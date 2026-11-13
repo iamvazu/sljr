@@ -288,3 +288,4 @@ module.exports = {
     return { id: info.lastInsertRowid };
   }
 };
+

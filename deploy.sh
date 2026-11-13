@@ -14,3 +14,4 @@ sleep 4
 curl -s http://127.0.0.1:4173/api/health
 echo ""
 echo "=== Done! ==="
+
