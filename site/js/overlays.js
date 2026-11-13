@@ -47,10 +47,10 @@
       var formattedPrice = item.price || '$1,560,000';
       var addressLine = (item.address ? (item.address + (item.city ? ', ' + item.city.toUpperCase() : '') + ', CALIFORNIA') : '').toUpperCase();
       var specsLine = [
-        item.beds ? item.beds + ' BEDS' : '',
-        item.baths ? item.baths + ' BATHS' : '',
-        item.sqft ? item.sqft.toLocaleString() + ' SQ.FT' : ''
-      ].filter(Boolean).join(' · ');
+        Number(item.beds) ? item.beds + ' BEDS' : '',
+        Number(item.baths) ? item.baths + ' BATHS' : '',
+        (item.sqft && item.sqft !== '0') ? item.sqft.toLocaleString() + ' SQ.FT' : ''
+      ].filter(Boolean).join(' · ') || String(item.property_type || 'Land').toUpperCase();
 
       return (
         '<article class="listing-card">' +

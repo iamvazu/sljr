@@ -352,7 +352,7 @@
     <div class="pf-section-head">
       <span class="pf-banner__eyebrow">Recently Sold</span>
       <h2>Recent Closings</h2>
-      <p>A selection of homes Steven has represented across Danville, Oakland, and Livermore.</p>
+      <p>A selection of homes Steven has represented across the East Bay and beyond.</p>
     </div>
     <div class="pf-grid" id="sell-sold-grid"></div>
 
@@ -466,15 +466,15 @@
           s3.hidden = true;
           aiBox.hidden = false;
           aiBox.innerHTML =
-            '<span class="pf-banner__eyebrow">Steven Lenz AI · Instant Valuation Estimate</span>' +
+            '<span class="pf-banner__eyebrow">Rough Starting Estimate · Not an Appraisal</span>' +
             '<h3 style="font-family:var(--sw-font-display);font-weight:400;font-size:1.65rem;margin:6px 0 4px;">' + esc(addr) + '</h3>' +
             '<p style="margin:0;color:var(--sw-ink-soft);font-size:0.86rem;">Submarket: <strong style="color:var(--sw-ink);">' + esc(res.submarket) + '</strong> · ' + esc(type) + ' · ' + esc(beds) + ' Bed / ' + esc(baths) + ' Bath · ' + Number(sqft).toLocaleString() + ' Sq.Ft.</p>' +
             '<div class="ai-val-nums">' +
-            '<div><strong>' + esc(res.mid) + '</strong><span>AI Estimated Value</span></div>' +
-            '<div><strong>' + esc(res.low) + ' – ' + esc(res.high) + '</strong><span>Market Range</span></div>' +
-            '<div><strong>' + esc(res.uplift) + '</strong><span>Est. Concierge Uplift</span></div>' +
+            '<div><strong>' + esc(res.mid) + '</strong><span>Estimated Midpoint</span></div>' +
+            '<div><strong>' + esc(res.low) + ' – ' + esc(res.high) + '</strong><span>Rough Range</span></div>' +
             '</div>' +
             '<p style="margin:0 0 14px;font-size:0.9rem;color:var(--sw-ink-soft);line-height:1.6;"><strong style="color:var(--sw-ink);">Recommended Launch Strategy (' + esc(timeline) + '):</strong> ' + esc(res.strategy) + ' (~$' + esc(res.ppsf) + '/sq.ft. baseline). Thank you, ' + esc(name) + ' — Steven Lenz Jr. will follow up with a line-by-line comparable CMA.</p>' +
+            '<p style="margin:0 0 14px;font-size:0.76rem;color:var(--sw-ink-soft);line-height:1.55;">This figure is a simple calculation from typical price-per-square-foot numbers for the area and the details you entered. It is not an appraisal, a broker price opinion, or a comparative market analysis, and it does not account for condition, upgrades, lot, or location within the neighborhood. Steven will prepare a real pricing analysis from current comparable sales.</p>' +
             '<div style="display:flex;flex-wrap:wrap;gap:12px;">' +
             '<a class="sw-btn sw-btn--primary" href="connect.html">Book 1-on-1 Pricing Walkthrough</a>' +
             '<button type="button" class="sw-btn sw-btn--ghost" id="sv-reset" style="cursor:pointer;">Run Another Address</button>' +
@@ -506,7 +506,7 @@
             '<div style="color:var(--sw-accent);font-family:var(--sw-font-display);font-size:1.35rem;">' + item.price + '</div>' +
             '<h3>' + item.address + '</h3>' +
             '<span class="listing-city">' + item.city + ', ' + item.state + ' ' + item.zip + '</span>' +
-            '<div class="listing-meta">' + item.beds + ' Beds · ' + item.baths + ' Baths · ' + item.sqft + ' Sq.Ft.</div>' +
+            '<div class="listing-meta">' + (Number(item.beds) ? item.beds + ' Beds · ' + item.baths + ' Baths · ' + item.sqft + ' Sq.Ft.' : (item.property_type || 'Land') + (item.lot_size ? ' · ' + item.lot_size : '')) + '</div>' +
             '<a class="listing-link" style="margin-top:auto;padding-top:8px;" href="listing.html?id=' + encodeURIComponent(item.id) + '">View Property →</a>' +
             '</div>' +
             '</article>';

@@ -186,7 +186,7 @@
                 '<div class="prop-price">' + esc(item.price) + '</div>' +
                 '<h3>' + esc(item.address) + '</h3>' +
                 '<span class="listing-city">' + esc(item.city) + ', ' + esc(item.state) + ' ' + esc(item.zip) + '</span>' +
-                '<div class="listing-meta">' + esc(item.beds) + ' Beds · ' + esc(item.baths) + ' Baths · ' + esc(item.sqft) + ' Sq.Ft.</div>' +
+                '<div class="listing-meta">' + (Number(item.beds) ? esc(item.beds) + ' Beds · ' + esc(item.baths) + ' Baths · ' + esc(item.sqft) + ' Sq.Ft.' : esc(item.property_type || 'Land') + (item.lot_size ? ' · ' + esc(item.lot_size) : '')) + '</div>' +
                 '<p class="prop-desc">' + esc(item.summary) + '</p>' +
                 '<div class="prop-actions">' +
                   '<a class="listing-link" href="listing.html?id=' + encodeURIComponent(item.id) + '">View Property →</a>' +

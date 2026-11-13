@@ -60,6 +60,49 @@
   window.SLForms = { post: post, show: show, busy: busy, FALLBACK: FALLBACK };
 })();
 
+/* ------------------------------------------------------------------
+ * Area pages: show Steven's REAL listings and closings for that city,
+ * read from the same data the admin panel manages. Nothing is hard-coded.
+ * ------------------------------------------------------------------ */
+(function () {
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function init() {
+    var sections = document.querySelectorAll('[data-area-homes]');
+    if (!sections.length) return;
+    var pfx = sections[0].getAttribute('data-pfx') || '';
+    fetch('/api/listings')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (d) { return d.listings || []; })
+      .catch(function () { return fetch(pfx + 'content/listings.json').then(function (r) { return r.json(); }); })
+      .catch(function () { return []; })
+      .then(function (items) {
+        sections.forEach(function (sec) {
+          var cities = (sec.getAttribute('data-cities') || '').toLowerCase().split(',').filter(Boolean);
+          var grid = sec.querySelector('[data-area-grid]');
+          var empty = sec.querySelector('[data-area-empty]');
+          var match = items.filter(function (i) {
+            return !cities.length || cities.indexOf(String(i.city || '').toLowerCase()) !== -1;
+          }).slice(0, 3);
+          if (!match.length) { if (grid) grid.hidden = true; if (empty) empty.hidden = false; return; }
+          grid.innerHTML = match.map(function (i) {
+            var specs = Number(i.beds)
+              ? i.beds + ' BEDS · ' + i.baths + ' BATHS · ' + i.sqft + ' SQ.FT'
+              : String(i.property_type || 'Land').toUpperCase();
+            return '<article class="area-home-card"><a href="' + pfx + 'listing.html?id=' + encodeURIComponent(i.id) + '">' +
+              '<div class="area-home-img-wrap"><img src="' + pfx + esc(i.photo) + '" alt="' + esc(i.full_address || i.address) + '" loading="lazy" width="1376" height="768">' +
+              '<div class="area-home-badges"><span class="area-home-badge' + (i.active ? ' area-home-badge--gold' : '') + '">' + esc(String(i.status || '').toUpperCase()) + '</span></div></div>' +
+              '<div class="area-home-body"><div class="area-home-price">' + esc(i.price) + '</div>' +
+              '<div class="area-home-address">' + esc(String(i.full_address || i.address || '').toUpperCase()) + '</div>' +
+              '<div class="area-home-specs">' + esc(specs) + '</div></div></a></article>';
+          }).join('');
+        });
+      });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
 /* ============================================================================
    editorial-nav.js — Shared Header, Communities Dropdown, Drawer & Stay-in-Know
    ============================================================================ */
@@ -84,6 +127,7 @@
         '<span class="ed-brand__sub">Real Estate</span>' +
       '</a>' +
       '<nav class="ed-nav-group ed-nav-group--right" aria-label="Secondary navigation">' +
+        '<a class="ed-nav-link" href="' + pfx + 'about.html">About</a>' +
         '<div class="ed-dropdown ed-dropdown--mega" id="communities-dd-wrap">' +
           '<button type="button" class="ed-nav-link" id="communities-dd-btn" aria-expanded="false" aria-haspopup="true">Communities ▾</button>' +
           '<div class="ed-mega" role="menu">' +
@@ -96,7 +140,6 @@
             '</div>' +
           '</div>' +
         '</div>' +
-        '<a class="ed-nav-link" href="' + pfx + 'about.html">About</a>' +
         '<div class="ed-dropdown" id="resources-dd-wrap">' +
           '<button type="button" class="ed-nav-link" id="resources-dd-btn" aria-expanded="false" aria-haspopup="true">Resources ▾</button>' +
           '<div class="ed-dropdown__menu" role="menu" aria-label="Real Estate News and Insights">' +

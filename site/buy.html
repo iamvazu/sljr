@@ -248,7 +248,7 @@
               '<div style="color:var(--sw-accent);font-family:var(--sw-font-display);font-size:1.35rem;">' + esc(item.price) + '</div>' +
               '<h3>' + esc(item.address) + '</h3>' +
               '<span class="listing-city">' + esc(item.city) + ', ' + esc(item.state) + ' ' + esc(item.zip) + '</span>' +
-              '<div class="listing-meta">' + esc(item.beds) + ' Beds · ' + esc(item.baths) + ' Baths · ' + esc(item.sqft) + ' Sq.Ft.</div>' +
+              '<div class="listing-meta">' + (Number(item.beds) ? esc(item.beds) + ' Beds · ' + esc(item.baths) + ' Baths · ' + esc(item.sqft) + ' Sq.Ft.' : esc(item.property_type || 'Land') + (item.lot_size ? ' · ' + esc(item.lot_size) : '')) + '</div>' +
               '<a class="listing-link" style="margin-top:auto;padding-top:8px;" href="listing.html?id=' + encodeURIComponent(item.id) + '">View Property →</a>' +
             '</div>' +
           '</article>';

@@ -319,3 +319,14 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .sw-copy__body, .sw-copy--hero .sw-copy__body { font-size: 0.88rem; }
   .sw-btn { letter-spacing: 0.1em; padding: 12px 12px; }
 }
+
+/* ---------- Content additions (all widths) ---------- */
+.art-disclaimer {
+  margin: 28px 0; padding: 14px 16px; border-left: 2px solid var(--sw-accent, #D8A55A);
+  background: rgba(243, 238, 230, 0.05); color: var(--sw-ink-soft, #B9B3A8);
+  font-size: 0.82rem; line-height: 1.6;
+}
+.area-homes__note { color: var(--sw-ink-soft, #B9B3A8); font-size: 0.95rem; line-height: 1.6; max-width: 60ch; margin: 0 0 20px; }
+.area-homes__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.area-home-card > a { color: inherit; text-decoration: none; display: block; }
+@media (max-width: 680px) { .area-homes__cta { display: grid; grid-template-columns: 1fr; } }

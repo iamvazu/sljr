@@ -8,6 +8,8 @@ const { DatabaseSync } = require('node:sqlite');
 // file server can ever hand it to a visitor. Override with DB_PATH.
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', '..', 'data', 'steven_lenz.db');
 const LISTINGS_JSON = path.join(__dirname, '..', 'content', 'listings.json');
+const TESTIMONIALS_JSON = path.join(__dirname, '..', 'content', 'testimonials.json');
+const DATA_DIR = path.join(__dirname, '..', '..', 'data');
 
 let db;
 
@@ -130,53 +132,94 @@ function getDb() {
   addCol('status', "status TEXT NOT NULL DEFAULT 'new'");
   addCol('notes', "notes TEXT");
 
+  addCol('follow_up_at', "follow_up_at TEXT");
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
+    CREATE TABLE IF NOT EXISTS testimonials (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      quote TEXT NOT NULL,
+      name TEXT NOT NULL,
+      context TEXT,
+      source TEXT,
+      permission_on_file INTEGER NOT NULL DEFAULT 0,
+      published INTEGER NOT NULL DEFAULT 0,
+      sort_order INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE TABLE IF NOT EXISTS admin_sessions (
+      token_hash TEXT PRIMARY KEY,
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      ip_hash TEXT
+    );
+    CREATE TABLE IF NOT EXISTS audit_log (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      at TEXT NOT NULL,
+      action TEXT NOT NULL,
+      detail TEXT,
+      ip_hash TEXT
+    );
+  `);
+
+  const listingCols = db.prepare('PRAGMA table_info(listings)').all().map((c) => c.name);
+  if (!listingCols.includes('published')) db.exec('ALTER TABLE listings ADD COLUMN published INTEGER NOT NULL DEFAULT 1');
+
   seedListingsIfEmpty(db);
+  runOnce(db, 'cleanup_2026_11_13_listings', () => {
+    // Listings that could not be matched to a real MLS record, plus one duplicate.
+    // Hidden, not deleted: re-publish from the admin panel once verified.
+    const held = readJson(path.join(DATA_DIR, 'unpublished-listings.json'));
+    const ins = insertListingStmt(db);
+    held.forEach((item, i) => {
+      const exists = db.prepare('SELECT 1 FROM listings WHERE id = ?').get(item.id);
+      if (!exists) ins.run(...listingParams(item, 900 + i));
+      db.prepare('UPDATE listings SET published = 0 WHERE id = ?').run(item.id);
+    });
+  });
+  runOnce(db, 'seed_testimonials', () => {
+    const ins = db.prepare('INSERT INTO testimonials (quote, name, context, source, permission_on_file, published, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    readJson(TESTIMONIALS_JSON).forEach((t, i) => ins.run(t.quote, t.name, t.context || '', t.source || '', t.permission_on_file ? 1 : 0, t.permission_on_file ? 1 : 0, i));
+    readJson(path.join(DATA_DIR, 'testimonials-pending.json')).forEach((t, i) => ins.run(t.quote, t.name, t.context || '', t.source || '', 0, 0, 100 + i));
+  });
   return db;
 }
 
-function seedListingsIfEmpty(database) {
-  const row = database.prepare('SELECT COUNT(*) AS cnt FROM listings').get();
-  if (row && row.cnt > 0) return;
-  if (!fs.existsSync(LISTINGS_JSON)) return;
+function readJson(file) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch (_) { return []; }
+}
 
-  const items = JSON.parse(fs.readFileSync(LISTINGS_JSON, 'utf8'));
-  const insert = database.prepare(`
+function runOnce(database, key, fn) {
+  if (database.prepare('SELECT 1 FROM meta WHERE key = ?').get(key)) return;
+  fn();
+  database.prepare('INSERT INTO meta (key, value) VALUES (?, ?)').run(key, new Date().toISOString());
+}
+
+function insertListingStmt(database) {
+  return database.prepare(`
     INSERT OR REPLACE INTO listings (
       id, status, price, price_num, address, full_address, city, state, zip, county,
       beds, baths, sqft, year_built, lot_size, property_type, mls_id, photo,
       summary, description, highlights_json, role, external_url, active, sort_order
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
+}
 
-  items.forEach((item, idx) => {
-    insert.run(
-      item.id,
-      item.status || 'For Sale',
-      item.price || '$0',
-      parsePriceNum(item.price),
-      item.address || '',
-      item.full_address || '',
-      item.city || '',
-      item.state || 'CA',
-      item.zip || '',
-      item.county || '',
-      Number(item.beds) || 0,
-      Number(item.baths) || 0,
-      String(item.sqft || ''),
-      String(item.year_built || ''),
-      String(item.lot_size || ''),
-      item.property_type || '',
-      item.mls_id || '',
-      item.photo || '',
-      item.summary || '',
-      item.description || '',
-      JSON.stringify(item.highlights || []),
-      item.role || '',
-      item.external_url || '',
-      item.active ? 1 : 0,
-      idx
-    );
-  });
+function listingParams(item, idx) {
+  return [
+    item.id, item.status || 'For Sale', item.price || '$0', parsePriceNum(item.price),
+    item.address || '', item.full_address || '', item.city || '', item.state || 'CA', item.zip || '', item.county || '',
+    Number(item.beds) || 0, Number(item.baths) || 0, String(item.sqft || ''), String(item.year_built || ''),
+    String(item.lot_size || ''), item.property_type || '', item.mls_id || '', item.photo || '',
+    item.summary || '', item.description || '', JSON.stringify(item.highlights || []),
+    item.role || '', item.external_url || '', item.active ? 1 : 0, idx
+  ];
+}
+
+function seedListingsIfEmpty(database) {
+  const row = database.prepare('SELECT COUNT(*) AS cnt FROM listings').get();
+  if (row && row.cnt > 0) return;
+  const insert = insertListingStmt(database);
+  readJson(LISTINGS_JSON).forEach((item, idx) => insert.run(...listingParams(item, idx)));
 }
 
 function formatListingRow(row) {
@@ -207,25 +250,26 @@ function formatListingRow(row) {
     highlights,
     role: row.role,
     external_url: row.external_url,
-    active: Boolean(row.active)
+    active: Boolean(row.active),
+    published: row.published === undefined ? true : Boolean(row.published)
   };
 }
 
 function getAllListings() {
   const database = getDb();
-  const rows = database.prepare('SELECT * FROM listings ORDER BY active DESC, sort_order ASC').all();
+  const rows = database.prepare('SELECT * FROM listings WHERE published = 1 ORDER BY active DESC, sort_order ASC').all();
   return rows.map(formatListingRow);
 }
 
 function getListingById(id) {
   const database = getDb();
-  const row = database.prepare('SELECT * FROM listings WHERE id = ?').get(String(id || ''));
+  const row = database.prepare('SELECT * FROM listings WHERE id = ? AND published = 1').get(String(id || ''));
   return formatListingRow(row);
 }
 
 function searchListings({ q = '', city = '', minPrice = 0, maxPrice = 999999999, beds = 0, baths = 0, status = '' } = {}) {
   const database = getDb();
-  const clauses = [];
+  const clauses = ['published = 1'];
   const params = [];
 
   if (q) {
@@ -371,8 +415,187 @@ function upsertNewsletter({ email, consent, source_page }) {
   `).run(email, consent ? 1 : 0, source_page || '/');
 }
 
+// ---------- Public testimonials ----------
+function getPublishedTestimonials() {
+  return getDb().prepare(
+    'SELECT quote, name, context, source FROM testimonials WHERE published = 1 AND permission_on_file = 1 ORDER BY sort_order ASC, id ASC'
+  ).all().map((t) => Object.assign(t, { permission_on_file: true }));
+}
+
+// ---------- Admin: sessions & audit ----------
+function createSession(tokenHash, ttlMs, ipHash) {
+  const now = Date.now();
+  getDb().prepare('DELETE FROM admin_sessions WHERE expires_at < ?').run(new Date(now).toISOString());
+  getDb().prepare('INSERT INTO admin_sessions (token_hash, created_at, expires_at, ip_hash) VALUES (?, ?, ?, ?)')
+    .run(tokenHash, new Date(now).toISOString(), new Date(now + ttlMs).toISOString(), ipHash || '');
+}
+function getSession(tokenHash) {
+  return getDb().prepare('SELECT * FROM admin_sessions WHERE token_hash = ? AND expires_at > ?').get(tokenHash, new Date().toISOString());
+}
+function deleteSession(tokenHash) {
+  getDb().prepare('DELETE FROM admin_sessions WHERE token_hash = ?').run(tokenHash);
+}
+function audit(action, detail, ipHash) {
+  getDb().prepare('INSERT INTO audit_log (at, action, detail, ip_hash) VALUES (?, ?, ?, ?)')
+    .run(new Date().toISOString(), action, String(detail || '').slice(0, 500), ipHash || '');
+}
+function getAudit(limit = 100) {
+  return getDb().prepare('SELECT at, action, detail FROM audit_log ORDER BY id DESC LIMIT ?').all(limit);
+}
+
+// ---------- Admin: leads ----------
+const LEAD_STATUSES = ['new', 'contacted', 'qualified', 'closed', 'lost', 'spam'];
+
+function parseLead(row) {
+  if (!row) return null;
+  const out = Object.assign({}, row);
+  try { out.areas = JSON.parse(row.areas_json || '[]'); } catch (_) { out.areas = []; }
+  try { out.utm = JSON.parse(row.utm_json || '{}'); } catch (_) { out.utm = {}; }
+  delete out.areas_json; delete out.utm_json; delete out.ip_hash;
+  out.email_consent = Boolean(row.email_consent);
+  out.sms_consent = Boolean(row.sms_consent);
+  return out;
+}
+
+function adminListLeads({ status = '', type = '', q = '', limit = 50, offset = 0 } = {}) {
+  const clauses = [];
+  const params = [];
+  if (status) { clauses.push('status = ?'); params.push(status); }
+  if (type) { clauses.push('form_type = ?'); params.push(type); }
+  if (q) {
+    const like = `%${q.toLowerCase()}%`;
+    clauses.push('(LOWER(name) LIKE ? OR LOWER(email) LIKE ? OR phone LIKE ? OR LOWER(message) LIKE ?)');
+    params.push(like, like, like, like);
+  }
+  const where = clauses.length ? 'WHERE ' + clauses.join(' AND ') : '';
+  const database = getDb();
+  const total = database.prepare(`SELECT COUNT(*) AS n FROM leads ${where}`).get(...params).n;
+  const rows = database.prepare(`SELECT * FROM leads ${where} ORDER BY received_at DESC LIMIT ? OFFSET ?`).all(...params, limit, offset);
+  return { total, leads: rows.map(parseLead) };
+}
+
+function adminGetLead(leadId) {
+  const database = getDb();
+  const lead = parseLead(database.prepare('SELECT * FROM leads WHERE lead_id = ?').get(leadId));
+  if (!lead) return null;
+  lead.deliveries = database.prepare(
+    'SELECT id, channel, status, attempts, last_error, created_at, sent_at, next_attempt_at FROM outbox WHERE lead_id = ? ORDER BY id ASC'
+  ).all(leadId);
+  return lead;
+}
+
+function adminUpdateLead(leadId, { status, notes, follow_up_at }) {
+  const sets = [];
+  const params = [];
+  if (status !== undefined && LEAD_STATUSES.includes(status)) { sets.push('status = ?'); params.push(status); }
+  if (notes !== undefined) { sets.push('notes = ?'); params.push(String(notes).slice(0, 5000)); }
+  if (follow_up_at !== undefined) { sets.push('follow_up_at = ?'); params.push(follow_up_at ? String(follow_up_at).slice(0, 30) : null); }
+  if (!sets.length) return false;
+  return getDb().prepare(`UPDATE leads SET ${sets.join(', ')} WHERE lead_id = ?`).run(...params, leadId).changes > 0;
+}
+
+function adminDeleteLead(leadId) {
+  const database = getDb();
+  database.prepare('DELETE FROM outbox WHERE lead_id = ?').run(leadId);
+  return database.prepare('DELETE FROM leads WHERE lead_id = ?').run(leadId).changes > 0;
+}
+
+function retryOutbox(id) {
+  return getDb().prepare(
+    "UPDATE outbox SET status = 'pending', attempts = 0, next_attempt_at = ?, last_error = NULL WHERE id = ? AND status != 'sent'"
+  ).run(new Date().toISOString(), id).changes > 0;
+}
+
+function adminStats() {
+  const database = getDb();
+  const since = (days) => new Date(Date.now() - days * 86400000).toISOString();
+  const count = (sql, ...p) => database.prepare(sql).get(...p).n;
+  const group = (col, days) => database.prepare(
+    `SELECT COALESCE(NULLIF(${col}, ''), '(none)') AS k, COUNT(*) AS n FROM leads WHERE received_at >= ? AND status != 'spam' GROUP BY k ORDER BY n DESC LIMIT 12`
+  ).all(since(days));
+  return {
+    total: count('SELECT COUNT(*) AS n FROM leads'),
+    last7: count("SELECT COUNT(*) AS n FROM leads WHERE received_at >= ? AND status != 'spam'", since(7)),
+    last30: count("SELECT COUNT(*) AS n FROM leads WHERE received_at >= ? AND status != 'spam'", since(30)),
+    uncontacted: count("SELECT COUNT(*) AS n FROM leads WHERE status = 'new'"),
+    follow_ups_due: count("SELECT COUNT(*) AS n FROM leads WHERE follow_up_at IS NOT NULL AND follow_up_at <= ? AND status NOT IN ('closed','lost','spam')", new Date().toISOString().slice(0, 10) + 'T23:59'),
+    subscribers: count('SELECT COUNT(*) AS n FROM newsletter_subscribers WHERE consent = 1'),
+    by_status: database.prepare('SELECT status AS k, COUNT(*) AS n FROM leads GROUP BY status').all(),
+    by_type: group('form_type', 90),
+    by_page: group('source_page', 90),
+    by_source: group("json_extract(utm_json, '$.source')", 90),
+    by_day: database.prepare(
+      "SELECT substr(received_at, 1, 10) AS k, COUNT(*) AS n FROM leads WHERE received_at >= ? AND status != 'spam' GROUP BY k ORDER BY k ASC"
+    ).all(since(30)),
+    deliveries: outboxSummary()
+  };
+}
+
+function adminSubscribers() {
+  return getDb().prepare('SELECT email, consent, source_page, created_at FROM newsletter_subscribers ORDER BY id DESC').all();
+}
+
+// ---------- Admin: listings ----------
+const LISTING_FIELDS = ['status', 'price', 'address', 'full_address', 'city', 'state', 'zip', 'county', 'beds', 'baths',
+  'sqft', 'year_built', 'lot_size', 'property_type', 'mls_id', 'photo', 'summary', 'description', 'role', 'external_url'];
+
+function adminListListings() {
+  return getDb().prepare('SELECT * FROM listings ORDER BY published DESC, active DESC, sort_order ASC').all().map(formatListingRow)
+    .map((l, i, arr) => l);
+}
+
+function adminSaveListing(id, data, isNew) {
+  const database = getDb();
+  const existing = database.prepare('SELECT * FROM listings WHERE id = ?').get(id);
+  if (isNew && existing) return 'exists';
+  if (!isNew && !existing) return 'missing';
+  if (isNew) {
+    insertListingStmt(database).run(...listingParams(Object.assign({ id }, data), 500));
+    database.prepare('UPDATE listings SET published = ? WHERE id = ?').run(data.published ? 1 : 0, id);
+    return 'ok';
+  }
+  const sets = [];
+  const params = [];
+  LISTING_FIELDS.forEach((f) => {
+    if (data[f] === undefined) return;
+    sets.push(`${f} = ?`);
+    params.push(f === 'beds' || f === 'baths' ? Number(data[f]) || 0 : String(data[f]).slice(0, 4000));
+  });
+  if (data.price !== undefined) { sets.push('price_num = ?'); params.push(parsePriceNum(data.price)); }
+  if (data.highlights !== undefined) { sets.push('highlights_json = ?'); params.push(JSON.stringify((data.highlights || []).slice(0, 20))); }
+  if (data.active !== undefined) { sets.push('active = ?'); params.push(data.active ? 1 : 0); }
+  if (data.published !== undefined) { sets.push('published = ?'); params.push(data.published ? 1 : 0); }
+  if (data.sort_order !== undefined) { sets.push('sort_order = ?'); params.push(Number(data.sort_order) || 0); }
+  if (sets.length) database.prepare(`UPDATE listings SET ${sets.join(', ')} WHERE id = ?`).run(...params, id);
+  return 'ok';
+}
+
+// ---------- Admin: testimonials ----------
+function adminListTestimonials() {
+  return getDb().prepare('SELECT * FROM testimonials ORDER BY sort_order ASC, id ASC').all()
+    .map((t) => Object.assign(t, { permission_on_file: Boolean(t.permission_on_file), published: Boolean(t.published) }));
+}
+function adminSaveTestimonial(id, d) {
+  const database = getDb();
+  const vals = [String(d.quote || '').slice(0, 2000), String(d.name || '').slice(0, 120), String(d.context || '').slice(0, 160),
+    String(d.source || '').slice(0, 200), d.permission_on_file ? 1 : 0, d.published && d.permission_on_file ? 1 : 0, Number(d.sort_order) || 0];
+  if (!vals[0] || !vals[1]) return false;
+  if (id) return database.prepare('UPDATE testimonials SET quote=?, name=?, context=?, source=?, permission_on_file=?, published=?, sort_order=? WHERE id=?').run(...vals, id).changes > 0;
+  database.prepare('INSERT INTO testimonials (quote, name, context, source, permission_on_file, published, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)').run(...vals);
+  return true;
+}
+function adminDeleteTestimonial(id) {
+  return getDb().prepare('DELETE FROM testimonials WHERE id = ?').run(id).changes > 0;
+}
+
 module.exports = {
   getDb,
+  getPublishedTestimonials,
+  createSession, getSession, deleteSession, audit, getAudit,
+  LEAD_STATUSES, adminListLeads, adminGetLead, adminUpdateLead, adminDeleteLead, retryOutbox,
+  adminStats, adminSubscribers,
+  adminListListings, adminSaveListing,
+  adminListTestimonials, adminSaveTestimonial, adminDeleteTestimonial,
   getAllListings,
   getListingById,
   searchListings,
