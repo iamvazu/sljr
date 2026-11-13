@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Back Office — Steven Lenz Jr.</title>
-  <link rel="icon" href="../assets/brand/favicon.png" />
-  <link rel="stylesheet" href="admin.css?v=1" />
+  <link rel="icon" href="/assets/brand/favicon.png" />
+  <link rel="stylesheet" href="/admin/admin.css?v=2" />
 </head>
 <body>
-  <div id="login" class="login" hidden>
+  <div id="login" class="login">
     <form id="login-form" class="card login__card" autocomplete="on">
       <p class="eyebrow">Steven Lenz Jr. · Compass</p>
       <h1>Back Office</h1>
       <label for="pw">Password</label>
-      <input id="pw" type="password" autocomplete="current-password" required />
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Enter admin password" required />
       <button class="btn btn--primary" type="submit">Sign in</button>
       <p id="login-msg" class="msg" role="alert" hidden></p>
     </form>
@@ -32,7 +32,7 @@
         <button data-view="activity">Activity</button>
       </nav>
       <div class="top__right">
-        <a href="../" target="_blank" rel="noopener">View site ↗</a>
+        <a href="/" target="_blank" rel="noopener">View site ↗</a>
         <button id="logout" class="btn btn--quiet">Sign out</button>
       </div>
     </header>
@@ -49,6 +49,6 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="admin.js?v=1"></script>
+  <script src="/admin/admin.js?v=2"></script>
 </body>
 </html>

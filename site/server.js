@@ -59,7 +59,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 // site/ (server.js, db/, api/, lib/, middleware/, scratch/, package.json…)
 // is invisible to visitors — a 404, not a 403, so nothing is confirmed.
 const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles', 'admin']);
-const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', 'favicon.ico']);
+const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', 'favicon.ico', 'admin.js', 'admin.css']);
 // Internal review pages: available on your own machine, never in production.
 const INTERNAL_PAGES = new Set(['pitch.html', 'preview.html']);
 const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt', '.xml', '.webmanifest']);
@@ -409,8 +409,18 @@ function serveStatic(req, res, parsedUrl) {
     return;
   }
 
-  // Admin panel shell: never cached, never indexed.
-  if (reqPath === '/admin' || reqPath === '/admin/') reqPath = '/admin/index.html';
+  // Admin panel shell: redirect /admin -> /admin/ for canonical relative asset loading
+  if (reqPath === '/admin') {
+    res.writeHead(301, {
+      'Location': '/admin/',
+      'Cache-Control': 'no-store'
+    });
+    res.end();
+    return;
+  }
+  if (reqPath === '/admin/') reqPath = '/admin/index.html';
+  if (reqPath === '/admin.js') reqPath = '/admin/admin.js';
+  if (reqPath === '/admin.css') reqPath = '/admin/admin.css';
   if (reqPath.startsWith('/admin/')) {
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     res.setHeader('Cache-Control', 'no-store');
