@@ -211,6 +211,165 @@
     }
     @media (max-width: 960px) { .cc-covered { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .cc-covered { grid-template-columns: 1fr; } }
+
+    /* =========================================================================
+       How It Works — Architectural Step Cards & Process Connectors
+       ========================================================================= */
+    .ex-steps {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 22px !important;
+      margin: 36px 0 76px !important;
+      position: relative;
+    }
+    .ex-steps::before {
+      content: '';
+      position: absolute;
+      top: 52px;
+      left: 70px;
+      right: 70px;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        rgba(216, 165, 90, 0.6) 0%, 
+        rgba(216, 165, 90, 0.45) 35%,
+        rgba(216, 165, 90, 0.35) 70%,
+        rgba(216, 165, 90, 0.15) 100%
+      );
+      z-index: 1;
+    }
+    .ex-step {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(160deg, #131A24 0%, #0D1219 100%) !important;
+      border: 1px solid rgba(243, 238, 230, 0.12) !important;
+      border-radius: 16px !important;
+      padding: 26px 22px 24px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      overflow: hidden;
+      border-top: 1px solid rgba(243, 238, 230, 0.12) !important;
+    }
+    .ex-step::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(216, 165, 90, 0.35) 0%, transparent 60%, rgba(255, 255, 255, 0.05) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: 0.6;
+      transition: opacity 0.35s ease;
+    }
+    .ex-step:hover {
+      transform: translateY(-8px) !important;
+      border-color: rgba(216, 165, 90, 0.55) !important;
+      background: linear-gradient(160deg, #182230 0%, #111822 100%) !important;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 0 28px rgba(216, 165, 90, 0.18) !important;
+    }
+    .ex-step:hover::before {
+      opacity: 1;
+    }
+    .ex-step__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .ex-step__num-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(216, 165, 90, 0.22) 0%, rgba(20, 26, 35, 0.95) 100%);
+      border: 1px solid rgba(216, 165, 90, 0.4);
+      color: #D8A55A;
+      font-family: var(--sw-font-display, inherit);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(216, 165, 90, 0.15);
+      transition: all 0.3s ease;
+    }
+    .ex-step:hover .ex-step__num-badge {
+      background: linear-gradient(135deg, #D8A55A 0%, #B8853A 100%);
+      color: #0D1117;
+      border-color: #F3EEE6;
+      box-shadow: 0 0 20px rgba(216, 165, 90, 0.5);
+      transform: scale(1.06);
+    }
+    .ex-step__phase {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      color: #D8A55A;
+      background: rgba(216, 165, 90, 0.1);
+      border: 1px solid rgba(216, 165, 90, 0.28);
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+    .ex-step__icon-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(216, 165, 90, 0.16) 0%, rgba(20, 26, 35, 0.6) 100%);
+      border: 1px solid rgba(216, 165, 90, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ex-step:hover .ex-step__icon-wrap {
+      background: radial-gradient(circle, rgba(216, 165, 90, 0.28) 0%, rgba(24, 34, 48, 0.95) 100%);
+      border-color: #D8A55A;
+      box-shadow: 0 0 24px rgba(216, 165, 90, 0.35);
+    }
+    .ex-step__icon-wrap svg {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ex-step:hover .ex-step__icon-wrap svg {
+      transform: scale(1.15) rotate(3deg);
+    }
+    .ex-step h3 {
+      font-family: var(--sw-font-display, "Playfair Display", serif) !important;
+      font-weight: 500 !important;
+      font-size: 1.3rem !important;
+      color: #F9FAFB !important;
+      margin: 0 0 10px !important;
+      line-height: 1.25 !important;
+    }
+    .ex-step p {
+      color: #9CA3AF !important;
+      font-size: 0.88rem !important;
+      line-height: 1.62 !important;
+      margin: 0 0 18px !important;
+      flex: 1 !important;
+    }
+    .ex-step__tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      color: #D8A55A;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding-top: 12px;
+      border-top: 1px solid rgba(243, 238, 230, 0.08);
+    }
+    @media (max-width: 1040px) {
+      .ex-steps { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+      .ex-steps::before { display: none !important; }
+    }
+    @media (max-width: 600px) {
+      .ex-steps { grid-template-columns: 1fr !important; gap: 18px !important; }
+    }
   </style>
   <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
   <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
@@ -611,25 +770,85 @@
         <h2>How It Works</h2>
       </div>
       <div class="ex-steps">
+        <!-- Step 01 -->
         <div class="ex-step">
-          <span class="ex-step__num">01</span>
+          <div class="ex-step__header">
+            <span class="ex-step__num-badge">01</span>
+            <span class="ex-step__phase">Phase I · Strategy</span>
+          </div>
+          <div class="ex-step__icon-wrap">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 31H32" stroke="#D8A55A" stroke-width="1.8" stroke-linecap="round"/>
+              <rect x="7" y="16" width="22" height="15" rx="2" stroke="rgba(243,238,230,0.3)" stroke-width="1.4" stroke-dasharray="2 2" fill="none"/>
+              <path d="M18 5L9 26M18 5L27 26" stroke="#F3EEE6" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 18H24" stroke="#D8A55A" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="18" cy="5" r="3" fill="#D8A55A"/>
+              <circle cx="18" cy="5" r="1.2" fill="#0D1117"/>
+              <path d="M28 8L30 11L28 14L26 11Z" fill="#D8A55A"/>
+            </svg>
+          </div>
           <h3>Plan &amp; Budget</h3>
           <p>You and your agent work together to decide which services can increase your home’s value the most and set an estimated budget for the work.</p>
+          <span class="ex-step__tag">ROI Assessment · Upfront Allocation</span>
         </div>
+
+        <!-- Step 02 -->
         <div class="ex-step">
-          <span class="ex-step__num">02</span>
+          <div class="ex-step__header">
+            <span class="ex-step__num-badge">02</span>
+            <span class="ex-step__phase">Phase II · Curation</span>
+          </div>
+          <div class="ex-step__icon-wrap">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M18 3L6 8V17C6 24.5 11.2 31.4 18 33C24.8 31.4 30 24.5 30 17V8L18 3Z" stroke="#D8A55A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(216,165,90,0.06)"/>
+              <path d="M13 14L23 24M15 12L12 15M24 21L21 24" stroke="#F3EEE6" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 20L15 22L18 19L21 21L24 18" stroke="#D8A55A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="18" cy="13" r="2" fill="#D8A55A"/>
+            </svg>
+          </div>
           <h3>Engage Vendors</h3>
           <p>When you're ready to start, your Compass agent will be by your side as you engage vendors and commission work.</p>
+          <span class="ex-step__tag">Vetted Contractors · Full Oversight</span>
         </div>
+
+        <!-- Step 03 -->
         <div class="ex-step">
-          <span class="ex-step__num">03</span>
+          <div class="ex-step__header">
+            <span class="ex-step__num-badge">03</span>
+            <span class="ex-step__phase">Phase III · Showcase</span>
+          </div>
+          <div class="ex-step__icon-wrap">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 17L18 6L32 17V30C32 30.6 31.6 31 31 31H5C4.4 31 4 30.6 4 30V17Z" stroke="#F3EEE6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="rgba(243,238,230,0.04)"/>
+              <path d="M15 31V21H21V31" stroke="#D8A55A" stroke-width="1.8"/>
+              <path d="M10 19H12M24 19H26" stroke="#D8A55A" stroke-width="2" stroke-linecap="round"/>
+              <path d="M18 2V6M14 4L16 6M22 4L20 6" stroke="#D8A55A" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M1 23L7 20M35 23L29 20" stroke="#D8A55A" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h3>Go to Market</h3>
-          <p>Once the transformation is complete, your home will go on the market.</p>
+          <p>Once the transformation is complete, your home will go on the market with high-impact staging and targeted luxury exposure.</p>
+          <span class="ex-step__tag">High-Impact Debut · Targeted Buyers</span>
         </div>
+
+        <!-- Step 04 -->
         <div class="ex-step">
-          <span class="ex-step__num">04</span>
+          <div class="ex-step__header">
+            <span class="ex-step__num-badge">04</span>
+            <span class="ex-step__phase">Phase IV · Settlement</span>
+          </div>
+          <div class="ex-step__icon-wrap">
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="12" cy="14" r="6" stroke="#D8A55A" stroke-width="2"/>
+              <circle cx="12" cy="14" r="2.5" fill="#D8A55A"/>
+              <path d="M18 14H30V18H27V21H24V17H18" stroke="#F3EEE6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 24L26 29L34 21" stroke="#D8A55A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 31H20" stroke="rgba(243,238,230,0.4)" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
           <h3>Pay at Closing</h3>
           <p>You'll pay for the services when one of the following happens — your home sells, you terminate your listing agreement with Compass, or 12 months pass from your Concierge start date.</p>
+          <span class="ex-step__tag">Zero Out-Of-Pocket · Escrow Settlement</span>
         </div>
       </div>
     </section>
