@@ -1,0 +1,15 @@
+# robots.txt for https://stevenlenzjr.com/
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /pitch.html
+Disallow: /preview.html
+
+# Sitemaps
+Sitemap: https://stevenlenzjr.com/sitemap.xml
+
+# LLM & AI Answer Engine Context
+# Reference: https://llmstxt.org
+# Direct AI context: https://stevenlenzjr.com/llms.txt
+
+

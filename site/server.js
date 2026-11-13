@@ -1,0 +1,445 @@
+'use strict';
+
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const { URL } = require('url');
+
+// Load project-root/.env if present (Node 22 built-in, no dependency).
+try { process.loadEnvFile(path.join(__dirname, '..', '.env')); } catch (_) {}
+
+const zlib = require('zlib');
+const db = require('./db/database');
+const outbox = require('./lib/outbox');
+const { submitLead } = require('./api/lead');
+const {
+  stripHtml,
+  isValidEmail,
+  isValidPhone,
+  normalizePhone,
+  getClientIp,
+  hashIp,
+  applySecurityHeaders,
+  createRateLimiter,
+  readJsonBody,
+  sendJson
+} = require('./middleware/security');
+
+const PORT = Number(process.env.PORT) || 4173;
+const SITE_ROOT = path.resolve(__dirname);
+
+const writeLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 25, prefix: 'write' });
+const searchLimiter = createRateLimiter({ windowMs: 60 * 1000, max: 120, prefix: 'search' });
+
+const MIME_TYPES = {
+  '.html': 'text/html; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+  '.mp4': 'video/mp4',
+  '.ico': 'image/x-icon',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
+  '.webmanifest': 'application/manifest+json; charset=utf-8'
+};
+
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+// ---- Static allowlist -------------------------------------------------
+// Only these folders and root files are ever served. Everything else in
+// site/ (server.js, db/, api/, lib/, middleware/, scratch/, package.json…)
+// is invisible to visitors — a 404, not a 403, so nothing is confirmed.
+const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles']);
+const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', 'favicon.ico']);
+// Internal review pages: available on your own machine, never in production.
+const INTERNAL_PAGES = new Set(['pitch.html', 'preview.html']);
+const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt', '.xml', '.webmanifest']);
+
+function isPublicPath(relPath) {
+  const parts = relPath.split('/').filter(Boolean);
+  if (!parts.length) return false;
+  if (parts.some((p) => p.startsWith('.'))) return false;
+  if (parts.length === 1) {
+    const file = parts[0].toLowerCase();
+    if (PUBLIC_ROOT_FILES.has(file)) return true;
+    if (!file.endsWith('.html')) return false;
+    if (INTERNAL_PAGES.has(file)) return !IS_PROD;
+    return true;
+  }
+  return PUBLIC_DIRS.has(parts[0].toLowerCase());
+}
+
+function cacheControlFor(relPath, ext) {
+  if (ext === '.html') return 'no-cache';
+  if (relPath.startsWith('/assets/')) return 'public, max-age=604800';
+  if (relPath.startsWith('/content/')) return 'public, max-age=300';
+  return 'public, max-age=3600';
+}
+
+function sendNotFound(req, res) {
+  const page = path.join(SITE_ROOT, '404.html');
+  fs.readFile(page, (err, buf) => {
+    res.writeHead(404, { 'Content-Type': err ? 'text/plain; charset=utf-8' : 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(req.method === 'HEAD' ? undefined : (err ? 'Not Found' : buf));
+  });
+}
+
+function computeValuation({ address, type, beds, baths, sqft, timeline }) {
+  const low = String(address || '').toLowerCase();
+  let submarket = 'Tri-Valley & East Bay';
+  let ppsf = 625;
+  if (low.includes('alamo') || low.includes('94507')) { submarket = 'Alamo'; ppsf = 815; }
+  else if (low.includes('danville') || low.includes('blackhawk') || low.includes('94506') || low.includes('94526')) { submarket = 'Danville / Blackhawk'; ppsf = 760; }
+  else if (low.includes('pleasanton') || low.includes('94566') || low.includes('94588')) { submarket = 'Pleasanton'; ppsf = 745; }
+  else if (low.includes('walnut creek') || low.includes('94596') || low.includes('94595') || low.includes('94598')) { submarket = 'Walnut Creek'; ppsf = 695; }
+  else if (low.includes('orinda') || low.includes('lafayette')) { submarket = 'Lamorinda'; ppsf = 860; }
+  else if (low.includes('livermore') || low.includes('94550') || low.includes('94551')) { submarket = 'Livermore'; ppsf = 610; }
+  else if (low.includes('san ramon') || low.includes('94582') || low.includes('94583')) { submarket = 'San Ramon'; ppsf = 690; }
+  else if (low.includes('brentwood') || low.includes('94513')) { submarket = 'Brentwood'; ppsf = 410; }
+  else if (low.includes('oakland') || low.includes('946')) { submarket = 'Oakland'; ppsf = 670; }
+  else if (low.includes('richmond') || low.includes('948')) { submarket = 'Richmond'; ppsf = 560; }
+
+  const typeMult = type === 'Estate / Acreage' ? 1.16 : type === 'Townhome / Condo' ? 0.88 : type === 'Multi-Family' ? 1.08 : 1.0;
+  const bedAdj = (Number(beds) - 3) * 28000;
+  const bathAdj = (Number(baths) - 2) * 22000;
+  const area = Math.max(400, Math.min(20000, Number(sqft) || 2000));
+  const mid = Math.round((area * ppsf * typeMult + bedAdj + bathAdj) / 5000) * 5000;
+  const estLow = Math.round(mid * 0.94 / 5000) * 5000;
+  const estHigh = Math.round(mid * 1.06 / 5000) * 5000;
+  const conciergeUplift = Math.round(mid * 0.055 / 5000) * 5000;
+  const strategy = timeline === 'Ready now'
+    ? 'Immediate Compass Private Exclusive preview followed by full MLS launch.'
+    : '4-week Compass Concierge prep (paint, staging, lighting) to capture top-quartile offers.';
+
+  return {
+    submarket,
+    ppsf: Math.round(mid / area),
+    est_low: estLow,
+    est_mid: mid,
+    est_high: estHigh,
+    concierge_uplift: conciergeUplift,
+    low: '$' + estLow.toLocaleString(),
+    mid: '$' + mid.toLocaleString(),
+    high: '$' + estHigh.toLocaleString(),
+    uplift: '+$' + conciergeUplift.toLocaleString(),
+    strategy
+  };
+}
+
+async function handleApi(req, res, parsedUrl) {
+  const pathname = parsedUrl.pathname;
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // Health Check
+  if (req.method === 'GET' && pathname === '/api/health') {
+    db.getDb().prepare('SELECT 1').get();
+    return sendJson(res, 200, { ok: true });
+  }
+
+  // All Listings
+  if (req.method === 'GET' && pathname === '/api/listings') {
+    if (!searchLimiter(req, res)) return;
+    const items = db.getAllListings();
+    return sendJson(res, 200, { ok: true, count: items.length, listings: items });
+  }
+
+  // Search Listings
+  if (req.method === 'GET' && pathname === '/api/listings/search') {
+    if (!searchLimiter(req, res)) return;
+    const sp = parsedUrl.searchParams;
+    const results = db.searchListings({
+      q: stripHtml(sp.get('q') || '').slice(0, 100),
+      city: stripHtml(sp.get('city') || '').slice(0, 60),
+      minPrice: Number(sp.get('minPrice')) || 0,
+      maxPrice: Number(sp.get('maxPrice')) || 999999999,
+      beds: Number(sp.get('beds')) || 0,
+      baths: Number(sp.get('baths')) || 0,
+      status: stripHtml(sp.get('status') || '').slice(0, 20)
+    });
+    return sendJson(res, 200, { ok: true, count: results.length, listings: results });
+  }
+
+  // Single Listing by ID
+  if (req.method === 'GET' && pathname.startsWith('/api/listings/')) {
+    if (!searchLimiter(req, res)) return;
+    const id = stripHtml(decodeURIComponent(pathname.slice('/api/listings/'.length))).slice(0, 80);
+    const item = db.getListingById(id);
+    if (!item) return sendJson(res, 404, { ok: false, error: 'Listing not found' });
+    return sendJson(res, 200, { ok: true, listing: item });
+  }
+
+  // Submit Lead — every contact form on the site posts here.
+  if (req.method === 'POST' && pathname === '/api/lead') {
+    if (!writeLimiter(req, res)) return;
+    const body = await readJsonBody(req);
+    const result = submitLead(body, req);
+    return sendJson(res, 200, { ok: true, lead_id: result.lead_id });
+  }
+
+  // Steven Lenz AI Valuation
+  if (req.method === 'POST' && pathname === '/api/valuation') {
+    if (!writeLimiter(req, res)) return;
+    const body = await readJsonBody(req);
+    const address = stripHtml(body.address).slice(0, 200);
+    const name = stripHtml(body.name).slice(0, 120);
+    const email = stripHtml(body.email).toLowerCase().slice(0, 160);
+    const rawValPhone = stripHtml(body.phone || '');
+    const phone = normalizePhone(rawValPhone);
+    const type = stripHtml(body.type || 'Single Family').slice(0, 60);
+    const beds = stripHtml(body.beds || '3').slice(0, 10);
+    const baths = stripHtml(body.baths || '2').slice(0, 10);
+    const sqft = Number(body.sqft) || 2000;
+    const timeline = stripHtml(body.timeline || 'Exploring').slice(0, 60);
+    const consent = Boolean(body.consent);
+
+    if (!address || !name || !isValidEmail(email)) {
+      return sendJson(res, 400, { ok: false, error: 'Address, name, and valid email are required.' });
+    }
+    if (rawValPhone && !isValidPhone(rawValPhone)) {
+      return sendJson(res, 400, { ok: false, error: 'Please enter a valid 10-digit phone number.' });
+    }
+
+    const val = computeValuation({ address, type, beds, baths, sqft, timeline });
+    const valuationId = `val_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+
+    db.insertValuation({
+      valuation_id: valuationId,
+      address,
+      submarket: val.submarket,
+      property_type: type,
+      beds,
+      baths,
+      sqft,
+      timeline,
+      name,
+      email,
+      phone,
+      consent,
+      est_low: val.est_low,
+      est_mid: val.est_mid,
+      est_high: val.est_high,
+      concierge_uplift: val.concierge_uplift,
+      ppsf: val.ppsf
+    });
+
+    // A valuation request is a seller lead: put it in the same inbox and
+    // notification pipeline as every other form.
+    submitLead({
+      name, email, phone: rawValPhone,
+      interest: 'selling',
+      timeline,
+      form_type: 'valuation',
+      scene: 'valuation',
+      source_page: stripHtml(body.source_page || '/sell.html').slice(0, 160),
+      email_consent: consent,
+      utm: body.utm,
+      referrer: body.referrer,
+      message: `Valuation request for ${address} — ${type}, ${beds} bd / ${baths} ba, ${sqft} sq.ft. ` +
+        `Rough estimate shown: ${val.low} – ${val.high} (${valuationId}).`
+    }, req);
+
+    return sendJson(res, 200, { ok: true, valuation_id: valuationId, valuation: val });
+  }
+
+  // Newsletter Subscribe
+  if (req.method === 'POST' && pathname === '/api/newsletter') {
+    if (!writeLimiter(req, res)) return;
+    const body = await readJsonBody(req);
+    const email = stripHtml(body.email).toLowerCase().slice(0, 160);
+    const consent = Boolean(body.consent);
+    if (!isValidEmail(email)) {
+      return sendJson(res, 400, { ok: false, error: 'Please enter a valid email address.' });
+    }
+    if (!consent) {
+      return sendJson(res, 400, { ok: false, error: 'Please check the consent box to subscribe.' });
+    }
+    db.upsertNewsletter({
+      email,
+      consent,
+      source_page: stripHtml(body.source_page || '/').slice(0, 120)
+    });
+    return sendJson(res, 200, { ok: true });
+  }
+
+  return sendJson(res, 404, { ok: false, error: 'API route not found' });
+}
+
+function serveStatic(req, res, parsedUrl) {
+  let reqPath = decodeURIComponent(parsedUrl.pathname);
+  if (reqPath === '/') reqPath = '/index.html';
+
+  // Handle reference area redirects & clean URLs
+  const areaRedirects = {
+    '/areas/pleasanton': '/areas/pleasanton.html',
+    '/areas/danville': '/areas/danville.html',
+    '/areas/livermore': '/areas/livermore.html',
+    '/areas/walnut-creek': '/areas/walnut-creek.html',
+    '/areas/alamo': '/areas/alamo.html',
+    '/areas/san-ramon': '/areas/san-ramon.html',
+    '/areas/dublin': '/areas/dublin.html',
+    '/areas/lafayette': '/areas/lafayette.html',
+    '/areas/oakland': '/areas/oakland.html',
+    '/areas/berkeley': '/areas/berkeley.html',
+    '/areas/hayward': '/areas/hayward.html',
+    '/areas/fremont': '/areas/fremont.html',
+    '/areas/san-francisco': '/areas/san-francisco.html',
+    '/areas/palo-alto': '/areas/palo-alto.html',
+    '/areas/san-jose': '/areas/san-jose.html'
+  };
+  const cleanPath = reqPath.replace(/\/$/, '').toLowerCase();
+  if (areaRedirects[cleanPath]) {
+    res.writeHead(302, { 'Location': areaRedirects[cleanPath] });
+    res.end();
+    return;
+  }
+
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    res.writeHead(405, { 'Content-Type': 'text/plain; charset=utf-8', Allow: 'GET, HEAD' });
+    res.end('Method Not Allowed');
+    return;
+  }
+
+  if (reqPath.includes('\0') || reqPath.includes('..') || reqPath.includes('\\')) {
+    return sendNotFound(req, res);
+  }
+
+  let filePath = path.resolve(SITE_ROOT, '.' + reqPath);
+  if (!filePath.toLowerCase().startsWith(SITE_ROOT.toLowerCase() + path.sep)) {
+    return sendNotFound(req, res);
+  }
+
+  // Support clean URLs without .html extension
+  if (!path.extname(filePath) && fs.existsSync(filePath + '.html')) {
+    filePath = filePath + '.html';
+    reqPath = reqPath + '.html';
+  }
+
+  const ext = path.extname(filePath).toLowerCase();
+  if (!MIME_TYPES[ext] || !isPublicPath(reqPath)) {
+    return sendNotFound(req, res);
+  }
+
+  fs.stat(filePath, (err, stat) => {
+    if (err || !stat.isFile()) return sendNotFound(req, res);
+
+    const mime = MIME_TYPES[ext];
+    const etag = `W/"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
+    const baseHeaders = {
+      'Content-Type': mime,
+      'Cache-Control': cacheControlFor(reqPath, ext),
+      ETag: etag,
+      'Last-Modified': stat.mtime.toUTCString()
+    };
+
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, baseHeaders);
+      res.end();
+      return;
+    }
+
+    // HTTP Range requests for video scrubbing (.mp4)
+    const range = req.headers.range;
+    if (range && ext === '.mp4') {
+      const m = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
+      let start = m && m[1] !== '' ? parseInt(m[1], 10) : NaN;
+      let end = m && m[2] !== '' ? parseInt(m[2], 10) : stat.size - 1;
+      if (m && m[1] === '' && m[2] !== '') { start = Math.max(0, stat.size - parseInt(m[2], 10)); end = stat.size - 1; }
+      end = Math.min(end, stat.size - 1);
+      if (!m || isNaN(start) || start > end || start >= stat.size) {
+        res.writeHead(416, { 'Content-Range': `bytes */${stat.size}` });
+        res.end();
+        return;
+      }
+      res.writeHead(206, Object.assign({}, baseHeaders, {
+        'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': end - start + 1
+      }));
+      if (req.method === 'HEAD') return res.end();
+      fs.createReadStream(filePath, { start, end }).pipe(res);
+      return;
+    }
+
+    const acceptsGzip = /\bgzip\b/.test(String(req.headers['accept-encoding'] || ''));
+    if (COMPRESSIBLE.has(ext) && acceptsGzip && stat.size > 1024) {
+      res.writeHead(200, Object.assign({}, baseHeaders, { 'Content-Encoding': 'gzip', Vary: 'Accept-Encoding' }));
+      if (req.method === 'HEAD') return res.end();
+      fs.createReadStream(filePath).pipe(zlib.createGzip({ level: 6 })).pipe(res);
+      return;
+    }
+
+    res.writeHead(200, Object.assign({}, baseHeaders, {
+      'Content-Length': stat.size,
+      'Accept-Ranges': 'bytes'
+    }));
+    if (req.method === 'HEAD') return res.end();
+    fs.createReadStream(filePath).pipe(res);
+  });
+}
+
+// Initialize SQLite database and the notification worker on boot
+db.getDb();
+outbox.start();
+
+const server = http.createServer(async (req, res) => {
+  const start = Date.now();
+  let logPath = '-';
+  res.on('finish', () => {
+    console.log(`[${req.method}] ${logPath} ${res.statusCode} (${Date.now() - start}ms)`);
+  });
+  applySecurityHeaders(req, res);
+
+  let parsedUrl;
+  try {
+    parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    logPath = parsedUrl.pathname;
+    decodeURIComponent(parsedUrl.pathname);
+  } catch (_) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Bad Request');
+    return;
+  }
+
+  try {
+    if (parsedUrl.pathname.startsWith('/api/')) {
+      await handleApi(req, res, parsedUrl);
+    } else {
+      serveStatic(req, res, parsedUrl);
+    }
+  } catch (err) {
+    const code = err.statusCode || 500;
+    if (code >= 500) console.error('[server] request failed:', err);
+    if (res.headersSent) { res.end(); return; }
+    sendJson(res, code, {
+      ok: false,
+      error: code >= 500
+        ? 'Something went wrong on our side and your message was not saved. Please call or text (925) 998-9711.'
+        : err.message
+    });
+  }
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    const nextPort = PORT === 4173 ? 4174 : PORT + 1;
+    console.warn(`[server] Port ${PORT} is busy, switching to fallback port http://localhost:${nextPort}`);
+    server.listen(nextPort);
+  } else {
+    console.error('[server] Server error:', err);
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`Steven Lenz Jr. | Compass server running at http://localhost:${PORT}`);
+});
+

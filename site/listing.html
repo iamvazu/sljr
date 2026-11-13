@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Property Details | Steven Lenz Jr. · Compass Real Estate</title>
+  <meta name="description" content="Property details, features, and private showing requests with Steven Lenz Jr. at Compass." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/theme.css?v=20261113b" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261113b" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261113b" />
+  <style>
+    body { overflow-y: auto; }
+    .prop-card { background: #141A23; border: 1px solid var(--sw-border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+    .prop-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+    .prop-body { padding: 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .prop-body h3 { font-family: var(--sw-font-display); font-weight: 400; font-size: 1.25rem; margin: 0; }
+  </style>
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
+</head>
+<body class="subpage">
+  <div id="ed-header-mount"></div>
+
+  <main class="ld-wrap" id="ld-root">
+    <p style="color:var(--sw-ink-soft);">Loading property details…</p>
+  </main>
+
+  <div id="ed-drawer-mount"></div>
+  <div id="ed-footer-mount"></div>
+
+  <script src="js/editorial-nav.js?v=20261113b"></script>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var targetId = params.get('id') || '2710-presidio';
+
+      fetch('content/listings.json')
+        .then(function (r) { return r.json(); })
+        .then(function (items) {
+          var item = items.find(function (x) { return x.id === targetId; }) || items[0];
+          document.title = item.full_address + ' | Steven Lenz Jr. · Compass';
+
+          var others = items.filter(function (x) { return x.id !== item.id; }).slice(0, 3);
+          var badgeStyle = item.active
+            ? 'background:rgba(216,165,90,0.92);color:#0D1117;border-color:transparent;'
+            : '';
+
+          var root = document.getElementById('ld-root');
+          root.innerHTML =
+            '<nav class="ld-breadcrumb" aria-label="Breadcrumb">' +
+              '<a href="index.html">Home</a> <span>›</span> ' +
+              '<a href="properties.html">Portfolio</a> <span>›</span> ' +
+              '<span style="color:var(--sw-ink);">' + item.full_address + '</span>' +
+            '</nav>' +
+
+            '<div class="ld-hero-photo">' +
+              '<img src="' + item.photo + '" alt="' + item.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
+              '<span class="listing-status" style="top:18px;left:18px;font-size:0.78rem;padding:6px 14px;' + badgeStyle + '">' + item.status + '</span>' +
+            '</div>' +
+
+            '<div class="ld-top-bar">' +
+              '<div>' +
+                '<span class="pf-banner__eyebrow">' + item.status + ' · ' + item.city + ', ' + item.state + '</span>' +
+                '<h1>' + item.address + '</h1>' +
+                '<p style="color:var(--sw-ink-soft);margin:0;">' + item.full_address + '</p>' +
+              '</div>' +
+              '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;">' +
+                '<div class="ld-price">' + item.price + '</div>' +
+                '<div style="display:flex;flex-wrap:wrap;gap:10px;">' +
+                  '<a class="sw-btn sw-btn--primary" href="#ld-inquiry">Schedule a Private Tour</a>' +
+                  '<a class="sw-btn sw-btn--ghost" href="tel:+19259989711">Call (925) 998-9711</a>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="ld-metrics">' +
+              '<div class="ld-metric"><strong>' + item.beds + '</strong><span>Bedrooms</span></div>' +
+              '<div class="ld-metric"><strong>' + item.baths + '</strong><span>Bathrooms</span></div>' +
+              '<div class="ld-metric"><strong>' + item.sqft + '</strong><span>Sq. Ft.</span></div>' +
+              '<div class="ld-metric"><strong>' + (item.year_built || item.status) + '</strong><span>' + (item.year_built ? 'Year Built' : 'Listing Status') + '</span></div>' +
+            '</div>' +
+
+            '<div class="ld-body">' +
+              '<div>' +
+                '<section class="ld-section">' +
+                  '<h2>About This Home</h2>' +
+                  '<p>' + item.description + '</p>' +
+                '</section>' +
+
+                '<section class="ld-section">' +
+                  '<h2>Property Highlights</h2>' +
+                  '<ul class="ld-highlights">' +
+                    (item.highlights || []).map(function (h) { return '<li>' + h + '</li>'; }).join('') +
+                  '</ul>' +
+                '</section>' +
+
+                '<section class="ld-section">' +
+                  '<h2>Features &amp; Details</h2>' +
+                  '<div class="ld-kv-table">' +
+                    '<div class="ld-kv"><span>Bedrooms</span><strong>' + item.beds + '</strong></div>' +
+                    '<div class="ld-kv"><span>Bathrooms</span><strong>' + item.baths + '</strong></div>' +
+                    '<div class="ld-kv"><span>Living Area</span><strong>' + item.sqft + ' sq ft</strong></div>' +
+                    '<div class="ld-kv"><span>Property Type</span><strong>' + (item.property_type || 'Residence') + '</strong></div>' +
+                    '<div class="ld-kv"><span>City</span><strong>' + item.city + '</strong></div>' +
+                    '<div class="ld-kv"><span>County</span><strong>' + (item.county || 'East Bay') + '</strong></div>' +
+                    '<div class="ld-kv"><span>Zip Code</span><strong>' + item.zip + '</strong></div>' +
+                    '<div class="ld-kv"><span>Record</span><strong>' + item.mls_id + '</strong></div>' +
+                  '</div>' +
+                  '<p style="margin-top:16px;"><a class="listing-link" href="' + item.external_url + '" target="_blank" rel="noopener noreferrer">View official transaction record on Compass ↗</a></p>' +
+                '</section>' +
+              '</div>' +
+
+              '<aside class="ld-sidebar">' +
+                '<div class="ld-card">' +
+                  '<h3>At a Glance</h3>' +
+                  '<div class="ld-kv"><span>Price</span><strong>' + item.price + '</strong></div>' +
+                  '<div class="ld-kv"><span>Status</span><strong>' + item.status + '</strong></div>' +
+                  '<div class="ld-kv"><span>Property Type</span><strong>' + (item.property_type || 'Single Family') + '</strong></div>' +
+                  '<div class="ld-kv"><span>Location</span><strong>' + item.city + ', ' + item.state + '</strong></div>' +
+                  '<div class="ld-kv" style="border-bottom:0;"><span>MLS® / Source</span><strong>' + item.mls_id + '</strong></div>' +
+                '</div>' +
+
+                '<div class="ld-card" style="display:flex;gap:14px;align-items:center;">' +
+                  '<img src="assets/img/steven-headshot.jpg" alt="Steven Lenz Jr." style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--sw-accent);" width="2111" height="2472" loading="lazy" decoding="async">' +
+                  '<div>' +
+                    '<strong style="display:block;font-family:var(--sw-font-display);font-size:1.15rem;">Steven Lenz Jr.</strong>' +
+                    '<span style="font-size:0.78rem;color:var(--sw-accent);display:block;">Luxury REALTOR® · Compass</span>' +
+                    '<span style="font-size:0.76rem;color:var(--sw-ink-soft);">CA DRE# 01989811 · (925) 998-9711</span>' +
+                  '</div>' +
+                '</div>' +
+
+                '<div class="ld-card" id="ld-inquiry">' +
+                  '<h3>Request Information</h3>' +
+                  '<form id="ld-form" novalidate>' +
+                    '<div class="form-field" style="margin-bottom:10px;"><label for="ld-name">Name *</label><input type="text" id="ld-name" required /></div>' +
+                    '<div class="form-field" style="margin-bottom:10px;"><label for="ld-email">Email *</label><input type="email" id="ld-email" required /></div>' +
+                    '<div class="form-field" style="margin-bottom:10px;"><label for="ld-phone">Phone *</label><input type="tel" id="ld-phone" required placeholder="(925) 555-0123" /></div>' +
+                    '<div class="form-field" style="margin-bottom:10px;"><label for="ld-msg">Message</label><textarea id="ld-msg" rows="3">I\'d like more information about ' + item.full_address + '.</textarea></div>' +
+                    '<label class="consent-row" style="margin-bottom:12px;"><input type="checkbox" id="ld-consent" /><span>I agree to be contacted by Steven Lenz Jr. of Compass via call, email, and text for real estate services. To opt out, reply \'stop\' at any time. Message and data rates may apply.</span></label>' +
+                    '<button type="submit" class="sw-btn sw-btn--primary" style="border:0;cursor:pointer;width:100%;justify-content:center;">Send Inquiry</button>' +
+                    '<div id="ld-form-status" class="form-status" hidden></div>' +
+                  '</form>' +
+                '</div>' +
+              '</aside>' +
+            '</div>' +
+
+            '<section style="margin-top:56px;padding-top:36px;border-top:1px solid var(--sw-border);">' +
+              '<span class="pf-banner__eyebrow">Portfolio</span>' +
+              '<h2 style="font-family:var(--sw-font-display);font-weight:400;font-size:1.85rem;margin:6px 0 22px;">More Properties</h2>' +
+              '<div class="pf-grid" style="margin-bottom:0;">' +
+                others.map(function (o) {
+                  return '<article class="prop-card">' +
+                    '<a href="listing.html?id=' + encodeURIComponent(o.id) + '" class="listing-photo-wrap">' +
+                      '<img src="' + o.photo + '" alt="' + o.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
+                      '<span class="listing-status">' + o.status + '</span>' +
+                    '</a>' +
+                    '<div class="prop-body">' +
+                      '<div style="color:var(--sw-accent);font-family:var(--sw-font-display);font-size:1.25rem;">' + o.price + '</div>' +
+                      '<h3>' + o.address + '</h3>' +
+                      '<span class="listing-city">' + o.city + ', ' + o.state + ' ' + o.zip + '</span>' +
+                      '<div class="listing-meta">' + o.beds + ' Beds · ' + o.baths + ' Baths · ' + o.sqft + ' Sq.Ft.</div>' +
+                      '<a class="listing-link" style="margin-top:8px;" href="listing.html?id=' + encodeURIComponent(o.id) + '">View Property →</a>' +
+                    '</div>' +
+                  '</article>';
+                }).join('') +
+              '</div>' +
+            '</section>';
+
+          var ldForm = document.getElementById('ld-form');
+          if (ldForm) {
+            ldForm.addEventListener('submit', function (e) {
+              e.preventDefault();
+              var name = document.getElementById('ld-name').value.trim();
+              var email = document.getElementById('ld-email').value.trim();
+              var status = document.getElementById('ld-form-status');
+              if (!name || !email) {
+                status.hidden = false;
+                status.textContent = 'Please enter your name and email address.';
+                return;
+              }
+              var done = window.SLForms.busy(ldForm);
+              window.SLForms.post('/api/lead', {
+                  name: name,
+                  email: email,
+                  phone: document.getElementById('ld-phone').value.trim(),
+                  interest: 'buying',
+                  message: document.getElementById('ld-msg').value.trim(),
+                  email_consent: document.getElementById('ld-consent').checked,
+                  source_page: window.location.pathname + window.location.search,
+                  scene: 'listing-' + item.id
+                })
+                .then(function () {
+                  window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your inquiry regarding ' + item.address + ' and will follow up personally.', false);
+                  ldForm.reset();
+                })
+                .catch(function (err) { window.SLForms.show(status, err.message, true); })
+                .then(done);
+            });
+          }
+        });
+    })();
+  </script>
+</body>
+</html>
+

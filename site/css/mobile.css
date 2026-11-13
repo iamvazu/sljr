@@ -1,0 +1,228 @@
+/* =====================================================================
+   mobile.css — phone & tablet layout for every page. Loaded LAST.
+
+   Rules of the road (keep these when editing):
+   1. Nothing may overlap. On the home page each scene is split into two
+      zones: copy on top, interactive panel pinned to the bottom. The copy
+      zone's max-height is always "viewport − header − panel", so text is
+      clipped (line-clamp) before it can run under a card or button.
+   2. Every tap target is at least 44px tall.
+   3. Inputs are 16px so iOS never zooms the page on focus.
+   4. One primary CTA per scene. If the panel's cards already are the
+      action, the duplicate button in the copy is hidden.
+   ===================================================================== */
+
+.form-status.is-error, .is-error[role="alert"] {
+  color: #FFD9D2 !important;
+  background: rgba(181, 60, 46, 0.22) !important;
+  border: 1px solid rgba(232, 120, 104, 0.7) !important;
+  border-radius: 8px; padding: 12px 14px; margin-top: 10px;
+  font-size: 0.86rem; line-height: 1.5;
+}
+button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
+
+.lead-mhead { display: none; }
+
+@media (max-width: 960px) {
+  :root {
+    --m-head: 72px;                                   /* fixed header height */
+    --m-top: calc(var(--m-head) + 12px);              /* where content starts */
+    --m-gutter: 16px;
+    --m-bottom: calc(14px + env(safe-area-inset-bottom));
+    --m-card-h: clamp(84px, 15.5dvh, 150px);          /* 2×2 card grids */
+  }
+
+  /* ---------- Header ---------- */
+  .ed-header { height: var(--m-head); padding: 0 12px; gap: 8px; }
+  .ed-brand { padding: 0 6px; }
+  .ed-brand__name { font-size: 1rem; letter-spacing: 0.14em; }
+  .ed-brand__banner { height: 24px; }
+  .ed-brand__sub { font-size: 0.5rem; margin-top: 1px; }
+  .ed-burger { min-width: 44px; min-height: 44px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; }
+
+  /* ---------- Home: shared scene rules ---------- */
+  .sw-route, .sw-hint { display: none !important; }
+  .sw-copylayer::before {
+    background: linear-gradient(180deg, rgba(13,17,23,0.90) 0%, rgba(13,17,23,0.66) 34%, rgba(13,17,23,0.34) 58%, rgba(13,17,23,0.86) 100%);
+  }
+  .sw-copy {
+    left: var(--m-gutter); right: var(--m-gutter); width: auto;
+    top: var(--m-top); bottom: auto;
+    max-height: calc(100dvh - var(--m-top) - var(--panel-h, 0px) - var(--m-bottom) - 14px);
+    overflow: hidden; transform: none !important;
+  }
+  .sw-copy[data-scene="lounge"] { width: auto; }
+  .sw-copy__eyebrow { font-size: 0.62rem; letter-spacing: 0.2em; }
+  .sw-copy__title,
+  .sw-copy--hero .sw-copy__title {
+    font-size: clamp(1.5rem, 6.2vw, 2.3rem); line-height: 1.16; margin: 8px 0 0;
+    max-width: none !important; text-wrap: balance;
+  }
+  .sw-copy:not(.sw-copy--hero) .sw-copy__title br { display: none; }
+  .sw-copy__body,
+  .sw-copy--hero .sw-copy__body {
+    margin-top: 10px; font-size: 0.94rem; line-height: 1.55; max-width: 60ch;
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+  }
+  .sw-copy__tags { display: none; }
+  .sw-copy__cta, .sw-copy__cta-group { margin-top: 14px; gap: 10px; }
+  .sw-btn {
+    min-height: 46px; padding: 12px 18px; justify-content: center; text-align: center;
+    font-size: 0.7rem; letter-spacing: 0.14em;
+  }
+  .sw-copy__cta .sw-btn, .sw-copy__cta-group .sw-btn { flex: 1 1 auto; }
+
+  .sw-panel {
+    left: var(--m-gutter); right: var(--m-gutter); width: auto !important;
+    top: auto !important; bottom: var(--m-bottom);
+    max-height: none; overflow: visible; transform: none !important;
+  }
+
+  /* ---------- Scene 1 · Hero ---------- */
+  .sw-copy--hero {
+    display: flex; flex-direction: column;
+    bottom: var(--m-bottom); max-height: none; overflow: visible; width: auto;
+  }
+  .sw-copy--hero .sw-copy__body { -webkit-line-clamp: 4; }
+  .hero-search-wrap { margin-top: auto; max-width: none; }
+  .hero-search-bar {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px;
+    background: rgba(13, 17, 23, 0.82);
+  }
+  .hero-search-input-wrap {
+    grid-column: 1 / -1; min-width: 0; min-height: 48px; padding: 0 12px;
+    background: rgba(243, 238, 230, 0.07); border: 1px solid rgba(243, 238, 230, 0.2);
+  }
+  .hero-search-input-wrap input { font-size: 16px; min-width: 0; width: 100%; }
+  .hero-search-btn, .hero-connect-btn { min-height: 46px; padding: 0 8px; font-size: 0.68rem; letter-spacing: 0.12em; }
+  .hero-search-results { top: auto; bottom: calc(100% + 6px); max-height: 42dvh; }
+  .hero-popular {
+    flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 6px; margin-top: 8px;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin-right: calc(var(--m-gutter) * -1); padding-right: var(--m-gutter);
+  }
+  .hero-popular::-webkit-scrollbar { display: none; }
+  .hero-popular__row { display: contents; }
+  .hero-popular__label, .hero-popular__pill { flex: 0 0 auto; }
+  .hero-popular__pill { min-height: 36px; display: inline-flex; align-items: center; padding: 0 12px; font-size: 0.74rem; }
+
+  /* ---------- Scene 2 · Meet Steven ---------- */
+  .sw-copy[data-scene="roots"] { --panel-h: 96px; }
+  .sw-stats-bar {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 8px;
+    margin-top: 14px; padding-top: 12px; max-width: none;
+  }
+  .sw-stat-col { gap: 4px; }
+  .sw-stat-col:nth-child(2)::after { display: block !important; }
+  .sw-stat-val { font-size: clamp(1.02rem, 4.6vw, 1.5rem); }
+  .sw-stat-lbl { font-size: 0.5rem; letter-spacing: 0.1em; padding-right: 6px; }
+  .sw-panel[data-scene="roots"] .meet-portrait {
+    flex-direction: row; align-items: center; text-align: left; gap: 14px;
+    padding: 10px 14px; border-radius: 14px;
+    background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(243, 238, 230, 0.2);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  }
+  .sw-panel[data-scene="roots"] .meet-portrait__ring { width: 74px; padding: 3px; box-shadow: none; }
+  .sw-panel[data-scene="roots"] .meet-portrait__meta-wrap {
+    margin: 0 !important; padding: 0; border: 0; max-width: none; min-width: 0;
+    align-items: flex-start; text-align: left;
+  }
+  .sw-panel[data-scene="roots"] .meet-portrait__name { font-size: 1.05rem; }
+  .sw-panel[data-scene="roots"] .meet-portrait__meta { font-size: 0.66rem; margin-top: 2px; }
+  .sw-panel[data-scene="roots"] .meet-portrait__link { margin-top: 4px; padding: 6px 0; font-size: 0.68rem; }
+
+  /* ---------- Scene 3 · Services (cards are the CTAs) ---------- */
+  .sw-copy[data-scene="concierge"],
+  .sw-copy[data-scene="communities"] { --panel-h: calc(var(--m-card-h) * 2 + 10px); }
+  .sw-copy[data-scene="concierge"] .sw-copy__cta-group { display: none; }
+  .sw-copy[data-scene="concierge"] .sw-copy__body { -webkit-line-clamp: 4; }
+  .svc-cards, .comm-cards { gap: 10px; }
+  .svc-card, .comm-card { aspect-ratio: auto; height: var(--m-card-h); max-height: none; border-radius: 12px; }
+  .svc-card__explore, .svc-card__body p, .comm-card__desc, .comm-card__explore-btn { display: none; }
+  .svc-card__body { left: 12px; right: 34px; bottom: 10px; }
+  .svc-card__body h3 { font-size: 1.02rem; line-height: 1.2; }
+  .comm-card__content { padding: 10px 12px; }
+  .comm-card__title { font-size: 1.02rem; line-height: 1.2; margin: 0; }
+
+  /* ---------- Scene 4 · Featured properties ---------- */
+  .sw-copy[data-scene="portfolio"] { --panel-h: calc(clamp(120px, 25dvh, 250px) + 142px); }
+  .sw-copy[data-scene="portfolio"] .sw-copy__cta { display: none; }   /* "View all" lives on the carousel */
+  .sw-panel[data-scene="portfolio"] .track-head { margin-bottom: 8px; align-items: center; }
+  .track-view-all { padding: 12px 0 10px; }
+  .track-arrow { width: 44px; height: 44px; }
+  .listings-grid { gap: 10px; margin-right: calc(var(--m-gutter) * -1); padding-right: var(--m-gutter); scroll-padding-left: 0; }
+  .listings-grid .listing-card { flex: 0 0 min(80%, 340px); }
+  .listings-grid .listing-photo-wrap { aspect-ratio: auto; height: clamp(120px, 25dvh, 250px); }
+  .listing-body { padding: 10px 12px 12px; }
+  .listing-price { font-size: 1.15rem; }
+
+  /* ---------- Scene 5 · Communities ---------- */
+  .sw-panel[data-scene="communities"] .track-head { display: none; }  /* copy CTA covers it */
+
+  /* ---------- Scene 6 · Testimonials ---------- */
+  .sw-copy[data-scene="lounge"] { --panel-h: 262px; }
+  .sw-copy[data-scene="lounge"] .sw-copy__body { -webkit-line-clamp: 2; }
+  .sw-panel[data-scene="lounge"] .track-head { margin-bottom: 8px; align-items: center; }
+  .sw-panel[data-scene="lounge"] .track-head__title { font-size: 1rem; }
+  .tq-track { gap: 10px; margin-right: calc(var(--m-gutter) * -1); padding-right: var(--m-gutter); }
+  .tq-card { flex: 0 0 min(84%, 360px); min-height: 0; height: 206px; padding: 14px 16px 12px; border-radius: 14px; }
+  .tq-stars { font-size: 0.78rem; }
+  .tq-quote { margin: 8px 0 10px; font-size: 0.9rem; line-height: 1.45; -webkit-line-clamp: 4; }
+  .tq-person { padding-top: 8px; }
+  .tq-name { font-size: 0.84rem; } .tq-context { font-size: 0.72rem; }
+
+  /* ---------- Scene 7 · Lead form (the form owns the screen) ---------- */
+  .sw-copy[data-scene="terrace"] { display: none; }
+  .sw-panel[data-scene="terrace"] {
+    top: var(--m-top) !important; bottom: var(--m-bottom);
+    max-height: none; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 16px 16px 0; border-radius: 14px;
+  }
+  .lead-mhead { display: block; margin-bottom: 14px; }
+  .lead-mhead .sw-copy__eyebrow { display: inline-flex; }
+  .lead-mhead__title {
+    font-family: var(--sw-font-display); font-weight: 300; color: var(--sw-ink);
+    font-size: clamp(1.4rem, 5.6vw, 1.9rem); line-height: 1.18; margin: 6px 0 4px;
+  }
+  .lead-mhead__sub { margin: 0 0 12px; font-size: 0.86rem; line-height: 1.5; color: rgba(243, 238, 230, 0.84); }
+  .lead-mhead__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sw-panel[data-scene="terrace"] .form-grid { grid-template-columns: 1fr 1fr; gap: 12px 10px; }
+  .sw-panel[data-scene="terrace"] .form-grid > .form-field:nth-child(-n+4) { grid-column: 1 / -1; }
+  .sw-panel[data-scene="terrace"] .area-chips {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 8px; padding-bottom: 2px;
+    margin-right: -16px; padding-right: 16px;
+  }
+  .sw-panel[data-scene="terrace"] .area-chips::-webkit-scrollbar { display: none; }
+  .sw-panel[data-scene="terrace"] .area-chip { flex: 0 0 auto; }
+  .sw-panel[data-scene="terrace"] #lead-submit {
+    position: sticky; bottom: 0; z-index: 3; min-height: 52px; margin: 6px -16px 0; width: calc(100% + 32px) !important;
+    border-radius: 0 0 13px 13px; box-shadow: 0 -14px 22px rgba(13, 17, 23, 0.85);
+  }
+  .sw-panel[data-scene="terrace"] .form-status { margin-bottom: 16px; }
+
+  /* ---------- Forms everywhere ---------- */
+  .form-field label { font-size: 0.78rem; }
+  .form-field input, .form-field select, .form-field textarea { font-size: 16px; min-height: 46px; padding: 10px 12px; }
+  .form-field textarea { min-height: 76px; }
+  .area-chip span { padding: 10px 14px; font-size: 0.8rem; }
+  .consent-row { font-size: 0.76rem; gap: 10px; margin-top: 10px; line-height: 1.45; }
+  .consent-row input[type="checkbox"] { width: 20px; height: 20px; margin-top: 0; }
+}
+
+/* Short phones / landscape: give the panel priority, trim the copy. */
+@media (max-width: 960px) and (max-height: 620px) {
+  .sw-copy__body, .sw-copy--hero .sw-copy__body { -webkit-line-clamp: 2 !important; }
+  .sw-copy[data-scene="roots"] .sw-copy__body { -webkit-line-clamp: 3 !important; }
+  .tq-card { height: 180px; } .tq-quote { -webkit-line-clamp: 3; }
+  .sw-copy[data-scene="lounge"] { --panel-h: 236px; }
+}
+@media (max-width: 960px) and (max-height: 500px) {
+  .sw-copy:not(.sw-copy--hero) .sw-copy__body, .sw-stats-bar, .hero-popular { display: none; }
+}
+/* Tablets in portrait have room for bigger cards. */
+@media (min-width: 700px) and (max-width: 960px) {
+  :root { --m-gutter: 28px; --m-card-h: clamp(120px, 17dvh, 220px); }
+  .svc-card__body p, .comm-card__desc { display: block; }
+  .listings-grid .listing-card { flex-basis: 46%; }
+  .tq-card { flex-basis: 46%; }
+}

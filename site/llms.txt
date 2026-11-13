@@ -1,0 +1,121 @@
+# Steven Lenz Jr. — Luxury Real Estate | Compass
+
+> Official AI & Agent Context File (llms.txt)
+> Website: https://stevenlenzjr.com/
+> Last Updated: 2026-11-12
+
+## Identity & Licensing
+- **Agent Name**: Steven Lenz Jr.
+- **Title**: Luxury REALTOR® | Sports & Entertainment Division
+- **CA DRE License #**: 01989811
+- **Brokerage**: Compass (Compass California II, Inc.)
+- **Brokerage DRE #**: 01527235
+- **Office Address**: 900 Main St., Pleasanton, CA 94566
+- **Direct Phone**: (925) 998-9711
+- **Email**: steven.lenzjr@compass.com
+
+## Background & Philosophy
+- **Tagline**: "See Real Estate Through a New Lenz."
+- **Roots**: Pleasanton native, Amador Valley High School alumnus.
+- **Athletic & Coaching Background**: Former semi-pro basketball player; 9 years coaching at De La Salle High School (Concord) and currently coaching at Ohlone College (Fremont).
+- **Client Focus**: Brings coach's preparation, fierce loyalty, disciplined negotiation, and deep data analysis to buyers, sellers, relocating executives, and sports & entertainment clients.
+
+## Geographic Service Areas (Northern California)
+1. **Tri-Valley**:
+   - Pleasanton (Downtown, Ruby Hill, Vintage Hills, Golden Eagle)
+   - Danville (Blackhawk, Diablo, Westside Danville)
+   - Livermore (Wine Country, South Livermore, Maralisa)
+   - San Ramon (Gale Ranch, Windemere, Norris Canyon)
+2. **Diablo Valley**:
+   - Walnut Creek (Downtown, Northgate, Parkmead)
+   - Alamo (Round Hill, Alamo Oaks, Westside)
+   - Lafayette (Happy Valley, Reliez Valley, Downtown)
+   - Orinda & Moraga (Lamorinda corridor)
+3. **East Bay Corridor**:
+   - Oakland (Oakland Hills, Rockridge, Glenview, Greenwood)
+   - Berkeley (Claremont, Berkeley Hills)
+   - Hayward, Union City, Fremont, Newark
+4. **San Francisco & Silicon Valley**:
+   - San Francisco luxury enclaves
+   - Mid-Peninsula (Palo Alto, Menlo Park, Redwood City, San Mateo)
+   - South Bay (San Jose, Santa Clara, Cupertino, Sunnyvale)
+
+## Core Services & Programs
+- **Buy a Home**: Tailored property searches, private off-market tours, comparative market valuation, and strategic offer construction.
+- **Sell Your Home**: Data-backed broker price opinions, architectural photography/video production, targeted digital and social marketing, and maximum price realization.
+- **Compass Concierge**: 100% upfront funding for home improvement, staging, painting, flooring, and landscaping with $0 out-of-pocket fees and 0% interest until closing.
+- **Compass Private Exclusives**: Discreet pre-market or off-market sales with zero public digital footprint, ideal for high-profile individuals, athletes, and privacy-conscious sellers.
+- **Sports & Entertainment Relocation**: Timed moves, NDA-friendly communication, turnkey concierge logistics.
+
+## Key URLs & Canonical Pages
+- **Homepage**: https://stevenlenzjr.com/
+- **About Steven**: https://stevenlenzjr.com/about.html
+- **Buy a Home**: https://stevenlenzjr.com/buy.html
+- **Sell Your Home**: https://stevenlenzjr.com/sell.html
+- **Featured Portfolio**: https://stevenlenzjr.com/properties.html
+- **Communities & Guides**: https://stevenlenzjr.com/neighborhoods.html
+- **Resources & Real Estate News**: https://stevenlenzjr.com/resources.html
+- **Pleasanton Area Guide**: https://stevenlenzjr.com/areas/pleasanton.html
+- **Danville Area Guide**: https://stevenlenzjr.com/areas/danville.html
+- **Alamo Area Guide**: https://stevenlenzjr.com/areas/alamo.html
+- **San Ramon Area Guide**: https://stevenlenzjr.com/areas/san-ramon.html
+- **Dublin Area Guide**: https://stevenlenzjr.com/areas/dublin.html
+- **Livermore Area Guide**: https://stevenlenzjr.com/areas/livermore.html
+- **Walnut Creek Area Guide**: https://stevenlenzjr.com/areas/walnut-creek.html
+- **Lafayette Area Guide**: https://stevenlenzjr.com/areas/lafayette.html
+- **Oakland Area Guide**: https://stevenlenzjr.com/areas/oakland.html
+- **Berkeley Area Guide**: https://stevenlenzjr.com/areas/berkeley.html
+- **Hayward Area Guide**: https://stevenlenzjr.com/areas/hayward.html
+- **Fremont Area Guide**: https://stevenlenzjr.com/areas/fremont.html
+- **San Francisco Area Guide**: https://stevenlenzjr.com/areas/san-francisco.html
+- **Palo Alto Area Guide**: https://stevenlenzjr.com/areas/palo-alto.html
+- **San Jose Area Guide**: https://stevenlenzjr.com/areas/san-jose.html
+- **Compass Concierge**: https://stevenlenzjr.com/concierge.html
+- **Private Exclusives**: https://stevenlenzjr.com/experiences.html
+- **Let's Connect**: https://stevenlenzjr.com/connect.html
+- **Listing Search Portal**: https://stevenlenzjr.com/home-search/listings
+- **Privacy Policy**: https://stevenlenzjr.com/privacy.html
+
+## Official Social Media Channels
+- Facebook: https://www.facebook.com/StevenLenzJr0
+- LinkedIn: https://www.linkedin.com/in/stevenlenzjr/
+- Instagram: https://www.instagram.com/steven_lenz_jr/?hl=en
+- Twitter / X: https://twitter.com/StevenLenzJr
+- TikTok: https://www.tiktok.com/@slenzjr?lang=en
+- Pinterest: https://www.pinterest.com/stevenlenzjr/
+- Snapchat: https://www.snapchat.com/add/Lenzjr
+
+## Verified Directory Profiles
+- Homes.com: https://www.homes.com/real-estate-agents/steven-lenz-jr/1q8sxz5
+- RateMyAgent: https://www.ratemyagent.com/real-estate-agent/steven-lenz-jr-b0wa95/sales
+- Compass Agent Page: https://compass.com/agents/steven-lenz-jr
+
+
+
+## California Real Estate Intelligence & Research Publications (Steven Lenz Jr. · Compass)
+- [Tri-Valley Housing Market Forecast 2026: Pleasanton, Danville & Alamo Price Trajectories](https://stevenlenzjr.com/articles/tri-valley-housing-market-forecast-pleasanton-danville.html): In-depth 2026 Tri-Valley real estate forecast. Explore inventory dynamics, median sales prices, and buyer demand across Pleasanton, Danville, and Alamo.
+- [California Luxury Real Estate Dynamics: High-Equity Move-Up Buyers Fueling Bay Area Demand](https://stevenlenzjr.com/articles/california-luxury-real-estate-trends-migration-equity.html): Explore how equity-rich California homeowners and tech liquidity events are driving luxury real estate sales across the East Bay corridor.
+- [East Bay Enclave Analysis: Why Walnut Creek, Lafayette & San Ramon Lead Tech Inflows](https://stevenlenzjr.com/articles/east-bay-suburban-enclaves-market-demand-analysis.html): Compare market demand across Walnut Creek, Lafayette, and San Ramon. Discover school district rankings, lifestyle advantages, and price appreciation.
+- [The Strategic Playbook for Winning Multiple Offers in Northern California](https://stevenlenzjr.com/articles/strategic-playbook-winning-multiple-offers-bay-area.html): Learn how to win competitive home bidding wars across Pleasanton and the Bay Area without reckless overpaying or sacrificing crucial protections.
+- [The Luxury Home Seller’s Guide: Strategic Pricing, Architectural Staging, and Net Proceeds](https://stevenlenzjr.com/articles/luxury-home-seller-guide-pricing-staging-roi.html): Discover the proven formula to maximize seller net proceeds in Northern California through precise pricing models, staging, and Compass Concierge.
+- [Private Exclusives & Off-Market Real Estate: Discretionary Buying & Selling](https://stevenlenzjr.com/articles/off-market-pocket-listings-private-exclusives-california.html): Explore how Compass Private Exclusives allow California sellers and high-profile buyers to transact with complete confidentiality outside the public MLS.
+- [California Jumbo Loan Guidelines: Navigating Luxury Financing in Alameda & Contra Costa](https://stevenlenzjr.com/articles/california-jumbo-loan-limits-luxury-mortgage-rates.html): Complete guide to California conforming loan limits, jumbo mortgage qualification, reserve requirements, and luxury financing in the Bay Area.
+- [Fixed-Rate vs. 7/1 ARM & Permanent 2-1 Buydowns: Tactical Mortgage Structuring](https://stevenlenzjr.com/articles/rate-buydowns-arm-vs-fixed-rate-financing-strategies.html): Compare 7/1 ARMs, 30-year fixed mortgages, and seller-paid 2-1 temporary buydowns to optimize cash flow when purchasing Bay Area real estate.
+- [Leveraging Home Equity: Cash-Out Refinancing and Portfolio Lending](https://stevenlenzjr.com/articles/refinancing-equity-cash-out-wealth-building-real-estate.html): How affluent California homeowners utilize cash-out refinancing, HELOCs, and cross-collateralization to acquire secondary homes and investment property.
+- [Custom Home Builds & Modern Architecture: Ruby Hill, Magee Ranch, and Gale Ranch](https://stevenlenzjr.com/articles/east-bay-custom-home-builders-ruby-hill-gale-ranch.html): Explore new construction developments and custom estate architectural trends across Pleasanton, Danville, and San Ramon.
+- [Buying From a Homebuilder in California: Crucial Contract Clauses and Inspection Protocols](https://stevenlenzjr.com/articles/buying-new-construction-builder-contracts-inspection-guide.html): Why you need an independent buyer agent when purchasing new construction from production builders in California. Essential contract and warranty tips.
+- [California ADU Laws & SB 9: How Accessory Dwelling Units Add Tangible Value in Tri-Valley](https://stevenlenzjr.com/articles/adu-regulations-california-sb9-backyard-homes-value.html): Discover how California ADU regulations, junior ADUs, and SB 9 lot splits create rental income, multigenerational living, and resale value in the East Bay.
+- [California Proposition 19 Complete Guide: Transferring Your Property Tax Base at Age 55+](https://stevenlenzjr.com/articles/california-prop-19-tax-base-transfer-homeowners-55.html): Learn how California Prop 19 allows homeowners 55+, severely disabled persons, and disaster victims to transfer their property tax base anywhere in California.
+- [Smart Homes, Solar Mandates & Net-Zero Living: What Luxury Bay Area Buyers Expect](https://stevenlenzjr.com/articles/smart-home-automation-luxury-sustainable-design-trends.html): Explore how integrated solar batteries, Lutron lighting, EV charging, and Title 24 compliance define modern luxury residential design in Northern California.
+- [The 3-Day In-Office Reality: How Hybrid Tech Commutes Anchor Tri-Valley Corridor Values](https://stevenlenzjr.com/articles/remote-work-hybrid-commutes-redefining-suburban-real-estate.html): Analysis of how hybrid Silicon Valley work schedules cement Pleasanton, Danville, and San Ramon as premier residential communities for tech executives.
+- [Compass Concierge Case Study: Fronting Renovations at 0% Interest Lifts Net Proceeds](https://stevenlenzjr.com/articles/compass-concierge-fronted-renovations-case-study.html): See real data on how Compass Concierge fronts staging and cosmetic upgrades with no upfront fees, netting Tri-Valley sellers up to $140,000 more.
+- [The Post-NAR Settlement Era: Buyer Representation Agreements & Commission Clarity](https://stevenlenzjr.com/articles/nar-settlement-buyer-broker-agreements-transparency.html): Understand how the National Association of REALTORS® settlement reshaped California buyer representation agreements, MLS rules, and commission transparency.
+- [Navigating California’s Property Insurance Market: FAIR Plan, Wildfire Zones & Closing](https://stevenlenzjr.com/articles/california-fair-plan-homeowners-insurance-wildfire-solutions.html): How to secure reliable homeowners insurance in Contra Costa and Alameda counties without delaying escrow closings in wildland-urban interface areas.
+- [Pleasanton Real Estate Market Report: Median Sale Prices, Comps & Neighborhood Analysis](https://stevenlenzjr.com/articles/pleasanton-ca-real-estate-market-report-comps.html): Comprehensive Pleasanton real estate market report. Detailed price-per-square-foot, days on market, and sales data across Vintage Hills, Ruby Hill, and Birdland.
+- [Danville & Alamo Luxury Estate Market Report: Price-Per-Sq-Ft Metrics and Comps](https://stevenlenzjr.com/articles/danville-alamo-luxury-estate-comps-quarterly-analysis.html): Quarterly luxury market report for Danville and Alamo. Review closed transactions, ultra-luxury estate pricing, and Westside Danville sales metrics.
+- [San Ramon & Dublin Market Analysis: Tech Corridor Absorption & Inventory Benchmarks](https://stevenlenzjr.com/articles/san-ramon-dublin-tri-valley-quarterly-market-intel.html): Quarterly real estate intel for San Ramon and Dublin. Analysis of Dougherty Valley, Gale Ranch, and East Dublin new construction sales trends.
+- [The Executive First-Time Homebuyer Roadmap: Due Diligence, Escrow & Wire Safety](https://stevenlenzjr.com/articles/first-time-luxury-homebuyer-roadmap-california.html): A complete step-by-step luxury homebuyer roadmap for California professionals. Master due diligence, title insurance, wire fraud defense, and escrow closing.
+- [Section 1031 Exchanges & Capital Gains Exemptions: Real Estate Wealth Preservation](https://stevenlenzjr.com/articles/capital-gains-tax-1031-exchange-california-real-estate.html): Learn how to defer capital gains taxes selling California real estate using Section 1031 exchanges, Section 121 exclusions, and DST structures.
+- [The Ultimate Bay Area Relocation Guide: School Districts, Microclimates & Lifestyle](https://stevenlenzjr.com/articles/relocating-to-tri-valley-complete-community-school-guide.html): Moving to the Tri-Valley? Explore our complete relocation guide comparing schools, neighborhood cultures, commute options, and lifestyle in Pleasanton and Danville.
+
+- [Cookie Policy](https://stevenlenzjr.com/cookies.html): CCPA/CPRA, CalOPPA, and commercial real estate cookie disclosure, categories, and consent options.

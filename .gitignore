@@ -1,0 +1,9 @@
+.env
+data/
+node_modules/
+_backup_*/
+*.db
+*.db-shm
+*.db-wal
+.agent/
+

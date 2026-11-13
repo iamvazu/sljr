@@ -1,0 +1,412 @@
+/* ============================================================================
+   article.css — Luxury Editorial Article Styling
+   Steven Lenz Jr. | Compass Real Estate
+   ============================================================================ */
+
+.art-page {
+  background: #0D1117;
+  color: var(--sw-ink);
+  min-height: 100vh;
+}
+
+.art-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 120px 24px 80px;
+}
+
+/* Breadcrumbs */
+.art-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sw-ink-soft);
+  margin-bottom: 24px;
+}
+.art-crumbs a {
+  color: var(--sw-ink-soft);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.art-crumbs a:hover {
+  color: var(--sw-accent);
+}
+.art-crumbs span.sep {
+  opacity: 0.4;
+}
+
+/* Header & Meta */
+.art-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--sw-accent);
+  background: rgba(216, 165, 90, 0.1);
+  border: 1px solid rgba(216, 165, 90, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.art-title {
+  font-family: var(--sw-font-display);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  margin: 0 0 20px;
+  color: #FFFFFF;
+}
+
+.art-byline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--sw-border);
+  border-bottom: 1px solid var(--sw-border);
+  margin-bottom: 32px;
+  font-size: 0.84rem;
+  color: var(--sw-ink-soft);
+}
+
+.art-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.art-author img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--sw-border);
+}
+.art-author strong {
+  color: var(--sw-ink);
+  font-weight: 600;
+  display: block;
+}
+.art-author small {
+  color: var(--sw-accent);
+  font-size: 0.76rem;
+}
+
+.art-share {
+  display: flex;
+  gap: 10px;
+}
+.art-share-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--sw-border);
+  color: var(--sw-ink);
+  font-size: 0.76rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.art-share-btn:hover {
+  background: rgba(216, 165, 90, 0.15);
+  border-color: var(--sw-accent);
+  color: var(--sw-accent);
+}
+
+/* Hero Media */
+.art-hero-img-wrap {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--sw-border);
+  margin-bottom: 36px;
+  background: #141A23;
+}
+.art-hero-img-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 480px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Takeaways Callout */
+.art-takeaways {
+  background: linear-gradient(135deg, rgba(216, 165, 90, 0.08) 0%, rgba(20, 26, 35, 0.6) 100%);
+  border: 1px solid rgba(216, 165, 90, 0.35);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin: 0 0 40px;
+}
+.art-takeaways h3 {
+  font-family: var(--sw-font-display);
+  font-size: 1.15rem;
+  color: var(--sw-accent);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.art-takeaways ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.art-takeaways li {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: rgba(243, 238, 230, 0.92);
+}
+
+/* Prose Body */
+.art-prose {
+  font-family: var(--sw-font-body);
+  font-size: 1.05rem;
+  line-height: 1.82;
+  color: rgba(243, 238, 230, 0.88);
+}
+.art-lead {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #FFFFFF;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.art-prose h2 {
+  font-family: var(--sw-font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: #FFFFFF;
+  margin: 44px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.art-prose p {
+  margin: 0 0 24px;
+}
+
+/* Tables */
+.art-table-wrap {
+  overflow-x: auto;
+  margin: 28px 0 36px;
+  border: 1px solid var(--sw-border);
+  border-radius: 10px;
+  background: #10151D;
+}
+.art-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+.art-table th {
+  background: rgba(216, 165, 90, 0.12);
+  color: var(--sw-accent);
+  padding: 12px 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--sw-border);
+}
+.art-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--sw-ink);
+}
+.art-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* FAQ Accordion */
+.art-faqs {
+  margin: 48px 0;
+  padding-top: 36px;
+  border-top: 1px solid var(--sw-border);
+}
+.art-faqs h2 {
+  font-family: var(--sw-font-display);
+  font-size: 1.6rem;
+  color: #FFFFFF;
+  margin: 0 0 20px;
+}
+.art-faq-item {
+  border: 1px solid var(--sw-border);
+  border-radius: 8px;
+  background: #141A23;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.art-faq-item summary {
+  padding: 16px 20px;
+  font-weight: 500;
+  color: var(--sw-ink);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.art-faq-item summary::-webkit-details-marker { display: none; }
+.art-faq-item summary::after {
+  content: "+";
+  color: var(--sw-accent);
+  font-size: 1.2rem;
+}
+.art-faq-item[open] summary::after {
+  content: "–";
+}
+.art-faq-item p {
+  padding: 0 20px 18px;
+  color: var(--sw-ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Author Box */
+.art-author-box {
+  background: #141A23;
+  border: 1px solid var(--sw-border);
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 48px 0;
+}
+.art-author-box img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--sw-accent);
+  flex-shrink: 0;
+}
+.art-author-box h4 {
+  margin: 0 0 6px;
+  font-family: var(--sw-font-display);
+  font-size: 1.25rem;
+  color: #FFFFFF;
+}
+.art-author-box p {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--sw-ink-soft);
+}
+.art-author-box a {
+  color: var(--sw-accent);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Lead CTA */
+.art-lead-cta {
+  background: radial-gradient(circle at center, rgba(216, 165, 90, 0.16) 0%, rgba(13, 17, 23, 0.9) 75%), #141A23;
+  border: 1px solid var(--sw-accent);
+  border-radius: 14px;
+  padding: 40px 32px;
+  text-align: center;
+  margin: 56px 0;
+}
+.art-lead-cta h3 {
+  font-family: var(--sw-font-display);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 400;
+  margin: 0 0 12px;
+  color: #FFFFFF;
+}
+.art-lead-cta p {
+  max-width: 580px;
+  margin: 0 auto 24px;
+  color: var(--sw-ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+.art-lead-cta__btns {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Related Articles */
+.art-related {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--sw-border);
+}
+.art-related h3 {
+  font-family: var(--sw-font-display);
+  font-size: 1.6rem;
+  margin: 0 0 24px;
+  color: #FFFFFF;
+}
+.art-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+.art-related-card {
+  background: #141A23;
+  border: 1px solid var(--sw-border);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--sw-ink);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.art-related-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--sw-accent);
+}
+.art-related-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+.art-related-card div {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.art-related-card span {
+  font-size: 0.68rem;
+  color: var(--sw-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.art-related-card h4 {
+  font-family: var(--sw-font-display);
+  font-size: 1.05rem;
+  line-height: 1.35;
+  margin: 0 0 8px;
+  color: #FFFFFF;
+}
+.art-related-card p {
+  font-size: 0.78rem;
+  color: var(--sw-ink-soft);
+  margin: 0;
+  line-height: 1.45;
+}
+
+@media (max-width: 680px) {
+  .art-container { padding: 90px 18px 60px; }
+  .art-author-box { flex-direction: column; text-align: center; }
+  .art-byline { flex-direction: column; align-items: flex-start; }
+}

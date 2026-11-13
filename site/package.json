@@ -1,0 +1,14 @@
+{
+  "name": "steven-lenz-jr-compass",
+  "version": "1.0.0",
+  "description": "Steven Lenz Jr. | Compass Real Estate — Full-stack editorial web platform with SQLite DB, security middleware, and search API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
+

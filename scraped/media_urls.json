@@ -1,0 +1,61 @@
+{
+  "home": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "about": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "testimonials": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "concierge": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "private-exclusives": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "properties": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-6831891739819453871.jpg",
+    "https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-7623023828273487248.jpg",
+    "https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-1923264926297032171.jpg",
+    "https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-1687885987.jpg",
+    "https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/166635999.jpg",
+    "https://res.cloudinary.com/"
+  ],
+  "properties_1631-altamont-cir": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "properties_2261-genoa-st": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ],
+  "properties_3868-greenwood-ave": [
+    "https://cdn.luxurypresence.com/scripts/a11y-widget/latest/widget.js",
+    "https://cdn.luxurypresence.com/scripts/event-bus-js",
+    "https://cdn.luxurypresence.com/scripts/lp-consent/latest/lp-consent-boot.js",
+    "https://res.cloudinary.com/"
+  ]
+}

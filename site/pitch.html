@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pitch Deck — See Real Estate Through a New Lenz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0D1117; --surface: #141A23; --border: rgba(243,238,230,0.14);
+      --ink: #F3EEE6; --ink-soft: #A9B4C2; --accent: #D8A55A;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; line-height: 1.55; }
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 28px; background: rgba(13,17,23,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar img { height: 22px; }
+    .controls { display: flex; align-items: center; gap: 10px; }
+    .btn {
+      background: rgba(243,238,230,0.08); color: var(--ink); border: 1px solid var(--border);
+      padding: 7px 14px; border-radius: 999px; cursor: pointer; font-size: 0.82rem; text-decoration: none;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-accent { background: var(--accent); color: #0D1117; border-color: var(--accent); font-weight: 600; }
+    main { max-width: 1120px; margin: 0 auto; padding: 88px 24px 64px; }
+    .slide { display: none; min-height: 74vh; flex-direction: column; justify-content: center; gap: 20px; }
+    .slide.is-active { display: flex; }
+    .kicker { color: var(--accent); font-size: 0.82rem; letter-spacing: 0.08em; font-weight: 500; }
+    h1, h2 { font-family: 'Fraunces', serif; font-weight: 400; margin: 0; line-height: 1.15; }
+    h1 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); }
+    h2 { font-size: clamp(1.8rem, 3.2vw, 2.7rem); }
+    .lead { font-size: 1.12rem; color: var(--ink-soft); max-width: 720px; margin: 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .card h3 { font-family: 'Fraunces', serif; font-weight: 400; margin: 0 0 8px; font-size: 1.2rem; color: var(--accent); }
+    .card p, .card li { color: var(--ink-soft); font-size: 0.92rem; }
+    .storyboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .shot { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .shot img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .shot div { padding: 10px; font-size: 0.78rem; color: var(--ink-soft); }
+    .shot strong { display: block; color: var(--ink); margin-bottom: 3px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    th { color: var(--accent); font-weight: 600; background: rgba(243,238,230,0.03); }
+    td { color: var(--ink-soft); }
+    .talk-track {
+      padding: 14px 18px; border-left: 3px solid var(--accent); background: rgba(216,165,90,0.08);
+      border-radius: 0 10px 10px 0; font-size: 0.92rem; color: var(--ink);
+    }
+    .approval-mock {
+      max-width: 360px; background: #19212c; border: 1px solid var(--accent); border-radius: 16px; padding: 18px;
+    }
+    .approval-mock .actions { display: flex; gap: 8px; margin-top: 14px; }
+    .hero-still { width: 100%; max-height: 360px; object-fit: cover; border-radius: 14px; border: 1px solid var(--border); }
+  </style>
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
+</head>
+<body>
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <img src="assets/brand/compass-sl-white.png" alt="SL | Compass" width="3000" height="532" loading="lazy" decoding="async">
+      <span id="slide-counter" style="font-size:0.82rem;color:var(--ink-soft);">Slide 1 / 12</span>
+    </div>
+    <div class="controls">
+      <a class="btn" href="index.html">Live Site ↗</a>
+      <button type="button" class="btn" id="prev-btn">← Prev</button>
+      <button type="button" class="btn btn-accent" id="next-btn">Next →</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Slide 1 -->
+    <section class="slide is-active">
+      <span class="kicker">Slide 01 · Title</span>
+      <h1>“See Real Estate Through a New Lenz.”</h1>
+      <p class="lead">A bespoke 3D scroll-world website experience and a four-bot AI back office built for Steven Lenz Jr. (Compass · CA DRE# 01989811).</p>
+      <img class="hero-still" src="assets/still/lens.webp" alt="Scene 1 Lens Portal" width="1920" height="1080" loading="lazy" decoding="async">
+      <div class="talk-track"><strong>Talk track:</strong> “Your tagline is already a visual idea. We turned it into the experience.”</div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide">
+      <span class="kicker">Slide 02 · The Moment You're In</span>
+      <h2>Sports &amp; entertainment clients size you up in five seconds.</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Quiet Inventory</h3><p>Much of the Tri-Valley’s high end moves via Private Exclusives, coming-soon, and pocket networks.</p></div>
+        <div class="card"><h3>Discretion &amp; Speed</h3><p>Business managers and GMs judge polish, privacy, and response speed before they ever call.</p></div>
+        <div class="card"><h3>Template Fatigue</h3><p>Most agent sites share the same template, hero stock clip, and generic contact box.</p></div>
+      </div>
+      <div class="talk-track"><strong>Talk track:</strong> “When a GM’s assistant or a player’s business manager Googles you, what do they see in the first five seconds?”</div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide">
+      <span class="kicker">Slide 03 · Discovery</span>
+      <h2>Aligning on the next 12 months.</h2>
+      <div class="grid-2">
+        <div class="card"><h3>Target Client</h3><p>Price band, Tri-Valley &amp; East Bay micro-markets, and Sports &amp; Entertainment relocation referrals.</p></div>
+        <div class="card"><h3>Where Time Leaks</h3><p>Speed-to-lead between showings, late-night comps, and sifting MLS &amp; Compass alert emails.</p></div>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide">
+      <span class="kicker">Slide 04 · The Solution in One Picture</span>
+      <h2>Front of house that stops the scroll. Back of house that never misses a lead.</h2>
+      <div class="grid-2">
+        <div class="card"><h3>Front of House</h3><p>A cinematic six-scene scroll-world flight through one Tri-Valley estate—from Golden Hour to Twilight.</p></div>
+        <div class="card"><h3>Back of House</h3><p>Four DeepSeek-powered bots that scout, watch, price, and draft follow-ups. <strong>Nothing goes out without your tap.</strong></p></div>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide">
+      <span class="kicker">Slide 05 · The Six-Scene Journey</span>
+      <h2>Visitors don’t scroll a page; they take a tour of you.</h2>
+      <div class="storyboard">
+        <div class="shot"><img src="assets/still/lens.webp" alt="Lens Portal" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>1. Lens Portal</strong>The brand promise</div></div>
+        <div class="shot"><img src="assets/still/roots.webp" alt="Hardwood & Roots" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>2. Hardwood &amp; Roots</strong>Pleasanton, hoops, coach</div></div>
+        <div class="shot"><img src="assets/still/concierge.webp" alt="Concierge Studio" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>3. Concierge Studio</strong>Concierge &amp; Private Exclusives</div></div>
+        <div class="shot"><img src="assets/still/portfolio.webp" alt="Portfolio Gallery" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>4. Portfolio Gallery</strong>Real, credited homes</div></div>
+        <div class="shot"><img src="assets/still/lounge.webp" alt="VIP Lounge" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>5. VIP Lounge</strong>Sports &amp; Ent. discretion</div></div>
+        <div class="shot"><img src="assets/still/terrace.webp" alt="Let's Connect Terrace" width="1920" height="1080" loading="lazy" decoding="async"><div><strong>6. Connect Terrace</strong>Lead capture + compliance</div></div>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide">
+      <span class="kicker">Slide 06 · Built Right, Not Just Pretty</span>
+      <h2>Fast, accessible, mobile-native, and honest.</h2>
+      <div class="grid-2">
+        <div class="card"><h3>Native Mobile &amp; Speed</h3><p>Dedicated 9:16 portrait video chain (19.98 MB total), instant `.webp` poster first-frame, and lazy clip prefetch.</p></div>
+        <div class="card"><h3>WCAG 2.2 AA &amp; SEO</h3><p>Full semantic HTML copy, JSON-LD `RealEstateAgent` schema, `prefers-reduced-motion` support, and a “View as page” toggle.</p></div>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide">
+      <span class="kicker">Slide 07 · Compliance Designed In</span>
+      <h2>Built so your managing broker says yes the first time.</h2>
+      <div class="card">
+        <ul>
+          <li>CA DRE# 01989811 + Compass California II, Inc. (DRE# 01527235) on hero, form, and footer</li>
+          <li>Equal Housing Opportunity badge, official `SL | Compass` lockup, and AI-imagery disclosure</li>
+          <li>Separate, unchecked, versioned (`2026-11-v1`) Email &amp; TCPA SMS consent checkboxes</li>
+          <li>CCPA/CPRA Privacy Notice, Accessibility Statement, and verbatim permissioned testimonials</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 8 -->
+    <section class="slide">
+      <span class="kicker">Slide 08 · Meet Your AI Team</span>
+      <h2>Lenz Luxury Desk — Four Specialists in Lenz HQ</h2>
+      <table>
+        <thead><tr><th>Bot</th><th>What It Does</th><th>Cadence</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Off-Market Scout</strong></td><td>Turns MLS &amp; Compass alert emails into a scored $2.5M+ buyer-fit digest</td><td>Every 4h (6am–10pm)</td></tr>
+          <tr><td><strong>Relocation Radar</strong></td><td>Public trades, signings, coaching &amp; exec moves with warm compliant paths</td><td>Daily 6:30am PT</td></tr>
+          <tr><td><strong>Comps Analyst</strong></td><td>CMA, absorption rate, months of supply &amp; Concierge ROI with full math</td><td>On demand + Mon 8am</td></tr>
+          <tr><td><strong>Follow-Up Concierge</strong></td><td>Drafts personal replies to every web lead &amp; expands mobile shorthand</td><td>Instant webhook</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Slide 9 -->
+    <section class="slide">
+      <span class="kicker">Slide 09 · You Stay in Control</span>
+      <h2>Think of it as an assistant coach who preps everything. You still call the play.</h2>
+      <div class="approval-mock">
+        <div style="font-size:0.75rem;color:var(--accent);margin-bottom:6px;">Lenz HQ · Approval Card</div>
+        <strong style="display:block;margin-bottom:8px;">Send reply to Jordan R.?</strong>
+        <p style="font-size:0.84rem;color:var(--ink-soft);margin:0;">“Hi Jordan — I’d be glad to connect confidentially regarding gated Danville &amp; Alamo options…”</p>
+        <div class="actions">
+          <span class="btn btn-accent">Approve</span>
+          <span class="btn">Edit</span>
+          <span class="btn">Discard</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10 -->
+    <section class="slide">
+      <span class="kicker">Slide 10 · What Changes in Your Week</span>
+      <h2>Speed and consistency without extra headcount.</h2>
+      <table>
+        <thead><tr><th>Today</th><th>With Lenz Luxury Desk</th></tr></thead>
+        <tbody>
+          <tr><td>Lead waits until you finish a showing</td><td>Draft reply waiting in minutes; one-tap approve between appointments</td></tr>
+          <tr><td>Evenings pulling comps manually</td><td>CMA &amp; absorption brief ready in minutes from your MLS CSV</td></tr>
+          <tr><td>Skimming dozens of alert emails</td><td>One scored digest matched to your active buyers</td></tr>
+          <tr><td>Hearing about a trade after the fact</td><td>Morning briefing with a warm Compass S&amp;E referral path</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Slide 11 -->
+    <section class="slide">
+      <span class="kicker">Slide 11 · Investment Structure</span>
+      <h2>Modular rollout: Site, AI Desk, and Care Plan.</h2>
+      <div class="grid-3">
+        <div class="card"><h3>1. Scroll-World Site</h3><p>Six-scene desktop + mobile chains, real overlays, lead form, compliance build, and launch.</p></div>
+        <div class="card"><h3>2. AI Desk Setup</h3><p>Ubuntu VPS, DeepSeek engine, Composio Google Workspace connections, 4 bots, webhook, and 60-min training.</p></div>
+        <div class="card"><h3>3. Monthly Care Plan</h3><p>Hosting, model updates, quarterly featured-listing &amp; testimonial refreshes, and bot tuning.</p></div>
+      </div>
+    </section>
+
+    <!-- Slide 12 -->
+    <section class="slide">
+      <span class="kicker">Slide 12 · Next Steps</span>
+      <h2>Discovery → Previz → Compass Sign-Off → Launch</h2>
+      <div class="card">
+        <ol style="color:var(--ink-soft);margin:0;padding-left:20px;line-height:1.9;">
+          <li>Confirm discovery items (Sports &amp; Entertainment title, featured role labels, managing broker AI sign-off).</li>
+          <li>Review the live interactive site &amp; 4-bot acceptance tests.</li>
+          <li>Compass marketing compliance review &amp; DNS cutover on `stevenlenzjr.com`.</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var slides = Array.from(document.querySelectorAll('.slide'));
+      var counter = document.getElementById('slide-counter');
+      var idx = 0;
+      function show(n) {
+        idx = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach(function (s, i) { s.classList.toggle('is-active', i === idx); });
+        counter.textContent = 'Slide ' + (idx + 1) + ' / ' + slides.length;
+      }
+      document.getElementById('prev-btn').addEventListener('click', function () { show(idx - 1); });
+      document.getElementById('next-btn').addEventListener('click', function () { show(idx + 1); });
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === ' ') show(idx + 1);
+        if (e.key === 'ArrowLeft') show(idx - 1);
+      });
+    })();
+  </script>
+</body>
+</html>
+
