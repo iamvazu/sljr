@@ -34,9 +34,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/theme.css?v=20261113b" />
-  <link rel="stylesheet" href="css/editorial.css?v=20261113b" />
-  <link rel="stylesheet" href="css/mobile.css?v=20261113b" />
+  <link rel="stylesheet" href="css/theme.css?v=20261113d" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261113d" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261113d" />
   <link rel="preload" as="image" href="assets/img/hero-about.jpg" fetchpriority="high" />
   <style>body { overflow-y: auto; }</style>
 
@@ -183,29 +183,195 @@
       </div>
     </section>
 
-    <!-- Testimonials from stevenlenzjr.com/about -->
-    <section style="margin-bottom:56px;">
-      <div class="pf-section-head">
-        <span class="pf-banner__eyebrow">Client Perspectives</span>
-        <h2>Testimonials</h2>
+    <!-- HoneyQuote-Style Testimonials Carousel -->
+    <section class="hq-reviews-section" aria-label="Client Perspectives &amp; Reviews">
+      <div class="hq-reviews-head">
+        <div class="hq-reviews-head__copy">
+          <span class="hq-reviews-eyebrow">Client Perspectives</span>
+          <h2 class="hq-reviews-title">See why so many people make confident moves after <em>partnering with Steven Lenz Jr.</em></h2>
+        </div>
+        <div class="hq-reviews-arrows" aria-label="Review navigation">
+          <button type="button" class="hq-arrow-btn hq-arrow-btn--prev" id="hq-prev-btn" aria-label="Previous reviews" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <button type="button" class="hq-arrow-btn hq-arrow-btn--next" id="hq-next-btn" aria-label="Next reviews">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
       </div>
-      <div class="ex-cards" style="margin-bottom:0;">
-        <article class="ex-card">
-          <p style="font-family:var(--sw-font-display);font-size:1.2rem;color:var(--sw-ink);">“The dude knows what up! Steven Lenz knows what you need!”</p>
-          <span class="ex-card__cat" style="margin-top:auto;margin-bottom:0;">Thomas G.</span>
-        </article>
-        <article class="ex-card">
-          <p style="font-family:var(--sw-font-display);font-size:1.2rem;color:var(--sw-ink);">“A great agent! Always in the office every day and on the phone doing his best to help out his clients.”</p>
-          <span class="ex-card__cat" style="margin-top:auto;margin-bottom:0;">Grant I.</span>
-        </article>
-        <article class="ex-card">
-          <p style="font-family:var(--sw-font-display);font-size:1.2rem;color:var(--sw-ink);">“Steven is an amazing agent! He has saved thousands for some of our clients! Highly recommend using him.”</p>
-          <span class="ex-card__cat" style="margin-top:auto;margin-bottom:0;">Adam S.</span>
-        </article>
-        <article class="ex-card">
-          <p style="font-family:var(--sw-font-display);font-size:1.2rem;color:var(--sw-ink);">“I have worked with Steven professionally and can say without doubt he is excellent at what he does. Steven is also big into giving back to the community and volunteering.”</p>
-          <span class="ex-card__cat" style="margin-top:auto;margin-bottom:0;">Nicole Y.</span>
-        </article>
+
+      <div class="hq-reviews-viewport">
+        <div class="hq-reviews-track" id="hq-reviews-track" role="region" aria-label="Client reviews carousel" tabindex="0">
+          
+          <!-- Review 1: Ray M. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Ray M.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;Steven did an exceptional job negotiating my purchase and staying in close communication during the entire process. I will be recommending Steven to my friends, family, and colleagues thank you sir!&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Ray M.</span>
+                <span class="hq-review-card__context">Tri-Valley Home Buyer</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 2: Peter L. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Peter L.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;Steven Lenz was extremely helpful during my home buying process. He was knowledgeable and was always in constant communication with me. Steven made my process that much easier.&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Peter L.</span>
+                <span class="hq-review-card__context">Alamo Home Buyer</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 3: Verified Client -->
+          <article class="hq-review-card" role="group" aria-label="Review from Verified Client">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;Steve assisted me through my entire home buying journey. He kept me in the loop every step of the way until I signed and explained every detail. He truly goes the extra mile!&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Verified Client</span>
+                <span class="hq-review-card__context">East Bay Home Buyer</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 4: Repeat Client -->
+          <article class="hq-review-card" role="group" aria-label="Review from Repeat Client">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;Steven has always been professional. He has great communication skills, understands the real estate industry, and is always a pleasure to work with! Always on top of his game!&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Danville Client</span>
+                <span class="hq-review-card__context">Repeat Buyer &amp; Seller</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 5: Frank T. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Frank T.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;He was on top of everything I asked him to do. Fast, sharp, and totally reliable. I totally recommend using this professional legend for any East Bay transaction.&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Frank T.</span>
+                <span class="hq-review-card__context">Walnut Creek Client</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 6: Adam S. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Adam S.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;Steven is an amazing agent! He has saved thousands for our clients with his strategic contract terms and negotiation. Highly recommend using him.&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Adam S.</span>
+                <span class="hq-review-card__context">Bay Area Seller &amp; Buyer</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 7: Nicole Y. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Nicole Y.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;I have worked with Steven professionally and can say without doubt he is excellent at what he does. Patient and kind with a great work ethic and strong character.&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Nicole Y.</span>
+                <span class="hq-review-card__context">Pleasanton Colleague</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Review 8: Thomas G. -->
+          <article class="hq-review-card" role="group" aria-label="Review from Thomas G.">
+            <div>
+              <div class="hq-review-card__stars" aria-label="5 out of 5 stars">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <p class="hq-review-card__quote">&ldquo;The dude knows what’s up! Steven Lenz knows what you need, stays proactive on local inventory, and delivers for his clients every single time.&rdquo;</p>
+            </div>
+            <div>
+              <hr class="hq-review-card__divider" />
+              <div class="hq-review-card__author">
+                <span class="hq-review-card__name">Thomas G.</span>
+                <span class="hq-review-card__context">Tri-Valley Client</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
       </div>
     </section>
 
@@ -226,7 +392,87 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
 
-  <script src="js/editorial-nav.js?v=20261113b"></script>
+  <script src="js/editorial-nav.js?v=20261113d"></script>
+  <script>
+    (function () {
+      'use strict';
+      var track = document.getElementById('hq-reviews-track');
+      var prevBtn = document.getElementById('hq-prev-btn');
+      var nextBtn = document.getElementById('hq-next-btn');
+      if (!track) return;
+
+      function updateButtons() {
+        if (!prevBtn || !nextBtn) return;
+        var maxScroll = track.scrollWidth - track.clientWidth;
+        prevBtn.disabled = track.scrollLeft <= 6;
+        nextBtn.disabled = track.scrollLeft >= maxScroll - 6;
+      }
+
+      function getStep() {
+        var card = track.querySelector('.hq-review-card');
+        return card ? (card.offsetWidth + 24) : 364;
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          track.scrollBy({ left: getStep(), behavior: 'smooth' });
+        });
+      }
+
+      track.addEventListener('scroll', updateButtons, { passive: true });
+      window.addEventListener('resize', updateButtons, { passive: true });
+      setTimeout(updateButtons, 100);
+
+      // Desktop drag-to-scroll
+      var isDown = false;
+      var startX = 0;
+      var scrollLeft = 0;
+
+      track.addEventListener('mousedown', function (e) {
+        isDown = true;
+        track.classList.add('is-dragging');
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+
+      track.addEventListener('mouseleave', function () {
+        if (isDown) {
+          isDown = false;
+          track.classList.remove('is-dragging');
+        }
+      });
+
+      track.addEventListener('mouseup', function () {
+        if (isDown) {
+          isDown = false;
+          track.classList.remove('is-dragging');
+        }
+      });
+
+      track.addEventListener('mousemove', function (e) {
+        if (!isDown) return;
+        e.preventDefault();
+        var x = e.pageX - track.offsetLeft;
+        var walk = (x - startX) * 1.5;
+        track.scrollLeft = scrollLeft - walk;
+      });
+
+      // Keyboard left/right arrow support
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') {
+          track.scrollBy({ left: getStep(), behavior: 'smooth' });
+        } else if (e.key === 'ArrowLeft') {
+          track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
 

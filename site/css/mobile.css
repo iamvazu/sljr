@@ -23,6 +23,14 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
 
 .lead-mhead { display: none; }
 
+/* "View Property →" style links had no styles at all (rendered browser-blue). */
+.listing-link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+  color: var(--sw-accent, #D8A55A); text-decoration: none;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+}
+.listing-link:hover { color: #F5F2EC; }
+
 @media (max-width: 960px) {
   :root {
     --m-head: 72px;                                   /* fixed header height */
@@ -104,7 +112,7 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .hero-popular::-webkit-scrollbar { display: none; }
   .hero-popular__row { display: contents; }
   .hero-popular__label, .hero-popular__pill { flex: 0 0 auto; }
-  .hero-popular__pill { min-height: 36px; display: inline-flex; align-items: center; padding: 0 12px; font-size: 0.74rem; }
+  .hero-popular__pill { min-height: 40px; display: inline-flex; align-items: center; padding: 0 12px; font-size: 0.74rem; }
 
   /* ---------- Scene 2 · Meet Steven ---------- */
   .sw-copy[data-scene="roots"] { --panel-h: 96px; }
@@ -129,7 +137,8 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   }
   .sw-panel[data-scene="roots"] .meet-portrait__name { font-size: 1.05rem; }
   .sw-panel[data-scene="roots"] .meet-portrait__meta { font-size: 0.66rem; margin-top: 2px; }
-  .sw-panel[data-scene="roots"] .meet-portrait__link { margin-top: 4px; padding: 6px 0; font-size: 0.68rem; }
+  .sw-panel[data-scene="roots"] .meet-portrait__link { margin-top: 0; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.68rem; }
+  .sw-copy[data-scene="roots"] { --panel-h: 104px; }
 
   /* ---------- Scene 3 · Services (cards are the CTAs) ---------- */
   .sw-copy[data-scene="concierge"],
@@ -148,7 +157,7 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .sw-copy[data-scene="portfolio"] { --panel-h: calc(clamp(120px, 25dvh, 250px) + 142px); }
   .sw-copy[data-scene="portfolio"] .sw-copy__cta { display: none; }   /* "View all" lives on the carousel */
   .sw-panel[data-scene="portfolio"] .track-head { margin-bottom: 8px; align-items: center; }
-  .track-view-all { padding: 12px 0 10px; }
+  .track-view-all { min-height: 44px; display: inline-flex; align-items: center; border-bottom: 0; text-decoration: underline; text-underline-offset: 5px; }
   .track-arrow { width: 44px; height: 44px; }
   .listings-grid { gap: 10px; margin-right: calc(var(--m-gutter) * -1); padding-right: var(--m-gutter); scroll-padding-left: 0; }
   .listings-grid .listing-card { flex: 0 0 min(80%, 340px); }
@@ -163,7 +172,7 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .sw-copy[data-scene="lounge"] { --panel-h: 262px; }
   .sw-copy[data-scene="lounge"] .sw-copy__body { -webkit-line-clamp: 2; }
   .sw-panel[data-scene="lounge"] .track-head { margin-bottom: 8px; align-items: center; }
-  .sw-panel[data-scene="lounge"] .track-head__title { font-size: 1rem; }
+  .sw-panel[data-scene="lounge"] .track-head__title { font-size: 0.9rem; white-space: nowrap; }
   .tq-track { gap: 10px; margin-right: calc(var(--m-gutter) * -1); padding-right: var(--m-gutter); }
   .tq-card { flex: 0 0 min(84%, 360px); min-height: 0; height: 206px; padding: 14px 16px 12px; border-radius: 14px; }
   .tq-stars { font-size: 0.78rem; }
@@ -215,6 +224,7 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .sw-copy[data-scene="roots"] .sw-copy__body { -webkit-line-clamp: 3 !important; }
   .tq-card { height: 180px; } .tq-quote { -webkit-line-clamp: 3; }
   .sw-copy[data-scene="lounge"] { --panel-h: 236px; }
+  .sw-copy[data-scene="lounge"] .sw-copy__body { display: none; }
 }
 @media (max-width: 960px) and (max-height: 500px) {
   .sw-copy:not(.sw-copy--hero) .sw-copy__body, .sw-stats-bar, .hero-popular { display: none; }
@@ -225,4 +235,87 @@ button[aria-busy="true"] { opacity: 0.6; cursor: progress; }
   .svc-card__body p, .comm-card__desc { display: block; }
   .listings-grid .listing-card { flex-basis: 46%; }
   .tq-card { flex-basis: 46%; }
+}
+
+/* =====================================================================
+   Inner pages (buy, sell, portfolio, listing, communities, resources…)
+   ===================================================================== */
+@media (max-width: 680px) {
+  /* Button groups: stacked, full width, equal size — no ragged CTAs. */
+  .ld-top-actions, .art-lead-cta__btns, .error-actions, .cookie-actions,
+  main .actions, .sw-copy__cta-group {
+    display: grid !important; grid-template-columns: 1fr; gap: 10px; width: 100%;
+  }
+  .ld-top-actions .sw-btn, .prop-actions .sw-btn, .art-lead-cta__btns .sw-btn,
+  .error-actions .sw-btn, main .actions .sw-btn { width: 100%; }
+  body.subpage main .sw-btn, main form .sw-btn { min-height: 48px; }
+  main form button[type="submit"].sw-btn { width: 100%; }
+
+  /* Property cards: real buttons, side by side */
+  .prop-actions { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .prop-actions .listing-link {
+    justify-content: center; text-align: center; padding: 0 10px; font-size: 0.66rem;
+    border: 1px solid rgba(216, 165, 90, 0.6);
+  }
+  .prop-actions .listing-link + .listing-link { border-color: rgba(243, 238, 230, 0.32); color: var(--sw-ink) !important; }
+
+  /* Long lists (sold homes, search results): compact rows instead of a
+     500px card each — a 28-home page drops from ~19,000px to ~6,000px. */
+  .pf-grid:has(> :nth-child(4)) { gap: 12px; }
+  .pf-grid:has(> :nth-child(4)) .prop-card { flex-direction: row; align-items: stretch; }
+  .pf-grid:has(> :nth-child(4)) .prop-card > a:first-child { flex: 0 0 38%; aspect-ratio: auto; min-height: 132px; }
+  .pf-grid:has(> :nth-child(4)) .prop-card img { height: 100%; aspect-ratio: auto; }
+  .pf-grid:has(> :nth-child(4)) .prop-body { padding: 10px 12px; gap: 3px; min-width: 0; }
+  .pf-grid:has(> :nth-child(4)) .prop-body h3 { font-size: 0.98rem; line-height: 1.25; }
+  .pf-grid:has(> :nth-child(4)) .prop-price,
+  .pf-grid:has(> :nth-child(4)) .prop-body > div:first-child { font-size: 1.08rem !important; }
+  .pf-grid:has(> :nth-child(4)) .prop-desc { display: none; }
+  .pf-grid:has(> :nth-child(4)) .listing-city, .pf-grid:has(> :nth-child(4)) .listing-meta { font-size: 0.74rem; }
+  .pf-grid:has(> :nth-child(4)) .prop-actions { display: flex !important; border-top: 0; padding-top: 0; }
+  .pf-grid:has(> :nth-child(4)) .prop-actions .listing-link { border: 0; padding: 0; justify-content: flex-start; min-height: 36px; }
+  .pf-grid:has(> :nth-child(4)) .listing-link { min-height: 36px; padding-top: 0 !important; }
+  .pf-grid:has(> :nth-child(4)) .listing-status { font-size: 0.56rem; padding: 3px 7px; }
+
+  /* Listing detail */
+  .ld-wrap { padding: calc(var(--m-top, 84px) + 8px) 16px 56px; }
+  .ld-top-bar { gap: 14px; }
+  .ld-top-aside { align-items: stretch !important; width: 100%; }
+  .ld-top-bar h1 { font-size: 1.7rem; }
+  .ld-price { font-size: 1.7rem; }
+  .ld-kv { font-size: 0.9rem; padding: 11px 0; }
+
+  /* Buy: filter in two columns, search inputs first */
+  .bs-filter-grid { grid-template-columns: 1fr 1fr !important; gap: 12px 10px; }
+  .bs-filter-grid > *:nth-child(-n+2), .bs-filter-grid > button, .bs-filter-grid > *:last-child { grid-column: 1 / -1; }
+  .bs-filter-grid input, .bs-filter-grid select { font-size: 16px; min-height: 46px; }
+
+  /* Sell: valuation wizard */
+  .sell-val-btn { min-height: 48px; width: 100%; padding: 12px 20px; }
+  #sell-val-form input, #sell-val-form select { font-size: 16px; min-height: 46px; }
+  .ai-val-nums { grid-template-columns: 1fr !important; }
+
+  /* Any input on any page: 16px stops iOS zoom-on-focus */
+  main input:not([type="checkbox"]):not([type="radio"]), main select, main textarea { font-size: 16px; }
+
+  /* Footer */
+  .ed-stay__row { padding-bottom: 0; }
+  .ed-stay__row input { font-size: 16px; min-height: 48px; min-width: 0; }
+  .ed-stay__row button { min-width: 48px; min-height: 48px; font-size: 1.3rem; }
+  .ed-footer__links a { display: inline-block; padding: 7px 0; }
+  .ed-footer a[aria-label] { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+  /* Drawer menu links */
+  .drawer-nav a, .drawer-nav button { min-height: 44px; display: flex; align-items: center; }
+  .drawer-sub a, .drawer-sub button { min-height: 40px; padding: 8px 0; }
+
+  /* Resource tabs & article CTA */
+  .res-nav-tab { min-height: 44px; display: inline-flex; align-items: center; }
+  .res-search-inline input { font-size: 16px; min-height: 44px; }
+}
+
+/* Very narrow phones (iPhone SE 1st gen, small Androids) */
+@media (max-width: 360px) {
+  .sw-copy__title, .sw-copy--hero .sw-copy__title { font-size: 1.36rem; }
+  .sw-copy__body, .sw-copy--hero .sw-copy__body { font-size: 0.88rem; }
+  .sw-btn { letter-spacing: 0.1em; padding: 12px 12px; }
 }
