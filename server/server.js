@@ -197,7 +197,8 @@ function handleRequest(req, res) {
   serveStatic(req, res, pathname);
 }
 
-server.listen(PORT, '127.0.0.1', () => {
+const HOST = process.env.HOST || '0.0.0.0';
+server.listen(PORT, HOST, () => {
   console.log(`====================================================`);
   console.log(`  STEVEN LENZ JR. FULL-STACK SERVER RUNNING         `);
   console.log(`  Local URL:   http://localhost:${PORT}             `);

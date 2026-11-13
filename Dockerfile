@@ -5,6 +5,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
 ENV PORT=4173
 
 # Copy package files (if any) or project structure
