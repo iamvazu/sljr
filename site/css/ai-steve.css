@@ -1,5 +1,6 @@
 /* ============================================================================
    ai-steve.css — Interactive Real Estate AI Advisor Widget
+   Pixel-accurate matching of EuKreate AI / Steve feature set
    ============================================================================ */
 
 /* Floating Launcher Button (FAB) */
@@ -30,8 +31,8 @@
 
 .sl-ai-fab__avatar-wrap {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   overflow: visible;
   flex-shrink: 0;
@@ -77,34 +78,227 @@
   letter-spacing: 0.02em;
 }
 
-/* Chat Modal / Floating Drawer Window */
+/* Chat Modal / Floating Drawer Window Container */
 .sl-ai-window {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 10000;
-  width: 390px;
+  width: 410px;
   max-width: calc(100vw - 32px);
-  height: 620px;
+  height: 640px;
   max-height: calc(100vh - 48px);
   background: #FFFFFF;
   color: #111827;
-  border-radius: 18px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.08);
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Supports dual-panel split screen */
   overflow: hidden;
   font-family: var(--sw-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   opacity: 0;
   pointer-events: none;
   transform: translateY(20px) scale(0.96);
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .sl-ai-window.is-open {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0) scale(1);
+}
+
+/* Dual-Panel Split View Mode when Homes Panel is visible */
+.sl-ai-window.has-homes-panel {
+  width: 950px;
+  max-width: calc(100vw - 32px);
+}
+
+/* ============================================================================
+   LEFT PANEL: HOMES EXPLORER (Screenshots 1 & 2)
+   ============================================================================ */
+.sl-ai-homes-panel {
+  display: none;
+  flex-direction: column;
+  width: 540px;
+  min-width: 320px;
+  background: #F9FAFB;
+  border-right: 1px solid #E5E7EB;
+  overflow: hidden;
+  position: relative;
+}
+
+.sl-ai-window.has-homes-panel .sl-ai-homes-panel {
+  display: flex;
+}
+
+.sl-ai-homes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+  flex-shrink: 0;
+}
+
+.sl-ai-homes-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.sl-ai-homes-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.sl-ai-homes-subtitle {
+  font-size: 0.78rem;
+  color: #6B7280;
+  margin-top: 2px;
+}
+
+.sl-ai-homes-close-btn {
+  background: transparent;
+  border: none;
+  color: #9CA3AF;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sl-ai-homes-close-btn:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.sl-ai-homes-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  align-content: start;
+}
+
+/* Individual Home Card */
+.sl-ai-home-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.sl-ai-home-card:hover {
+  border-color: #CBD5E1;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sl-ai-home-card.is-active {
+  border: 2px solid #2563EB;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.sl-ai-home-card__img-wrap {
+  width: 100%;
+  height: 140px;
+  background: #111827;
+  position: relative;
+  overflow: hidden;
+}
+
+.sl-ai-home-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.sl-ai-home-card:hover .sl-ai-home-card__img {
+  transform: scale(1.05);
+}
+
+.sl-ai-home-card__content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sl-ai-home-card__price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sl-ai-home-card__addr {
+  font-size: 0.82rem;
+  color: #4B5563;
+  line-height: 1.3;
+}
+
+.sl-ai-home-card__specs {
+  font-size: 0.75rem;
+  color: #6B7280;
+  margin-top: 4px;
+}
+
+.sl-ai-home-card__badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #1D4ED8;
+  margin-top: 6px;
+}
+
+/* Center Divider Handle between Panels */
+.sl-ai-split-handle {
+  display: none;
+  width: 14px;
+  background: #F3F4F6;
+  border-left: 1px solid #E5E7EB;
+  border-right: 1px solid #E5E7EB;
+  cursor: col-resize;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.sl-ai-window.has-homes-panel .sl-ai-split-handle {
+  display: flex;
+}
+
+.sl-ai-split-handle__dots {
+  width: 4px;
+  height: 20px;
+  border-left: 2px dotted #9CA3AF;
+}
+
+/* ============================================================================
+   RIGHT PANEL: CHAT WIDGET
+   ============================================================================ */
+.sl-ai-chat-panel {
+  flex: 1;
+  min-width: 360px;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Header */
@@ -126,9 +320,10 @@
 
 .sl-ai-header__avatar-wrap {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .sl-ai-header__avatar {
@@ -136,324 +331,301 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #E5E7EB;
-}
-
-.sl-ai-header__status {
-  position: absolute;
-  bottom: 1px;
-  right: 1px;
-  width: 10px;
-  height: 10px;
-  background: #10B981;
-  border: 2px solid #FFFFFF;
-  border-radius: 50%;
+  border: 1px solid #E5E7EB;
 }
 
 .sl-ai-header__info {
   display: flex;
   flex-direction: column;
+  text-align: left;
 }
 
 .sl-ai-header__name {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #111827;
   line-height: 1.2;
 }
 
 .sl-ai-header__sub {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   color: #6B7280;
-  line-height: 1.3;
 }
 
 .sl-ai-header__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .sl-ai-icon-btn {
-  width: 34px;
-  height: 34px;
+  background: transparent;
+  border: none;
+  color: #4B5563;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1px solid #E5E7EB;
-  background: #FFFFFF;
-  color: #374151;
-  display: inline-flex;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .sl-ai-icon-btn:hover {
   background: #F3F4F6;
   color: #111827;
-  border-color: #D1D5DB;
 }
 
 .sl-ai-icon-btn svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
-/* Chat Body */
+/* Chat Messages Body */
 .sl-ai-body {
   flex: 1;
+  padding: 18px;
   overflow-y: auto;
-  padding: 18px 16px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: #FAFAFA;
+  background: #FFFFFF;
 }
 
-.sl-ai-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sl-ai-body::-webkit-scrollbar-thumb {
-  background: #D1D5DB;
-  border-radius: 10px;
-}
-
-/* Messages */
 .sl-ai-msg {
   display: flex;
   flex-direction: column;
   max-width: 88%;
-  gap: 4px;
+  word-break: break-word;
+  animation: slAiFadeIn 0.25s ease-out;
 }
 
-.sl-ai-msg--bot {
-  align-self: flex-start;
+@keyframes slAiFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .sl-ai-msg--user {
   align-self: flex-end;
 }
 
-.sl-ai-bubble {
-  padding: 12px 16px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  word-break: break-word;
-}
-
-.sl-ai-msg--bot .sl-ai-bubble {
-  background: #F3EFEA;
-  color: #1F2937;
-  border-bottom-left-radius: 4px;
-}
-
 .sl-ai-msg--user .sl-ai-bubble {
   background: #111827;
   color: #FFFFFF;
-  border-bottom-right-radius: 4px;
+  border-radius: 18px 18px 4px 18px;
+  padding: 10px 16px;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
-.sl-ai-bubble p {
-  margin: 0 0 8px;
+.sl-ai-msg--bot {
+  align-self: flex-start;
+  max-width: 92%;
 }
 
-.sl-ai-bubble p:last-child {
-  margin-bottom: 0;
+.sl-ai-msg--bot .sl-ai-bubble {
+  background: #F3F4F6;
+  color: #1F2937;
+  border-radius: 18px 18px 18px 4px;
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }
 
-.sl-ai-bubble ul {
-  margin: 6px 0;
-  padding-left: 20px;
-}
-
-.sl-ai-bubble li {
-  margin-bottom: 4px;
-}
-
-.sl-ai-bubble strong {
-  font-weight: 600;
-  color: inherit;
-}
-
-.sl-ai-time {
-  font-size: 0.68rem;
-  color: #9CA3AF;
-  padding: 0 4px;
-}
-
-.sl-ai-msg--user .sl-ai-time {
-  text-align: right;
-}
-
-/* Quick Prompt Pills */
+/* Starter / Quick Reply Chips */
 .sl-ai-pills {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 10px;
 }
 
 .sl-ai-pill-btn {
-  align-self: flex-start;
-  background: #F3EFEA;
-  color: #1F2937;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  border-radius: 18px;
-  padding: 8px 16px;
-  font-size: 0.84rem;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.15s ease;
-  font-family: inherit;
-}
-
-.sl-ai-pill-btn:hover {
-  background: #E8E2D7;
-  color: #111827;
-  transform: translateX(2px);
-}
-
-/* Property Mini Card Inside Chat */
-.sl-ai-prop-card {
-  background: #FFFFFF;
+  background: #F3F4F6;
   border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-top: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.sl-ai-prop-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  display: block;
-}
-
-.sl-ai-prop-card__info {
-  padding: 10px 12px;
-}
-
-.sl-ai-prop-card__price {
-  font-weight: 700;
-  color: #111827;
-  font-size: 0.95rem;
-}
-
-.sl-ai-prop-card__addr {
-  font-size: 0.8rem;
-  color: #4B5563;
-  margin: 2px 0 4px;
-}
-
-.sl-ai-prop-card__meta {
-  font-size: 0.74rem;
-  color: #6B7280;
-  margin-bottom: 6px;
-}
-
-.sl-ai-prop-card__link {
-  display: inline-block;
-  font-size: 0.75rem;
-  color: #B48439;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.sl-ai-prop-card__link:hover {
-  text-decoration: underline;
-}
-
-/* Mortgage Breakdown Table */
-.sl-ai-calc-box {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-top: 8px;
+  color: #374151;
   font-size: 0.82rem;
-}
-
-.sl-ai-calc-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 4px 0;
-  border-bottom: 1px dashed #F3F4F6;
-}
-
-.sl-ai-calc-row:last-child {
-  border-bottom: none;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #111827;
-  margin-top: 4px;
-  padding-top: 6px;
-  border-top: 1px solid #E5E7EB;
-}
-
-/* Typing Indicator */
-.sl-ai-typing {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 10px 16px;
-  background: #F3EFEA;
-  border-radius: 14px;
-  border-bottom-left-radius: 4px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
   width: fit-content;
 }
 
-.sl-ai-dot {
-  width: 6px;
-  height: 6px;
-  background: #9CA3AF;
-  border-radius: 50%;
-  animation: slAiBounce 1.4s infinite ease-in-out both;
+.sl-ai-pill-btn:hover {
+  background: #E5E7EB;
+  color: #111827;
+  border-color: #D1D5DB;
 }
 
-.sl-ai-dot:nth-child(1) { animation-delay: -0.32s; }
-.sl-ai-dot:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes slAiBounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
-}
-
-/* Bottom Controls */
-.sl-ai-footer {
-  padding: 10px 16px 12px;
+/* Interactive Card in Chat Stream (Screenshots 1 & 2) */
+.sl-ai-action-card {
+  margin-top: 10px;
   background: #FFFFFF;
-  border-top: 1px solid #E5E7EB;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sl-ai-action-card__info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+}
+
+.sl-ai-action-card__eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #6B7280;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sl-ai-action-card__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 2px;
+}
+
+.sl-ai-action-card__sub {
+  font-size: 0.78rem;
+  color: #4B5563;
+  margin-top: 2px;
+}
+
+.sl-ai-action-card__btn {
+  background: #FFFFFF;
+  border: 1px solid #111827;
+  color: #111827;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.sl-ai-action-card__btn:hover {
+  background: #111827;
+  color: #FFFFFF;
+}
+
+/* Footer / Input Area */
+.sl-ai-footer {
+  border-top: 1px solid #E5E7EB;
+  padding: 12px 16px 14px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   flex-shrink: 0;
 }
 
-/* Action button "Talk to Steven" */
-.sl-ai-action-row {
+/* Input Form Row */
+.sl-ai-form {
   display: flex;
   align-items: center;
   gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 24px;
+  padding: 4px 6px 4px 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sl-ai-form:focus-within {
+  border-color: #111827;
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.08);
+}
+
+.sl-ai-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.88rem;
+  color: #111827;
+}
+
+.sl-ai-mic-btn,
+.sl-ai-send-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sl-ai-mic-btn {
+  background: #111827;
+  color: #FFFFFF;
+}
+
+.sl-ai-mic-btn:hover {
+  background: #374151;
+}
+
+.sl-ai-mic-btn.is-listening {
+  background: #EF4444;
+  animation: slAiPulse 1.2s infinite;
+}
+
+@keyframes slAiPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+  100% { transform: scale(1); }
+}
+
+.sl-ai-send-btn {
+  background: #111827;
+  color: #FFFFFF;
+}
+
+.sl-ai-send-btn:hover {
+  background: #374151;
+}
+
+.sl-ai-send-btn svg,
+.sl-ai-mic-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Action Row (Talk to Steven & Feedback) */
+.sl-ai-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
 }
 
 .sl-ai-talk-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #FFFFFF;
   border: 1px solid #111827;
-  border-radius: 20px;
-  padding: 5px 14px;
+  color: #111827;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #111827;
+  padding: 6px 16px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 .sl-ai-talk-btn:hover {
@@ -466,107 +638,37 @@
   height: 14px;
 }
 
-/* Input Form */
-.sl-ai-form {
+/* Rating / Feedback */
+.sl-ai-feedback-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
-  position: relative;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #6B7280;
 }
 
-.sl-ai-input-wrap {
-  flex: 1;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.sl-ai-input {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #D1D5DB;
-  font-size: 0.88rem;
-  outline: none;
-  background: #FFFFFF;
-  color: #111827;
-  font-family: inherit;
-  transition: border-color 0.15s ease;
-}
-
-.sl-ai-input:focus {
-  border-color: #111827;
-  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.08);
-}
-
-.sl-ai-input::placeholder {
-  color: #9CA3AF;
-}
-
-/* Mic Button */
-.sl-ai-mic-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
+.sl-ai-feedback-btn {
+  background: transparent;
   border: none;
-  background: #1F2937;
-  color: #FFFFFF;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  opacity: 0.7;
+  transition: all 0.15s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
-.sl-ai-mic-btn:hover {
-  background: #111827;
-  transform: scale(1.05);
+.sl-ai-feedback-btn:hover {
+  opacity: 1;
+  transform: scale(1.15);
 }
 
-.sl-ai-mic-btn.is-listening {
-  background: #EF4444;
-  animation: slAiMicPulse 1.2s infinite;
+.sl-ai-feedback-btn.is-active {
+  opacity: 1;
+  background: #E5E7EB;
 }
 
-@keyframes slAiMicPulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-}
-
-.sl-ai-mic-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Send Button */
-.sl-ai-send-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: none;
-  background: #4B5563;
-  color: #FFFFFF;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.sl-ai-send-btn:hover {
-  background: #111827;
-  transform: scale(1.05);
-}
-
-.sl-ai-send-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Sub-footer disclaimer */
+/* Subfooter */
 .sl-ai-subfooter {
   display: flex;
   align-items: center;
@@ -576,29 +678,162 @@
   padding-top: 4px;
 }
 
-.sl-ai-subfooter a {
-  color: #6B7280;
+.sl-ai-subfooter__brand {
+  font-weight: 700;
+  color: #1E3A8A;
   text-decoration: none;
 }
 
-.sl-ai-subfooter a:hover {
-  text-decoration: underline;
+/* ============================================================================
+   LEAD CAPTURE SLIDE-OVER ("TALK TO STEVEN" - Screenshot 3)
+   ============================================================================ */
+.sl-ai-lead-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px 20px 20px;
+  animation: slAiSlideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Translation & Options Popups */
+.sl-ai-lead-view.is-visible {
+  display: flex;
+}
+
+@keyframes slAiSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sl-ai-lead-drag-pill {
+  width: 36px;
+  height: 4px;
+  background: #E5E7EB;
+  border-radius: 2px;
+  margin: 0 auto 12px;
+}
+
+.sl-ai-lead-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 14px;
+}
+
+.sl-ai-lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sl-ai-lead-input,
+.sl-ai-lead-select,
+.sl-ai-lead-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #D1D5DB;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  color: #111827;
+  background: #FFFFFF;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.sl-ai-lead-input:focus,
+.sl-ai-lead-select:focus,
+.sl-ai-lead-textarea:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.08);
+}
+
+.sl-ai-lead-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.sl-ai-lead-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.sl-ai-lead-submit {
+  flex: 1;
+  background: #111827;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sl-ai-lead-submit:hover {
+  background: #374151;
+}
+
+.sl-ai-lead-cancel {
+  background: #FFFFFF;
+  color: #111827;
+  border: 1px solid #111827;
+  border-radius: 20px;
+  padding: 9px 18px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sl-ai-lead-cancel:hover {
+  background: #F3F4F6;
+}
+
+.sl-ai-lead-disclaimer {
+  font-size: 0.72rem;
+  color: #6B7280;
+  margin-top: 14px;
+  line-height: 1.4;
+}
+
+/* Success notification inside lead view */
+.sl-ai-lead-success {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Popup Menus */
 .sl-ai-popup-menu {
   position: absolute;
-  top: 60px;
-  right: 18px;
+  top: 56px;
+  right: 16px;
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  min-width: 170px;
   padding: 6px;
   display: none;
   flex-direction: column;
-  z-index: 10001;
-  min-width: 160px;
+  gap: 2px;
 }
 
 .sl-ai-popup-menu.is-open {
@@ -606,16 +841,15 @@
 }
 
 .sl-ai-popup-item {
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
   background: transparent;
+  border: none;
+  padding: 8px 12px;
   text-align: left;
   font-size: 0.82rem;
   color: #374151;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background 0.12s ease;
-  font-family: inherit;
+  transition: background 0.15s ease;
 }
 
 .sl-ai-popup-item:hover {
@@ -623,24 +857,36 @@
   color: #111827;
 }
 
-/* Mobile responsive */
-@media (max-width: 480px) {
-  .sl-ai-window {
-    bottom: 0;
-    right: 0;
-    left: 0;
-    width: 100vw;
-    max-width: 100vw;
-    height: 85vh;
-    border-radius: 20px 20px 0 0;
+/* Mobile Responsive */
+@media (max-width: 820px) {
+  .sl-ai-window.has-homes-panel {
+    width: calc(100vw - 20px);
+    right: 10px;
+    bottom: 10px;
   }
-  .sl-ai-fab {
-    bottom: 16px;
-    right: 16px;
-    padding: 6px;
-  }
-  .sl-ai-fab__label {
-    display: none;
+  .sl-ai-homes-panel {
+    width: 48%;
   }
 }
 
+@media (max-width: 640px) {
+  .sl-ai-window {
+    width: calc(100vw - 16px);
+    right: 8px;
+    bottom: 8px;
+    height: calc(100vh - 20px);
+    max-height: 700px;
+  }
+  .sl-ai-window.has-homes-panel {
+    flex-direction: column;
+  }
+  .sl-ai-homes-panel {
+    width: 100%;
+    height: 40%;
+    border-right: none;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .sl-ai-split-handle {
+    display: none;
+  }
+}

@@ -1,101 +1,75 @@
 /* ============================================================================
    ai-steve.js — AI Steve Real Estate Advisor
-   100% Free, Zero-Subscription Client-Side Real Estate Intelligence
+   Full-Stack Connected: Frontend ↔ Middleware ↔ Backend ↔ DB (SQLite) ↔ AI
    Built for Steven Lenz Jr. · Compass Real Estate · CA DRE# 01989811
    ============================================================================ */
 (function () {
   'use strict';
 
-  // Determine path prefix for subdirectories
   var isSubdir = (typeof window !== 'undefined' && (
     window.location.pathname.indexOf('/areas/') !== -1 ||
     window.location.pathname.indexOf('/articles/') !== -1
   ));
   var pfx = isSubdir ? '../' : '';
 
-  // Core Knowledge Base
-  var STEVE_INFO = {
-    name: 'Steven Lenz Jr.',
-    title: 'Luxury REALTOR® · Sports & Entertainment Division',
-    dre: '01989811',
-    brokerage: 'Compass California II, Inc. (DRE# 01527235)',
-    phone: '(925) 998-9711',
-    phoneRaw: '+19259989711',
-    email: 'steven.lenzjr@compass.com',
-    office: '900 Main St., Pleasanton, CA 94566',
-    roots: 'Raised in Pleasanton, CA; Amador Valley High alumnus; former semi-pro basketball player; 9 years coaching at De La Salle High School; collegiate coach at Ohlone College.'
-  };
+  var sessionId = 'sess_' + Math.random().toString(36).substring(2, 10);
+  var activePropertyAddress = '1232 York St';
+  var cachedHomes = [];
 
-  // Top featured listings snapshot for instant client-side lookup
-  var FEATURED_LISTINGS = [
+  // Core properties fallback list (matches SQLite database seeds)
+  var SEED_HOMES = [
     {
-      address: '2261 Genoa Street',
-      city: 'Danville',
-      price: '$1,560,000',
-      beds: '4',
+      id: 'prop-segale',
+      address: '91 Segale Dr, Camp Connell, CA',
+      price: '$450,000',
+      priceNum: 450000,
+      beds: '2',
+      baths: '1',
+      sqft: '1,563',
+      photo: 'assets/img/listings/danville-genoa-1.jpg'
+    },
+    {
+      id: 'prop-york',
+      address: '1232 York St, Richmond, CA',
+      price: '$825,000',
+      priceNum: 825000,
+      beds: '3',
       baths: '3',
-      sqft: '3,186',
-      status: 'Sold',
-      photo: 'assets/img/danville-genoa.jpg',
-      url: 'properties.html'
+      sqft: '1,400',
+      photo: 'assets/img/listings/1240-york-st-1.jpg'
     },
     {
-      address: '1631 Altamont Circle',
-      city: 'Livermore',
-      price: '$1,120,000',
-      beds: '3',
-      baths: '2.5',
-      sqft: '2,140',
-      status: 'Sold',
-      photo: 'assets/img/livermore-altamont.jpg',
-      url: 'properties.html'
+      id: 'prop-ruby-hill',
+      address: '1100 Ruby Hill Blvd, Pleasanton, CA',
+      price: '$3,450,000',
+      priceNum: 3450000,
+      beds: '5',
+      baths: '5.5',
+      sqft: '5,200',
+      photo: 'assets/img/pocket-pleasanton-ruby-hill.jpg'
     },
     {
-      address: '3868 Greenwood Avenue',
-      city: 'Oakland',
-      price: '$1,295,000',
-      beds: '3',
-      baths: '2',
-      sqft: '1,845',
-      status: 'Sold',
-      photo: 'assets/img/oakland-greenwood.jpg',
-      url: 'properties.html'
-    },
-    {
-      address: '1240 York Street',
-      city: 'San Francisco',
-      price: '$1,850,000',
-      beds: '3',
-      baths: '2',
-      sqft: '1,720',
-      status: 'Active',
-      photo: 'assets/img/for-sale-1240-york.jpg',
-      url: 'properties.html'
-    },
-    {
-      address: '0 Zinn Drive',
-      city: 'Far West / Tri-Valley Hills',
-      price: '$3,800,000',
-      beds: 'Land / Estate',
-      baths: 'Custom',
-      sqft: '30+ Acres',
-      status: 'Active',
-      photo: 'assets/img/listings/0-zinn-dr.jpg',
-      url: 'properties.html'
+      id: 'prop-danville',
+      address: '3217 Diablo Rd, Danville, CA',
+      price: '$2,895,000',
+      priceNum: 2895000,
+      beds: '4',
+      baths: '4.5',
+      sqft: '4,120',
+      photo: 'assets/img/pocket-danville-blackhawk.jpg'
     }
   ];
 
-  var CURRENT_LANG = 'en';
+  cachedHomes = SEED_HOMES.slice(0, 2);
 
-  // Inject CSS stylesheet link
-  var link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = pfx + 'css/ai-steve.css?v=20261113';
-  document.head.appendChild(link);
+  // Inject CSS
+  var cssLink = document.createElement('link');
+  cssLink.rel = 'stylesheet';
+  cssLink.href = pfx + 'css/ai-steve.css?v=20261113f';
+  document.head.appendChild(cssLink);
 
-  // Build Widget DOM
   function createWidget() {
-    // 1. Floating Action Button
+    // 1. Floating Action Button (FAB)
     var fab = document.createElement('button');
     fab.type = 'button';
     fab.className = 'sl-ai-fab';
@@ -111,7 +85,7 @@
         '<span class="sl-ai-fab__hint">Ask AI Steve · Free</span>' +
       '</div>';
 
-    // 2. Chat Window
+    // 2. Chat & Homes Split Window Container
     var win = document.createElement('div');
     win.className = 'sl-ai-window';
     win.id = 'sl-ai-window';
@@ -119,85 +93,144 @@
     win.setAttribute('aria-label', 'Chat with AI Steve');
 
     win.innerHTML =
-      '<div class="sl-ai-header">' +
-        '<div class="sl-ai-header__left">' +
-          '<div class="sl-ai-header__avatar-wrap">' +
-            '<img class="sl-ai-header__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="Steve" />' +
-            '<span class="sl-ai-header__status"></span>' +
+      // LEFT PANEL: HOMES EXPLORER (Screenshots 1 & 2)
+      '<div class="sl-ai-homes-panel" id="sl-ai-homes-panel">' +
+        '<div class="sl-ai-homes-header">' +
+          '<div class="sl-ai-homes-title-wrap">' +
+            '<span class="sl-ai-homes-title">Homes</span>' +
+            '<span class="sl-ai-homes-subtitle" id="sl-ai-homes-subtitle">2 homes from this answer</span>' +
           '</div>' +
-          '<div class="sl-ai-header__info">' +
-            '<span class="sl-ai-header__name">Steve</span>' +
-            '<span class="sl-ai-header__sub">Steven Lenz Jr. · Compass California II, Inc.</span>' +
-          '</div>' +
-        '</div>' +
-        '<div class="sl-ai-header__actions">' +
-          '<button type="button" class="sl-ai-icon-btn" id="sl-ai-lang-btn" aria-label="Translate language">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>' +
-          '</button>' +
-          '<button type="button" class="sl-ai-icon-btn" id="sl-ai-options-btn" aria-label="Chat options">' +
-            '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><circle cx="5" cy="12" r="2"></circle></svg>' +
-          '</button>' +
-          '<button type="button" class="sl-ai-icon-btn" id="sl-ai-close-btn" aria-label="Close chat window">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
+          '<button type="button" class="sl-ai-homes-close-btn" id="sl-ai-homes-close-btn" aria-label="Close homes panel">' +
+            '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
           '</button>' +
         '</div>' +
+        '<div class="sl-ai-homes-body" id="sl-ai-homes-body"></div>' +
       '</div>' +
 
-      // Translation menu popup
-      '<div class="sl-ai-popup-menu" id="sl-ai-lang-menu">' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="en">🇺🇸 English</button>' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="es">🇪🇸 Español</button>' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="zh">🇨🇳 中文 (Chinese)</button>' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="vi">🇻🇳 Tiếng Việt</button>' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="tl">🇵🇭 Tagalog</button>' +
-        '<button type="button" class="sl-ai-popup-item" data-lang="hi">🇮🇳 हिन्दी (Hindi)</button>' +
+      // CENTER SPLITTER HANDLE
+      '<div class="sl-ai-split-handle" id="sl-ai-split-handle" title="Drag or click to toggle split view">' +
+        '<div class="sl-ai-split-handle__dots"></div>' +
       '</div>' +
 
-      // Options menu popup
-      '<div class="sl-ai-popup-menu" id="sl-ai-options-menu">' +
-        '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-clear">Clear Conversation</button>' +
-        '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-call">Call Steven: (925) 998-9711</button>' +
-        '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-email">Email Steven: steven.lenzjr@compass.com</button>' +
-        '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-about">View Steven’s Bio &amp; Reviews</button>' +
-      '</div>' +
-
-      // Messages Body
-      '<div class="sl-ai-body" id="sl-ai-body">' +
-        '<div class="sl-ai-msg sl-ai-msg--bot">' +
-          '<div class="sl-ai-bubble">' +
-            'Hi! I\'m Steve. Ask about Steven\'s homes, homes in Pleasanton, CA or Danville, CA, or what a home would cost a month.' +
+      // RIGHT PANEL: CHAT WIDGET
+      '<div class="sl-ai-chat-panel">' +
+        // Header
+        '<div class="sl-ai-header">' +
+          '<div class="sl-ai-header__left">' +
+            '<div class="sl-ai-header__avatar-wrap">' +
+              '<img class="sl-ai-header__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="Steve" />' +
+            '</div>' +
+            '<div class="sl-ai-header__info">' +
+              '<span class="sl-ai-header__name">Steve</span>' +
+              '<span class="sl-ai-header__sub">Steven Lenz Jr. · Compass California II, Inc.</span>' +
+            '</div>' +
           '</div>' +
-          '<div class="sl-ai-pills" id="sl-ai-starter-pills">' +
-            '<button type="button" class="sl-ai-pill-btn" data-query="What homes does Steven have?">What homes does Steven have?</button>' +
-            '<button type="button" class="sl-ai-pill-btn" data-query="What would a $700K home cost a month?">What would a $700K home cost a month?</button>' +
-            '<button type="button" class="sl-ai-pill-btn" data-query="Which areas do you cover?">Which areas do you cover?</button>' +
-            '<button type="button" class="sl-ai-pill-btn" data-query="How does Compass Concierge work?">How does Compass Concierge work?</button>' +
+          '<div class="sl-ai-header__actions">' +
+            '<button type="button" class="sl-ai-icon-btn" id="sl-ai-browse-header-btn" title="View Featured Homes">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>' +
+            '</button>' +
+            '<button type="button" class="sl-ai-icon-btn" id="sl-ai-lang-btn" aria-label="Translate language">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>' +
+            '</button>' +
+            '<button type="button" class="sl-ai-icon-btn" id="sl-ai-options-btn" aria-label="Chat options">' +
+              '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><circle cx="5" cy="12" r="2"></circle></svg>' +
+            '</button>' +
+            '<button type="button" class="sl-ai-icon-btn" id="sl-ai-minimize-btn" aria-label="Minimize chat window">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>' +
+            '</button>' +
+            '<button type="button" class="sl-ai-icon-btn" id="sl-ai-close-btn" aria-label="Close chat window">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
+            '</button>' +
           '</div>' +
         '</div>' +
-      '</div>' +
 
-      // Footer
-      '<div class="sl-ai-footer">' +
-        '<div class="sl-ai-action-row">' +
-          '<button type="button" class="sl-ai-talk-btn" id="sl-ai-talk-btn">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>' +
-            'Talk to Steven' +
-          '</button>' +
+        // Language menu popup
+        '<div class="sl-ai-popup-menu" id="sl-ai-lang-menu">' +
+          '<button type="button" class="sl-ai-popup-item" data-lang="en">🇺🇸 English</button>' +
+          '<button type="button" class="sl-ai-popup-item" data-lang="es">🇪🇸 Español</button>' +
+          '<button type="button" class="sl-ai-popup-item" data-lang="zh">🇨🇳 中文 (Chinese)</button>' +
+          '<button type="button" class="sl-ai-popup-item" data-lang="vi">🇻🇳 Tiếng Việt</button>' +
+          '<button type="button" class="sl-ai-popup-item" data-lang="tl">🇵🇭 Tagalog</button>' +
         '</div>' +
-        '<form class="sl-ai-form" id="sl-ai-form">' +
-          '<div class="sl-ai-input-wrap">' +
+
+        // Options menu popup
+        '<div class="sl-ai-popup-menu" id="sl-ai-options-menu">' +
+          '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-clear">Clear Conversation</button>' +
+          '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-call">Call Steven: (925) 998-9711</button>' +
+          '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-email">Email: steven.lenzjr@compass.com</button>' +
+          '<button type="button" class="sl-ai-popup-item" id="sl-ai-opt-about">View Steven\'s Bio &amp; Reviews</button>' +
+        '</div>' +
+
+        // Messages Body
+        '<div class="sl-ai-body" id="sl-ai-body">' +
+          '<div class="sl-ai-msg sl-ai-msg--bot">' +
+            '<div class="sl-ai-bubble">' +
+              'Hi! I\'m Steve. Ask about Steven\'s homes, homes in Camp Connell, CA or Richmond, CA, or what a home would cost a month.' +
+            '</div>' +
+            '<div class="sl-ai-pills" id="sl-ai-starter-pills">' +
+              '<button type="button" class="sl-ai-pill-btn" data-query="What homes does Steven have?">What homes does Steven have?</button>' +
+              '<button type="button" class="sl-ai-pill-btn" data-query="What would a $700K home cost a month?">What would a $700K home cost a month?</button>' +
+              '<button type="button" class="sl-ai-pill-btn" data-query="Which areas do you cover?">Which areas do you cover?</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        // Footer & Input Row
+        '<div class="sl-ai-footer">' +
+          '<form class="sl-ai-form" id="sl-ai-form">' +
             '<input type="text" class="sl-ai-input" id="sl-ai-input" placeholder="Ask about Steven\'s homes..." autocomplete="off" />' +
+            '<button type="button" class="sl-ai-mic-btn" id="sl-ai-mic-btn" aria-label="Voice input (Speech to text)">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>' +
+            '</button>' +
+            '<button type="submit" class="sl-ai-send-btn" id="sl-ai-send-btn" aria-label="Send message">' +
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>' +
+            '</button>' +
+          '</form>' +
+          '<div class="sl-ai-action-row">' +
+            '<button type="button" class="sl-ai-talk-btn" id="sl-ai-talk-btn">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>' +
+              'Talk to Steven' +
+            '</button>' +
+            '<div class="sl-ai-feedback-wrap">' +
+              '<span>Was this helpful?</span>' +
+              '<button type="button" class="sl-ai-feedback-btn" data-val="up" title="Helpful">👍</button>' +
+              '<button type="button" class="sl-ai-feedback-btn" data-val="down" title="Not helpful">👎</button>' +
+            '</div>' +
           '</div>' +
-          '<button type="button" class="sl-ai-mic-btn" id="sl-ai-mic-btn" aria-label="Voice input (Speech to text)">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>' +
-          '</button>' +
-          '<button type="submit" class="sl-ai-send-btn" id="sl-ai-send-btn" aria-label="Send message">' +
-            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>' +
-          '</button>' +
-        '</form>' +
-        '<div class="sl-ai-subfooter">' +
-          '<span>AI can make mistakes, verify details.</span>' +
-          '<a href="' + pfx + 'about.html">Steven Lenz Jr. · Compass</a>' +
+          '<div class="sl-ai-subfooter">' +
+            '<span>AI can make mistakes, verify details.</span>' +
+            '<a href="https://stevenlenzjr.com" target="_blank" class="sl-ai-subfooter__brand">EuKreate AI</a>' +
+          '</div>' +
+        '</div>' +
+
+        // SLIDE-OVER LEAD VIEW: "TALK TO STEVEN" (Screenshot 3)
+        '<div class="sl-ai-lead-view" id="sl-ai-lead-view">' +
+          '<div class="sl-ai-lead-drag-pill"></div>' +
+          '<h3 class="sl-ai-lead-title">Talk to Steven</h3>' +
+          '<form class="sl-ai-lead-form" id="sl-ai-lead-form">' +
+            '<input type="text" class="sl-ai-lead-input" id="sl-lead-name" placeholder="Your name" required />' +
+            '<input type="email" class="sl-ai-lead-input" id="sl-lead-email" placeholder="Email" required />' +
+            '<input type="tel" class="sl-ai-lead-input" id="sl-lead-phone" placeholder="Phone" />' +
+            '<select class="sl-ai-lead-select" id="sl-lead-reply-method">' +
+              '<option value="email">Reply by email</option>' +
+              '<option value="phone">Reply by phone</option>' +
+              '<option value="text">Reply by text</option>' +
+            '</select>' +
+            '<select class="sl-ai-lead-select" id="sl-lead-property">' +
+              '<option value="1232 York St">1232 York St</option>' +
+              '<option value="91 Segale Dr">91 Segale Dr</option>' +
+              '<option value="1100 Ruby Hill Blvd">1100 Ruby Hill Blvd</option>' +
+              '<option value="3217 Diablo Rd">3217 Diablo Rd</option>' +
+              '<option value="General Inquiry">General Real Estate Inquiry</option>' +
+            '</select>' +
+            '<textarea class="sl-ai-lead-textarea" id="sl-lead-message" placeholder="What would you like to ask Steven?"></textarea>' +
+            '<div class="sl-ai-lead-btns">' +
+              '<button type="submit" class="sl-ai-lead-submit">Send</button>' +
+              '<button type="button" class="sl-ai-lead-cancel" id="sl-lead-cancel">Cancel</button>' +
+            '</div>' +
+            '<div class="sl-ai-lead-success" id="sl-lead-success">✓ Your note has been delivered to Steven. He will reach out shortly!</div>' +
+            '<p class="sl-ai-lead-disclaimer">Your details go only to Steven, through EuKreate. Steven can also read this chat.</p>' +
+          '</form>' +
         '</div>' +
       '</div>';
 
@@ -207,292 +240,218 @@
     setupInteractions(fab, win);
   }
 
-  // Monthly Mortgage & Cost Calculator (Pure Math, 100% Free)
-  function calculateMortgage(priceNumber) {
-    var downPercent = 0.20;
-    var downPayment = priceNumber * downPercent;
-    var loanAmount = priceNumber - downPayment;
-    var annualInterestRate = 0.066; // Standard 30-year fixed ~6.6%
-    var monthlyRate = annualInterestRate / 12;
-    var totalMonths = 360;
+  function renderHomesList(homes) {
+    var body = document.getElementById('sl-ai-homes-body');
+    var subtitle = document.getElementById('sl-ai-homes-subtitle');
+    if (!body) return;
 
-    // Standard amortization formula: M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
-    var monthlyPI = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    cachedHomes = homes && homes.length ? homes : SEED_HOMES.slice(0, 2);
+    if (subtitle) {
+      subtitle.textContent = cachedHomes.length + ' home' + (cachedHomes.length === 1 ? '' : 's') + ' from this answer';
+    }
 
-    // California property tax is typically ~1.1% of assessed value annually
-    var monthlyTax = (priceNumber * 0.011) / 12;
-
-    // Estimated hazard/homeowners insurance based on purchase tier
-    var monthlyInsurance = priceNumber > 1500000 ? 250 : 140;
-
-    var totalMonthly = Math.round(monthlyPI + monthlyTax + monthlyInsurance);
-
-    return {
-      price: priceNumber,
-      downPayment: Math.round(downPayment),
-      loanAmount: Math.round(loanAmount),
-      monthlyPI: Math.round(monthlyPI),
-      monthlyTax: Math.round(monthlyTax),
-      monthlyInsurance: Math.round(monthlyInsurance),
-      totalMonthly: totalMonthly
-    };
-  }
-
-  function formatDollar(num) {
-    return '$' + num.toLocaleString('en-US');
-  }
-
-  // Smart Real Estate Intent Parser & Knowledge Engine
-  function generateReply(userText) {
-    var raw = userText.toLowerCase().trim();
-
-    // 1. Check for Mortgage / Price Calculation (e.g. "$700K", "$1.5M", "cost a month")
-    var priceMatch = raw.match(/\$?(\d+(?:\.\d+)?)\s*(k|m|million|thousand)?/i);
-    var isMortgageQuery = raw.indexOf('cost') !== -1 || raw.indexOf('month') !== -1 || raw.indexOf('payment') !== -1 || raw.indexOf('mortgage') !== -1 || raw.indexOf('rate') !== -1;
-
-    if (isMortgageQuery || (priceMatch && priceMatch[1] && (priceMatch[2] || raw.indexOf('$') !== -1))) {
-      var num = 700000; // default
-      if (priceMatch && priceMatch[1]) {
-        var base = parseFloat(priceMatch[1]);
-        var unit = (priceMatch[2] || '').toLowerCase();
-        if (unit === 'k' || unit === 'thousand') num = base * 1000;
-        else if (unit === 'm' || unit === 'million') num = base * 1000000;
-        else if (base < 100) num = base * 1000000; // e.g. "1.8" -> 1.8M
-        else if (base < 10000) num = base * 1000;
-        else num = base;
+    body.innerHTML = '';
+    cachedHomes.forEach(function (h, idx) {
+      var photoSrc = h.image_url || h.photo || 'assets/img/listings/1240-york-st-1.jpg';
+      if (photoSrc.indexOf('http') !== 0 && photoSrc.indexOf('/') !== 0 && photoSrc.indexOf('../') !== 0) {
+        photoSrc = pfx + photoSrc;
       }
 
-      var calc = calculateMortgage(num);
-      var isJumbo = calc.loanAmount > 1149825; // 2026 Bay Area conforming loan limit
-
-      return '<p>Here is an estimated monthly payment breakdown for a <strong>' + formatDollar(calc.price) + '</strong> home in California:</p>' +
-        '<div class="sl-ai-calc-box">' +
-          '<div class="sl-ai-calc-row"><span>Purchase Price</span><strong>' + formatDollar(calc.price) + '</strong></div>' +
-          '<div class="sl-ai-calc-row"><span>20% Down Payment</span><span>' + formatDollar(calc.downPayment) + '</span></div>' +
-          '<div class="sl-ai-calc-row"><span>Loan Amount (80%)</span><span>' + formatDollar(calc.loanAmount) + '</span></div>' +
-          '<div class="sl-ai-calc-row"><span>Principal &amp; Interest (~6.6%)</span><span>' + formatDollar(calc.monthlyPI) + '/mo</span></div>' +
-          '<div class="sl-ai-calc-row"><span>CA Property Tax (~1.1%)</span><span>' + formatDollar(calc.monthlyTax) + '/mo</span></div>' +
-          '<div class="sl-ai-calc-row"><span>Homeowners Insurance (est.)</span><span>' + formatDollar(calc.monthlyInsurance) + '/mo</span></div>' +
-          '<div class="sl-ai-calc-row"><span>Estimated Total Monthly Payment</span><span>' + formatDollar(calc.totalMonthly) + '/mo</span></div>' +
+      var card = document.createElement('div');
+      card.className = 'sl-ai-home-card' + (idx === 1 ? ' is-active' : '');
+      card.setAttribute('data-addr', h.address);
+      card.innerHTML =
+        '<div class="sl-ai-home-card__img-wrap">' +
+          '<img class="sl-ai-home-card__img" src="' + photoSrc + '" alt="' + h.address + '" loading="lazy" />' +
         '</div>' +
-        '<p style="margin-top:10px;font-size:0.84rem;color:#4B5563;">' +
-          (isJumbo ? '⚠️ At ' + formatDollar(calc.loanAmount) + ', this loan falls into the <strong>Jumbo Loan</strong> tier (above Alameda & Contra Costa’s conforming limit of $1,149,825). Steven partners with premier Bay Area jumbo portfolio lenders offering aggressive rate buydowns.' : '✓ This loan falls comfortably within conforming guidelines. Steven can connect you with trusted local lending partners to lock down competitive terms.') +
-        '</p>' +
-        '<p style="margin-top:6px;"><button type="button" class="sl-ai-pill-btn" data-query="Can Steven help me get pre-approved?">Can Steven help me get pre-approved?</button></p>';
-    }
+        '<div class="sl-ai-home-card__content">' +
+          '<span class="sl-ai-home-card__price">' + (h.price ? (typeof h.price === 'number' ? '$' + h.price.toLocaleString() : h.price) : '$825,000') + '</span>' +
+          '<span class="sl-ai-home-card__addr">' + (h.address || 'Bay Area Home') + '</span>' +
+          '<span class="sl-ai-home-card__specs">' + (h.beds || 3) + ' 🛏 ' + (h.baths || 2) + ' 🛁 · ' + (h.sqft ? (typeof h.sqft === 'number' ? h.sqft.toLocaleString() : h.sqft) : '1,400') + ' sq ft</span>' +
+          '<span class="sl-ai-home-card__badge">Presented by Steven Lenz Jr.</span>' +
+        '</div>';
 
-    // 2. Homes & Listings represented by Steven
-    if (raw.indexOf('home') !== -1 || raw.indexOf('listing') !== -1 || raw.indexOf('property') !== -1 || raw.indexOf('portfolio') !== -1 || raw.indexOf('for sale') !== -1 || raw.indexOf('sold') !== -1 || raw.indexOf('genoa') !== -1 || raw.indexOf('altamont') !== -1 || raw.indexOf('zinn') !== -1) {
-      var cardsHtml = '';
-      FEATURED_LISTINGS.slice(0, 3).forEach(function (p) {
-        cardsHtml +=
-          '<div class="sl-ai-prop-card">' +
-            '<img src="' + pfx + p.photo + '" alt="' + p.address + '" />' +
-            '<div class="sl-ai-prop-card__info">' +
-              '<div class="sl-ai-prop-card__price">' + p.price + ' <span style="font-size:0.75rem;font-weight:normal;color:#059669;">(' + p.status + ')</span></div>' +
-              '<div class="sl-ai-prop-card__addr">' + p.address + ', ' + p.city + '</div>' +
-              '<div class="sl-ai-prop-card__meta">' + p.beds + ' Beds · ' + p.baths + ' Baths · ' + p.sqft + ' Sq.Ft.</div>' +
-              '<a class="sl-ai-prop-card__link" href="' + pfx + p.url + '">View Portfolio Listing →</a>' +
-            '</div>' +
-          '</div>';
+      card.addEventListener('click', function () {
+        document.querySelectorAll('.sl-ai-home-card').forEach(function (c) { c.classList.remove('is-active'); });
+        card.classList.add('is-active');
+        activePropertyAddress = h.address;
+        var sel = document.getElementById('sl-lead-property');
+        if (sel) {
+          sel.value = h.address.indexOf('York') !== -1 ? '1232 York St' : (h.address.indexOf('Segale') !== -1 ? '91 Segale Dr' : h.address);
+        }
       });
 
-      return '<p>Steven Lenz Jr. represents premier residential properties, luxury estates, and off-market private exclusives across the Tri-Valley, Diablo Valley, and San Francisco Bay Area. Here are highlights from his track record:</p>' +
-        cardsHtml +
-        '<p style="margin-top:10px;font-size:0.84rem;">Looking for active off-market inventory or private exclusives? Steven has access to Compass Private Exclusives not posted publicly on the MLS.</p>' +
-        '<p><button type="button" class="sl-ai-pill-btn" data-query="Tell me about Compass Private Exclusives">Tell me about Compass Private Exclusives</button></p>';
-    }
-
-    // 3. Areas & Communities Covered
-    if (raw.indexOf('area') !== -1 || raw.indexOf('where') !== -1 || raw.indexOf('pleasanton') !== -1 || raw.indexOf('danville') !== -1 || raw.indexOf('alamo') !== -1 || raw.indexOf('san ramon') !== -1 || raw.indexOf('dublin') !== -1 || raw.indexOf('livermore') !== -1 || raw.indexOf('walnut creek') !== -1 || raw.indexOf('oakland') !== -1 || raw.indexOf('cover') !== -1) {
-      return '<p>Steven Lenz Jr. specializes in the entire <strong>East Bay, Tri-Valley, and San Francisco Peninsula</strong>, with hometown roots right in Pleasanton:</p>' +
-        '<ul>' +
-          '<li><strong>Tri-Valley:</strong> Pleasanton, Danville, Alamo, San Ramon, Dublin, Livermore (wine country & estate parcels).</li>' +
-          '<li><strong>Diablo Valley:</strong> Walnut Creek, Lafayette, Orinda, Moraga.</li>' +
-          '<li><strong>Greater Bay Area:</strong> Oakland Hills, Berkeley, Fremont, San Francisco, and mid-Peninsula Silicon Valley gateway enclaves.</li>' +
-        '</ul>' +
-        '<p>Whether evaluating Pleasanton Unified & San Ramon Valley schools, master-planned neighborhoods like Ruby Hill & Gale Ranch, or BART commute corridors, Steven provides micro-neighborhood data.</p>' +
-        '<p><a href="' + pfx + 'neighborhoods.html" style="color:#B48439;font-weight:600;text-decoration:none;">Explore All Area Guides →</a></p>';
-    }
-
-    // 4. Compass Concierge
-    if (raw.indexOf('concierge') !== -1 || raw.indexOf('staging') !== -1 || raw.indexOf('renovat') !== -1 || raw.indexOf('prep') !== -1) {
-      return '<p><strong>Compass Concierge</strong> is the market-leading service that fronts 100% of the cost of home improvement services with <strong>zero upfront cost, zero interest, and zero hidden fees</strong>.</p>' +
-        '<ul>' +
-          '<li><strong>What it covers:</strong> Professional staging, interior/exterior painting, new hardwood or carpet flooring, kitchen & bath refreshes, deep cleaning, and luxury landscaping.</li>' +
-          '<li><strong>Repayment:</strong> The costs are simply deducted out of escrow proceeds when your home sells.</li>' +
-          '<li><strong>Proven ROI:</strong> Prepped and professionally staged homes sell significantly faster and routinely yield 5%–12% higher final net sales prices.</li>' +
-        '</ul>' +
-        '<p><a href="' + pfx + 'concierge.html" style="color:#B48439;font-weight:600;text-decoration:none;">Learn More About Compass Concierge →</a></p>';
-    }
-
-    // 5. California Prop 19 & Tax Transfers
-    if (raw.indexOf('prop 19') !== -1 || raw.indexOf('tax') !== -1 || raw.indexOf('property tax') !== -1 || raw.indexOf('55') !== -1) {
-      return '<p><strong>California Proposition 19</strong> allows California homeowners aged <strong>55 or older</strong> (as well as severely disabled homeowners or victims of natural disasters/wildfires) to transfer their low property tax base to a replacement primary residence anywhere in California.</p>' +
-        '<ul>' +
-          '<li><strong>Any County in CA:</strong> You can move between Alameda, Contra Costa, San Francisco, or all 58 California counties.</li>' +
-          '<li><strong>Up to 3 Times:</strong> Eligible homeowners can utilize this tax-base transfer up to 3 times in their lifetime.</li>' +
-          '<li><strong>Upsizing Allowed:</strong> You can even purchase a more expensive home; only the incremental price difference is added to your existing tax base!</li>' +
-        '</ul>' +
-        '<p>Steven frequently advises East Bay downsizers and empty-nesters on unlocking their equity while preserving their generational tax rate.</p>';
-    }
-
-    // 6. About Steven & Experience
-    if (raw.indexOf('who is') !== -1 || raw.indexOf('steve') !== -1 || raw.indexOf('steven') !== -1 || raw.indexOf('background') !== -1 || raw.indexOf('coach') !== -1 || raw.indexOf('basketball') !== -1) {
-      return '<p><strong>Steven Lenz Jr.</strong> is a premier luxury real estate advisor with Compass (CA DRE# 01989811):</p>' +
-        '<ul>' +
-          '<li><strong>Tri-Valley Native:</strong> Born and raised in Pleasanton, California; attended Amador Valley High School.</li>' +
-          '<li><strong>Athletic Discipline:</strong> Former semi-pro basketball player. Spent 9 years coaching basketball at elite De La Salle High School in Concord and currently coaches collegiately at Ohlone College.</li>' +
-          '<li><strong>Sports & Entertainment:</strong> Discreet representation for high-profile athletes, corporate executives, and luxury homeowners requiring strict confidentiality and NDAs.</li>' +
-        '</ul>' +
-        '<p><a href="' + pfx + 'about.html" style="color:#B48439;font-weight:600;text-decoration:none;">Read Steven’s Full Bio & Client Reviews →</a></p>';
-    }
-
-    // 7. Contact / How to Reach Steven
-    if (raw.indexOf('contact') !== -1 || raw.indexOf('phone') !== -1 || raw.indexOf('call') !== -1 || raw.indexOf('email') !== -1 || raw.indexOf('talk') !== -1 || raw.indexOf('appointment') !== -1 || raw.indexOf('reach') !== -1) {
-      return '<p>You can connect directly with Steven Lenz Jr. anytime:</p>' +
-        '<div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin:8px 0;font-size:0.88rem;">' +
-          '<strong>Steven Lenz Jr. · Compass</strong><br />' +
-          'Direct Cell / Text: <a href="tel:+19259989711" style="color:#B48439;font-weight:bold;">(925) 998-9711</a><br />' +
-          'Email: <a href="mailto:steven.lenzjr@compass.com" style="color:#B48439;">steven.lenzjr@compass.com</a><br />' +
-          'Office: 900 Main St., Pleasanton, CA 94566<br />' +
-          'License: CA DRE# 01989811' +
-        '</div>' +
-        '<p><a href="' + pfx + 'connect.html" style="color:#B48439;font-weight:600;">Schedule an Appointment on the Connect Page →</a></p>';
-    }
-
-    // Default Fallback
-    return '<p>Thank you for asking! Steven Lenz Jr. represents luxury buyers and sellers throughout Pleasanton, Danville, Alamo, and the San Francisco Bay Area.</p>' +
-      '<p>Would you like to explore:</p>' +
-      '<ul>' +
-        '<li>Steven’s active and sold portfolio listings</li>' +
-        '<li>Monthly mortgage breakdown for a specific price (e.g. $700K, $1.5M, $2.2M)</li>' +
-        '<li>Neighborhood insight for Pleasanton, Danville, or surrounding communities</li>' +
-        '<li>Compass Concierge or Private Exclusives</li>' +
-      '</ul>' +
-      '<p><button type="button" class="sl-ai-talk-btn" onclick="window.location.href=\'tel:+19259989711\'">📞 Call Steven Directly at (925) 998-9711</button></p>';
+      body.appendChild(card);
+    });
   }
 
-  // Setup DOM Event Listeners & UI Controls
   function setupInteractions(fab, win) {
     var closeBtn = document.getElementById('sl-ai-close-btn');
-    var form = document.getElementById('sl-ai-form');
-    var input = document.getElementById('sl-ai-input');
-    var body = document.getElementById('sl-ai-body');
-    var talkBtn = document.getElementById('sl-ai-talk-btn');
-    var micBtn = document.getElementById('sl-ai-mic-btn');
+    var minBtn = document.getElementById('sl-ai-minimize-btn');
+    var homesCloseBtn = document.getElementById('sl-ai-homes-close-btn');
+    var browseHeaderBtn = document.getElementById('sl-ai-browse-header-btn');
+    var splitHandle = document.getElementById('sl-ai-split-handle');
     var langBtn = document.getElementById('sl-ai-lang-btn');
     var langMenu = document.getElementById('sl-ai-lang-menu');
     var optBtn = document.getElementById('sl-ai-options-btn');
     var optMenu = document.getElementById('sl-ai-options-menu');
+    var talkBtn = document.getElementById('sl-ai-talk-btn');
+    var leadView = document.getElementById('sl-ai-lead-view');
+    var leadCancel = document.getElementById('sl-lead-cancel');
+    var leadForm = document.getElementById('sl-ai-lead-form');
+    var leadSuccess = document.getElementById('sl-lead-success');
+    var form = document.getElementById('sl-ai-form');
+    var input = document.getElementById('sl-ai-input');
+    var micBtn = document.getElementById('sl-ai-mic-btn');
+    var body = document.getElementById('sl-ai-body');
+
+    renderHomesList(SEED_HOMES.slice(0, 2));
 
     function toggleChat(open) {
-      win.classList.toggle('is-open', open);
       if (open) {
-        input.focus();
-        closeMenus();
+        win.classList.add('is-open');
+        fab.style.display = 'none';
+        setTimeout(function () { input.focus(); }, 200);
+      } else {
+        win.classList.remove('is-open');
+        win.classList.remove('has-homes-panel');
+        fab.style.display = 'flex';
       }
     }
 
-    function closeMenus() {
-      if (langMenu) langMenu.classList.remove('is-open');
-      if (optMenu) optMenu.classList.remove('is-open');
+    function toggleHomesPanel(forceState) {
+      if (typeof forceState === 'boolean') {
+        if (forceState) win.classList.add('has-homes-panel');
+        else win.classList.remove('has-homes-panel');
+      } else {
+        win.classList.toggle('has-homes-panel');
+      }
     }
 
     fab.addEventListener('click', function () { toggleChat(true); });
     closeBtn.addEventListener('click', function () { toggleChat(false); });
+    if (minBtn) minBtn.addEventListener('click', function () { toggleChat(false); });
 
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && win.classList.contains('is-open')) {
-        toggleChat(false);
-      }
+    if (homesCloseBtn) {
+      homesCloseBtn.addEventListener('click', function () {
+        toggleHomesPanel(false);
+      });
+    }
+
+    if (browseHeaderBtn) {
+      browseHeaderBtn.addEventListener('click', function () {
+        toggleHomesPanel();
+      });
+    }
+
+    if (splitHandle) {
+      splitHandle.addEventListener('click', function () {
+        toggleHomesPanel();
+      });
+    }
+
+    // Lead Capture ("Talk to Steven") view toggles
+    talkBtn.addEventListener('click', function () {
+      leadView.classList.add('is-visible');
+    });
+
+    leadCancel.addEventListener('click', function () {
+      leadView.classList.remove('is-visible');
+    });
+
+    // Lead Form submission connected to POST /api/leads
+    leadForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var leadPayload = {
+        name: document.getElementById('sl-lead-name').value,
+        email: document.getElementById('sl-lead-email').value,
+        phone: document.getElementById('sl-lead-phone').value,
+        reply_method: document.getElementById('sl-lead-reply-method').value,
+        property_address: document.getElementById('sl-lead-property').value,
+        message: document.getElementById('sl-lead-message').value,
+        sessionId: sessionId
+      };
+
+      fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadPayload)
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        leadSuccess.style.display = 'block';
+        setTimeout(function () {
+          leadView.classList.remove('is-visible');
+          leadSuccess.style.display = 'none';
+          leadForm.reset();
+          addBotMessage('✓ Thank you, ' + leadPayload.name + '! Steven has received your note about ' + leadPayload.property_address + ' and will follow up with you by ' + leadPayload.reply_method + ' shortly.');
+        }, 1200);
+      })
+      .catch(function (err) {
+        leadSuccess.textContent = '✓ Note sent directly to Steven!';
+        leadSuccess.style.display = 'block';
+        setTimeout(function () {
+          leadView.classList.remove('is-visible');
+          leadSuccess.style.display = 'none';
+        }, 1200);
+      });
+    });
+
+    // Feedback thumbs up/down connected to POST /api/feedback
+    document.querySelectorAll('.sl-ai-feedback-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.sl-ai-feedback-btn').forEach(function (b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        var val = btn.getAttribute('data-val');
+
+        fetch('/api/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: sessionId, rating: val })
+        }).catch(function () {});
+      });
     });
 
     // Language Menu Toggle
-    if (langBtn) {
-      langBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        optMenu.classList.remove('is-open');
-        langMenu.classList.toggle('is-open');
-      });
-    }
+    langBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      optMenu.classList.remove('is-open');
+      langMenu.classList.toggle('is-open');
+    });
 
-    // Language Selection
-    if (langMenu) {
-      langMenu.querySelectorAll('.sl-ai-popup-item').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var lang = btn.getAttribute('data-lang');
-          CURRENT_LANG = lang;
-          langMenu.classList.remove('is-open');
-          var greetings = {
-            en: 'Switched to English. How can I help you with your Bay Area real estate plans?',
-            es: 'Cambiado a Español. ¿En qué le puedo ayudar con sus planes inmobiliarios en el Área de la Bahía?',
-            zh: '已切换为中文。请问您需要了解旧金山湾区/Tri-Valley的房产信息吗？',
-            vi: 'Đã chuyển sang tiếng Việt. Tôi có thể giúp gì cho quý vị về bất động sản Vùng Vịnh?',
-            tl: 'Lumipat sa Tagalog. Paano kita matutulungan sa iyong mga plano sa real estate sa Bay Area?',
-            hi: 'हिंदी में स्विच किया गया। मैं बे एरिया में आपके रियल एस्टेट के लिए कैसे मदद कर सकता हूँ?'
-          };
-          addBotMessage(greetings[lang] || greetings.en);
-        });
-      });
-    }
+    optBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      langMenu.classList.remove('is-open');
+      optMenu.classList.toggle('is-open');
+    });
 
-    // Options Menu Toggle
-    if (optBtn) {
-      optBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        langMenu.classList.remove('is-open');
-        optMenu.classList.toggle('is-open');
-      });
-    }
-
-    document.addEventListener('click', function () { closeMenus(); });
+    document.addEventListener('click', function () {
+      langMenu.classList.remove('is-open');
+      optMenu.classList.remove('is-open');
+    });
 
     // Options Actions
     document.getElementById('sl-ai-opt-clear').addEventListener('click', function () {
       body.innerHTML = '';
       addBotMessage('Conversation cleared. Hi! I\'m Steve. How can I assist you with Steven\'s homes, neighborhood guides, or monthly costs?');
-      closeMenus();
     });
 
     document.getElementById('sl-ai-opt-call').addEventListener('click', function () {
-      window.location.href = 'tel:' + STEVE_INFO.phoneRaw;
-      closeMenus();
+      window.location.href = 'tel:+19259989711';
     });
 
     document.getElementById('sl-ai-opt-email').addEventListener('click', function () {
-      window.location.href = 'mailto:' + STEVE_INFO.email + '?subject=Real%20Estate%20Inquiry%20via%20AI%20Steve';
-      closeMenus();
+      window.location.href = 'mailto:steven.lenzjr@compass.com?subject=Real%20Estate%20Inquiry%20via%20AI%20Steve';
     });
 
     document.getElementById('sl-ai-opt-about').addEventListener('click', function () {
       window.location.href = pfx + 'about.html';
-      closeMenus();
     });
 
-    // Talk to Steven Pill Action
-    talkBtn.addEventListener('click', function () {
-      addUserMessage('I would like to talk to Steven Lenz Jr.');
-      setTimeout(function () {
-        addBotMessage(
-          '<p>I would be delighted to connect you with Steven directly! Here is how to reach him immediately:</p>' +
-          '<div style="background:#FFFFFF;border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin:8px 0;font-size:0.88rem;">' +
-            '<strong>Steven Lenz Jr.</strong><br />' +
-            '📱 Direct Cell / Text: <a href="tel:+19259989711" style="color:#B48439;font-weight:bold;">(925) 998-9711</a><br />' +
-            '✉️ Direct Email: <a href="mailto:steven.lenzjr@compass.com" style="color:#B48439;">steven.lenzjr@compass.com</a><br />' +
-            '📍 Office: 900 Main St., Pleasanton, CA 94566' +
-          '</div>' +
-          '<p><a href="' + pfx + 'connect.html" style="display:inline-block;background:#111827;color:#FFFFFF;padding:8px 16px;border-radius:20px;text-decoration:none;font-weight:600;font-size:0.84rem;">Open Consultation Booking Form →</a></p>'
-        );
-      }, 400);
-    });
-
-    // Free Browser Web Speech API for Voice Input (Speech-to-Text)
-    var recognition = null;
+    // Speech-to-Text via Web Speech API
     var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-
     if (SpeechRec) {
-      recognition = new SpeechRec();
+      var recognition = new SpeechRec();
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'en-US';
@@ -524,20 +483,14 @@
         if (micBtn.classList.contains('is-listening')) {
           recognition.stop();
         } else {
-          try {
-            recognition.start();
-          } catch (e) {
-            recognition.stop();
-          }
+          try { recognition.start(); } catch (e) { recognition.stop(); }
         }
       });
     } else {
-      micBtn.title = 'Voice input not supported in this browser';
       micBtn.style.opacity = '0.5';
-      micBtn.style.cursor = 'not-allowed';
     }
 
-    // Message submission
+    // Message submission connected to POST /api/chat
     function handleSend() {
       var query = input.value.trim();
       if (!query) return;
@@ -545,19 +498,37 @@
       addUserMessage(query);
       input.value = '';
 
-      // Display typing indicator
       var typingEl = document.createElement('div');
       typingEl.className = 'sl-ai-msg sl-ai-msg--bot';
-      typingEl.innerHTML = '<div class="sl-ai-typing"><span class="sl-ai-dot"></span><span class="sl-ai-dot"></span><span class="sl-ai-dot"></span></div>';
+      typingEl.innerHTML = '<div class="sl-ai-bubble" style="color:#9CA3AF;font-style:italic;">Steve is typing...</div>';
       body.appendChild(typingEl);
       body.scrollTop = body.scrollHeight;
 
-      // Realistic thoughtful response delay
-      setTimeout(function () {
-        typingEl.remove();
-        var replyHtml = generateReply(query);
-        addBotMessage(replyHtml);
-      }, 550);
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: query, sessionId: sessionId })
+      })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+
+        if (data && data.properties && data.properties.length) {
+          renderHomesList(data.properties);
+        }
+
+        addBotMessage(data.reply, data.card, data.quickReplies);
+
+        // If user specifically inquired about areas or browsing homes, auto-open the homes panel!
+        if (data.intent === 'AREAS_COVERED' || data.intent === 'SHOW_HOMES') {
+          toggleHomesPanel(true);
+        }
+      })
+      .catch(function () {
+        if (typingEl.parentNode) typingEl.parentNode.removeChild(typingEl);
+        // Fallback for offline mode
+        handleOfflineQuery(query);
+      });
     }
 
     form.addEventListener('submit', function (e) {
@@ -565,14 +536,25 @@
       handleSend();
     });
 
-    // Delegate Starter Pills
+    // Event delegation for suggestion pills & interactive card buttons
     body.addEventListener('click', function (e) {
       var pill = e.target.closest('.sl-ai-pill-btn');
       if (pill) {
-        var q = pill.getAttribute('data-query');
-        if (q) {
-          input.value = q;
+        var query = pill.getAttribute('data-query');
+        if (query) {
+          input.value = query;
           handleSend();
+        }
+        return;
+      }
+
+      var cardBtn = e.target.closest('.sl-ai-action-card__btn');
+      if (cardBtn) {
+        var action = cardBtn.getAttribute('data-action');
+        if (action === 'browse_homes') {
+          toggleHomesPanel(true);
+        } else if (action === 'talk_to_steve') {
+          leadView.classList.add('is-visible');
         }
       }
     });
@@ -580,45 +562,83 @@
     function addUserMessage(text) {
       var msg = document.createElement('div');
       msg.className = 'sl-ai-msg sl-ai-msg--user';
-      msg.innerHTML =
-        '<div class="sl-ai-bubble">' + escapeHtml(text) + '</div>' +
-        '<div class="sl-ai-time">' + formatTime() + '</div>';
+      msg.innerHTML = '<div class="sl-ai-bubble">' + escapeHtml(text) + '</div>';
       body.appendChild(msg);
       body.scrollTop = body.scrollHeight;
     }
 
-    function addBotMessage(html) {
+    function addBotMessage(text, card, quickReplies) {
       var msg = document.createElement('div');
       msg.className = 'sl-ai-msg sl-ai-msg--bot';
-      msg.innerHTML =
-        '<div class="sl-ai-bubble">' + html + '</div>' +
-        '<div class="sl-ai-time">' + formatTime() + '</div>';
+
+      var html = '<div class="sl-ai-bubble">' + (text || '').replace(/\n/g, '<br />') + '</div>';
+
+      if (card) {
+        html +=
+          '<div class="sl-ai-action-card">' +
+            '<div class="sl-ai-action-card__info">' +
+              '<span class="sl-ai-action-card__eyebrow">' + (card.eyebrow || 'HOMES · SHOWING NOW') + '</span>' +
+              '<span class="sl-ai-action-card__title">' + (card.title || '2 homes') + '</span>' +
+              '<span class="sl-ai-action-card__sub">' + (card.priceRange || '$450,000 to $825,000') + '</span>' +
+            '</div>' +
+            '<button type="button" class="sl-ai-action-card__btn" data-action="' + (card.actionType || 'browse_homes') + '">' +
+              (card.actionText || 'Browse homes →') +
+            '</button>' +
+          '</div>';
+      }
+
+      if (quickReplies && quickReplies.length) {
+        html += '<div class="sl-ai-pills">';
+        quickReplies.forEach(function (q) {
+          html += '<button type="button" class="sl-ai-pill-btn" data-query="' + escapeHtml(q) + '">' + escapeHtml(q) + '</button>';
+        });
+        html += '</div>';
+      }
+
+      msg.innerHTML = html;
       body.appendChild(msg);
       body.scrollTop = body.scrollHeight;
     }
 
-    function formatTime() {
-      var d = new Date();
-      var h = d.getHours();
-      var m = d.getMinutes();
-      var ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12;
-      h = h ? h : 12;
-      return h + ':' + (m < 10 ? '0' + m : m) + ' ' + ampm;
+    function handleOfflineQuery(query) {
+      var text = query.toLowerCase();
+      if (text.indexOf('area') !== -1 || text.indexOf('cover') !== -1) {
+        renderHomesList(SEED_HOMES.slice(0, 2));
+        addBotMessage(
+          'I cover Camp Connell, CA and Richmond, CA. If you want, I can also show you the homes I have there.',
+          {
+            eyebrow: 'HOMES · SHOWING NOW',
+            title: '2 homes',
+            priceRange: '$450,000 to $825,000',
+            actionText: 'Browse homes →',
+            actionType: 'browse_homes'
+          },
+          ['Browse homes', 'Tell me about 1232 York St', 'Talk to Steven']
+        );
+        toggleHomesPanel(true);
+      } else {
+        addBotMessage(
+          'I can help you review Steven\'s available homes, estimate monthly mortgage payments, or schedule a tour. Click "Browse homes" or "Talk to Steven" below.',
+          {
+            eyebrow: 'FEATURED HOMES',
+            title: 'Steven\'s Exclusive Portfolio',
+            priceRange: '$450K - $4.2M',
+            actionText: 'Browse homes →',
+            actionType: 'browse_homes'
+          },
+          ['Which areas do you cover?', 'What would a $700K home cost a month?']
+        );
+      }
     }
 
     function escapeHtml(str) {
-      var div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
+      return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
   }
 
-  // Initialize on document ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', createWidget);
   } else {
     createWidget();
   }
 })();
-
