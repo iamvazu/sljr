@@ -20,7 +20,7 @@ const { stripHtml, getClientIp, hashIp, createRateLimiter, readJsonBody, sendJso
 
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
 const COOKIE = 'sl_admin';
-const loginLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 8, prefix: 'admin-login' });
+const loginLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 30, prefix: 'admin-login' });
 
 const sha256 = (v) => crypto.createHash('sha256').update(v).digest('hex');
 
@@ -51,9 +51,10 @@ function readCookie(req, name) {
   return '';
 }
 
-function setSessionCookie(res, token, maxAgeSec) {
-  const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  res.setHeader('Set-Cookie', `${COOKIE}=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${maxAgeSec}${secure}`);
+function setSessionCookie(res, token, maxAgeSec, req) {
+  const isHttps = req ? (req.headers['x-forwarded-proto'] === 'https' || Boolean(req.socket && req.socket.encrypted)) : false;
+  const secure = isHttps ? '; Secure' : '';
+  res.setHeader('Set-Cookie', `${COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAgeSec}${secure}`);
 }
 
 function currentSession(req) {
@@ -110,7 +111,7 @@ async function handleAdminApi(req, res, parsedUrl) {
     }
     const token = crypto.randomBytes(32).toString('hex');
     db.createSession(sha256(token), SESSION_TTL_MS, ip);
-    setSessionCookie(res, token, SESSION_TTL_MS / 1000);
+    setSessionCookie(res, token, SESSION_TTL_MS / 1000, req);
     db.audit('login', '', ip);
     return sendJson(res, 200, { ok: true });
   }
@@ -130,7 +131,7 @@ async function handleAdminApi(req, res, parsedUrl) {
 
   if (method === 'POST' && route === '/logout') {
     db.deleteSession(sha256(auth.token));
-    setSessionCookie(res, '', 0);
+    setSessionCookie(res, '', 0, req);
     db.audit('logout', '', ip);
     return sendJson(res, 200, { ok: true });
   }
