@@ -1,0 +1,24 @@
+services:
+  stevenlenzjr:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stevenlenzjr-web
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-4173}:4173"
+    environment:
+      - PORT=4173
+      - NODE_ENV=production
+    volumes:
+      - stevenlenzjr_sqlite_data:/app/server/data
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:4173/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  stevenlenzjr_sqlite_data:
+    name: stevenlenzjr_sqlite_data

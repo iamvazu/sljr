@@ -7,5 +7,6 @@ _backup_*/
 *.db-wal
 *.sqlite-shm
 *.sqlite-wal
+scripts/
 .agent/
 
