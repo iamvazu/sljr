@@ -14,10 +14,9 @@ COPY package*.json ./
 # Install production dependencies if package.json exists
 RUN if [ -f package.json ]; then npm install --omit=dev; fi
 
-# Copy application server, static assets, and data
+# Copy application server and static assets
 COPY server/ ./server/
 COPY site/ ./site/
-COPY data/ ./data/
 
 # Create persistent data directory for SQLite
 RUN mkdir -p /app/data /app/server/data
