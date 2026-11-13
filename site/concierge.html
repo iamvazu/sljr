@@ -106,23 +106,111 @@
   </script>
   <style>
     body { overflow-y: auto; }
-    .cc-covered { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; margin-bottom: 56px; }
+    .cc-covered {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 56px;
+    }
     .cc-covered-item {
-      padding: 14px 16px; background: #141A23; border: 1px solid var(--sw-border);
-      border-radius: 10px; font-size: 0.9rem; color: var(--sw-ink);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 18px;
+      background: linear-gradient(145deg, #131922 0%, #0F141C 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      color: var(--sw-ink);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    .cc-faq { border-top: 1px solid var(--sw-border); margin-bottom: 48px; }
-    .cc-faq details { border-bottom: 1px solid var(--sw-border); padding: 18px 0; }
-    .cc-faq summary {
-      cursor: pointer; list-style: none; font-family: var(--sw-font-display);
-      font-size: 1.2rem; font-weight: 500; color: var(--sw-ink);
-      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    .cc-covered-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216, 165, 90, 0.25), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .cc-faq summary::after { content: "+"; color: var(--sw-accent); font-size: 1.3rem; }
-    .cc-faq details[open] summary::after { content: "–"; }
-    .cc-faq p { margin: 12px 0 0; color: var(--sw-ink-soft); line-height: 1.7; font-size: 0.94rem; }
-    @media (max-width: 860px) { .cc-covered { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 560px) { .cc-covered { grid-template-columns: 1fr; } }
+    .cc-covered-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(216, 165, 90, 0.45);
+      background: linear-gradient(145deg, #17202B 0%, #111722 100%);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 0 24px rgba(216, 165, 90, 0.12);
+    }
+    .cc-covered-item:hover::before {
+      opacity: 1;
+    }
+    .cc-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(216, 165, 90, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .cc-icon-wrap svg {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .cc-covered-item:hover .cc-icon-wrap {
+      background: rgba(216, 165, 90, 0.12);
+      border-color: #D8A55A;
+      box-shadow: 0 0 16px rgba(216, 165, 90, 0.25);
+    }
+    .cc-covered-item:hover .cc-icon-wrap svg {
+      transform: scale(1.15) rotate(3deg);
+    }
+    .cc-item-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .cc-item-title {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: #F9FAFB;
+      line-height: 1.3;
+      transition: color 0.2s ease;
+    }
+    .cc-covered-item:hover .cc-item-title {
+      color: #FFFFFF;
+    }
+    .cc-item-sub {
+      font-size: 0.76rem;
+      color: #9CA3AF;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+    }
+    /* Featured 100+ services card */
+    .cc-covered-item--featured {
+      background: linear-gradient(145deg, rgba(216, 165, 90, 0.12) 0%, rgba(19, 25, 34, 0.95) 100%);
+      border: 1px solid rgba(216, 165, 90, 0.5);
+    }
+    .cc-covered-item--featured:hover {
+      border-color: #D8A55A;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 30px rgba(216, 165, 90, 0.25);
+    }
+    .cc-icon-wrap--featured {
+      background: rgba(216, 165, 90, 0.18);
+      border-color: #D8A55A;
+    }
+    .cc-item-title--featured {
+      color: #D8A55A;
+      font-weight: 700;
+    }
+    .cc-item-sub--featured {
+      color: rgba(216, 165, 90, 0.85);
+    }
+    @media (max-width: 960px) { .cc-covered { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .cc-covered { grid-template-columns: 1fr; } }
   </style>
   <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
   <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
@@ -211,28 +299,291 @@
         <h2>Covered Services</h2>
       </div>
       <div class="cc-covered">
-        <div class="cc-covered-item">Floor repair</div>
-        <div class="cc-covered-item">Carpet cleaning &amp; replacement</div>
-        <div class="cc-covered-item">Staging</div>
-        <div class="cc-covered-item">Deep-cleaning</div>
-        <div class="cc-covered-item">Decluttering</div>
-        <div class="cc-covered-item">Cosmetic renovations</div>
-        <div class="cc-covered-item">Landscaping</div>
-        <div class="cc-covered-item">Interior &amp; exterior painting</div>
-        <div class="cc-covered-item">HVAC</div>
-        <div class="cc-covered-item">Roofing repair</div>
-        <div class="cc-covered-item">Moving &amp; storage</div>
-        <div class="cc-covered-item">Pest control</div>
-        <div class="cc-covered-item">Custom closet work</div>
-        <div class="cc-covered-item">Fencing</div>
-        <div class="cc-covered-item">Electrical work</div>
-        <div class="cc-covered-item">Seller-side inspections &amp; evaluations</div>
-        <div class="cc-covered-item">Kitchen improvements</div>
-        <div class="cc-covered-item">Bathroom improvements</div>
-        <div class="cc-covered-item">Pool &amp; tennis court services</div>
-        <div class="cc-covered-item">Water heating &amp; plumbing repair</div>
-        <div class="cc-covered-item">Sewer lateral inspections &amp; remediation</div>
-        <div class="cc-covered-item" style="border-color:rgba(216,165,90,0.4);color:var(--sw-accent);">More than 100 other home improvement services</div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 3h18v18H3z" stroke="rgba(216,165,90,0.5)"/>
+      <path d="M3 9h18M3 15h18M9 3v6M15 9v6M9 15v6" stroke="#D8A55A"/>
+      <circle cx="9" cy="6" r="1" fill="#D8A55A"/>
+      <circle cx="15" cy="12" r="1" fill="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Floor repair</span>
+            <span class="cc-item-sub">Hardwood refinishing, tile & luxury vinyl</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19h16M4 15h16" stroke="rgba(216,165,90,0.4)"/>
+      <path d="M7 11V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v7" stroke="#D8A55A"/>
+      <path d="M5 11h14l1 8H4l1-8z" stroke="#F3F4F6"/>
+      <path d="M12 5v3" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Carpet cleaning & replacement</span>
+            <span class="cc-item-sub">Commercial steam extraction & plush wool install</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 11a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v3H5v-3z" stroke="#D8A55A"/>
+      <path d="M3 14h18v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4z" stroke="#F3F4F6"/>
+      <path d="M6 20v2M18 20v2M12 4v3" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Staging</span>
+            <span class="cc-item-sub">Bespoke interior design, luxury vignettes & art</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8z" stroke="#D8A55A" fill="rgba(216,165,90,0.15)"/>
+      <path d="M5 3l1 2M19 19l1 2M4 20l2-2" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Deep-cleaning</span>
+            <span class="cc-item-sub">White-glove sanitization & detail polishing</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" stroke="#D8A55A"/>
+      <path d="m3.3 7 8.7 5 8.7-5M12 22V12" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Decluttering</span>
+            <span class="cc-item-sub">Spatial curation & minimalist staging prep</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="#D8A55A" fill="rgba(216,165,90,0.1)"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Cosmetic renovations</span>
+            <span class="cc-item-sub">Modern lighting, updated hardware & moldings</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22v-8M7 22h10" stroke="rgba(216,165,90,0.5)"/>
+      <path d="M12 14c-4.5 0-7-3.5-7-7 0 0 3.5 0 7 3.5 3.5-3.5 7-3.5 7-3.5 0 3.5-2.5 7-7 7z" stroke="#D8A55A" fill="rgba(216,165,90,0.15)"/>
+      <path d="M12 6v8" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Landscaping</span>
+            <span class="cc-item-sub">Curb appeal elevation, tree pruning & mulch</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h12v5H4z" stroke="#D8A55A" fill="rgba(216,165,90,0.2)"/>
+      <path d="M16 6.5h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-6v4a2 2 0 0 0 2 2h0" stroke="#F3F4F6"/>
+      <circle cx="14" cy="20.5" r="1.5" fill="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Interior & exterior painting</span>
+            <span class="cc-item-sub">Designer palettes, crisp trim & pressure wash</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v20M2 12h20" stroke="rgba(216,165,90,0.3)"/>
+      <path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="rgba(216,165,90,0.3)"/>
+      <circle cx="12" cy="12" r="4" stroke="#D8A55A" fill="rgba(216,165,90,0.15)"/>
+      <path d="M12 9a3 3 0 0 1 3 3" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">HVAC</span>
+            <span class="cc-item-sub">Furnace tune-ups, heat pump & AC diagnostics</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 11 9-7 9 7" stroke="#D8A55A" stroke-width="2"/>
+      <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" stroke="#F3F4F6"/>
+      <path d="M19 7v-3h-3" stroke="rgba(216,165,90,0.5)"/>
+      <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Roofing repair</span>
+            <span class="cc-item-sub">Tile resetting, flashing seals & gutter guards</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 3h15v13H1z" stroke="#F3F4F6"/>
+      <path d="M16 8h4l3 3v5h-7V8z" stroke="#D8A55A"/>
+      <circle cx="5.5" cy="18.5" r="2.5" stroke="#D8A55A" fill="rgba(216,165,90,0.2)"/>
+      <circle cx="18.5" cy="18.5" r="2.5" stroke="#D8A55A" fill="rgba(216,165,90,0.2)"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Moving & storage</span>
+            <span class="cc-item-sub">White-glove pack, transit & vaulted holding</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#D8A55A" fill="rgba(216,165,90,0.1)"/>
+      <path d="m9 12 2 2 4-4" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Pest control</span>
+            <span class="cc-item-sub">Eco-certified termite & rodent clearance</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" stroke="#F3F4F6"/>
+      <path d="M12 3v18M4 9h16M4 15h16" stroke="#D8A55A"/>
+      <circle cx="10" cy="12" r="0.8" fill="#D8A55A"/>
+      <circle cx="14" cy="12" r="0.8" fill="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Custom closet work</span>
+            <span class="cc-item-sub">Architectural built-ins & modular systems</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4l2-2 2 2v18H4V4zM10 4l2-2 2 2v18h-4V4zM16 4l2-2 2 2v18h-4V4z" stroke="#D8A55A"/>
+      <path d="M2 9h20M2 17h20" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Fencing</span>
+            <span class="cc-item-sub">Redwood privacy fencing & iron gate repairs</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" stroke="#D8A55A" fill="rgba(216,165,90,0.2)"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Electrical work</span>
+            <span class="cc-item-sub">Panel upgrades, recessed LED & smart switches</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" stroke="#F3F4F6"/>
+      <rect x="8" y="2" width="8" height="4" rx="1" stroke="#D8A55A"/>
+      <path d="m9 14 2 2 4-4" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Seller-side inspections & evaluations</span>
+            <span class="cc-item-sub">Full home, pest, chimney & structural audits</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 5h18v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5z" stroke="#F3F4F6"/>
+      <path d="M3 11h18M12 11v10" stroke="#D8A55A"/>
+      <circle cx="7.5" cy="8" r="1" fill="#D8A55A"/>
+      <circle cx="16.5" cy="8" r="1" fill="#D8A55A"/>
+      <path d="M9 16v2M15 16v2" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Kitchen improvements</span>
+            <span class="cc-item-sub">Quartz counters, backsplashes & cabinetry tune</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h16a1 1 0 0 1 1 1v3a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-3a1 1 0 0 1 1-1z" stroke="#F3F4F6"/>
+      <path d="M6 12V5a3 3 0 0 1 3-3h1a2 2 0 0 1 2 2v2" stroke="#D8A55A"/>
+      <path d="M5 21l1 2M19 21l-1 2" stroke="rgba(216,165,90,0.5)"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Bathroom improvements</span>
+            <span class="cc-item-sub">Frameless glass, modern vanities & grout polish</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2 12c2.5-2 5.5-2 8 0s5.5 2 8 0 5.5-2 8 0" stroke="#D8A55A"/>
+      <path d="M2 17c2.5-2 5.5-2 8 0s5.5 2 8 0 5.5-2 8 0" stroke="rgba(216,165,90,0.6)"/>
+      <circle cx="12" cy="6" r="3" stroke="#F3F4F6"/>
+      <path d="M12 9v3" stroke="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Pool & tennis court services</span>
+            <span class="cc-item-sub">Tile re-grouting, chemical balance & court recoat</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" stroke="#D8A55A" fill="rgba(216,165,90,0.15)"/>
+      <path d="M12 9v5M9.5 11.5h5" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Water heating & plumbing repair</span>
+            <span class="cc-item-sub">Tankless water heaters, copper valves & fixtures</span>
+          </div>
+        </div>
+        <div class="cc-covered-item">
+          <div class="cc-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9" stroke="rgba(216,165,90,0.4)"/>
+      <circle cx="12" cy="12" r="4" stroke="#D8A55A" fill="rgba(216,165,90,0.2)"/>
+      <path d="M12 3v5M12 16v5M3 12h5M16 12h5" stroke="#F3F4F6"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title">Sewer lateral inspections & remediation</span>
+            <span class="cc-item-sub">CCTV line video scoping & trenchless lining</span>
+          </div>
+        </div>
+        <div class="cc-covered-item cc-covered-item--featured">
+          <div class="cc-icon-wrap cc-icon-wrap--featured">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#D8A55A"/>
+      <circle cx="12" cy="12" r="3" stroke="#F3F4F6" fill="#D8A55A"/>
+    </svg>
+          </div>
+          <div class="cc-item-text">
+            <span class="cc-item-title cc-item-title--featured">More than 100 other home improvement services</span>
+            <span class="cc-item-sub cc-item-sub--featured">Custom-tailored scopes with zero upfront fees</span>
+          </div>
+        </div>
       </div>
     </section>
 
