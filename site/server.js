@@ -13,6 +13,8 @@ const db = require('./db/database');
 const outbox = require('./lib/outbox');
 const { submitLead } = require('./api/lead');
 const { handleAdminApi } = require('./api/admin');
+const aiAgent = require('../server/ai');
+const aiDb = require('../server/db');
 const {
   stripHtml,
   isValidEmail,
@@ -27,6 +29,7 @@ const {
 } = require('./middleware/security');
 
 const PORT = Number(process.env.PORT) || 4173;
+const HOST = process.env.HOST || '0.0.0.0';
 const SITE_ROOT = path.resolve(__dirname);
 
 const writeLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 25, prefix: 'write' });
@@ -149,7 +152,120 @@ async function handleApi(req, res, parsedUrl) {
   // Health Check
   if (req.method === 'GET' && pathname === '/api/health') {
     db.getDb().prepare('SELECT 1').get();
-    return sendJson(res, 200, { ok: true });
+    return sendJson(res, 200, {
+      ok: true,
+      status: 'healthy',
+      service: 'Steven Lenz Jr. Full-Stack Platform & AI Steve Engine',
+      db: 'connected (node:sqlite)',
+      uptime: Math.round(process.uptime()),
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // AI Chat endpoint (AI Steve)
+  if (req.method === 'POST' && pathname === '/api/chat') {
+    const body = await readJsonBody(req);
+    const { message, sessionId = 'default-session' } = body;
+    if (!message || typeof message !== 'string') {
+      return sendJson(res, 400, { ok: false, error: 'Message text is required' });
+    }
+    try {
+      const response = aiAgent.processQuery(message);
+      aiDb.recordConversation(sessionId, 'user', message);
+      aiDb.recordConversation(sessionId, 'assistant', response.reply, response.intent, response.properties);
+      return sendJson(res, 200, {
+        success: true,
+        ok: true,
+        ...response,
+        sessionId,
+        timestamp: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('[AI Chat Error]', err);
+      return sendJson(res, 500, { ok: false, error: 'Internal AI Error', message: err.message });
+    }
+  }
+
+  // AI Steve Lead Generation ("Talk to Steven") endpoint
+  if (req.method === 'POST' && pathname === '/api/leads') {
+    if (!writeLimiter(req, res)) return;
+    const body = await readJsonBody(req);
+    const name = stripHtml(body.name || '').slice(0, 120);
+    const email = stripHtml(body.email || '').toLowerCase().slice(0, 160);
+    const phone = stripHtml(body.phone || '').slice(0, 40);
+    const replyMethod = stripHtml(body.reply_method || 'email').slice(0, 30);
+    const propertyAddress = stripHtml(body.property_address || '').slice(0, 200);
+    const message = stripHtml(body.message || '').slice(0, 2000);
+    const sessionId = stripHtml(body.sessionId || '').slice(0, 60);
+
+    if (!name || !isValidEmail(email)) {
+      return sendJson(res, 400, { ok: false, error: 'Name and a valid email are required.' });
+    }
+
+    try {
+      // 1. Record in AI DB
+      const inserted = aiDb.insertLead({
+        name,
+        email,
+        phone,
+        reply_method: replyMethod,
+        property_address: propertyAddress,
+        message,
+        session_id: sessionId,
+        ip: getClientIp(req),
+        user_agent: req.headers['user-agent']
+      });
+
+      // 2. Submit to Main Office Lead Pipeline (SQLite + Outbox + Resend/Webhooks)
+      try {
+        submitLead({
+          name,
+          email,
+          phone,
+          interest: propertyAddress ? `Inquiry on ${propertyAddress}` : 'General Inquiry',
+          form_type: 'contact',
+          scene: 'ai-steve',
+          source_page: '/ai-steve',
+          email_consent: true,
+          message: message ? `[AI Steve Inquiry] ${message} (Property: ${propertyAddress || 'N/A'})` : `Inquiry via AI Steve for ${propertyAddress || 'general representation'}`
+        }, req);
+      } catch (leadErr) {
+        console.warn('[AI Steve Pipeline Note]', leadErr.message);
+      }
+
+      return sendJson(res, 201, {
+        success: true,
+        ok: true,
+        leadId: inserted.id,
+        message: 'Thank you! Steven has received your details and will follow up shortly.'
+      });
+    } catch (err) {
+      console.error('[AI Leads Error]', err);
+      return sendJson(res, 500, { ok: false, error: 'Database Error', message: err.message });
+    }
+  }
+
+  // AI Leads List endpoint (Admin/Review)
+  if (req.method === 'GET' && pathname === '/api/leads') {
+    const leads = aiDb.getLeads();
+    return sendJson(res, 200, { success: true, count: leads.length, leads });
+  }
+
+  // AI Feedback (thumbs up / thumbs down)
+  if (req.method === 'POST' && pathname === '/api/feedback') {
+    const body = await readJsonBody(req);
+    const { sessionId = 'anon', messageId = null, rating, comment = null } = body;
+    if (!rating || !['up', 'down'].includes(String(rating).toLowerCase())) {
+      return sendJson(res, 400, { ok: false, error: "Rating must be 'up' or 'down'" });
+    }
+    aiDb.recordFeedback(sessionId, messageId, String(rating).toLowerCase(), comment);
+    return sendJson(res, 200, { success: true, recorded: rating });
+  }
+
+  // AI Properties Catalog endpoint
+  if (req.method === 'GET' && pathname === '/api/properties') {
+    const properties = aiDb.getProperties(Object.fromEntries(parsedUrl.searchParams));
+    return sendJson(res, 200, { success: true, count: properties.length, properties });
   }
 
   // All Listings
@@ -461,7 +577,7 @@ server.on('error', (err) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`Steven Lenz Jr. | Compass server running at http://localhost:${PORT}`);
+server.listen(PORT, HOST, () => {
+  console.log(`Steven Lenz Jr. | Compass server running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
 });
 

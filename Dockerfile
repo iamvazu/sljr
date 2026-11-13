@@ -14,12 +14,13 @@ COPY package*.json ./
 # Install production dependencies if package.json exists
 RUN if [ -f package.json ]; then npm install --omit=dev; fi
 
-# Copy application server and static assets
+# Copy application server, static assets, and data
 COPY server/ ./server/
 COPY site/ ./site/
+COPY data/ ./data/
 
 # Create persistent data directory for SQLite
-RUN mkdir -p /app/server/data
+RUN mkdir -p /app/data /app/server/data
 
 # Expose server port
 EXPOSE 4173
@@ -29,4 +30,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://127.0.0.1:4173/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
 
 # Start the Node.js full-stack server
-CMD ["node", "server/server.js"]
+CMD ["node", "site/server.js"]
