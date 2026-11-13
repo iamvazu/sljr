@@ -392,12 +392,25 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeader);
-  } else {
+  function boot() {
     var isSubdir = (typeof window !== 'undefined' && (window.location.pathname.indexOf('/areas/') !== -1 || window.location.pathname.indexOf('/articles/') !== -1));
     var pfx = isSubdir ? '../' : '';
     initHeader();
     initCookieConsent(pfx);
+
+    // Mount AI Steve Real Estate Advisor
+    if (!document.getElementById('ai-steve-script')) {
+      var s = document.createElement('script');
+      s.id = 'ai-steve-script';
+      s.src = pfx + 'js/ai-steve.js?v=20261113';
+      s.defer = true;
+      document.body.appendChild(s);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();

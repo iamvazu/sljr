@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Back Office — Steven Lenz Jr.</title>
+  <link rel="icon" href="../assets/brand/favicon.png" />
+  <link rel="stylesheet" href="admin.css?v=1" />
+</head>
+<body>
+  <div id="login" class="login" hidden>
+    <form id="login-form" class="card login__card" autocomplete="on">
+      <p class="eyebrow">Steven Lenz Jr. · Compass</p>
+      <h1>Back Office</h1>
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password" required />
+      <button class="btn btn--primary" type="submit">Sign in</button>
+      <p id="login-msg" class="msg" role="alert" hidden></p>
+    </form>
+  </div>
+
+  <div id="app" hidden>
+    <header class="top">
+      <strong class="top__brand">Back Office</strong>
+      <nav class="tabs" id="tabs" aria-label="Sections">
+        <button data-view="dashboard" class="is-on">Dashboard</button>
+        <button data-view="leads">Leads <span class="badge" id="badge-new" hidden></span></button>
+        <button data-view="listings">Listings</button>
+        <button data-view="reviews">Reviews</button>
+        <button data-view="subscribers">Subscribers</button>
+        <button data-view="activity">Activity</button>
+      </nav>
+      <div class="top__right">
+        <a href="../" target="_blank" rel="noopener">View site ↗</a>
+        <button id="logout" class="btn btn--quiet">Sign out</button>
+      </div>
+    </header>
+    <div id="banner" class="banner" hidden></div>
+    <main id="view" class="view" tabindex="-1"></main>
+  </div>
+
+  <div id="drawer" class="drawer" hidden>
+    <div class="drawer__backdrop" data-close></div>
+    <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Details">
+      <button class="drawer__close" data-close aria-label="Close">×</button>
+      <div id="drawer-body"></div>
+    </aside>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="admin.js?v=1"></script>
+</body>
+</html>

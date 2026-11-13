@@ -12,6 +12,7 @@ const zlib = require('zlib');
 const db = require('./db/database');
 const outbox = require('./lib/outbox');
 const { submitLead } = require('./api/lead');
+const { handleAdminApi } = require('./api/admin');
 const {
   stripHtml,
   isValidEmail,
@@ -54,7 +55,7 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 // Only these folders and root files are ever served. Everything else in
 // site/ (server.js, db/, api/, lib/, middleware/, scratch/, package.json…)
 // is invisible to visitors — a 404, not a 403, so nothing is confirmed.
-const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles']);
+const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles', 'admin']);
 const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', 'favicon.ico']);
 // Internal review pages: available on your own machine, never in production.
 const INTERNAL_PAGES = new Set(['pitch.html', 'preview.html']);
@@ -138,6 +139,11 @@ async function handleApi(req, res, parsedUrl) {
     res.writeHead(204);
     res.end();
     return;
+  }
+
+  // Back office (leads inbox, listings, reviews) — see api/admin.js
+  if (pathname === '/api/admin' || pathname.startsWith('/api/admin/')) {
+    return handleAdminApi(req, res, parsedUrl);
   }
 
   // Health Check
@@ -278,6 +284,22 @@ function serveStatic(req, res, parsedUrl) {
   let reqPath = decodeURIComponent(parsedUrl.pathname);
   if (reqPath === '/') reqPath = '/index.html';
 
+  // Listings and reviews are managed in the admin panel, so the JSON the
+  // pages read is generated from the database (published items only).
+  if (req.method === 'GET' && (reqPath === '/content/listings.json' || reqPath === '/content/testimonials.json')) {
+    const data = reqPath.endsWith('listings.json') ? db.getAllListings() : db.getPublishedTestimonials();
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-cache' });
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  // Admin panel shell: never cached, never indexed.
+  if (reqPath === '/admin' || reqPath === '/admin/') reqPath = '/admin/index.html';
+  if (reqPath.startsWith('/admin/')) {
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    res.setHeader('Cache-Control', 'no-store');
+  }
+
   // Handle reference area redirects & clean URLs
   const areaRedirects = {
     '/areas/pleasanton': '/areas/pleasanton.html',
@@ -336,7 +358,7 @@ function serveStatic(req, res, parsedUrl) {
     const etag = `W/"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
     const baseHeaders = {
       'Content-Type': mime,
-      'Cache-Control': cacheControlFor(reqPath, ext),
+      'Cache-Control': reqPath.startsWith('/admin/') ? 'no-store' : cacheControlFor(reqPath, ext),
       ETag: etag,
       'Last-Modified': stat.mtime.toUTCString()
     };
