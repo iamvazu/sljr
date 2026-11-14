@@ -1,7 +1,7 @@
 {
   "name": "steven-lenz-jr",
   "version": "1.0.0",
-  "description": "Steven Lenz Jr. | Compass Real Estate \u2014 Full-Stack Editorial Web Application",
+  "description": "Steven Lenz Jr. | Compass Real Estate — Full-Stack Editorial Web Application",
   "scripts": {
     "start": "node site/server.js",
     "dev": "node --watch site/server.js",
@@ -10,5 +10,8 @@
   },
   "engines": {
     "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "web-push": "^4.0.0"
   }
 }

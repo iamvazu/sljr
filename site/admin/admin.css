@@ -1,7 +1,7 @@
 :root { --bg:#0D1117; --panel:#141A23; --line:rgba(243,238,230,.14); --ink:#F3EEE6; --soft:#A9A398; --gold:#D8A55A; --red:#E87868; --green:#8FB37A; }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; width: 100%; }
 [hidden] { display: none !important; }
 a { color: var(--gold); }
 h1 { font-weight: 300; font-size: 1.7rem; margin: 0 0 16px; }

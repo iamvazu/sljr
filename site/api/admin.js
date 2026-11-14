@@ -16,6 +16,8 @@
 const crypto = require('crypto');
 const db = require('../db/database');
 const outbox = require('../lib/outbox');
+const push = require('../lib/push');
+const backup = require('../lib/backup');
 const { stripHtml, getClientIp, hashIp, createRateLimiter, readJsonBody, sendJson } = require('../middleware/security');
 
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -270,6 +272,62 @@ async function handleAdminApi(req, res, parsedUrl) {
       const ok = db.adminDeleteTask(taskId);
       if (ok) db.audit('task_delete', `Task #${taskId} deleted`, ip);
       return sendJson(res, ok ? 200 : 404, { ok });
+    }
+  }
+
+  // ---- Web Push & Notifications ----
+  if (method === 'GET' && route === '/push/vapid-key') {
+    return sendJson(res, 200, { ok: true, publicKey: push.getVapidPublicKey() });
+  }
+  if (method === 'POST' && route === '/push/subscribe') {
+    const body = await readJsonBody(req);
+    if (!body.endpoint || !body.keys) {
+      return sendJson(res, 400, { ok: false, error: 'Endpoint and keys are required.' });
+    }
+    db.addPushSubscription(body.endpoint, body.keys);
+    db.audit('push_subscribe', String(body.endpoint).slice(0, 80), ip);
+    return sendJson(res, 200, { ok: true });
+  }
+  if ((method === 'DELETE' && route === '/push/subscribe') || (method === 'POST' && route === '/push/unsubscribe')) {
+    const body = method === 'DELETE' ? (await readJsonBody(req).catch(() => ({}))) : await readJsonBody(req);
+    const endpoint = body.endpoint || sp.get('endpoint');
+    if (!endpoint) return sendJson(res, 400, { ok: false, error: 'Endpoint is required.' });
+    const ok = db.removePushSubscription(endpoint);
+    if (ok) db.audit('push_unsubscribe', String(endpoint).slice(0, 80), ip);
+    return sendJson(res, 200, { ok: true });
+  }
+  if (method === 'POST' && route === '/push/test') {
+    const result = await push.sendTestNotification();
+    db.audit('push_test', `Sent ${result.sent} of ${result.total}`, ip);
+    return sendJson(res, 200, Object.assign({ ok: true }, result));
+  }
+
+  // ---- Settings & Usage ----
+  if (method === 'GET' && route === '/settings') {
+    return sendJson(res, 200, {
+      ok: true,
+      settings: db.getSettings(),
+      usage: db.getUsageStats(),
+      last_backup: db.getLastBackupInfo(),
+      vapid_public_key: push.getVapidPublicKey()
+    });
+  }
+  if (method === 'PATCH' && route === '/settings') {
+    const body = await readJsonBody(req);
+    const updated = db.updateSettings(body);
+    db.audit('settings_update', 'CRM settings updated', ip);
+    return sendJson(res, 200, { ok: true, settings: updated });
+  }
+  if (method === 'GET' && route === '/usage') {
+    return sendJson(res, 200, { ok: true, usage: db.getUsageStats() });
+  }
+  if (method === 'POST' && route === '/backup/run') {
+    try {
+      const backupResult = backup.runBackup();
+      db.audit('backup_manual', `Manual backup: ${backupResult.filename}`, ip);
+      return sendJson(res, 200, { ok: true, backup: backupResult, last_backup: db.getLastBackupInfo() });
+    } catch (bErr) {
+      return sendJson(res, 500, { ok: false, error: bErr.message });
     }
   }
 

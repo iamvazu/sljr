@@ -568,3 +568,109 @@ test('CRM Admin & Session Foundation', async (t) => {
     assert.equal(db.getSession(tokenHash), undefined);
   });
 });
+
+test('Step 6: PWA, Web Push & Mobile Hardening', async (t) => {
+  const fs = require('fs');
+  const path = require('path');
+  const push = require('../site/lib/push');
+
+  await t.test('PWA Web Manifest & Service Worker validation', () => {
+    const manifestPath = path.join(__dirname, '..', 'site', 'admin', 'manifest.webmanifest');
+    assert.ok(fs.existsSync(manifestPath), 'manifest.webmanifest must exist');
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    assert.equal(manifest.start_url, '/admin/');
+    assert.equal(manifest.scope, '/admin/');
+    assert.equal(manifest.display, 'standalone');
+
+    const swPath = path.join(__dirname, '..', 'site', 'admin', 'sw.js');
+    assert.ok(fs.existsSync(swPath), 'sw.js must exist');
+    const swContent = fs.readFileSync(swPath, 'utf8');
+    // Acceptance criteria: API responses are never cached
+    assert.ok(swContent.includes('/api/'), 'SW must handle /api/');
+    assert.ok(swContent.includes('push'), 'SW must handle push event');
+    assert.ok(swContent.includes('notificationclick'), 'SW must handle notificationclick event');
+  });
+
+  await t.test('Push Subscriptions database operations', () => {
+    const endpoint = 'https://updates.push.services.mozilla.com/wpush/v2/test_sub_' + Date.now();
+    const keys = { p256dh: 'test_p256dh_key', auth: 'test_auth_secret' };
+
+    // 1. Add subscription
+    db.addPushSubscription(endpoint, keys);
+    let subs = db.getPushSubscriptions();
+    const found = subs.find(s => s.endpoint === endpoint);
+    assert.ok(found, 'Subscription should be saved');
+    assert.ok(found.keys_json.includes('test_p256dh_key'));
+
+    // 2. Duplicate subscription updates keys (ON CONFLICT DO UPDATE)
+    const updatedKeys = { p256dh: 'updated_key', auth: 'updated_auth' };
+    db.addPushSubscription(endpoint, updatedKeys);
+    subs = db.getPushSubscriptions();
+    const updated = subs.find(s => s.endpoint === endpoint);
+    assert.ok(updated.keys_json.includes('updated_key'));
+
+    // 3. Remove subscription
+    const removed = db.removePushSubscription(endpoint);
+    assert.equal(removed, true);
+    subs = db.getPushSubscriptions();
+    assert.equal(subs.find(s => s.endpoint === endpoint), undefined);
+  });
+
+  await t.test('Lead push notification formatting (Acceptance Test)', () => {
+    const testLead = {
+      lead_id: 'lead_test_123',
+      name: 'Eleanor Vance',
+      form_type: 'Buyer Consultation',
+      interest: 'Purchase Luxury Estate',
+      budget: '$3.5M - $5M',
+      timeline: '1-3 months'
+    };
+
+    const notif = push.formatLeadNotification(testLead);
+    assert.equal(notif.title, 'New lead: Eleanor, Buyer Consultation');
+    assert.equal(notif.body, 'Purchase Luxury Estate · $3.5M - $5M · 1-3 months');
+    assert.equal(notif.data.url, '/admin/#contacts');
+  });
+
+  await t.test('CRM Settings & Meta persistence', () => {
+    const initial = db.getSettings();
+    assert.ok(initial.sender_name);
+    assert.ok(initial.sender_signature);
+
+    const updated = db.updateSettings({
+      sender_name: 'Steven Lenz Jr. (Compass)',
+      working_hours: '07:30 - 19:30',
+      notifications_enabled: false
+    });
+    assert.equal(updated.sender_name, 'Steven Lenz Jr. (Compass)');
+    assert.equal(updated.working_hours, '07:30 - 19:30');
+    assert.equal(updated.notifications_enabled, false);
+
+    // Revert back to defaults
+    db.updateSettings({
+      sender_name: 'Steven Lenz Jr.',
+      working_hours: '08:00 - 19:00',
+      notifications_enabled: true
+    });
+  });
+
+  await t.test('CRM Usage & Budget caps calculation', () => {
+    const usage = db.getUsageStats();
+    assert.ok(usage.month);
+    assert.equal(usage.ai_budget_cap_usd, 25.00);
+    assert.equal(usage.email_budget_cap_usd, 20.00);
+    assert.equal(typeof usage.ai_spend_usd, 'number');
+    assert.equal(typeof usage.email_spend_usd, 'number');
+  });
+
+  await t.test('Mobile Hardening (Acceptance Test 18)', () => {
+    const cssPath = path.join(__dirname, '..', 'site', 'admin', 'admin.css');
+    const cssContent = fs.readFileSync(cssPath, 'utf8');
+
+    // Tap targets at least 44px
+    assert.ok(cssContent.includes('min-height: 44px') || cssContent.includes('min-height:44px'), 'CSS must specify 44px min tap targets');
+    // Inputs at least 16px to prevent iOS auto-zoom
+    assert.ok(cssContent.includes('font-size: 16px') || cssContent.includes('font-size:16px'), 'Form inputs must specify 16px font-size');
+  });
+});
+

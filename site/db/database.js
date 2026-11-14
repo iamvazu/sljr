@@ -572,6 +572,14 @@ function insertLead(lead) {
     }
 
     database.exec('COMMIT');
+
+    // Trigger instant Web Push notification to registered CRM clients
+    try {
+      const { sendLeadNotification } = require('../lib/push');
+      sendLeadNotification(lead).catch((pErr) => {
+        console.warn('[push] lead notification failed:', pErr.message);
+      });
+    } catch (_) {}
   } catch (err) {
     try { database.exec('ROLLBACK'); } catch (_) {}
     throw err;
@@ -1224,6 +1232,116 @@ function adminUpdateDeal(dealId, updates = {}) {
   return adminGetDeal(dealId);
 }
 
+// ---------- Push Subscriptions & Settings ----------
+
+function getPushSubscriptions() {
+  return getDb().prepare('SELECT * FROM push_subscriptions ORDER BY id ASC').all();
+}
+
+function addPushSubscription(endpoint, keys) {
+  const database = getDb();
+  const keysJson = typeof keys === 'string' ? keys : JSON.stringify(keys || {});
+  const now = new Date().toISOString();
+  database.prepare(`
+    INSERT INTO push_subscriptions (endpoint, keys_json, created_at)
+    VALUES (?, ?, ?)
+    ON CONFLICT(endpoint) DO UPDATE SET keys_json = excluded.keys_json
+  `).run(endpoint, keysJson, now);
+  return true;
+}
+
+function removePushSubscription(endpoint) {
+  const database = getDb();
+  const res = database.prepare('DELETE FROM push_subscriptions WHERE endpoint = ?').run(endpoint);
+  return res.changes > 0;
+}
+
+function getSetting(key, defaultValue = '') {
+  const row = getDb().prepare('SELECT value FROM meta WHERE key = ?').get(key);
+  return row ? row.value : defaultValue;
+}
+
+function setSetting(key, value) {
+  getDb().prepare(`
+    INSERT INTO meta (key, value) VALUES (?, ?)
+    ON CONFLICT(key) DO UPDATE SET value = excluded.value
+  `).run(key, String(value));
+  return true;
+}
+
+function getSettings() {
+  return {
+    sender_name: getSetting('crm_sender_name', 'Steven Lenz Jr.'),
+    sender_signature: getSetting('crm_sender_signature', 'Steven Lenz Jr. | Compass Real Estate\nCA DRE# 01989811\nMobile: (925) 555-0100 | steven.lenzjr@compass.com'),
+    working_hours: getSetting('crm_working_hours', '08:00 - 19:00'),
+    notifications_enabled: getSetting('crm_notifications_enabled', '1') !== '0'
+  };
+}
+
+function updateSettings(updates) {
+  updates = updates || {};
+  if (updates.sender_name !== undefined) setSetting('crm_sender_name', String(updates.sender_name).slice(0, 100));
+  if (updates.sender_signature !== undefined) setSetting('crm_sender_signature', String(updates.sender_signature).slice(0, 1000));
+  if (updates.working_hours !== undefined) setSetting('crm_working_hours', String(updates.working_hours).slice(0, 50));
+  if (updates.notifications_enabled !== undefined) setSetting('crm_notifications_enabled', updates.notifications_enabled ? '1' : '0');
+  return getSettings();
+}
+
+function getUsageStats() {
+  const database = getDb();
+  const now = new Date();
+  const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
+
+  const aiCap = Number(process.env.AI_MONTHLY_BUDGET_USD) || 25.00;
+  const emailCap = Number(process.env.EMAIL_MONTHLY_BUDGET_USD) || 20.00;
+
+  // AI spend from ai_runs
+  let aiSpent = 0.00;
+  try {
+    const aiRow = database.prepare(
+      'SELECT COALESCE(SUM(cost_usd), 0) AS total FROM ai_runs WHERE created_at >= ?'
+    ).get(startOfMonth);
+    if (aiRow && aiRow.total) aiSpent = Number(aiRow.total);
+  } catch (_) {}
+
+  // Email spend: $0.001 per email recorded in messages or outbox
+  let emailCount = 0;
+  try {
+    const emailRow = database.prepare(
+      "SELECT COUNT(*) AS cnt FROM messages WHERE occurred_at >= ? AND channel = 'email'"
+    ).get(startOfMonth);
+    if (emailRow && emailRow.cnt) emailCount = Number(emailRow.cnt);
+  } catch (_) {}
+
+  const emailSpent = Number((emailCount * 0.001).toFixed(4));
+
+  return {
+    month: now.toISOString().slice(0, 7),
+    ai_spend_usd: Number(aiSpent.toFixed(2)),
+    ai_budget_cap_usd: aiCap,
+    ai_pct: Math.min(100, Math.round((aiSpent / aiCap) * 100)),
+    email_spend_usd: Number(emailSpent.toFixed(2)),
+    email_budget_cap_usd: emailCap,
+    email_pct: Math.min(100, Math.round((emailSpent / emailCap) * 100)),
+    email_count_mtd: emailCount
+  };
+}
+
+function getLastBackupInfo() {
+  try {
+    const row = getDb().prepare(
+      "SELECT * FROM audit_log WHERE action = 'backup' ORDER BY id DESC LIMIT 1"
+    ).get();
+    if (row) {
+      return {
+        timestamp: row.created_at,
+        details: row.details
+      };
+    }
+  } catch (_) {}
+  return null;
+}
+
 module.exports = {
   getDb,
   getPublishedTestimonials,
@@ -1232,6 +1350,9 @@ module.exports = {
   CONTACT_STAGES, CONTACT_TYPES, SCORE_BANDS, adminListContacts, adminGetContact, adminUpdateContact,
   adminCreateTask, adminUpdateTask, adminDeleteTask, updateContactNextFollowUp,
   adminListPipelines, adminCreateDeal, adminGetDeal, adminUpdateDeal,
+  getPushSubscriptions, addPushSubscription, removePushSubscription,
+  getSetting, setSetting, getSettings, updateSettings,
+  getUsageStats, getLastBackupInfo,
   adminStats, adminSubscribers,
   adminListListings, adminSaveListing,
   adminListTestimonials, adminSaveTestimonial, adminDeleteTestimonial,

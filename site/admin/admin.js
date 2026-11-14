@@ -78,7 +78,7 @@
     state.view = name;
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
     view.innerHTML = '<p class="muted">Loading…</p>';
-    var routes = { dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity };
+    var routes = { dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity, settings: settings };
     if (routes[name]) routes[name]();
     else dashboard();
   }
@@ -858,6 +858,262 @@
             '</table>' +
           '</div>' : '<div class="empty">No activity logged yet.</div>');
     }).catch(fail);
+  }
+
+  /* ---------- Web Push & PWA Helpers ---------- */
+  function urlBase64ToUint8Array(base64String) {
+    var padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+    for (var i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
+  async function getPushStatus() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      return { supported: false, subscribed: false };
+    }
+    try {
+      var reg = await navigator.serviceWorker.ready;
+      var sub = await reg.pushManager.getSubscription();
+      return {
+        supported: true,
+        subscribed: Boolean(sub),
+        permission: Notification.permission,
+        subscription: sub
+      };
+    } catch (_) {
+      return { supported: false, subscribed: false };
+    }
+  }
+
+  async function toggleWebPush(enable) {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      throw new Error('Web Push is not supported in this browser.');
+    }
+    var reg = await navigator.serviceWorker.ready;
+    if (enable) {
+      var perm = await Notification.requestPermission();
+      if (perm !== 'granted') {
+        throw new Error('Notification permission was ' + perm);
+      }
+      var d = await api('/push/vapid-key');
+      if (!d.publicKey) throw new Error('VAPID public key unavailable.');
+      var convertedVapidKey = urlBase64ToUint8Array(d.publicKey);
+      var sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey
+      });
+      var subJson = sub.toJSON();
+      await api('/push/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+          endpoint: sub.endpoint,
+          keys: subJson.keys
+        })
+      });
+      return true;
+    } else {
+      var sub = await reg.pushManager.getSubscription();
+      if (sub) {
+        await api('/push/subscribe', {
+          method: 'DELETE',
+          body: JSON.stringify({ endpoint: sub.endpoint })
+        });
+        await sub.unsubscribe();
+      }
+      return false;
+    }
+  }
+
+  /* ---------- Settings Screen ---------- */
+  function settings() {
+    api('/settings').then(async function (d) {
+      var s = d.settings || {};
+      var u = d.usage || {};
+      var b = d.last_backup;
+      var pushInfo = await getPushStatus().catch(function () { return { supported: false }; });
+
+      var pushLabel = !pushInfo.supported ? '<span class="pill pill--off">Not supported in this browser</span>'
+        : (pushInfo.subscribed ? '<span class="pill pill--on">Active on this device</span>' : '<span class="pill pill--off">Disabled on this device</span>');
+
+      var aiPct = u.ai_pct || 0;
+      var emailPct = u.email_pct || 0;
+
+      view.innerHTML =
+        '<h1>Settings & Operations</h1>' +
+        '<div class="two" style="gap:20px;margin-top:16px;">' +
+          // Column 1: Notifications & Communication
+          '<div>' +
+            '<div class="card" style="margin-bottom:16px;">' +
+              '<h3>Web Push Notifications</h3>' +
+              '<p class="muted small">Instant alerts on your phone or desktop when a new lead submits an inquiry.</p>' +
+              '<div style="margin:14px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
+                pushLabel +
+                (pushInfo.supported ? (pushInfo.subscribed ?
+                  '<button id="btn-push-toggle" class="btn btn--danger" style="font-size:.78rem;">Disable notifications</button>' :
+                  '<button id="btn-push-toggle" class="btn btn--primary" style="font-size:.78rem;">Enable notifications</button>') : '') +
+              '</div>' +
+              '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">' +
+                '<button id="btn-push-test" class="btn" ' + (pushInfo.subscribed ? '' : 'disabled') + ' style="font-size:.78rem;">Send Test Push</button>' +
+                '<span id="push-test-msg" class="muted small" style="margin-left:10px;"></span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="card">' +
+              '<h3>Agent Profile & Signature</h3>' +
+              '<form id="settings-form">' +
+                '<label class="small muted" for="set-sender-name">Sender Name</label>' +
+                '<input id="set-sender-name" value="' + esc(s.sender_name || '') + '" maxlength="100" style="margin-bottom:12px;" required />' +
+
+                '<label class="small muted" for="set-working-hours">Working Hours</label>' +
+                '<input id="set-working-hours" value="' + esc(s.working_hours || '') + '" maxlength="50" style="margin-bottom:12px;" />' +
+
+                '<label class="small muted" for="set-sender-signature">Email & Outbound Signature</label>' +
+                '<textarea id="set-sender-signature" rows="4" style="margin-bottom:14px;">' + esc(s.sender_signature || '') + '</textarea>' +
+
+                '<div style="display:flex;align-items:center;gap:12px;">' +
+                  '<button type="submit" class="btn btn--primary">Save Settings</button>' +
+                  '<span id="settings-save-msg" class="muted small"></span>' +
+                '</div>' +
+              '</form>' +
+            '</div>' +
+          '</div>' +
+
+          // Column 2: Budget Caps & Safety Backups
+          '<div>' +
+            '<div class="card" style="margin-bottom:16px;">' +
+              '<h3>Monthly Budget & Usage</h3>' +
+              '<p class="muted small">Hard spending caps enforced in code. Banners appear if a cap is hit.</p>' +
+
+              '<div style="margin:16px 0;">' +
+                '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.86rem;">' +
+                  '<span>Gemini AI Budget</span>' +
+                  '<strong>$' + (u.ai_spend_usd || 0).toFixed(2) + ' / $' + (u.ai_budget_cap_usd || 25).toFixed(2) + '</strong>' +
+                '</div>' +
+                '<div style="height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;">' +
+                  '<div style="height:100%;width:' + aiPct + '%;background:var(--gold);"></div>' +
+                '</div>' +
+              '</div>' +
+
+              '<div style="margin:16px 0;">' +
+                '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.86rem;">' +
+                  '<span>Email Deliveries</span>' +
+                  '<strong>$' + (u.email_spend_usd || 0).toFixed(2) + ' / $' + (u.email_budget_cap_usd || 20).toFixed(2) + ' (' + (u.email_count_mtd || 0) + ' sent)</strong>' +
+                '</div>' +
+                '<div style="height:8px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;">' +
+                  '<div style="height:100%;width:' + emailPct + '%;background:#8FB37A;"></div>' +
+                '</div>' +
+              '</div>' +
+
+              '<p class="muted small" style="margin-top:14px;">Billing cycle: <strong>' + esc(u.month || '') + '</strong></p>' +
+            '</div>' +
+
+            '<div class="card">' +
+              '<h3>Database Safety & Backups</h3>' +
+              '<p class="muted small">Nightly online SQLite backup with integrity check and 14-day retention rotation.</p>' +
+              '<div style="margin:12px 0;font-size:.88rem;">' +
+                (b ? '<div>Last backup: <strong>' + when(b.timestamp) + '</strong></div><div class="muted small" style="margin-top:4px;">' + esc(b.details || '') + '</div>' :
+                     '<div class="muted">No backup record found yet.</div>') +
+              '</div>' +
+              '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">' +
+                '<button id="btn-backup-now" class="btn" style="font-size:.78rem;">Run Backup Now</button>' +
+                '<span id="backup-run-msg" class="muted small" style="margin-left:10px;"></span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      // Event listeners for Settings
+      var btnToggle = $('btn-push-toggle');
+      if (btnToggle) {
+        btnToggle.addEventListener('click', async function () {
+          btnToggle.disabled = true;
+          try {
+            await toggleWebPush(!pushInfo.subscribed);
+            toast(pushInfo.subscribed ? 'Web push disabled on this device.' : 'Web push enabled successfully!');
+            settings();
+          } catch (err) {
+            fail(err);
+            btnToggle.disabled = false;
+          }
+        });
+      }
+
+      var btnTest = $('btn-push-test');
+      if (btnTest) {
+        btnTest.addEventListener('click', function () {
+          btnTest.disabled = true;
+          var msg = $('push-test-msg');
+          msg.textContent = 'Sending…';
+          api('/push/test', { method: 'POST' }).then(function (res) {
+            msg.textContent = 'Test push sent (' + res.sent + ' delivered).';
+            toast('Test notification sent!');
+            setTimeout(function () { btnTest.disabled = false; }, 2000);
+          }).catch(function (err) {
+            msg.textContent = 'Failed: ' + err.message;
+            btnTest.disabled = false;
+          });
+        });
+      }
+
+      var f = $('settings-form');
+      if (f) {
+        f.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var saveBtn = f.querySelector('button[type=submit]');
+          saveBtn.disabled = true;
+          var msg = $('settings-save-msg');
+          msg.textContent = 'Saving…';
+          api('/settings', {
+            method: 'PATCH',
+            body: JSON.stringify({
+              sender_name: $('set-sender-name').value.trim(),
+              working_hours: $('set-working-hours').value.trim(),
+              sender_signature: $('set-sender-signature').value.trim()
+            })
+          }).then(function () {
+            msg.textContent = 'Settings saved.';
+            toast('Settings saved successfully.');
+            saveBtn.disabled = false;
+            setTimeout(function () { msg.textContent = ''; }, 3000);
+          }).catch(function (err) {
+            fail(err);
+            saveBtn.disabled = false;
+            msg.textContent = '';
+          });
+        });
+      }
+
+      var btnBackup = $('btn-backup-now');
+      if (btnBackup) {
+        btnBackup.addEventListener('click', function () {
+          btnBackup.disabled = true;
+          var msg = $('backup-run-msg');
+          msg.textContent = 'Running VACUUM INTO backup…';
+          api('/backup/run', { method: 'POST' }).then(function (res) {
+            msg.textContent = 'Backup completed: ' + res.backup.filename;
+            toast('Database backup completed successfully!');
+            setTimeout(function () { settings(); }, 1500);
+          }).catch(function (err) {
+            msg.textContent = 'Backup failed: ' + err.message;
+            btnBackup.disabled = false;
+          });
+        });
+      }
+    }).catch(fail);
+  }
+
+  // Register Service Worker for PWA shell and Web Push
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/admin/sw.js', { scope: '/admin/' }).then(function (reg) {
+      console.log('[PWA] ServiceWorker registered with scope:', reg.scope);
+    }).catch(function (err) {
+      console.warn('[PWA] ServiceWorker registration failed:', err);
+    });
   }
 
   // Check session on load
