@@ -15,6 +15,107 @@ const middleware = require('./middleware');
 const PORT = process.env.PORT || 4173;
 const SITE_DIR = path.resolve(__dirname, '..', 'site');
 
+const KNOWN_AREAS = new Set([
+  'walnut-creek', 'alamo', 'danville', 'san-ramon', 'dublin',
+  'pleasanton', 'livermore', 'lafayette', 'oakland', 'berkeley',
+  'fremont', 'hayward', 'palo-alto', 'san-jose', 'san-francisco'
+]);
+
+const STATIC_REDIRECTS = {
+  '/home-valuation': '/valuation.html',
+  '/valuation': '/valuation.html',
+  '/testimonials': '/about.html#testimonials',
+  '/private-exclusives': '/experiences.html',
+  '/experiences': '/experiences.html',
+  '/home-search/listings': '/properties.html',
+  '/home-search/account': '/',
+  '/home-search/auth': '/',
+  '/terms-and-conditions': '/terms.html',
+  '/terms': '/terms.html',
+  '/privacy': '/privacy.html',
+  '/sitemap': '/sitemap.xml',
+  '/neighborhoods': '/neighborhoods.html',
+  '/areas': '/neighborhoods.html',
+  '/properties': '/properties.html',
+  '/about': '/about.html',
+  '/concierge': '/concierge.html',
+  '/contact': '/contact.html',
+  '/buy': '/buy.html',
+  '/sell': '/sell.html',
+  '/ai-steve': '/ai-steve.html'
+};
+
+function send301(res, target) {
+  res.writeHead(301, {
+    'Location': target,
+    'Cache-Control': 'public, max-age=31536000',
+    'Content-Type': 'text/html; charset=UTF-8'
+  });
+  res.end(`<!DOCTYPE html><html><head><title>301 Moved Permanently</title><meta http-equiv="refresh" content="0;url=${target}"></head><body><h1>Moved Permanently</h1><p>The document has moved <a href="${target}">here</a>.</p></body></html>`);
+}
+
+function handleLegacyRedirects(req, res, parsedUrl) {
+  let pathname = (parsedUrl ? parsedUrl.pathname : url.parse(req.url).pathname) || '/';
+  let normPath = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  normPath = normPath.toLowerCase();
+
+  // Skip assets, apis, and existing html files
+  if (normPath.endsWith('.html') || normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
+    return false;
+  }
+
+  // 1. Static redirect lookup
+  if (STATIC_REDIRECTS[normPath]) {
+    send301(res, STATIC_REDIRECTS[normPath]);
+    return true;
+  }
+
+  // 2. Legacy /neighborhoods/:slug -> /areas/:slug.html
+  if (normPath.startsWith('/neighborhoods/')) {
+    const slug = normPath.slice('/neighborhoods/'.length).replace(/\/$/, '');
+    if (KNOWN_AREAS.has(slug)) {
+      send301(res, `/areas/${slug}.html`);
+      return true;
+    }
+    send301(res, '/neighborhoods.html');
+    return true;
+  }
+
+  // 3. /areas/:slug -> /areas/:slug.html
+  if (normPath.startsWith('/areas/')) {
+    const slug = normPath.slice('/areas/'.length).replace(/\/$/, '');
+    if (KNOWN_AREAS.has(slug)) {
+      send301(res, `/areas/${slug}.html`);
+      return true;
+    }
+    send301(res, '/neighborhoods.html');
+    return true;
+  }
+
+  // 4. Legacy /properties/:slug -> /listing.html?id=:slug
+  if (normPath.startsWith('/properties/')) {
+    const slug = normPath.slice('/properties/'.length).replace(/\/$/, '');
+    if (slug) {
+      send301(res, `/listing.html?id=${encodeURIComponent(slug)}`);
+      return true;
+    }
+    send301(res, '/properties.html');
+    return true;
+  }
+
+  return false;
+}
+
+function getListings() {
+  try {
+    const raw = fs.readFileSync(path.join(SITE_DIR, 'content', 'listings.json'), 'utf8');
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('[Listings Read Error]', err);
+    return [];
+  }
+}
+
 const MIME_TYPES = {
   '.html': 'text/html; charset=UTF-8',
   '.css': 'text/css; charset=UTF-8',
@@ -70,6 +171,11 @@ function serveStatic(req, res, pathname) {
 }
 
 const server = http.createServer((req, res) => {
+  // Legacy 301 Redirect Engine - intercept immediately before middleware to preserve crawl budget
+  if (handleLegacyRedirects(req, res)) {
+    return;
+  }
+
   // Middleware pipeline execution
   middleware.requestLogger(req, res, () => {
     middleware.securityHeaders(req, res, () => {
@@ -179,7 +285,7 @@ function handleRequest(req, res) {
     }
   }
 
-  // Properties Catalog endpoint
+  // Properties Catalog endpoint (AI DB)
   if (pathname === '/api/properties' && method === 'GET') {
     try {
       const properties = db.getProperties(parsedUrl.query);
@@ -187,6 +293,23 @@ function handleRequest(req, res) {
     } catch (err) {
       return sendJson(res, 500, { error: err.message });
     }
+  }
+
+  // Listings endpoint (JSON catalog for listing.html & site components)
+  if (pathname === '/api/listings' && method === 'GET') {
+    const listings = getListings();
+    return sendJson(res, 200, { ok: true, count: listings.length, listings });
+  }
+
+  // Single Listing by ID
+  if (pathname.startsWith('/api/listings/') && method === 'GET') {
+    const id = decodeURIComponent(pathname.slice('/api/listings/'.length)).trim();
+    const listings = getListings();
+    const item = listings.find(l => l.id === id);
+    if (!item) {
+      return sendJson(res, 404, { ok: false, error: 'Listing not found' });
+    }
+    return sendJson(res, 200, { ok: true, listing: item });
   }
 
   // --- STATIC FILE SERVING ---

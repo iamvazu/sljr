@@ -55,6 +55,100 @@ const MIME_TYPES = {
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
+// ---- Legacy 301 Redirect Engine ---------------------------------------
+// Permanent redirects (HTTP 301) for all legacy Luxury Presence URLs,
+// /neighborhoods/:slug routes, legacy property slugs, and static pages.
+const KNOWN_AREAS = new Set([
+  'walnut-creek', 'alamo', 'danville', 'san-ramon', 'dublin',
+  'pleasanton', 'livermore', 'lafayette', 'oakland', 'berkeley',
+  'fremont', 'hayward', 'palo-alto', 'san-jose', 'san-francisco'
+]);
+
+const STATIC_REDIRECTS = {
+  '/home-valuation': '/valuation.html',
+  '/valuation': '/valuation.html',
+  '/testimonials': '/about.html#testimonials',
+  '/private-exclusives': '/experiences.html',
+  '/experiences': '/experiences.html',
+  '/home-search/listings': '/properties.html',
+  '/home-search/account': '/',
+  '/home-search/auth': '/',
+  '/terms-and-conditions': '/terms.html',
+  '/terms': '/terms.html',
+  '/privacy': '/privacy.html',
+  '/sitemap': '/sitemap.xml',
+  '/neighborhoods': '/neighborhoods.html',
+  '/areas': '/neighborhoods.html',
+  '/properties': '/properties.html',
+  '/about': '/about.html',
+  '/concierge': '/concierge.html',
+  '/contact': '/contact.html',
+  '/buy': '/buy.html',
+  '/sell': '/sell.html',
+  '/ai-steve': '/ai-steve.html'
+};
+
+function send301(res, target) {
+  res.writeHead(301, {
+    'Location': target,
+    'Cache-Control': 'public, max-age=31536000',
+    'Content-Type': 'text/html; charset=utf-8'
+  });
+  res.end(`<!DOCTYPE html><html><head><title>301 Moved Permanently</title><meta http-equiv="refresh" content="0;url=${target}"></head><body><h1>Moved Permanently</h1><p>The document has moved <a href="${target}">here</a>.</p></body></html>`);
+}
+
+function handleLegacyRedirects(req, res, parsedUrl) {
+  let pathname = parsedUrl.pathname || '/';
+  let normPath = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  normPath = normPath.toLowerCase();
+
+  // Skip assets, apis, and existing html files
+  if (normPath.endsWith('.html') || normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
+    return false;
+  }
+
+  // 1. Static redirect lookup
+  if (STATIC_REDIRECTS[normPath]) {
+    send301(res, STATIC_REDIRECTS[normPath]);
+    return true;
+  }
+
+  // 2. Legacy /neighborhoods/:slug -> /areas/:slug.html
+  if (normPath.startsWith('/neighborhoods/')) {
+    const slug = normPath.slice('/neighborhoods/'.length).replace(/\/$/, '');
+    if (KNOWN_AREAS.has(slug)) {
+      send301(res, `/areas/${slug}.html`);
+      return true;
+    }
+    send301(res, '/neighborhoods.html');
+    return true;
+  }
+
+  // 3. /areas/:slug -> /areas/:slug.html
+  if (normPath.startsWith('/areas/')) {
+    const slug = normPath.slice('/areas/'.length).replace(/\/$/, '');
+    if (KNOWN_AREAS.has(slug)) {
+      send301(res, `/areas/${slug}.html`);
+      return true;
+    }
+    send301(res, '/neighborhoods.html');
+    return true;
+  }
+
+  // 4. Legacy /properties/:slug -> /listing.html?id=:slug
+  if (normPath.startsWith('/properties/')) {
+    const slug = normPath.slice('/properties/'.length).replace(/\/$/, '');
+    if (slug) {
+      send301(res, `/listing.html?id=${encodeURIComponent(slug)}`);
+      return true;
+    }
+    send301(res, '/properties.html');
+    return true;
+  }
+
+  return false;
+}
+
 // ---- Static allowlist -------------------------------------------------
 // Only these folders and root files are ever served. Everything else in
 // site/ (server.js, db/, api/, lib/, middleware/, scratch/, package.json…)
@@ -460,30 +554,8 @@ function serveStatic(req, res, parsedUrl) {
     res.setHeader('Cache-Control', 'no-store');
   }
 
-  // Handle reference area redirects & clean URLs
-  const areaRedirects = {
-    '/areas/pleasanton': '/areas/pleasanton.html',
-    '/areas/danville': '/areas/danville.html',
-    '/areas/livermore': '/areas/livermore.html',
-    '/areas/walnut-creek': '/areas/walnut-creek.html',
-    '/areas/alamo': '/areas/alamo.html',
-    '/areas/san-ramon': '/areas/san-ramon.html',
-    '/areas/dublin': '/areas/dublin.html',
-    '/areas/lafayette': '/areas/lafayette.html',
-    '/areas/oakland': '/areas/oakland.html',
-    '/areas/berkeley': '/areas/berkeley.html',
-    '/areas/hayward': '/areas/hayward.html',
-    '/areas/fremont': '/areas/fremont.html',
-    '/areas/san-francisco': '/areas/san-francisco.html',
-    '/areas/palo-alto': '/areas/palo-alto.html',
-    '/areas/san-jose': '/areas/san-jose.html'
-  };
-  const cleanPath = reqPath.replace(/\/$/, '').toLowerCase();
-  if (areaRedirects[cleanPath]) {
-    res.writeHead(302, { 'Location': areaRedirects[cleanPath] });
-    res.end();
-    return;
-  }
+  // Handle reference area redirects & clean URLs handled by handleLegacyRedirects (301)
+
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
     res.writeHead(405, { 'Content-Type': 'text/plain; charset=utf-8', Allow: 'GET, HEAD' });
@@ -590,6 +662,11 @@ const server = http.createServer(async (req, res) => {
   } catch (_) {
     res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
     res.end('Bad Request');
+    return;
+  }
+
+  // Legacy 301 Redirect Engine - permanent redirects for SEO & backlinks
+  if (handleLegacyRedirects(req, res, parsedUrl)) {
     return;
   }
 
