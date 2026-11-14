@@ -227,6 +227,16 @@ async function handleAdminApi(req, res, parsedUrl) {
       score_bands: db.SCORE_BANDS
     }, result));
   }
+  if (method === 'POST' && route === '/contacts') {
+    const body = await readJsonBody(req);
+    try {
+      const contact = db.adminCreateContact(body);
+      db.audit('contact_create', `Manually created Contact #${contact.id} (${contact.display_name})`, ip);
+      return sendJson(res, 200, { ok: true, contact });
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
+  }
   if (method === 'GET' && route === '/contacts.csv') {
     const { contacts } = db.adminListContacts({ limit: 100000 });
     db.audit('export_contacts', `${contacts.length} rows`, ip);
@@ -357,6 +367,17 @@ async function handleAdminApi(req, res, parsedUrl) {
   }
 
   // ---- CRM: Tasks ----
+  if (method === 'GET' && route === '/tasks') {
+    const status = stripHtml(sp.get('status') || 'all');
+    const contactId = sp.get('contact_id') ? Number(sp.get('contact_id')) : undefined;
+    const result = db.adminListTasks({
+      status,
+      contact_id: contactId,
+      limit: Math.min(200, Math.max(1, Number(sp.get('limit')) || 100)),
+      offset: Math.max(0, Number(sp.get('offset')) || 0)
+    });
+    return sendJson(res, 200, Object.assign({ ok: true }, result));
+  }
   if (method === 'POST' && route === '/tasks') {
     const body = await readJsonBody(req);
     const task = db.adminCreateTask({
@@ -439,6 +460,12 @@ async function handleAdminApi(req, res, parsedUrl) {
     } catch (bErr) {
       return sendJson(res, 500, { ok: false, error: bErr.message });
     }
+  }
+
+  if (method === 'POST' && route === '/seed-demo') {
+    const result = db.adminSeedSampleData(true);
+    db.audit('seed_demo', `Seeded sample CRM luxury data (${result.added} contacts)`, ip);
+    return sendJson(res, 200, result);
   }
 
   // ---- Leads ----

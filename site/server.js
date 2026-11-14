@@ -678,6 +678,15 @@ db.getDb();
 outbox.start();
 backup.scheduleNightlyBackup();
 
+// Auto-seed initial luxury Tri-Valley clients, pipeline deals & tasks if empty
+try {
+  if (process.env.NODE_ENV !== 'test') {
+    db.adminSeedSampleData(false);
+  }
+} catch (seedErr) {
+  console.warn('[server] sample seed notice:', seedErr.message);
+}
+
 const server = http.createServer(async (req, res) => {
   const start = Date.now();
   let logPath = '-';

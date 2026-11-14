@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="SLJR CRM" />
   <link rel="apple-touch-icon" href="/assets/brand/favicon.png" />
-  <link rel="stylesheet" href="/admin/admin.css?v=5" />
+  <link rel="stylesheet" href="/admin/admin.css?v=6" />
 </head>
 <body>
   <div id="login" class="login">
@@ -31,9 +31,11 @@
       <strong class="top__brand">Back Office</strong>
       <nav class="tabs" id="tabs" aria-label="Sections">
         <button data-view="today" class="is-on">Today</button>
-        <button data-view="dashboard">Dashboard</button>
+        <button data-view="pipeline">Pipeline <span class="badge" id="badge-deals" hidden></span></button>
         <button data-view="contacts">Contacts</button>
+        <button data-view="tasks">Tasks <span class="badge" id="badge-tasks" hidden></span></button>
         <button data-view="leads">Leads <span class="badge" id="badge-new" hidden></span></button>
+        <button data-view="dashboard">Dashboard</button>
         <button data-view="listings">Listings</button>
         <button data-view="reviews">Reviews</button>
         <button data-view="subscribers">Subscribers</button>
@@ -58,6 +60,6 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="/admin/admin.js?v=5"></script>
+  <script src="/admin/admin.js?v=6"></script>
 </body>
 </html>

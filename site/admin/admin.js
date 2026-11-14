@@ -5,11 +5,19 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var view = $('view');
-  var state = { view: 'today', contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 }, leads: { status: '', type: '', q: '', offset: 0 }, statuses: [], pipelines: [] };
+  var state = {
+    view: 'today',
+    pipeline: { active_id: 1 },
+    tasks: { filter: 'open', offset: 0 },
+    contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 },
+    leads: { status: '', type: '', q: '', offset: 0 },
+    statuses: [],
+    pipelines: []
+  };
   var LIMIT = 50;
 
-  function getPipelines() {
-    if (state.pipelines && state.pipelines.length) return Promise.resolve(state.pipelines);
+  function getPipelines(forceRefresh) {
+    if (!forceRefresh && state.pipelines && state.pipelines.length) return Promise.resolve(state.pipelines);
     return api('/pipelines').then(function (d) {
       state.pipelines = d.pipelines || [];
       return state.pipelines;
@@ -78,7 +86,20 @@
     state.view = name;
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
     view.innerHTML = '<p class="muted">Loading…</p>';
-    var routes = { today: today, dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity, settings: settings };
+    var routes = {
+      today: today,
+      pipeline: pipeline,
+      pipelines: pipeline,
+      contacts: contacts,
+      tasks: tasks,
+      leads: leads,
+      dashboard: dashboard,
+      listings: listings,
+      reviews: reviews,
+      subscribers: subscribers,
+      activity: activity,
+      settings: settings
+    };
     if (routes[name]) routes[name]();
     else today();
   }
@@ -185,7 +206,14 @@
           '</div>';
         }).join('');
       } else {
-        itemsHtml = '<div class="empty">All action items for today are completed! New items will be generated tomorrow morning at 6:00 AM.</div>';
+        itemsHtml =
+          '<div class="empty" style="padding:32px 16px;">' +
+            '<p style="margin:0 0 16px; font-size:1rem;">All action items for today are completed (or no client outreach pending today).</p>' +
+            '<div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">' +
+              '<button class="btn btn--primary" id="btn-seed-demo-today">Load Luxury Tri-Valley Clients &amp; Pipeline</button>' +
+              '<button class="btn" id="btn-force-gen-today">↻ Generate Today\'s Action Plan</button>' +
+            '</div>' +
+          '</div>';
       }
 
       var tasksHtml = '';
@@ -232,6 +260,28 @@
             toast('Action plan refreshed.');
             today();
           }).catch(fail);
+        };
+      }
+
+      var btnSeedToday = $('btn-seed-demo-today');
+      if (btnSeedToday) {
+        btnSeedToday.onclick = function () {
+          btnSeedToday.disabled = true;
+          api('/seed-demo', 'POST').then(function () {
+            toast('Luxury demo clients, pipeline deals, and tasks loaded!');
+            today();
+          }).catch(fail).then(function () { btnSeedToday.disabled = false; });
+        };
+      }
+
+      var btnForceToday = $('btn-force-gen-today');
+      if (btnForceToday) {
+        btnForceToday.onclick = function () {
+          btnForceToday.disabled = true;
+          api('/action-plan/generate', 'POST').then(function () {
+            toast('Action plan generated.');
+            today();
+          }).catch(fail).then(function () { btnForceToday.disabled = false; });
         };
       }
 
@@ -318,6 +368,521 @@
     }).catch(fail);
   }
 
+  /* ---------- Drawer Helpers for Deals, Tasks & Contacts ---------- */
+  function openAddDealDrawer(preferredPipeId) {
+    Promise.all([
+      api('/contacts?limit=100'),
+      getPipelines()
+    ]).then(function (results) {
+      var contacts = (results[0] && results[0].contacts) || [];
+      var pipelines = results[1] || [];
+
+      var contactOpts = contacts.map(function (c) {
+        return '<option value="' + c.id + '">' + esc(c.display_name) + (c.budget ? ' (' + esc(c.budget) + ')' : '') + '</option>';
+      }).join('');
+
+      var pipeOpts = pipelines.map(function (p) {
+        return '<option value="' + p.id + '"' + (p.id === preferredPipeId ? ' selected' : '') + '>' + esc(p.name) + '</option>';
+      }).join('');
+
+      var firstPipe = pipelines.find(function (p) { return p.id === preferredPipeId; }) || pipelines[0];
+      var stageOpts = (firstPipe ? firstPipe.stages : []).map(function (s) {
+        return '<option value="' + s.id + '">' + esc(s.name) + '</option>';
+      }).join('');
+
+      openDrawer(
+        '<h2>Create New Deal</h2>' +
+        '<form id="deal-create-form" class="list" style="margin-top:16px;">' +
+          '<label for="dcf-contact">Client / Contact</label>' +
+          '<select id="dcf-contact" required>' +
+            (contactOpts || '<option value="">No contacts available</option>') +
+          '</select>' +
+          '<label for="dcf-pipeline">Pipeline</label>' +
+          '<select id="dcf-pipeline">' + pipeOpts + '</select>' +
+          '<label for="dcf-stage">Initial Stage</label>' +
+          '<select id="dcf-stage">' + stageOpts + '</select>' +
+          '<label for="dcf-title">Deal Title</label>' +
+          '<input id="dcf-title" type="text" placeholder="e.g. Vance Family - Ruby Hill Luxury Purchase" required />' +
+          '<div class="two">' +
+            '<div>' +
+              '<label for="dcf-value">Deal Value ($)</label>' +
+              '<input id="dcf-value" type="number" placeholder="3500000" min="0" step="50000" />' +
+            '</div>' +
+            '<div>' +
+              '<label for="dcf-close">Target Close Date</label>' +
+              '<input id="dcf-close" type="date" />' +
+            '</div>' +
+          '</div>' +
+          '<label for="dcf-address">Target Property Address or Enclave</label>' +
+          '<input id="dcf-address" type="text" placeholder="e.g. Ruby Hill Enclave, Pleasanton or 342 El Pintado Rd" />' +
+          '<div class="actions" style="margin-top:20px;">' +
+            '<button type="submit" class="btn btn--primary">Save Deal</button>' +
+            '<button type="button" class="btn btn--quiet" data-close>Cancel</button>' +
+          '</div>' +
+        '</form>'
+      );
+
+      var pipeSel = $('dcf-pipeline');
+      var stageSel = $('dcf-stage');
+      if (pipeSel && stageSel) {
+        pipeSel.onchange = function () {
+          var pMatch = pipelines.find(function (p) { return p.id === Number(pipeSel.value); });
+          stageSel.innerHTML = (pMatch ? pMatch.stages : []).map(function (s) {
+            return '<option value="' + s.id + '">' + esc(s.name) + '</option>';
+          }).join('');
+        };
+      }
+
+      var form = $('deal-create-form');
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        var submitBtn = form.querySelector('button[type=submit]');
+        submitBtn.disabled = true;
+
+        var payload = {
+          contact_id: $('dcf-contact').value,
+          pipeline_id: $('dcf-pipeline').value,
+          stage_id: $('dcf-stage').value,
+          title: $('dcf-title').value.trim(),
+          value_usd: $('dcf-value').value ? Number($('dcf-value').value) : null,
+          property_address: $('dcf-address').value.trim(),
+          expected_close: $('dcf-close').value || null
+        };
+
+        api('/deals', 'POST', payload).then(function () {
+          toast('Deal created successfully.');
+          closeDrawer();
+          go('pipeline');
+        }).catch(fail).then(function () { submitBtn.disabled = false; });
+      };
+    }).catch(fail);
+  }
+
+  function openAddTaskDrawer(presetContactId) {
+    api('/contacts?limit=100').then(function (d) {
+      var contacts = d.contacts || [];
+      var contactOpts = '<option value="">None (General Task)</option>' + contacts.map(function (c) {
+        return '<option value="' + c.id + '"' + (presetContactId && Number(presetContactId) === c.id ? ' selected' : '') + '>' + esc(c.display_name) + '</option>';
+      }).join('');
+
+      var todayStr = new Date().toISOString().slice(0, 10);
+
+      openDrawer(
+        '<h2>Create New Task</h2>' +
+        '<form id="task-create-form" class="list" style="margin-top:16px;">' +
+          '<label for="tcf-title">Task Title</label>' +
+          '<input id="tcf-title" type="text" placeholder="e.g. Schedule private showing for Ruby Hill estate" required />' +
+          '<label for="tcf-contact">Associated Client</label>' +
+          '<select id="tcf-contact">' + contactOpts + '</select>' +
+          '<label for="tcf-due">Due Date</label>' +
+          '<input id="tcf-due" type="date" value="' + todayStr + '" />' +
+          '<div class="actions" style="margin-top:20px;">' +
+            '<button type="submit" class="btn btn--primary">Save Task</button>' +
+            '<button type="button" class="btn btn--quiet" data-close>Cancel</button>' +
+          '</div>' +
+        '</form>'
+      );
+
+      var form = $('task-create-form');
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        var submitBtn = form.querySelector('button[type=submit]');
+        submitBtn.disabled = true;
+
+        var payload = {
+          title: $('tcf-title').value.trim(),
+          contact_id: $('tcf-contact').value ? Number($('tcf-contact').value) : null,
+          due_at: $('tcf-due').value || null
+        };
+
+        api('/tasks', 'POST', payload).then(function () {
+          toast('Task created successfully.');
+          closeDrawer();
+          if (state.view === 'tasks') tasks();
+          else if (state.view === 'today') today();
+          else if (presetContactId) contactDetail(presetContactId);
+        }).catch(fail).then(function () { submitBtn.disabled = false; });
+      };
+    }).catch(fail);
+  }
+
+  function openAddContactDrawer() {
+    openDrawer(
+      '<h2>New Contact Profile</h2>' +
+      '<form id="contact-create-form" class="list" style="margin-top:16px;">' +
+        '<div class="two">' +
+          '<div>' +
+            '<label for="ccf-fn">First Name</label>' +
+            '<input id="ccf-fn" type="text" placeholder="Marcus" />' +
+          '</div>' +
+          '<div>' +
+            '<label for="ccf-ln">Last Name</label>' +
+            '<input id="ccf-ln" type="text" placeholder="Vance" />' +
+          '</div>' +
+        '</div>' +
+        '<label for="ccf-dn">Display Name (or couple/entity)</label>' +
+        '<input id="ccf-dn" type="text" placeholder="Dr. Marcus &amp; Elena Vance" />' +
+        '<div class="two">' +
+          '<div>' +
+            '<label for="ccf-email">Primary Email</label>' +
+            '<input id="ccf-email" type="email" placeholder="client@example.com" />' +
+          '</div>' +
+          '<div>' +
+            '<label for="ccf-phone">Primary Phone</label>' +
+            '<input id="ccf-phone" type="tel" placeholder="(925) 555-0199" />' +
+          '</div>' +
+        '</div>' +
+        '<div class="two">' +
+          '<div>' +
+            '<label for="ccf-stage">Stage</label>' +
+            '<select id="ccf-stage">' +
+              '<option value="new">New</option>' +
+              '<option value="contacted">Contacted</option>' +
+              '<option value="qualified" selected>Qualified</option>' +
+              '<option value="showing">Showing</option>' +
+              '<option value="listing_prep">Listing Prep</option>' +
+              '<option value="offer">Offer</option>' +
+              '<option value="under_contract">In Escrow</option>' +
+              '<option value="past_client">Past Client</option>' +
+            '</select>' +
+          '</div>' +
+          '<div>' +
+            '<label for="ccf-type">Relationship Type</label>' +
+            '<select id="ccf-type">' +
+              '<option value="client" selected>Client</option>' +
+              '<option value="lead">Lead</option>' +
+              '<option value="past_client">Past Client</option>' +
+              '<option value="sphere">Sphere of Influence</option>' +
+            '</select>' +
+          '</div>' +
+        '</div>' +
+        '<label for="ccf-interest">Target Corridor or Enclave</label>' +
+        '<input id="ccf-interest" type="text" placeholder="e.g. Relocating from SF to Pleasanton / Ruby Hill" />' +
+        '<div class="two">' +
+          '<div>' +
+            '<label for="ccf-budget">Budget / Price Range</label>' +
+            '<input id="ccf-budget" type="text" placeholder="e.g. $3,500,000" />' +
+          '</div>' +
+          '<div>' +
+            '<label for="ccf-timeline">Timeline</label>' +
+            '<input id="ccf-timeline" type="text" placeholder="e.g. 30-60 days" />' +
+          '</div>' +
+        '</div>' +
+        '<label for="ccf-notes">Internal Advisory Notes</label>' +
+        '<textarea id="ccf-notes" rows="3" placeholder="Background, preferences, school requirements, discreet preferences..."></textarea>' +
+        '<div class="actions" style="margin-top:20px;">' +
+          '<button type="submit" class="btn btn--primary">Create Contact</button>' +
+          '<button type="button" class="btn btn--quiet" data-close>Cancel</button>' +
+        '</div>' +
+      '</form>'
+    );
+
+    var form = $('contact-create-form');
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var submitBtn = form.querySelector('button[type=submit]');
+      submitBtn.disabled = true;
+
+      var payload = {
+        first_name: $('ccf-fn').value.trim(),
+        last_name: $('ccf-ln').value.trim(),
+        display_name: $('ccf-dn').value.trim(),
+        email: $('ccf-email').value.trim(),
+        phone: $('ccf-phone').value.trim(),
+        stage: $('ccf-stage').value,
+        type: $('ccf-type').value,
+        interest: $('ccf-interest').value.trim(),
+        budget: $('ccf-budget').value.trim(),
+        timeline: $('ccf-timeline').value.trim(),
+        notes: $('ccf-notes').value.trim()
+      };
+
+      api('/contacts', 'POST', payload).then(function (d) {
+        toast('Contact created.');
+        closeDrawer();
+        if (d.contact && d.contact.id) contactDetail(d.contact.id);
+        else contacts();
+      }).catch(fail).then(function () { submitBtn.disabled = false; });
+    };
+  }
+
+  /* ---------- Pipelines & Kanban Deals Board (CRM M1/M2) ---------- */
+  function pipeline() {
+    api('/pipelines').then(function (d) {
+      state.pipelines = d.pipelines || [];
+      if (!state.pipelines.length) {
+        view.innerHTML = '<h1>Pipelines &amp; Deals</h1><div class="empty">No pipelines configured.</div>';
+        return;
+      }
+
+      var activePipeId = state.pipeline.active_id || state.pipelines[0].id;
+      var currentPipe = state.pipelines.find(function (p) { return p.id === activePipeId; }) || state.pipelines[0];
+      state.pipeline.active_id = currentPipe.id;
+
+      var totalVolume = currentPipe.total_volume || 0;
+      var totalDeals = currentPipe.total_deals || 0;
+
+      var switchesHtml = state.pipelines.map(function (p) {
+        var isAct = p.id === currentPipe.id;
+        var pVol = p.total_volume ? '$' + Number(p.total_volume).toLocaleString() : '$0';
+        return '<button class="kanban-switch' + (isAct ? ' is-active' : '') + '" data-switch-pipe="' + p.id + '">' +
+          esc(p.name) + ' (' + (p.total_deals || 0) + ' · ' + pVol + ')</button>';
+      }).join('');
+
+      var stagesHtml = (currentPipe.stages || []).map(function (stage) {
+        var sDeals = stage.deals || [];
+        var sVol = stage.total_volume ? '$' + Number(stage.total_volume).toLocaleString() : '$0';
+
+        var cardsHtml = '';
+        if (sDeals.length) {
+          cardsHtml = sDeals.map(function (dl) {
+            var valStr = dl.value_usd ? '$' + Number(dl.value_usd).toLocaleString() : '';
+            var scoreBadge = '';
+            if (dl.contact_score != null) {
+              var sBand = dl.contact_score_band || (dl.contact_score >= 80 ? 'hot' : dl.contact_score >= 50 ? 'warm' : 'cool');
+              var emoji = sBand === 'hot' ? '🔥 ' : sBand === 'warm' ? '⚡ ' : '';
+              scoreBadge = '<span class="pill pill--' + esc(sBand) + '" style="font-size:0.68rem; padding:1px 6px;">' + emoji + dl.contact_score + '</span>';
+            }
+
+            var allStages = currentPipe.stages || [];
+            var stageOpts = allStages.map(function (st) {
+              return '<option value="' + st.id + '"' + (st.id === dl.stage_id ? ' selected' : '') + '>' + esc(st.name) + '</option>';
+            }).join('');
+
+            return '<div class="kanban-card" data-deal-card="' + dl.id + '" data-contact-id="' + dl.contact_id + '">' +
+              '<div class="kanban-card__top">' +
+                '<strong class="kanban-card__val">' + esc(valStr) + '</strong>' +
+                scoreBadge +
+              '</div>' +
+              '<h3 class="kanban-card__title">' + esc(dl.title) + '</h3>' +
+              '<div class="kanban-card__client">' +
+                '<span style="color:var(--ink); font-weight:500;">' + esc(dl.contact_name || 'Client') + '</span>' +
+                (dl.contact_phone ? '<span class="muted small">' + esc(dl.contact_phone) + '</span>' : '') +
+              '</div>' +
+              (dl.property_address ? '<div class="kanban-card__addr">📍 ' + esc(dl.property_address) + '</div>' : '') +
+              (dl.expected_close ? '<div class="muted small" style="margin-top:3px; font-size:0.72rem;">Target Close: ' + esc(dl.expected_close) + '</div>' : '') +
+              '<div class="kanban-card__stage-move">' +
+                '<label class="small muted" style="margin:0 0 2px; font-size:0.7rem;">Move Stage:</label>' +
+                '<select class="deal-quick-stage" data-deal-id="' + dl.id + '">' + stageOpts + '</select>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        } else {
+          cardsHtml = '<div class="muted small" style="padding:20px 8px; text-align:center; border:1px dashed var(--line); border-radius:6px;">No deals in this stage</div>';
+        }
+
+        return '<div class="kanban-col">' +
+          '<div class="kanban-col__header">' +
+            '<div>' +
+              '<h3 class="kanban-col__title">' + esc(stage.name) + '</h3>' +
+              '<div class="kanban-col__meta">' + (stage.probability ? stage.probability + '% prob · ' : '') + sDeals.length + ' deals</div>' +
+            '</div>' +
+            '<div class="kanban-col__val">' + sVol + '</div>' +
+          '</div>' +
+          '<div class="kanban-cards">' + cardsHtml + '</div>' +
+        '</div>';
+      }).join('');
+
+      view.innerHTML =
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">' +
+          '<div>' +
+            '<h1 style="margin:0;">Pipelines &amp; Deals</h1>' +
+            '<p class="muted small" style="margin:4px 0 0;">Visual Kanban stage tracking for Luxury Tri-Valley buyers &amp; sellers</p>' +
+          '</div>' +
+          '<div style="display:flex; gap:8px;">' +
+            '<button class="btn btn--primary" id="btn-add-deal">+ Add Deal</button>' +
+            '<button class="btn btn--quiet" id="btn-seed-sample-deals">Load Sample Deals</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="kanban-controls">' +
+          '<div class="kanban-switches">' + switchesHtml + '</div>' +
+          '<div class="kanban-kpis">' +
+            '<span>Active Deals: <strong>' + totalDeals + '</strong></span>' +
+            '<span>Pipeline Volume: <strong>$' + Number(totalVolume).toLocaleString() + '</strong></span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="kanban-board">' + stagesHtml + '</div>';
+
+      // Switch pipeline event
+      view.querySelectorAll('[data-switch-pipe]').forEach(function (btn) {
+        btn.onclick = function () {
+          state.pipeline.active_id = Number(btn.getAttribute('data-switch-pipe'));
+          pipeline();
+        };
+      });
+
+      // Quick move stage event
+      view.querySelectorAll('.deal-quick-stage').forEach(function (sel) {
+        sel.onclick = function (e) { e.stopPropagation(); };
+        sel.onchange = function (e) {
+          e.stopPropagation();
+          var dealId = sel.getAttribute('data-deal-id');
+          var newStId = Number(sel.value);
+          sel.disabled = true;
+          api('/deals/' + dealId, 'PATCH', { stage_id: newStId }).then(function () {
+            toast('Deal stage updated.');
+            pipeline();
+          }).catch(function (err) {
+            fail(err);
+            sel.disabled = false;
+          });
+        };
+      });
+
+      // Card click opens contact drawer
+      view.querySelectorAll('[data-deal-card]').forEach(function (card) {
+        card.onclick = function (e) {
+          if (e.target.closest('select') || e.target.closest('button') || e.target.closest('a')) return;
+          var cId = card.getAttribute('data-contact-id');
+          if (cId) contactDetail(cId);
+        };
+      });
+
+      // Add Deal button
+      var btnAddDeal = $('btn-add-deal');
+      if (btnAddDeal) {
+        btnAddDeal.onclick = function () {
+          openAddDealDrawer(currentPipe.id);
+        };
+      }
+
+      // Seed sample deals button
+      var btnSeed = $('btn-seed-sample-deals');
+      if (btnSeed) {
+        btnSeed.onclick = function () {
+          btnSeed.disabled = true;
+          api('/seed-demo', 'POST').then(function () {
+            toast('Loaded Luxury Tri-Valley clients and pipeline deals.');
+            pipeline();
+          }).catch(fail).then(function () { btnSeed.disabled = false; });
+        };
+      }
+    }).catch(fail);
+  }
+
+  /* ---------- Dedicated Tasks View (CRM M1/M2) ---------- */
+  function tasks() {
+    var f = state.tasks;
+    var qs = '?status=' + encodeURIComponent(f.filter || 'open') + '&offset=' + f.offset + '&limit=' + LIMIT;
+
+    api('/tasks' + qs).then(function (d) {
+      var allTasks = d.tasks || [];
+      var counts = d.counts || { total: 0, open_count: 0, completed_count: 0, overdue_count: 0, today_count: 0 };
+
+      var filters = [
+        { id: 'open', label: 'Open Tasks (' + counts.open_count + ')' },
+        { id: 'overdue', label: 'Overdue (' + counts.overdue_count + ')' },
+        { id: 'today', label: 'Due Today (' + counts.today_count + ')' },
+        { id: 'completed', label: 'Completed (' + counts.completed_count + ')' },
+        { id: 'all', label: 'All (' + counts.total + ')' }
+      ];
+
+      var filterBtns = filters.map(function (fl) {
+        var isAct = (f.filter || 'open') === fl.id;
+        return '<button class="kanban-switch' + (isAct ? ' is-active' : '') + '" data-task-filter="' + fl.id + '">' +
+          esc(fl.label) + '</button>';
+      }).join('');
+
+      var tasksListHtml = '';
+      if (allTasks.length) {
+        tasksListHtml = allTasks.map(function (tk) {
+          var isDone = Boolean(tk.done_at);
+          var dueBadge = '';
+          if (tk.due_at) {
+            if (tk.is_overdue && !isDone) {
+              dueBadge = '<span class="task-due task-due--overdue">Overdue · ' + esc(tk.due_at.slice(0, 10)) + '</span>';
+            } else if (tk.is_today && !isDone) {
+              dueBadge = '<span class="task-due task-due--today">Due Today</span>';
+            } else {
+              dueBadge = '<span class="task-due task-due--upcoming">' + esc(tk.due_at.slice(0, 10)) + '</span>';
+            }
+          }
+
+          return '<div class="task-item' + (isDone ? ' is-done' : '') + '">' +
+            '<input type="checkbox" data-task-toggle="' + tk.id + '" ' + (isDone ? 'checked' : '') + ' aria-label="Mark completed" style="width:20px; height:20px; cursor:pointer;" />' +
+            '<div>' +
+              '<div class="task-title">' + esc(tk.title) + '</div>' +
+              '<div class="task-sub">' +
+                (tk.contact_name ? '<a href="#contacts" data-open-contact="' + tk.contact_id + '" style="color:var(--gold); text-decoration:none;">👤 ' + esc(tk.contact_name) + '</a> · ' : '') +
+                (tk.deal_title ? '<span class="muted">💼 ' + esc(tk.deal_title) + '</span> · ' : '') +
+                (isDone ? '<span class="muted small">Completed ' + when(tk.done_at) + '</span>' : dueBadge) +
+              '</div>' +
+            '</div>' +
+            '<button class="btn btn--quiet small" data-task-del="' + tk.id + '" title="Delete task" style="color:var(--soft); font-size:1.1rem; padding:0 8px;">×</button>' +
+          '</div>';
+        }).join('');
+      } else {
+        tasksListHtml = '<div class="empty">No tasks found in this view. Schedule follow-ups or client showings anytime!</div>';
+      }
+
+      view.innerHTML =
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">' +
+          '<div>' +
+            '<h1 style="margin:0;">Tasks &amp; Follow-up</h1>' +
+            '<p class="muted small" style="margin:4px 0 0;">Manage upcoming client follow-ups, staging milestones, and showings</p>' +
+          '</div>' +
+          '<button class="btn btn--primary" id="btn-add-task">+ Add Task</button>' +
+        '</div>' +
+        '<div class="kpis" style="margin-bottom:16px;">' +
+          kpi(counts.overdue_count, 'Overdue Tasks', counts.overdue_count > 0) +
+          kpi(counts.today_count, 'Due Today', counts.today_count > 0) +
+          kpi(counts.open_count, 'Total Open') +
+          kpi(counts.completed_count, 'Completed') +
+        '</div>' +
+        '<div class="kanban-controls">' +
+          '<div class="kanban-switches">' + filterBtns + '</div>' +
+        '</div>' +
+        '<div class="task-list">' + tasksListHtml + '</div>';
+
+      // Filter switch event
+      view.querySelectorAll('[data-task-filter]').forEach(function (btn) {
+        btn.onclick = function () {
+          state.tasks.filter = btn.getAttribute('data-task-filter');
+          tasks();
+        };
+      });
+
+      // Toggle task done
+      view.querySelectorAll('[data-task-toggle]').forEach(function (chk) {
+        chk.onchange = function () {
+          var taskId = chk.getAttribute('data-task-toggle');
+          api('/tasks/' + taskId, 'PATCH', { done: chk.checked }).then(function () {
+            toast(chk.checked ? 'Task completed.' : 'Task re-opened.');
+            tasks();
+          }).catch(fail);
+        };
+      });
+
+      // Delete task
+      view.querySelectorAll('[data-task-del]').forEach(function (btn) {
+        btn.onclick = function () {
+          if (!confirm('Delete this task?')) return;
+          var taskId = btn.getAttribute('data-task-del');
+          api('/tasks/' + taskId, 'DELETE').then(function () {
+            toast('Task deleted.');
+            tasks();
+          }).catch(fail);
+        };
+      });
+
+      // Contact link inside task
+      view.querySelectorAll('[data-open-contact]').forEach(function (lnk) {
+        lnk.onclick = function (e) {
+          e.preventDefault();
+          contactDetail(lnk.getAttribute('data-open-contact'));
+        };
+      });
+
+      // Add Task button
+      var btnAddTask = $('btn-add-task');
+      if (btnAddTask) {
+        btnAddTask.onclick = function () {
+          openAddTaskDrawer();
+        };
+      }
+    }).catch(fail);
+  }
+
   /* ---------- Dashboard ---------- */
   function bars(rows) {
     if (!rows || !rows.length) return '<p class="muted small">Nothing yet.</p>';
@@ -367,7 +932,9 @@
           '<input type="search" id="cq" placeholder="Search name, email, phone, notes…" value="' + esc(f.q) + '" aria-label="Search contacts" />' +
           '<select id="cstage" aria-label="Stage"><option value="">All stages</option>' + stages.map(function (s) { return '<option' + (s === f.stage ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>' +
           '<select id="cscore" aria-label="Score Band"><option value="">All score bands</option>' + scoreBands.map(function (b) { return '<option' + (b === f.score_band ? ' selected' : '') + '>' + b + '</option>'; }).join('') + '</select>' +
+          '<button class="btn btn--primary" id="btn-add-contact">+ Add Contact</button>' +
           '<a class="btn" href="/api/admin/contacts.csv">Export CSV</a>' +
+          '<button class="btn btn--quiet" id="btn-seed-contacts">Load Sample Clients</button>' +
         '</div>' +
         (d.contacts.length ? '<div class="list">' + d.contacts.map(contactRow).join('') + '</div>' : '<div class="empty">No contacts match. Every inbound inquiry automatically creates or matches a contact profile here.</div>') +
         '<div class="pager"><span>' + (d.total ? (f.offset + 1) + '–' + Math.min(f.offset + LIMIT, d.total) + ' of ' + d.total : '') + '</span><span>' +
@@ -379,6 +946,18 @@
       $('cscore').addEventListener('change', function (e) { f.score_band = e.target.value; f.offset = 0; contacts(); });
       if ($('cprev')) $('cprev').onclick = function () { f.offset = Math.max(0, f.offset - LIMIT); contacts(); };
       if ($('cnext')) $('cnext').onclick = function () { f.offset += LIMIT; contacts(); };
+      var btnAddC = $('btn-add-contact');
+      if (btnAddC) btnAddC.onclick = function () { openAddContactDrawer(); };
+      var btnSeedC = $('btn-seed-contacts');
+      if (btnSeedC) {
+        btnSeedC.onclick = function () {
+          btnSeedC.disabled = true;
+          api('/seed-demo', 'POST').then(function () {
+            toast('Loaded sample luxury contacts & deals.');
+            contacts();
+          }).catch(fail).then(function () { btnSeedC.disabled = false; });
+        };
+      }
       view.querySelectorAll('[data-contact]').forEach(function (b) { b.onclick = function () { contactDetail(b.getAttribute('data-contact')); }; });
       if (f.q) { var i = $('cq'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
     }).catch(fail);
@@ -395,8 +974,14 @@
 
     var pills = [];
     if (c.discreet) pills.push('<span class="pill pill--discreet">Discreet</span>');
-    if (c.score > 0 || c.score_band !== 'cold') pills.push('<span class="pill pill--' + esc(c.score_band) + '">' + esc(c.score_band) + ' (' + c.score + ')</span>');
-    pills.push('<span class="pill pill--' + esc(c.stage) + '">' + esc(c.stage) + '</span>');
+    if (c.score > 0 || c.score_band !== 'cold') {
+      var sBand = c.score_band || (c.score >= 80 ? 'hot' : c.score >= 50 ? 'warm' : 'cool');
+      var emoji = sBand === 'hot' ? '🔥 ' : sBand === 'warm' ? '⚡ ' : sBand === 'cool' ? '❄️ ' : '';
+      pills.push('<span class="pill pill--' + esc(sBand) + '">' + emoji + esc(c.score) + ' ' + esc(sBand).toUpperCase() + '</span>');
+    }
+    pills.push('<span class="pill pill--' + esc(c.stage) + '">' + esc(c.stage.replace(/_/g, ' ')) + '</span>');
+    if (c.deals_count) pills.push('<span class="pill" style="border-color:var(--gold); color:var(--gold);">💼 ' + c.deals_count + ' Deal' + (c.deals_count > 1 ? 's' : '') + '</span>');
+    if (c.open_tasks_count) pills.push('<span class="pill" style="border-color:var(--soft);">📋 ' + c.open_tasks_count + ' Task' + (c.open_tasks_count > 1 ? 's' : '') + '</span>');
 
     return '<button class="row' + (c.stage === 'new' ? ' is-new' : '') + '" data-contact="' + esc(c.id) + '">' +
       '<span class="row__title">' + esc(c.display_name) + ' ' + pills.join(' ') + '</span>' +
@@ -636,7 +1221,8 @@
           api('/deals', 'POST', { contact_id: id, pipeline_id: 1 }).then(function () {
             toast('Started Buyer deal.');
             contactDetail(id);
-            contacts();
+            if (state.view === 'pipeline') pipeline();
+            else if (state.view === 'contacts') contacts();
           }).catch(fail);
         };
       }
@@ -646,7 +1232,8 @@
           api('/deals', 'POST', { contact_id: id, pipeline_id: 2 }).then(function () {
             toast('Started Seller deal.');
             contactDetail(id);
-            contacts();
+            if (state.view === 'pipeline') pipeline();
+            else if (state.view === 'contacts') contacts();
           }).catch(fail);
         };
       }
@@ -656,7 +1243,8 @@
           api('/deals/' + dealId, 'PATCH', { stage_id: sel.value }).then(function (res) {
             toast('Deal moved to ' + (res.deal ? res.deal.stage_name : 'new stage'));
             contactDetail(id);
-            contacts();
+            if (state.view === 'pipeline') pipeline();
+            else if (state.view === 'contacts') contacts();
           }).catch(fail);
         };
       });

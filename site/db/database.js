@@ -1315,16 +1315,375 @@ function adminDeleteTask(taskId) {
   return true;
 }
 
+function adminListTasks({ status = 'all', contact_id, deal_id, limit = 100, offset = 0 } = {}) {
+  const database = getDb();
+  const clauses = [];
+  const params = [];
+  const nowIso = new Date().toISOString();
+  const todayStr = nowIso.slice(0, 10);
+
+  if (status === 'open') {
+    clauses.push('t.done_at IS NULL');
+  } else if (status === 'completed') {
+    clauses.push('t.done_at IS NOT NULL');
+  } else if (status === 'overdue') {
+    clauses.push('t.done_at IS NULL AND t.due_at IS NOT NULL AND t.due_at < ?');
+    params.push(nowIso);
+  } else if (status === 'today') {
+    clauses.push('t.done_at IS NULL AND t.due_at IS NOT NULL AND substr(t.due_at, 1, 10) = ?');
+    params.push(todayStr);
+  }
+
+  if (contact_id) {
+    clauses.push('t.contact_id = ?');
+    params.push(Number(contact_id));
+  }
+  if (deal_id) {
+    clauses.push('t.deal_id = ?');
+    params.push(Number(deal_id));
+  }
+  const where = clauses.length ? 'WHERE ' + clauses.join(' AND ') : '';
+
+  const rows = database.prepare(`
+    SELECT t.*, c.display_name as contact_name, d.title as deal_title,
+           CASE WHEN t.done_at IS NULL AND t.due_at IS NOT NULL AND t.due_at < ? THEN 1 ELSE 0 END as is_overdue,
+           CASE WHEN t.done_at IS NULL AND t.due_at IS NOT NULL AND substr(t.due_at, 1, 10) = ? THEN 1 ELSE 0 END as is_today
+    FROM tasks t
+    LEFT JOIN contacts c ON c.id = t.contact_id
+    LEFT JOIN deals d ON d.id = t.deal_id
+    ${where}
+    ORDER BY t.done_at ASC, t.due_at ASC, t.id DESC
+    LIMIT ? OFFSET ?
+  `).all(nowIso, todayStr, ...params, limit, offset);
+
+  let counts = { total: 0, open_count: 0, completed_count: 0, overdue_count: 0, today_count: 0 };
+  try {
+    const cRow = database.prepare(`
+      SELECT
+        COUNT(*) as total,
+        COALESCE(SUM(CASE WHEN done_at IS NULL THEN 1 ELSE 0 END), 0) as open_count,
+        COALESCE(SUM(CASE WHEN done_at IS NOT NULL THEN 1 ELSE 0 END), 0) as completed_count,
+        COALESCE(SUM(CASE WHEN done_at IS NULL AND due_at IS NOT NULL AND due_at < ? THEN 1 ELSE 0 END), 0) as overdue_count,
+        COALESCE(SUM(CASE WHEN done_at IS NULL AND due_at IS NOT NULL AND substr(due_at, 1, 10) = ? THEN 1 ELSE 0 END), 0) as today_count
+      FROM tasks
+    `).get(nowIso, todayStr);
+    if (cRow) counts = cRow;
+  } catch (_) {}
+
+  return { tasks: rows, counts };
+}
+
+function adminCreateContact({ first_name, last_name, display_name, email, phone, stage, type, interest, budget, timeline, notes, discreet }) {
+  const database = getDb();
+  const fName = String(first_name || '').trim();
+  const lName = String(last_name || '').trim();
+  let dName = String(display_name || '').trim();
+  if (!dName) {
+    dName = [fName, lName].filter(Boolean).join(' ') || 'New Contact';
+  }
+  const now = new Date().toISOString();
+  const initialStage = stage && CONTACT_STAGES.includes(stage) ? stage : 'new';
+  const initialType = type && CONTACT_TYPES.includes(type) ? type : 'lead';
+
+  database.exec('BEGIN IMMEDIATE');
+  let contactId;
+  try {
+    const res = database.prepare(`
+      INSERT INTO contacts (
+        first_name, last_name, display_name, type, stage, discreet,
+        source, first_utm_json, interest, budget, timeline, areas_json,
+        notes, score, score_band, last_inbound_at, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'cold', ?, ?, ?)
+    `).run(
+      fName,
+      lName,
+      dName,
+      initialType,
+      initialStage,
+      discreet ? 1 : 0,
+      'back_office',
+      '{}',
+      interest ? String(interest).slice(0, 60) : null,
+      budget ? String(budget).slice(0, 40) : null,
+      timeline ? String(timeline).slice(0, 60) : null,
+      '[]',
+      notes ? String(notes).slice(0, 5000) : null,
+      now,
+      now,
+      now
+    );
+    contactId = Number(res.lastInsertRowid);
+
+    if (email) {
+      const cleanEmail = String(email).trim().toLowerCase();
+      database.prepare(`
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, verified, first_seen_at, last_seen_at)
+        VALUES (?, 'email', ?, 1, 0, ?, ?)
+      `).run(contactId, cleanEmail, now, now);
+      database.prepare(`
+        INSERT INTO consents (contact_id, channel, status, scope, source, recorded_at)
+        VALUES (?, 'email', 1, 'transactional', 'back_office_created', ?)
+      `).run(contactId, now);
+    }
+
+    if (phone) {
+      const cleanPhone = String(phone).trim();
+      database.prepare(`
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, verified, first_seen_at, last_seen_at)
+        VALUES (?, 'phone', ?, 1, 0, ?, ?)
+      `).run(contactId, cleanPhone, now, now);
+    }
+
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, body, occurred_at, created_at)
+      VALUES (?, 'note', NULL, 'Contact created manually in Back Office', ?, ?, ?)
+    `).run(contactId, `Created manually: ${dName}. Notes: ${notes || 'None'}`, now, now);
+
+    database.exec('COMMIT');
+  } catch (err) {
+    try { database.exec('ROLLBACK'); } catch (_) {}
+    throw err;
+  }
+
+  try {
+    rescoreContact(contactId, database);
+  } catch (_) {}
+
+  return adminGetContact(contactId, database);
+}
+
+function adminSeedSampleData(force = false) {
+  const database = getDb();
+  const existingCount = database.prepare('SELECT COUNT(*) as n FROM contacts WHERE merged_into IS NULL').get().n;
+  if (existingCount > 0 && !force) {
+    return { ok: true, seeded: false, message: 'Contacts already exist.' };
+  }
+
+  const sampleContacts = [
+    {
+      first_name: 'Marcus',
+      last_name: 'Vance',
+      display_name: 'Dr. Marcus & Elena Vance',
+      email: 'marcus.vance@ucsfmed.org',
+      phone: '(415) 890-4421',
+      stage: 'showing',
+      type: 'client',
+      interest: 'Relocating from San Francisco to Pleasanton',
+      budget: '$3,500,000',
+      timeline: 'Immediate (30-60 days)',
+      notes: 'UCSF Chief of Surgery relocating family from Pacific Heights to Pleasanton Ruby Hill. Needs custom estate with home office and 4-car garage. Top priority: Pleasanton Unified schools.',
+      pipeline_id: 1,
+      stage_id: 4, // Property Tours
+      deal_title: 'Dr. Marcus & Elena Vance - Ruby Hill Luxury Acquisition',
+      deal_value: 3450000,
+      deal_address: 'Ruby Hill Golf Club Enclave, Pleasanton',
+      tasks: [
+        { title: 'Send off-market Ruby Hill comp analysis and private gate access codes', due_offset_days: 0 },
+        { title: 'Confirm Saturday 11am private showing with listing agent', due_offset_days: 1 }
+      ]
+    },
+    {
+      first_name: 'Jonathan',
+      last_name: 'Chen',
+      display_name: 'Jonathan & Sarah Chen',
+      email: 'jonathan.chen@techleader.io',
+      phone: '(408) 512-9844',
+      stage: 'offer',
+      type: 'client',
+      interest: 'Moving from Silicon Valley to Danville',
+      budget: '$4,200,000',
+      timeline: '30 days',
+      notes: 'VP of AI at Mountain View tech company. Moving from Sunnyvale to Westside Danville. Wants minimum 0.75-acre lot, single story modern or updated traditional.',
+      pipeline_id: 1,
+      stage_id: 5, // Offers Out
+      deal_title: 'Chen Family - Westside Danville Custom Estate',
+      deal_value: 4100000,
+      deal_address: '342 El Pintado Rd, Danville',
+      tasks: [
+        { title: 'Follow up with listing agent on counter-offer terms and appraisal contingency', due_offset_days: 0 }
+      ]
+    },
+    {
+      first_name: 'Priya',
+      last_name: 'Patel',
+      display_name: 'Priya & Amit Patel',
+      email: 'priya.patel@biotechvc.com',
+      phone: '(510) 673-1980',
+      stage: 'under_contract',
+      type: 'client',
+      interest: 'Relocating from Fremont to San Ramon',
+      budget: '$2,200,000',
+      timeline: 'In Escrow',
+      notes: 'Biotech director in Mission Bay and Tesla engineer moving from Warm Springs Fremont to Gale Ranch San Ramon. Top priority: Dougherty Valley High academic rank.',
+      pipeline_id: 1,
+      stage_id: 6, // In Escrow
+      deal_title: 'Patel Family - Gale Ranch Modern View Estate',
+      deal_value: 2150000,
+      deal_address: '7104 Monarch Terrace, San Ramon',
+      tasks: [
+        { title: 'Schedule physical home inspection & sewer lateral review with inspectors', due_offset_days: 2 }
+      ]
+    },
+    {
+      first_name: 'Robert',
+      last_name: 'Sterling',
+      display_name: 'Robert & Catherine Sterling',
+      email: 'robert.sterling@sterlingcapital.net',
+      phone: '(925) 388-7712',
+      stage: 'listing_prep',
+      type: 'client',
+      interest: 'Selling Greenbrook Danville Estate',
+      budget: '$2,850,000',
+      timeline: 'Pre-Market Prep',
+      notes: 'Retiring executives downsizing to Carmel. Selling their beautifully maintained 4-bed, 3-bath estate in Greenbrook Danville. Utilizing Compass Concierge for fronted cosmetic updates.',
+      pipeline_id: 2,
+      stage_id: 12, // Pre-Market Staging
+      deal_title: 'Sterling Estate - Greenbrook Luxury Listing Presentation',
+      deal_value: 2850000,
+      deal_address: '112 Greenbrook Dr, Danville',
+      tasks: [
+        { title: 'Walk-through with Compass Concierge staging contractor for lighting & paint quotes', due_offset_days: 0 }
+      ]
+    },
+    {
+      first_name: 'David',
+      last_name: 'Miller',
+      display_name: 'David & Laura Miller',
+      email: 'david.miller@alamoinvest.com',
+      phone: '(925) 441-2099',
+      stage: 'qualified',
+      type: 'lead',
+      interest: 'Alamo Westside Acreage Estate Valuation',
+      budget: '$5,250,000',
+      timeline: 'Spring listing',
+      notes: 'Inquired via Home Valuation for their 2.1-acre gated estate near Round Hill. Interested in Compass Private Exclusives off-market launch before public MLS.',
+      pipeline_id: 2,
+      stage_id: 11, // Listing Presentation
+      deal_title: 'Miller Westside Alamo Compound Listing',
+      deal_value: 5250000,
+      deal_address: 'Round Hill Rd, Alamo',
+      tasks: [
+        { title: 'Deliver custom luxury CMA booklet with Round Hill recent comps', due_offset_days: 1 }
+      ]
+    },
+    {
+      first_name: 'Alexander',
+      last_name: 'Thorne',
+      display_name: 'Alexander Thorne',
+      email: 'alex.thorne@stanfordendow.org',
+      phone: '(650) 799-3120',
+      stage: 'new',
+      type: 'lead',
+      interest: 'Palo Alto to Alamo private compound relocation',
+      budget: '$6,500,000+',
+      timeline: 'Immediate cash buyer',
+      notes: 'Managing partner seeking secluded multi-acre Alamo gated compound with tennis court and pool. Private, discreet representation requested.',
+      pipeline_id: 1,
+      stage_id: 2, // Initial Contact / Qualification
+      deal_title: 'Thorne - Alamo Gated Compound Acquisition',
+      deal_value: 6500000,
+      deal_address: 'Alamo Ridges & Private Enclaves',
+      tasks: [
+        { title: 'Initial discovery call on multi-acre equestrian zoning in Alamo', due_offset_days: 0 }
+      ]
+    }
+  ];
+
+  let added = 0;
+  for (const s of sampleContacts) {
+    const contact = adminCreateContact({
+      first_name: s.first_name,
+      last_name: s.last_name,
+      display_name: s.display_name,
+      email: s.email,
+      phone: s.phone,
+      stage: s.stage,
+      type: s.type,
+      interest: s.interest,
+      budget: s.budget,
+      timeline: s.timeline,
+      notes: s.notes,
+      discreet: false
+    });
+
+    if (contact && contact.id) {
+      added++;
+      const deal = adminCreateDeal({
+        contact_id: contact.id,
+        pipeline_id: s.pipeline_id,
+        stage_id: s.stage_id,
+        title: s.deal_title,
+        value_usd: s.deal_value,
+        property_address: s.deal_address,
+        expected_close: new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10)
+      });
+
+      for (const t of s.tasks) {
+        const dueDate = new Date(Date.now() + t.due_offset_days * 86400000).toISOString().slice(0, 10);
+        adminCreateTask({
+          contact_id: contact.id,
+          deal_id: deal ? deal.id : null,
+          title: t.title,
+          due_at: dueDate
+        });
+      }
+
+      const now = new Date().toISOString();
+      database.prepare(`
+        INSERT INTO activities (contact_id, kind, direction, subject, body, occurred_at, created_at)
+        VALUES (?, 'inbound_form', 'inbound', 'Inquired via Relocation Corridor Guide', ?, ?, ?)
+      `).run(contact.id, `Inbound inquiry for ${s.interest}. Budget: ${s.budget}. Notes: ${s.notes}`, now, now);
+
+      rescoreContact(contact.id, database);
+    }
+  }
+
+  try {
+    const actionPlan = require('../lib/actionPlan');
+    actionPlan.generateDailyActionPlan(database);
+  } catch (_) {}
+
+  return { ok: true, seeded: true, added };
+}
+
 function adminListPipelines() {
   const database = getDb();
   const pipelines = database.prepare('SELECT * FROM pipelines ORDER BY id ASC').all();
   const stages = database.prepare('SELECT * FROM pipeline_stages ORDER BY pipeline_id ASC, sort_order ASC').all();
+  let deals = [];
+  try {
+    deals = database.prepare(`
+      SELECT d.*, c.display_name as contact_name, c.score as contact_score, c.score_band as contact_score_band,
+             (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'email' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_email,
+             (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'phone' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_phone
+      FROM deals d
+      JOIN contacts c ON c.id = d.contact_id
+      ORDER BY d.updated_at DESC, d.id DESC
+    `).all();
+  } catch (_) {
+    deals = [];
+  }
 
-  return pipelines.map((p) => ({
-    id: p.id,
-    name: p.name,
-    stages: stages.filter((s) => s.pipeline_id === p.id)
-  }));
+  return pipelines.map((p) => {
+    const pStages = stages.filter((s) => s.pipeline_id === p.id).map((s) => {
+      const stageDeals = deals.filter((d) => d.stage_id === s.id);
+      const totalVolume = stageDeals.reduce((sum, d) => sum + (Number(d.value_usd) || 0), 0);
+      return Object.assign({}, s, {
+        deals: stageDeals,
+        total_volume: totalVolume,
+        deal_count: stageDeals.length
+      });
+    });
+    const totalVolume = pStages.reduce((sum, s) => sum + s.total_volume, 0);
+    const totalDeals = pStages.reduce((sum, s) => sum + s.deal_count, 0);
+    return {
+      id: p.id,
+      name: p.name,
+      total_volume: totalVolume,
+      total_deals: totalDeals,
+      stages: pStages
+    };
+  });
 }
 
 function adminCreateDeal({ contact_id, pipeline_id, stage_id, title, value_usd, property_address, expected_close }) {
@@ -1617,6 +1976,7 @@ module.exports = {
   adminMergeContacts, adminExportContact, adminDeleteContact,
   rescoreContact, rescoreAllContacts,
   adminCreateTask, adminUpdateTask, adminDeleteTask, updateContactNextFollowUp,
+  adminListTasks, adminCreateContact, adminSeedSampleData,
   adminListPipelines, adminCreateDeal, adminGetDeal, adminUpdateDeal,
   getPushSubscriptions, addPushSubscription, removePushSubscription,
   getSetting, setSetting, getSettings, updateSettings,

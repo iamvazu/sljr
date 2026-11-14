@@ -93,6 +93,44 @@ th { color: var(--soft); font-weight: 500; font-size: .74rem; text-transform: up
 .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 60; background: #F3EEE6; color: #0D1117; padding: 10px 16px; border-radius: 8px; font-size: .88rem; box-shadow: 0 10px 30px rgba(0,0,0,.5); max-width: calc(100% - 32px); }
 .toast.is-error { background: #5a1f18; color: #FFD9D2; }
 
+/* Pipeline Kanban Board */
+.kanban-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.kanban-switches { display: flex; gap: 4px; background: rgba(255,255,255,.05); padding: 3px; border-radius: 8px; border: 1px solid var(--line); }
+.kanban-switch { font: inherit; font-size: .82rem; font-weight: 600; padding: 6px 14px; border-radius: 6px; border: 0; background: none; color: var(--soft); cursor: pointer; transition: all .15s ease; }
+.kanban-switch.is-active { background: var(--gold); color: #0D1117; }
+.kanban-kpis { display: flex; gap: 16px; font-size: .86rem; align-items: center; }
+.kanban-kpis strong { color: var(--gold); font-size: 1.05rem; }
+
+.kanban-board { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 24px; min-height: 520px; align-items: flex-start; scrollbar-width: thin; }
+.kanban-col { flex: 0 0 280px; width: 280px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; max-height: calc(100vh - 210px); }
+.kanban-col__header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.kanban-col__title { font-size: .86rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin: 0; }
+.kanban-col__meta { font-size: .74rem; color: var(--soft); margin-top: 2px; }
+.kanban-col__val { font-size: .78rem; color: var(--gold); font-weight: 700; white-space: nowrap; }
+.kanban-cards { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 2px; min-height: 60px; }
+.kanban-card { background: rgba(255,255,255,.03); border: 1px solid var(--line); border-radius: 8px; padding: 12px; cursor: pointer; transition: all .15s ease; }
+.kanban-card:hover { border-color: rgba(216,165,90,.6); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.3); }
+.kanban-card__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.kanban-card__val { font-size: .95rem; font-weight: 700; color: var(--gold); }
+.kanban-card__title { font-size: .88rem; font-weight: 600; margin: 0 0 4px; line-height: 1.3; }
+.kanban-card__client { font-size: .8rem; color: var(--ink); display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.kanban-card__addr { font-size: .76rem; color: var(--soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kanban-card__stage-move { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.06); }
+.kanban-card__stage-move select { min-height: 32px; font-size: .76rem; padding: 4px 8px; border-radius: 6px; }
+
+/* Dedicated Tasks Management */
+.task-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center; }
+.task-item { display: grid; grid-template-columns: 24px 1fr auto; gap: 12px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; transition: border-color .15s ease; }
+.task-item:hover { border-color: rgba(216,165,90,.4); }
+.task-item.is-done { opacity: .5; }
+.task-item.is-done .task-title { text-decoration: line-through; }
+.task-title { font-weight: 500; font-size: .92rem; margin: 0 0 3px; }
+.task-sub { font-size: .78rem; color: var(--soft); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.task-due { font-size: .74rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em; }
+.task-due--overdue { background: rgba(232,120,104,.2); color: var(--red); border: 1px solid rgba(232,120,104,.5); }
+.task-due--today { background: rgba(216,165,90,.2); color: var(--gold); border: 1px solid rgba(216,165,90,.5); }
+.task-due--upcoming { background: rgba(255,255,255,.06); color: var(--soft); border: 1px solid var(--line); }
+
 @media (max-width: 760px) {
   .top { flex-wrap: wrap; gap: 4px 12px; padding: 8px 12px 0; }
   .tabs { order: 3; width: 100%; margin: 0 -12px; padding: 0 8px; width: calc(100% + 24px); }
