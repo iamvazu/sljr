@@ -76,8 +76,8 @@ function handleLegacyRedirects(req, res, parsedUrl) {
   let normPath = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
   normPath = normPath.toLowerCase();
 
-  // Skip assets, apis, and internal scripts
-  if (normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
+  // Skip assets, apis, internal scripts, and admin panel
+  if (normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/') || normPath === '/admin' || normPath.startsWith('/admin/')) {
     return false;
   }
 

@@ -119,8 +119,8 @@ function handleLegacyRedirects(req, res, parsedUrl) {
   let normPath = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
   normPath = normPath.toLowerCase();
 
-  // Skip assets, apis, and internal scripts
-  if (normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
+  // Skip assets, apis, internal scripts, and admin panel
+  if (normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/') || normPath === '/admin' || normPath.startsWith('/admin/')) {
     return false;
   }
 
@@ -570,16 +570,10 @@ function serveStatic(req, res, parsedUrl) {
     return;
   }
 
-  // Admin panel shell: redirect /admin -> /admin/ for canonical relative asset loading
-  if (reqPath === '/admin') {
-    res.writeHead(301, {
-      'Location': '/admin/',
-      'Cache-Control': 'no-store'
-    });
-    res.end();
-    return;
+  // Admin panel shell: serve both /admin and /admin/ directly
+  if (reqPath === '/admin' || reqPath === '/admin/') {
+    reqPath = '/admin/index.html';
   }
-  if (reqPath === '/admin/') reqPath = '/admin/index.html';
   if (reqPath === '/admin.js') reqPath = '/admin/admin.js';
   if (reqPath === '/admin.css') reqPath = '/admin/admin.css';
   if (reqPath.startsWith('/admin/')) {
