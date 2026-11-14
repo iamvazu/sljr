@@ -1330,12 +1330,12 @@ function getUsageStats() {
 function getLastBackupInfo() {
   try {
     const row = getDb().prepare(
-      "SELECT * FROM audit_log WHERE action = 'backup' ORDER BY id DESC LIMIT 1"
+      "SELECT * FROM audit_log WHERE action LIKE 'backup%' ORDER BY id DESC LIMIT 1"
     ).get();
     if (row) {
       return {
-        timestamp: row.created_at,
-        details: row.details
+        timestamp: row.at,
+        details: row.detail
       };
     }
   } catch (_) {}
