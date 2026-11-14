@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://stevenlenzjr.com/</loc>
     <lastmod>2026-11-12</lastmod>
@@ -29,6 +31,174 @@
     <lastmod>2026-11-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/gwcsqn6ugf4ymoao1fp2</image:loc>
+      <image:title>2261 Genoa St, Danville, CA 94506</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41084468/-5543608936710878954.jpg</image:loc>
+      <image:title>2710 Presidio Dr, Brentwood, CA 94513</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-6831891739819453871.jpg</image:loc>
+      <image:title>2710 Presidio, Brentwood, CA 94513</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/7263dfb0-193f-4f5d-afb0-9285e9aace41</image:loc>
+      <image:title>1240 York St, Richmond, CA 94801</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/d6603eba-5bf0-4bb1-9bbc-c08534bbc78b</image:loc>
+      <image:title>3868 Greenwood Ave, Oakland, CA 94602</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ikbcxllqz4rr0q98h3vg</image:loc>
+      <image:title>1631 Altamont Cir, Livermore, CA 94551</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/166635999.jpg</image:loc>
+      <image:title>2460 Shawn Dr, San Pablo, CA 94806</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-7623023828273487248.jpg</image:loc>
+      <image:title>1232 York St, Richmond, CA 94801</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-1687885987.jpg</image:loc>
+      <image:title>24534 Townsend, HAYWARD, CA 94544</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rlvzmdfzrffwbr9ceu2o</image:loc>
+      <image:title>2135 7th Ave, Oakland, CA 94606</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/wwwdag7nmmfm3ymaiybr</image:loc>
+      <image:title>3717 McClelland St, Oakland, CA 94619</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/2f46e025-81d5-4fdc-89dc-698e45f9becd</image:loc>
+      <image:title>1097 Kenwal Rd, Concord, CA 94521</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/zibkf4hny9lr5pgabvy8</image:loc>
+      <image:title>203 Scott Creek Way, Brentwood, CA 94513</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rjo08ky030gezntbivt3</image:loc>
+      <image:title>1762 Landana Dr, Concord, CA 94519</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/lgwlzvlo02lotwmnkvvp</image:loc>
+      <image:title>1809 Crater Peak Way, Antioch, CA 94531</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/xnotqknyvoiaaqnblyvw</image:loc>
+      <image:title>2106 La Terrace Cir, San Jose, CA 95123</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-1923264926297032171.jpg</image:loc>
+      <image:title>91 Segale Dr, Camp Connell, CA 95223</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ytgynrlvtta7fznmcpvy</image:loc>
+      <image:title>1213 75th Avenue, Oakland, CA 94621</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/z94vbhnlgex0liaiajlg</image:loc>
+      <image:title>230 W La Flor Ln, Mountain House, CA 95391</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/wonbxneh2j2mjqstdojn</image:loc>
+      <image:title>1333 Webster Street, Unit A205, Alameda, CA 94501</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/lyetku45dn3wsp7ma1yv</image:loc>
+      <image:title>1087 Murrieta Blvd, #142, Livermore, CA 94550</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ljividkxueescif6lsi4</image:loc>
+      <image:title>1260 York St, Richmond, CA 94801</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/5a6a6d13-5650-4b25-bfd0-3b3ff3fce2ba</image:loc>
+      <image:title>1422 Autry Way, Merced, CA 95348</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/74baf850-4cef-4099-b0e0-4f834a82a5e6</image:loc>
+      <image:title>1240 York Street,  RICHMOND, CA 94801</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/r4s7efk1dflayr33ousp</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246, Antioch, CA 94509</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/as9df4pzc9wguyid8may</image:loc>
+      <image:title>91 Segale Dr, Arnold, CA 95223</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/cgpcbdsuyxbmeixmnpf7</image:loc>
+      <image:title>6320 Buena Ventura Ave, Oakland, CA 94608</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/550834438.jpg</image:loc>
+      <image:title>0 Zinn, Oakland, CA 94603</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
   </url>
   <url>
     <loc>https://stevenlenzjr.com/resources.html</loc>
@@ -137,6 +307,25 @@
     <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <video:video>
+      <video:thumbnail_loc>https://stevenlenzjr.com/assets/img/julia-oakland-house.jpg</video:thumbnail_loc>
+      <video:title>Compass Concierge Success Story — Julia's Oakland Home Sold 47% Over Ask</video:title>
+      <video:description>Watch how Compass Concierge fronted 100% of the renovation costs with zero upfront fees or interest to sell Julia's Oakland home in just 12 days at 47% over asking price.</video:description>
+      <video:content_loc>https://www.youtube.com/watch?v=4hd018raScA</video:content_loc>
+      <video:player_loc>https://www.youtube.com/embed/4hd018raScA</video:player_loc>
+      <video:duration>54</video:duration>
+      <video:publication_date>2026-11-14T08:00:00+00:00</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:requires_subscription>no</video:requires_subscription>
+      <video:live>no</video:live>
+      <video:tag>Compass Concierge</video:tag>
+      <video:tag>Oakland Real Estate</video:tag>
+      <video:tag>Steven Lenz Jr</video:tag>
+      <video:tag>Home Renovation Before Selling</video:tag>
+      <video:tag>East Bay Real Estate</video:tag>
+      <video:category>Real Estate</video:category>
+      <video:uploader info="https://stevenlenzjr.com/about.html">Steven Lenz Jr. · Compass</video:uploader>
+    </video:video>
   </url>
   <url>
     <loc>https://stevenlenzjr.com/experiences.html</loc>
@@ -324,5 +513,1564 @@
     <changefreq>monthly</changefreq>
     <priority>0.50</priority>
   </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2261-genoa-st</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/gwcsqn6ugf4ymoao1fp2</image:loc>
+      <image:title>2261 Genoa St, Danville, CA 94506 — Single Family</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gwcsqn6ugf4ymoao1fp2</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>2261 Genoa St — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $1,560,000 · 4 Beds · 3 Baths · 3,186 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Danville, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2710-presidio-dr-brentwood-ca-94513-41084468</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41084468/-5543608936710878954.jpg</image:loc>
+      <image:title>2710 Presidio Dr, Brentwood, CA 94513 — Single Family</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>2710 Presidio Dr — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>2710 Presidio Dr — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>2710 Presidio Dr — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>2710 Presidio Dr — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>2710 Presidio Dr — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Off Market · $965,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2710-presidio-brentwood-ca-94513-41092034</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-6831891739819453871.jpg</image:loc>
+      <image:title>2710 Presidio, Brentwood, CA 94513 — Single Family</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/4020359062265484055.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-7494355204851845331.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/6645610267492644439.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/8138094777762696838.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-4005735649329024764.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-2124442862888819882.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/-4607033623709727538.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/1572460611424996155.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41092034/1646612192325534370.jpg</image:loc>
+      <image:title>2710 Presidio — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>For Sale · $930,000 · 4 Beds · 3 Baths · 2,604 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1240-york-st</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/7263dfb0-193f-4f5d-afb0-9285e9aace41</image:loc>
+      <image:title>1240 York St, Richmond, CA 94801 — Single Family</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/7263dfb0-193f-4f5d-afb0-9285e9aace41</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/7520e677-1d4d-4d76-bdb2-c28f64fc9deb</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/63245d7b-88ca-4470-8031-3c5734f59367</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/93b332f9-c32d-4778-8282-6780597154fc</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/c48fa22f-0be3-4c4e-be1e-e7d6cc518508</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/f8276b8b-dfdb-4739-b221-f4217028c12b</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/e486e4d4-b6d9-422b-9795-01da8d812a15</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/e31741af-f72e-4e54-b26f-fb391460ef4d</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/966c0b3a-b35c-4a0b-8b1e-a0595101a7bc</image:loc>
+      <image:title>1240 York St — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>For Sale · $925,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=3868-greenwood-ave</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/d6603eba-5bf0-4bb1-9bbc-c08534bbc78b</image:loc>
+      <image:title>3868 Greenwood Ave, Oakland, CA 94602 — Single Family</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/d6603eba-5bf0-4bb1-9bbc-c08534bbc78b</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>3868 Greenwood Ave — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Leased · $920,000 · 4 Beds · 2 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1631-altamont-cir</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ikbcxllqz4rr0q98h3vg</image:loc>
+      <image:title>1631 Altamont Cir, Livermore, CA 94551 — Single Family</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/metscmc38h1n7xyk9su5</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1631 Altamont Cir — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $900,000 · 5 Beds · 3 Baths · 2,829 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2460-shawn-dr-san-pablo-ca-94806-40973477</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/166635999.jpg</image:loc>
+      <image:title>2460 Shawn Dr, San Pablo, CA 94806 — Single Family</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/701970158.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/925584665.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/999231150.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-410479747.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/2129425518.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1586614733.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1495080282.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-1102940459.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1595223861.jpg</image:loc>
+      <image:title>2460 Shawn Dr — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>Sold · $785,000 · 3 Beds · 2 Baths · 1,187 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Pablo, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1232-york-st-richmond-ca-us-94801-41141356</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-7623023828273487248.jpg</image:loc>
+      <image:title>1232 York St, Richmond, CA 94801 — Single Family</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-5757872460620403541.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-217255632064151401.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/5261230925343747408.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-7381206973992813542.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-5791962481782845234.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-7660242894182445764.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/4933989441635701801.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/-2604629034158232443.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41141356/4832267942036097394.jpg</image:loc>
+      <image:title>1232 York St — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>For Sale · $749,000 · 3 Beds · 3 Baths · 1,400 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=24534-townsend-hayward-ca-94544-40886609</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-1687885987.jpg</image:loc>
+      <image:title>24534 Townsend, HAYWARD, CA 94544 — Single Family</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>24534 Townsend — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $690,000 · 4 Beds · 2 Baths · 1,375 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>HAYWARD, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2135-7th-ave</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rlvzmdfzrffwbr9ceu2o</image:loc>
+      <image:title>2135 7th Ave, Oakland, CA 94606 — Single Family</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/va1oet1qxw0cgpts4nio</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/uehn9rgl6so7rr4iuhce</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/yxcqganoo9jwc72cuoef</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/oio1aoshe2l43eca3gv8</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gnwfiyrll9bnfhrqxchm</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/zkzdaqvzb1rez1hera8j</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/az4exmxpziefdmegaapi</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/g4oeex3r7e6n0did6tyb</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/oarjtxuuou716zgctvpd</image:loc>
+      <image:title>2135 7th Ave — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>Sold · $680,000 · 2 Beds · 1 Baths · 1,207 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=3717-mcclelland-st</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/wwwdag7nmmfm3ymaiybr</image:loc>
+      <image:title>3717 McClelland St, Oakland, CA 94619 — Single Family</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/wwwdag7nmmfm3ymaiybr</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/bjuunphwlewrsleel2tn</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/mcjohvkadysf76kpezmu</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/kvlxzhyittksdjrclvru</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ctcipupu5zdrz7aybojk</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>3717 McClelland St — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>Sold · $665,000 · 2 Beds · 2 Baths · 1,042 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1097-kenwal-rd</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/2f46e025-81d5-4fdc-89dc-698e45f9becd</image:loc>
+      <image:title>1097 Kenwal Rd, Concord, CA 94521 — Single Family</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1097 Kenwal Rd — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $650,000 · 3 Beds · 2 Baths · 1,150 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=203-scott-creek-way</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/zibkf4hny9lr5pgabvy8</image:loc>
+      <image:title>203 Scott Creek Way, Brentwood, CA 94513 — Single Family</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>203 Scott Creek Way — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $613,152 · 4 Beds · 3 Baths · 2,217 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Brentwood, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1762-landana-dr</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/rjo08ky030gezntbivt3</image:loc>
+      <image:title>1762 Landana Dr, Concord, CA 94519 — Single Family</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1762 Landana Dr — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $601,500 · 3 Beds · 2 Baths · 1,176 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Concord, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1809-crater-peak-way</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/lgwlzvlo02lotwmnkvvp</image:loc>
+      <image:title>1809 Crater Peak Way, Antioch, CA 94531 — Single Family</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1809 Crater Peak Way — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $573,500 · 3 Beds · 2.5 Baths · 1,358 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2106-la-terrace-cir</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/xnotqknyvoiaaqnblyvw</image:loc>
+      <image:title>2106 La Terrace Cir, San Jose, CA 95123 — Single Family</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/xnotqknyvoiaaqnblyvw</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>2106 La Terrace Cir — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $518,000 · 1 Beds · 1 Baths · 543 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>San Jose, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=91-segale-dr-camp-connell-ca-us-95223-41146460</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-1923264926297032171.jpg</image:loc>
+      <image:title>91 Segale Dr, Camp Connell, CA 95223 — Single Family</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-8010351355380678891.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-4244193049990890209.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/93453649045627889.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/712037039661022791.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/9174298651227897865.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/4395898751517348355.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/5039687557475374665.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/5347012853856816625.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dlajgvw9htjpb.cloudfront.net/cms/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/41146460/-4688872635802410709.jpg</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>For Sale · $450,000 · 2 Beds · 1 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Camp Connell, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1213-75th-avenue</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ytgynrlvtta7fznmcpvy</image:loc>
+      <image:title>1213 75th Avenue, Oakland, CA 94621 — Single Family</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1213 75th Avenue — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $440,002 · 3 Beds · 0 Baths · 1,085 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=230-w-la-flor-ln</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/z94vbhnlgex0liaiajlg</image:loc>
+      <image:title>230 W La Flor Ln, Mountain House, CA 95391 — Single Family</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>230 W La Flor Ln — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $417,000 · 2 Beds · 2 Baths · 1,275 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Mountain House, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1333-webster-street-unit-a205</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/wonbxneh2j2mjqstdojn</image:loc>
+      <image:title>1333 Webster Street, Unit A205, Alameda, CA 94501 — Single Family</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/wonbxneh2j2mjqstdojn</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1333 Webster Street, Unit A205 — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $394,500 · 1 Beds · 1 Baths · 701 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Alameda, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1087-murrieta-blvd-142</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/lyetku45dn3wsp7ma1yv</image:loc>
+      <image:title>1087 Murrieta Blvd, #142, Livermore, CA 94550 — Single Family</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lyetku45dn3wsp7ma1yv</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/metscmc38h1n7xyk9su5</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1087 Murrieta Blvd, #142 — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $339,000 · 1 Beds · 1 Baths · 758 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Livermore, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1260-york-st</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/ljividkxueescif6lsi4</image:loc>
+      <image:title>1260 York St, Richmond, CA 94801 — Single Family</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/ljividkxueescif6lsi4</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1260 York St — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $265,001 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Richmond, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1422-autry-way</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/5a6a6d13-5650-4b25-bfd0-3b3ff3fce2ba</image:loc>
+      <image:title>1422 Autry Way, Merced, CA 95348 — Single Family</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/5a6a6d13-5650-4b25-bfd0-3b3ff3fce2ba</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1422 Autry Way — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $260,500 · 0 Beds · 4 Baths · 1,490 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Merced, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=1240-york-street</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1920/https://media-production.lp-cdn.com/media/74baf850-4cef-4099-b0e0-4f834a82a5e6</image:loc>
+      <image:title>1240 York Street,  RICHMOND, CA 94801 — Single Family</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/74baf850-4cef-4099-b0e0-4f834a82a5e6</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>1240 York Street — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $250,000 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location> RICHMOND, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=2005-san-jose-dr-unit-246</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/r4s7efk1dflayr33ousp</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246, Antioch, CA 94509 — Single Family</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/pa9w7joiavh4je0tepcw</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/epbjzludgxzpysc1bgyu</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/imss7x02zrdmecljj3yj</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/vaevfa3azqcb3iostupv</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/z548zfvcmk2q5lfnf1bk</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/whbycx0h7ouftcujhuxm</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/cosfgqz4mfoyq2uas05e</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/dgtp7uuyw7vmluvu0lbw</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>2005 San Jose Dr. Unit 246 — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>Sold · $250,000 · 2 Beds · 1 Baths · 782 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Antioch, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=91-segale-dr</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/as9df4pzc9wguyid8may</image:loc>
+      <image:title>91 Segale Dr, Arnold, CA 95223 — Single Family</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>91 Segale Dr — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $190,000 · 2 Beds · 2 Baths · 1,563 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Arnold, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=6320-buena-ventura-ave</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/cgpcbdsuyxbmeixmnpf7</image:loc>
+      <image:title>6320 Buena Ventura Ave, Oakland, CA 94608 — Single Family</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/gl9fjm95y5gwmpidxujd</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/lwawt0paj6ujhkbm6rew</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/f5072301-4800-4476-9d39-a1fc3f5ae178</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/5f02a291-bcfd-4749-b9cf-afeb4ef5a4ae</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85/https://media-production.lp-cdn.com/media/31546efb-fe6c-423b-88b3-50329ccf40f5</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://media-production.lp-cdn.com/media/548404dd-7ee2-4f78-b3e1-1abc31e42e1c</image:loc>
+      <image:title>6320 Buena Ventura Ave — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $94,500 · 0 Beds · 0 Baths ·  Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://stevenlenzjr.com/listing.html?id=0-zinn-oakland-ca-94603-40887313</loc>
+    <lastmod>2026-11-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/550834438.jpg</image:loc>
+      <image:title>0 Zinn, Oakland, CA 94603 — Single Family</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1086168597.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 2</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1309783104.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 3</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1383429589.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 4</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-26281308.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 5</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-1781343339.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 6</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1970813172.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 7</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1879278721.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 8</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/-718742020.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 9</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+    <image:image>
+      <image:loc>https://dq1niho2427i9.cloudfront.net/b5d1b6ff-a67a-4db0-98a9-b94e53699bab/1979422300.jpg</image:loc>
+      <image:title>0 Zinn — Interior &amp; Architectural Detail View 10</image:title>
+      <image:caption>Sold · $39,000 · 0 Beds · 0 Baths · 8,863 Sq.Ft. Represented by Steven Lenz Jr. at Compass.</image:caption>
+      <image:geo_location>Oakland, California</image:geo_location>
+    </image:image>
+  </url>
 </urlset>
-
