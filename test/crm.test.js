@@ -966,4 +966,331 @@ test('Step 7: M2 Scoring Engine (Acceptance Tests 10 & 11)', async (t) => {
   });
 });
 
+test('Step 8: M2 Daily Action Plan without AI (Acceptance Tests 12 & 13)', async (t) => {
+  const actionPlan = require('../site/lib/actionPlan');
+  const database = db.getDb();
+  const testNow = new Date('2026-11-14T14:00:00.000Z'); // 6:00 AM Pacific
+  const planDate = actionPlan.getPlanDate(testNow);
+
+  // Clear any residual action items from prior test runs for isolated test harness
+  database.prepare("DELETE FROM action_items").run();
+
+  let testSeq = Date.now();
+  // Helper to insert test contacts cleanly
+  function createTestContact(data) {
+    const s = testSeq++;
+    const now = testNow.toISOString();
+    const res = database.prepare(`
+      INSERT INTO contacts (
+        first_name, last_name, display_name, type, stage, discreet,
+        score, score_band, last_inbound_at, last_outbound_at, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      data.first_name || 'Test',
+      data.last_name || 'User',
+      data.display_name || 'Test User',
+      data.type || 'lead',
+      data.stage || 'new',
+      data.discreet ? 1 : 0,
+      data.score || 0,
+      data.score_band || 'cold',
+      data.last_inbound_at || null,
+      data.last_outbound_at || null,
+      data.created_at || now,
+      now
+    );
+    const contactId = Number(res.lastInsertRowid);
+    if (data.email) {
+      const email = data.email.replace('@', `_${s}@`);
+      database.prepare(`
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+        VALUES (?, 'email', ?, 1, 'ok')
+      `).run(contactId, email);
+    }
+    if (data.phone) {
+      const phone = '+1925' + String(s).slice(-7);
+      database.prepare(`
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+        VALUES (?, 'phone', ?, 1, 'ok')
+      `).run(contactId, phone);
+    }
+    if (data.consents) {
+      for (const cn of data.consents) {
+        database.prepare(`
+          INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+          VALUES (?, ?, ?, '2026-11-v1', 'test', ?)
+        `).run(contactId, cn.channel, cn.granted ? 1 : 0, now);
+      }
+    }
+    return contactId;
+  }
+
+  // Acceptance Test 12: Plan Selection, Rules & Exclusions
+  await t.test('Plan Selection: Rules qualification and exclusions (AC #12)', () => {
+    // 1. Priority 1: new_lead (Stage new, no outbound)
+    const idNew = createTestContact({
+      display_name: 'Lead One',
+      stage: 'new',
+      phone: '+19255550111',
+      score: 50,
+      score_band: 'warm'
+    });
+
+    // 2. Priority 2: awaiting_reply (inbound activity > 4 working hours ago)
+    const idReply = createTestContact({
+      display_name: 'Reply Prospect',
+      stage: 'contacted',
+      score: 65,
+      score_band: 'warm',
+      email: 'reply@test.com'
+    });
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, occurred_at, created_at)
+      VALUES (?, 'email_in', 'in', 'Inquiry note', ?, ?)
+    `).run(idReply, new Date(testNow.getTime() - 16 * 3600000).toISOString(), new Date(testNow.getTime() - 16 * 3600000).toISOString());
+
+    // 3. Priority 3: follow_up_due (Task due today)
+    const idTask = createTestContact({
+      display_name: 'Task Prospect',
+      stage: 'contacted',
+      score: 40,
+      score_band: 'warm',
+      email: 'task@test.com'
+    });
+    database.prepare(`
+      INSERT INTO tasks (contact_id, title, due_at, created_at)
+      VALUES (?, 'Review disclosures', ?, ?)
+    `).run(idTask, planDate + 'T10:00:00.000Z', testNow.toISOString());
+
+    // 4. Priority 4: hot_no_touch (Hot band, no outbound in 3 days)
+    const idHot = createTestContact({
+      display_name: 'Hot Lead',
+      stage: 'qualified',
+      score: 85,
+      score_band: 'hot',
+      phone: '+19255550222',
+      last_outbound_at: new Date(testNow.getTime() - 4 * 86400000).toISOString()
+    });
+
+    // 5. Priority 5: warm_no_touch (Warm band, no outbound in 7 days)
+    const idWarm = createTestContact({
+      display_name: 'Warm Contact',
+      stage: 'contacted',
+      score: 55,
+      score_band: 'warm',
+      email: 'warm@test.com',
+      last_outbound_at: new Date(testNow.getTime() - 8 * 86400000).toISOString()
+    });
+
+    // 6. Priority 6: deal_stalled (Deal open, no activity in 14 days)
+    const idDeal = createTestContact({
+      display_name: 'Stalled Deal Client',
+      stage: 'showing',
+      score: 75,
+      score_band: 'hot',
+      phone: '+19255550333',
+      last_outbound_at: new Date(testNow.getTime() - 1 * 86400000).toISOString()
+    });
+    const twentyDaysAgo = new Date(testNow.getTime() - 20 * 86400000).toISOString();
+    database.prepare(`
+      INSERT INTO deals (contact_id, pipeline_id, stage_id, title, stage_changed_at, created_at, updated_at)
+      VALUES (?, 1, 3, 'Purchase in Ruby Hill', ?, ?, ?)
+    `).run(idDeal, twentyDaysAgo, twentyDaysAgo, twentyDaysAgo);
+
+    // 7. Priority 7: past_client_touch (type past_client, no outbound in 90 days)
+    const idPast = createTestContact({
+      display_name: 'Past Client VIP',
+      type: 'past_client',
+      stage: 'closed',
+      score: 30,
+      score_band: 'cool',
+      email: 'past@test.com',
+      last_outbound_at: new Date(testNow.getTime() - 100 * 86400000).toISOString()
+    });
+
+    // EXCLUSIONS:
+    // Excluded 1: Spam contact
+    const idSpam = createTestContact({ display_name: 'Spam Person', stage: 'spam', email: 'spam@test.com' });
+    // Excluded 2: Lost contact
+    const idLost = createTestContact({ display_name: 'Lost Person', stage: 'lost', email: 'lost@test.com' });
+    // Excluded 3: Discreet contact
+    const idDiscreet = createTestContact({ display_name: 'Celebrity Athlete', stage: 'new', discreet: 1, email: 'vip@test.com' });
+    // Excluded 4: Snoozed until tomorrow
+    const idSnoozed = createTestContact({ display_name: 'Snoozed Contact', stage: 'new', email: 'snooze@test.com' });
+    database.prepare(`
+      INSERT INTO action_items (plan_date, contact_id, rule, reason, channel, status, snoozed_until, created_at)
+      VALUES (?, ?, 'new_lead', 'Testing', 'email', 'snoozed', ?, ?)
+    `).run(planDate, idSnoozed, '2026-11-20', testNow.toISOString());
+
+    // Run candidate selection
+    const candidates = actionPlan.selectActionPlanCandidates(database, testNow);
+    const candidateIds = candidates.map(c => c.contact_id);
+
+    // Assert inclusions
+    assert.ok(candidateIds.includes(idNew), 'new_lead should qualify');
+    assert.ok(candidateIds.includes(idReply), 'awaiting_reply should qualify');
+    assert.ok(candidateIds.includes(idTask), 'follow_up_due should qualify');
+    assert.ok(candidateIds.includes(idHot), 'hot_no_touch should qualify');
+    assert.ok(candidateIds.includes(idWarm), 'warm_no_touch should qualify');
+    assert.ok(candidateIds.includes(idDeal), 'deal_stalled should qualify');
+    assert.ok(candidateIds.includes(idPast), 'past_client_touch should qualify');
+
+    // Assert exclusions
+    assert.ok(!candidateIds.includes(idSpam), 'spam must be excluded');
+    assert.ok(!candidateIds.includes(idLost), 'lost must be excluded');
+    assert.ok(!candidateIds.includes(idDiscreet), 'discreet must be excluded');
+    assert.ok(!candidateIds.includes(idSnoozed), 'snoozed must be excluded');
+
+    // Verify rules match exactly
+    assert.equal(candidates.find(c => c.contact_id === idNew).rule, 'new_lead');
+    assert.equal(candidates.find(c => c.contact_id === idReply).rule, 'awaiting_reply');
+    assert.equal(candidates.find(c => c.contact_id === idTask).rule, 'follow_up_due');
+    assert.equal(candidates.find(c => c.contact_id === idHot).rule, 'hot_no_touch');
+    assert.equal(candidates.find(c => c.contact_id === idWarm).rule, 'warm_no_touch');
+    assert.equal(candidates.find(c => c.contact_id === idDeal).rule, 'deal_stalled');
+    assert.equal(candidates.find(c => c.contact_id === idPast).rule, 'past_client_touch');
+  });
+
+  await t.test('Idempotency & Max 10 Cap (AC #12)', () => {
+    // Generate plan for testNow
+    const plan1 = actionPlan.generateDailyActionPlan(database, testNow);
+    assert.ok(plan1.ok);
+    assert.ok(plan1.total <= 10, 'Plan items must not exceed 10');
+
+    // Run again immediately on the same day
+    const plan2 = actionPlan.generateDailyActionPlan(database, testNow);
+    assert.equal(plan2.added, 0, 'Second run on the same day must not add duplicate contacts');
+    assert.equal(plan2.total, plan1.total);
+  });
+
+  // Acceptance Test 13: Approval & Consent Re-check
+  await t.test('Approval & Sending workflow (AC #13)', () => {
+    // 1. Create a contact with granted marketing consent
+    const testCid = createTestContact({
+      display_name: 'Approval Prospect',
+      stage: 'new',
+      email: 'approval@test.com',
+      consents: [{ channel: 'email_marketing', granted: 1 }]
+    });
+
+    // 2. Insert an open action item
+    const resItem = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel,
+        draft_subject, draft_body, draft_source, status, created_at
+      ) VALUES (?, ?, 'new_lead', 'New inquiry', 'email', 'Hello from Steven', 'Checking in on your plans.', 'template', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const actionItemId = Number(resItem.lastInsertRowid);
+
+    // Rule: No messages row exists until Approve
+    const msgBefore = database.prepare('SELECT 1 FROM messages WHERE contact_id = ?').get(testCid);
+    assert.equal(msgBefore, undefined, 'No messages row must exist before approval');
+
+    // 3. Test Approve & Send
+    const approveRes = actionPlan.approveActionItem(actionItemId, database, 'http://localhost:4173');
+    assert.ok(approveRes.ok);
+    assert.equal(approveRes.status, 'sent');
+    assert.ok(approveRes.message_id);
+
+    // Verify messages row now exists with approved_at set
+    const msgAfter = database.prepare('SELECT * FROM messages WHERE id = ?').get(approveRes.message_id);
+    assert.ok(msgAfter);
+    assert.ok(msgAfter.approved_at);
+    assert.equal(msgAfter.contact_id, testCid);
+    assert.equal(msgAfter.subject, 'Hello from Steven');
+
+    // Verify action item is marked sent
+    const itemAfter = database.prepare('SELECT * FROM action_items WHERE id = ?').get(actionItemId);
+    assert.equal(itemAfter.status, 'sent');
+    assert.ok(itemAfter.resolved_at);
+
+    // 4. Test Consent Re-check Failure:
+    // If marketing consent is withdrawn, approving must fail and create no message
+    const testCidNoConsent = createTestContact({
+      display_name: 'No Consent Prospect',
+      stage: 'new',
+      email: 'noconsent@test.com',
+      consents: [{ channel: 'email_marketing', granted: 0 }] // Withdrawn!
+    });
+
+    const resItemBlocked = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel,
+        draft_subject, draft_body, draft_source, status, created_at
+      ) VALUES (?, ?, 'new_lead', 'New inquiry', 'email', 'Subject', 'Body', 'template', 'open', ?)
+    `).run(planDate, testCidNoConsent, testNow.toISOString());
+    const blockedItemId = Number(resItemBlocked.lastInsertRowid);
+
+    assert.throws(() => {
+      actionPlan.approveActionItem(blockedItemId, database);
+    }, /Consent check failed|No active email/);
+
+    const msgBlocked = database.prepare('SELECT 1 FROM messages WHERE contact_id = ?').get(testCidNoConsent);
+    assert.equal(msgBlocked, undefined, 'Blocked send must create no messages row');
+  });
+
+  await t.test('Action Item Call/Text Done, Snooze, Skip, and Edit', () => {
+    const testCid = createTestContact({
+      display_name: 'Actions Client',
+      stage: 'showing',
+      phone: '+19255550999'
+    });
+
+    // 1. Done workflow for Call item
+    const resCall = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel,
+        draft_subject, draft_body, draft_source, status, created_at
+      ) VALUES (?, ?, 'deal_stalled', 'Stalled deal', 'call', 'Points', 'Spoke with buyer', 'template', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const callItemId = Number(resCall.lastInsertRowid);
+
+    const doneRes = actionPlan.markActionItemDone(callItemId, database);
+    assert.equal(doneRes.status, 'done');
+    const act = database.prepare('SELECT * FROM activities WHERE contact_id = ? ORDER BY id DESC LIMIT 1').get(testCid);
+    assert.equal(act.kind, 'call');
+
+    // 2. Snooze workflow
+    const resSnooze = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel, status, created_at
+      ) VALUES (?, ?, 'hot_no_touch', 'Hot lead', 'call', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const snoozeItemId = Number(resSnooze.lastInsertRowid);
+
+    const snoozeRes = actionPlan.snoozeActionItem(snoozeItemId, 2, database);
+    assert.equal(snoozeRes.status, 'snoozed');
+    assert.ok(snoozeRes.snoozed_until);
+
+    // 3. Skip workflow
+    const resSkip = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel, status, created_at
+      ) VALUES (?, ?, 'warm_no_touch', 'Warm contact', 'email', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const skipItemId = Number(resSkip.lastInsertRowid);
+
+    const skipRes = actionPlan.skipActionItem(skipItemId, 'Buyer traveling out of country', database);
+    assert.equal(skipRes.status, 'skipped');
+    const skippedRow = database.prepare('SELECT * FROM action_items WHERE id = ?').get(skipItemId);
+    assert.equal(skippedRow.skip_reason, 'Buyer traveling out of country');
+
+    // 4. Edit Draft workflow (sets edited = 1)
+    const resEdit = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel,
+        draft_subject, draft_body, draft_source, status, created_at
+      ) VALUES (?, ?, 'new_lead', 'Inquiry', 'email', 'Initial Subject', 'Initial Body', 'template', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const editItemId = Number(resEdit.lastInsertRowid);
+
+    const editRes = actionPlan.editActionItemDraft(editItemId, { subject: 'Customized Subject', body: 'Personalized Body' }, database);
+    assert.ok(editRes.ok);
+    const editedRow = database.prepare('SELECT * FROM action_items WHERE id = ?').get(editItemId);
+    assert.equal(editedRow.edited, 1);
+    assert.equal(editedRow.draft_subject, 'Customized Subject');
+    assert.equal(editedRow.draft_body, 'Personalized Body');
+  });
+});
+
 

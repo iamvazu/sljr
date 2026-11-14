@@ -5,7 +5,7 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var view = $('view');
-  var state = { view: 'dashboard', contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 }, leads: { status: '', type: '', q: '', offset: 0 }, statuses: [], pipelines: [] };
+  var state = { view: 'today', contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 }, leads: { status: '', type: '', q: '', offset: 0 }, statuses: [], pipelines: [] };
   var LIMIT = 50;
 
   function getPipelines() {
@@ -78,9 +78,9 @@
     state.view = name;
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
     view.innerHTML = '<p class="muted">Loading…</p>';
-    var routes = { dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity, settings: settings };
+    var routes = { today: today, dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity, settings: settings };
     if (routes[name]) routes[name]();
-    else dashboard();
+    else today();
   }
 
   /* ---------- Drawer ---------- */
@@ -88,6 +88,229 @@
   function closeDrawer() { $('drawer').hidden = true; $('drawer-body').innerHTML = ''; }
   $('drawer').addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDrawer(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('drawer').hidden) closeDrawer(); });
+
+  /* ---------- Today & Daily Action Plan ---------- */
+  function today() {
+    api('/today').then(function (d) {
+      var planDate = d.plan_date || '';
+      var items = d.action_items || [];
+      var tasks = d.due_tasks || [];
+      var leads = d.new_leads || [];
+      var banners = d.banners || [];
+
+      var bannerHtml = '';
+      if (banners.length) {
+        bannerHtml = banners.map(function (b) {
+          return '<div class="banner" style="margin: 0 0 16px; border-color: rgba(232,120,104,.6); background: rgba(232,120,104,.14); color: #FFD9D2;">' + esc(b.message) + '</div>';
+        }).join('');
+      }
+
+      var newLeadsAlert = '';
+      if (leads.length) {
+        newLeadsAlert =
+          '<div class="card" style="margin-bottom: 20px; border-color: var(--gold); background: rgba(216,165,90,.08);">' +
+            '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+              '<div>' +
+                '<strong style="color:var(--gold); font-size:1.05rem;">' + leads.length + ' New Inquiries Awaiting Response</strong>' +
+                '<p class="muted small" style="margin:4px 0 0;">Inquiries submitted via website forms that have not yet had initial outreach logged.</p>' +
+              '</div>' +
+              '<button class="btn btn--primary" id="btn-goto-leads">Review Leads</button>' +
+            '</div>' +
+          '</div>';
+      }
+
+      var itemsHtml = '';
+      if (items.length) {
+        itemsHtml = items.map(function (item) {
+          var isDone = item.status === 'sent' || item.status === 'done' || item.status === 'snoozed' || item.status === 'skipped';
+          var statusPill = '';
+          if (item.status === 'sent') statusPill = '<span class="pill pill--closed">Sent</span>';
+          else if (item.status === 'done') statusPill = '<span class="pill pill--closed">Done</span>';
+          else if (item.status === 'snoozed') statusPill = '<span class="pill">Snoozed until ' + esc(item.snoozed_until) + '</span>';
+          else if (item.status === 'skipped') statusPill = '<span class="pill pill--off">Skipped: ' + esc(item.skip_reason || '') + '</span>';
+
+          var draftHtml = '';
+          if (item.channel === 'email') {
+            draftHtml =
+              '<div style="margin: 12px 0;">' +
+                '<label class="small muted" style="margin-top:0;">Subject Line</label>' +
+                '<input type="text" class="card-draft-subject" data-item-id="' + item.id + '" value="' + esc(item.draft_subject || '') + '" ' + (isDone ? 'disabled' : '') + ' style="min-height:38px; margin-bottom:8px; font-size:0.9rem;" />' +
+                '<label class="small muted" style="margin-top:0;">Message Draft</label>' +
+                '<textarea class="card-draft-body" data-item-id="' + item.id + '" rows="4" ' + (isDone ? 'disabled' : '') + ' style="font-size:0.9rem;">' + esc(item.draft_body || '') + '</textarea>' +
+              '</div>';
+          } else {
+            draftHtml =
+              '<div style="margin: 12px 0;">' +
+                '<label class="small muted" style="margin-top:0;">' + (item.channel === 'call' ? 'Call Talking Points' : 'Suggested Text') + '</label>' +
+                '<textarea class="card-draft-body" data-item-id="' + item.id + '" rows="3" ' + (isDone ? 'disabled' : '') + ' style="font-size:0.9rem;">' + esc(item.draft_body || '') + '</textarea>' +
+              '</div>';
+          }
+
+          var actionsHtml = '';
+          if (!isDone) {
+            actionsHtml =
+              '<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);">' +
+                (item.channel === 'email' ?
+                  (item.consent_allowed ?
+                    '<button class="btn btn--primary" data-item-action="approve" data-item-id="' + item.id + '">Approve &amp; Send</button>' :
+                    '<span class="pill pill--off">Blocked: ' + esc(item.consent_reason || 'No consent') + '</span>') +
+                  '<button class="btn btn--quiet small" data-item-action="save-draft" data-item-id="' + item.id + '">Save Draft</button>' :
+                  (item.channel === 'call' ?
+                    '<a class="btn btn--primary" href="tel:' + esc(item.primary_phone || '') + '">Call ' + esc(item.primary_phone || '') + '</a>' +
+                    '<button class="btn" data-item-action="done" data-item-id="' + item.id + '">Mark Done</button>' :
+                    '<button class="btn btn--primary" data-item-action="copy-text" data-text="' + esc(item.draft_body || '') + '">Copy Text</button>' +
+                    '<button class="btn" data-item-action="done" data-item-id="' + item.id + '">Mark Done</button>')) +
+                '<button class="btn btn--quiet small" data-item-action="snooze" data-item-id="' + item.id + '">Snooze (1d)</button>' +
+                '<button class="btn btn--quiet small" data-item-action="skip" data-item-id="' + item.id + '">Skip</button>' +
+              '</div>';
+          }
+
+          return '<div class="card" style="margin-bottom: 16px; ' + (isDone ? 'opacity:0.65;' : '') + '">' +
+            '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px; flex-wrap:wrap;">' +
+              '<div>' +
+                '<div style="display:flex; align-items:center; gap:8px;">' +
+                  '<a href="#contacts" data-open-contact="' + item.contact_id + '" style="font-size:1.15rem; font-weight:600; text-decoration:none; color:var(--ink);">' + esc(item.display_name) + '</a>' +
+                  '<span class="pill pill--' + esc(item.contact_score_band) + '">' + esc(item.contact_score_band).toUpperCase() + ' ' + esc(item.contact_score) + '</span>' +
+                  '<span class="pill">' + esc(item.rule.replace(/_/g, ' ').toUpperCase()) + '</span>' +
+                  (item.draft_source ? '<span class="pill" style="font-size:0.7rem; color:var(--gold);">' + (item.draft_source === 'ai' ? 'Drafted by AI' : 'Template') + '</span>' : '') +
+                  (item.edited ? '<span class="pill" style="font-size:0.7rem;">Edited</span>' : '') +
+                  statusPill +
+                '</div>' +
+                '<p class="muted small" style="margin: 4px 0 0;">' + esc(item.reason) + ' · Suggested channel: <strong>' + esc(item.channel.toUpperCase()) + '</strong></p>' +
+              '</div>' +
+            '</div>' +
+            draftHtml +
+            actionsHtml +
+          '</div>';
+        }).join('');
+      } else {
+        itemsHtml = '<div class="empty">All action items for today are completed! New items will be generated tomorrow morning at 6:00 AM.</div>';
+      }
+
+      var tasksHtml = '';
+      if (tasks.length) {
+        tasksHtml =
+          '<div class="card" style="margin-top: 24px;">' +
+            '<h2>Tasks Due Today &amp; Overdue</h2>' +
+            '<div class="list">' +
+              tasks.map(function (tk) {
+                return '<div class="row" style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px;">' +
+                  '<label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer; flex:1;">' +
+                    '<input type="checkbox" data-today-task-toggle="' + tk.id + '" style="width:18px; height:18px;" />' +
+                    '<span><strong>' + esc(tk.title) + '</strong> ' + (tk.contact_name ? '<span class="muted">(' + esc(tk.contact_name) + ')</span>' : '') + '</span>' +
+                  '</label>' +
+                  '<span class="row__side" style="color:var(--gold);">' + (tk.due_at ? when(tk.due_at) : '') + '</span>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>';
+      }
+
+      view.innerHTML =
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">' +
+          '<div>' +
+            '<h1 style="margin:0;">Today</h1>' +
+            '<p class="muted small" style="margin:4px 0 0;">Action plan &amp; priorities for <strong>' + esc(planDate) + '</strong> · America/Los_Angeles</p>' +
+          '</div>' +
+          '<button class="btn" id="btn-refresh-plan">↻ Refresh Plan</button>' +
+        '</div>' +
+        bannerHtml +
+        newLeadsAlert +
+        '<div style="margin-bottom: 24px;">' +
+          '<h2 style="margin:0 0 12px;">Action Plan (' + items.length + ' of 10)</h2>' +
+          itemsHtml +
+        '</div>' +
+        tasksHtml;
+
+      // Event bindings
+      var btnRefresh = $('btn-refresh-plan');
+      if (btnRefresh) {
+        btnRefresh.onclick = function () {
+          btnRefresh.disabled = true;
+          api('/action-plan/generate', 'POST').then(function () {
+            toast('Action plan refreshed.');
+            today();
+          }).catch(fail);
+        };
+      }
+
+      var btnGotoLeads = $('btn-goto-leads');
+      if (btnGotoLeads) {
+        btnGotoLeads.onclick = function () { go('leads'); };
+      }
+
+      // Contact detail link
+      view.querySelectorAll('[data-open-contact]').forEach(function (el) {
+        el.onclick = function (e) {
+          e.preventDefault();
+          contactDetail(el.getAttribute('data-open-contact'));
+        };
+      });
+
+      // Action Item buttons
+      view.querySelectorAll('[data-item-action]').forEach(function (btn) {
+        btn.onclick = function () {
+          var action = btn.getAttribute('data-item-action');
+          var id = btn.getAttribute('data-item-id');
+          btn.disabled = true;
+
+          if (action === 'approve') {
+            api('/action-items/' + id + '/approve', 'POST').then(function () {
+              toast('Approved and queued for delivery!');
+              today();
+            }).catch(fail);
+          } else if (action === 'done') {
+            api('/action-items/' + id + '/done', 'POST').then(function () {
+              toast('Activity logged as completed.');
+              today();
+            }).catch(fail);
+          } else if (action === 'copy-text') {
+            var text = btn.getAttribute('data-text');
+            navigator.clipboard.writeText(text).then(function () {
+              toast('Draft copied to clipboard!');
+              btn.disabled = false;
+            }).catch(function () {
+              toast('Text: ' + text);
+              btn.disabled = false;
+            });
+          } else if (action === 'save-draft') {
+            var card = btn.closest('.card');
+            var subjInput = card.querySelector('.card-draft-subject');
+            var bodyInput = card.querySelector('.card-draft-body');
+            api('/action-items/' + id, 'PATCH', {
+              subject: subjInput ? subjInput.value.trim() : undefined,
+              body: bodyInput ? bodyInput.value.trim() : ''
+            }).then(function () {
+              toast('Draft updated.');
+              today();
+            }).catch(fail);
+          } else if (action === 'snooze') {
+            api('/action-items/' + id + '/snooze', 'POST', { days: 1 }).then(function (res) {
+              toast('Snoozed until ' + res.snoozed_until);
+              today();
+            }).catch(fail);
+          } else if (action === 'skip') {
+            var reason = prompt('Reason for skipping this action item (optional):') || 'Skipped by agent';
+            api('/action-items/' + id + '/skip', 'POST', { reason: reason }).then(function () {
+              toast('Action item skipped.');
+              today();
+            }).catch(fail);
+          }
+        };
+      });
+
+      // Task toggle in Today screen
+      view.querySelectorAll('[data-today-task-toggle]').forEach(function (chk) {
+        chk.onchange = function () {
+          var taskId = chk.getAttribute('data-today-task-toggle');
+          api('/tasks/' + taskId, 'PATCH', { done: true }).then(function () {
+            toast('Task completed.');
+            today();
+          }).catch(fail);
+        };
+      });
+    }).catch(fail);
+  }
 
   /* ---------- Dashboard ---------- */
   function bars(rows) {

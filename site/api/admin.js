@@ -18,6 +18,7 @@ const db = require('../db/database');
 const outbox = require('../lib/outbox');
 const push = require('../lib/push');
 const backup = require('../lib/backup');
+const actionPlan = require('../lib/actionPlan');
 const { stripHtml, getClientIp, hashIp, createRateLimiter, readJsonBody, sendJson } = require('../middleware/security');
 
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -140,6 +141,58 @@ async function handleAdminApi(req, res, parsedUrl) {
 
   const sp = parsedUrl.searchParams;
   let m;
+
+  // ---- CRM: Today & Daily Action Plan (M2) ----
+  if (method === 'GET' && route === '/today') {
+    return sendJson(res, 200, actionPlan.getTodayOverview(db.getDb()));
+  }
+  if (method === 'POST' && route === '/action-plan/generate') {
+    const plan = actionPlan.generateDailyActionPlan(db.getDb());
+    db.audit('action_plan_generate', `Generated plan: ${plan.added} new, ${plan.total} total`, ip);
+    return sendJson(res, 200, plan);
+  }
+  if ((m = /^\/action-items\/(\d+)$/.exec(route)) && method === 'PATCH') {
+    const id = Number(m[1]);
+    const body = await readJsonBody(req);
+    const result = actionPlan.editActionItemDraft(id, body, db.getDb());
+    if (result.ok) db.audit('action_item_edit', `Draft edited for #${id}`, ip);
+    return sendJson(res, result.ok ? 200 : 400, result);
+  }
+  if ((m = /^\/action-items\/(\d+)\/approve$/.exec(route)) && method === 'POST') {
+    const id = Number(m[1]);
+    const baseUrl = req.headers['x-forwarded-proto'] ? `${req.headers['x-forwarded-proto']}://${req.headers.host}` : `http://${req.headers.host}`;
+    try {
+      const result = actionPlan.approveActionItem(id, db.getDb(), baseUrl);
+      db.audit('action_item_approve', `Approved action item #${id}`, ip);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
+  }
+  if ((m = /^\/action-items\/(\d+)\/done$/.exec(route)) && method === 'POST') {
+    const id = Number(m[1]);
+    try {
+      const result = actionPlan.markActionItemDone(id, db.getDb());
+      db.audit('action_item_done', `Marked done action item #${id}`, ip);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
+  }
+  if ((m = /^\/action-items\/(\d+)\/snooze$/.exec(route)) && method === 'POST') {
+    const id = Number(m[1]);
+    const body = await readJsonBody(req);
+    const result = actionPlan.snoozeActionItem(id, body.days || 1, db.getDb());
+    db.audit('action_item_snooze', `Snoozed #${id} until ${result.snoozed_until}`, ip);
+    return sendJson(res, 200, result);
+  }
+  if ((m = /^\/action-items\/(\d+)\/skip$/.exec(route)) && method === 'POST') {
+    const id = Number(m[1]);
+    const body = await readJsonBody(req);
+    const result = actionPlan.skipActionItem(id, body.reason || '', db.getDb());
+    db.audit('action_item_skip', `Skipped #${id}: ${body.reason || 'no reason'}`, ip);
+    return sendJson(res, 200, result);
+  }
 
   // ---- Dashboard ----
   if (method === 'GET' && route === '/stats') return sendJson(res, 200, { ok: true, stats: db.adminStats() });
