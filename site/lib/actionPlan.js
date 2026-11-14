@@ -507,7 +507,7 @@ function selectActionPlanCandidates(dbInstance, now = new Date()) {
  * Generate or update the daily action plan for Today.
  * Idempotent: running twice on the same day preserves existing items and adds only new ones up to 10.
  */
-function generateDailyActionPlan(dbInstance, now = new Date()) {
+async function generateDailyActionPlan(dbInstance, now = new Date(), options = {}) {
   const db = dbInstance || getDb();
   const planDateStr = getPlanDate(now);
   const nowIso = new Date(now).toISOString();
@@ -527,6 +527,29 @@ function generateDailyActionPlan(dbInstance, now = new Date()) {
       if (existingContactIds.has(cand.contact_id)) continue;
       if (added >= remainingSlots) break;
 
+      let draftSubject = cand.draft_subject;
+      let draftBody = cand.draft_body;
+      let draftSource = cand.draft_source || 'template';
+
+      if (options.useAi !== false && process.env.GEMINI_API_KEY) {
+        try {
+          const ai = require('./ai');
+          const aiDraft = await ai.draftMessage({
+            contact: cand.contact,
+            rule: cand.rule,
+            channel: cand.channel,
+            context: cand,
+            dbInstance: db,
+            clientOverride: options.clientOverride
+          });
+          if (aiDraft && aiDraft.source === 'gemini') {
+            draftSubject = aiDraft.subject;
+            draftBody = aiDraft.body;
+            draftSource = aiDraft.source;
+          }
+        } catch (_) {}
+      }
+
       db.prepare(`
         INSERT INTO action_items (
           plan_date, contact_id, rule, reason, channel,
@@ -539,9 +562,9 @@ function generateDailyActionPlan(dbInstance, now = new Date()) {
         cand.rule,
         cand.reason,
         cand.channel,
-        cand.draft_subject,
-        cand.draft_body,
-        cand.draft_source,
+        draftSubject,
+        draftBody,
+        draftSource,
         nowIso
       );
 
@@ -562,12 +585,12 @@ function generateDailyActionPlan(dbInstance, now = new Date()) {
 /**
  * Get Today's complete overview: action plan cards, due tasks, new leads, and budget banners.
  */
-function getTodayOverview(dbInstance, now = new Date()) {
+async function getTodayOverview(dbInstance, now = new Date()) {
   const db = dbInstance || getDb();
   const planDateStr = getPlanDate(now);
 
   // Auto-generate plan for today if empty
-  generateDailyActionPlan(db, now);
+  await generateDailyActionPlan(db, now);
 
   const items = db.prepare(`
     SELECT ai.*,
@@ -818,3 +841,4 @@ module.exports = {
   skipActionItem,
   editActionItemDraft
 };
+

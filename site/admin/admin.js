@@ -160,6 +160,7 @@
                     '<button class="btn" data-item-action="done" data-item-id="' + item.id + '">Mark Done</button>' :
                     '<button class="btn btn--primary" data-item-action="copy-text" data-text="' + esc(item.draft_body || '') + '">Copy Text</button>' +
                     '<button class="btn" data-item-action="done" data-item-id="' + item.id + '">Mark Done</button>')) +
+                '<button class="btn btn--quiet small" data-item-action="redraft" data-item-id="' + item.id + '">↻ Redraft (AI)</button>' +
                 '<button class="btn btn--quiet small" data-item-action="snooze" data-item-id="' + item.id + '">Snooze (1d)</button>' +
                 '<button class="btn btn--quiet small" data-item-action="skip" data-item-id="' + item.id + '">Skip</button>' +
               '</div>';
@@ -172,7 +173,7 @@
                   '<a href="#contacts" data-open-contact="' + item.contact_id + '" style="font-size:1.15rem; font-weight:600; text-decoration:none; color:var(--ink);">' + esc(item.display_name) + '</a>' +
                   '<span class="pill pill--' + esc(item.contact_score_band) + '">' + esc(item.contact_score_band).toUpperCase() + ' ' + esc(item.contact_score) + '</span>' +
                   '<span class="pill">' + esc(item.rule.replace(/_/g, ' ').toUpperCase()) + '</span>' +
-                  (item.draft_source ? '<span class="pill" style="font-size:0.7rem; color:var(--gold);">' + (item.draft_source === 'ai' ? 'Drafted by AI' : 'Template') + '</span>' : '') +
+                  (item.draft_source ? '<span class="pill" style="font-size:0.7rem; color:var(--gold);">' + (item.draft_source === 'gemini' ? 'Drafted by AI' : 'Template') + '</span>' : '') +
                   (item.edited ? '<span class="pill" style="font-size:0.7rem;">Edited</span>' : '') +
                   statusPill +
                 '</div>' +
@@ -293,6 +294,11 @@
             var reason = prompt('Reason for skipping this action item (optional):') || 'Skipped by agent';
             api('/action-items/' + id + '/skip', 'POST', { reason: reason }).then(function () {
               toast('Action item skipped.');
+              today();
+            }).catch(fail);
+          } else if (action === 'redraft') {
+            api('/action-items/' + id + '/redraft', 'POST').then(function () {
+              toast('Draft regenerated via Gemini.');
               today();
             }).catch(fail);
           }
@@ -1253,6 +1259,15 @@
               '</div>' +
 
               '<p class="muted small" style="margin-top:14px;">Billing cycle: <strong>' + esc(u.month || '') + '</strong></p>' +
+              '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line);">' +
+                '<div class="muted small" style="margin-bottom:6px;"><strong>Draft Quality Signals (MTD):</strong></div>' +
+                '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+                  '<span class="pill pill--closed">Unedited: ' + ((u.signals && u.signals.unedited) || 0) + '</span>' +
+                  '<span class="pill">Edited: ' + ((u.signals && u.signals.edited) || 0) + '</span>' +
+                  '<span class="pill">Redrafted: ' + ((u.signals && u.signals.redrafted) || 0) + '</span>' +
+                  '<span class="pill pill--off">Skipped: ' + ((u.signals && u.signals.skipped) || 0) + '</span>' +
+                '</div>' +
+              '</div>' +
             '</div>' +
 
             '<div class="card">' +

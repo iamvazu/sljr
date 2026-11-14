@@ -1355,6 +1355,26 @@ function getUsageStats() {
 
   const emailSpent = Number((emailCount * 0.001).toFixed(4));
 
+  // Learning signals (PRD line 440): unedited, edited, skipped, redrafted
+  let signalUnedited = 0;
+  let signalEdited = 0;
+  let signalSkipped = 0;
+  let signalRedrafted = 0;
+  try {
+    const ym = now.toISOString().slice(0, 7);
+    const unRow = database.prepare("SELECT COUNT(*) as cnt FROM action_items WHERE status = 'sent' AND edited = 0 AND strftime('%Y-%m', created_at) = ?").get(ym);
+    if (unRow) signalUnedited = Number(unRow.cnt);
+
+    const edRow = database.prepare("SELECT COUNT(*) as cnt FROM action_items WHERE status = 'sent' AND edited = 1 AND strftime('%Y-%m', created_at) = ?").get(ym);
+    if (edRow) signalEdited = Number(edRow.cnt);
+
+    const skRow = database.prepare("SELECT COUNT(*) as cnt FROM action_items WHERE status = 'skipped' AND strftime('%Y-%m', created_at) = ?").get(ym);
+    if (skRow) signalSkipped = Number(skRow.cnt);
+
+    const rdRow = database.prepare("SELECT COUNT(*) as cnt FROM ai_runs WHERE purpose = 'redraft' AND strftime('%Y-%m', created_at) = ?").get(ym);
+    if (rdRow) signalRedrafted = Number(rdRow.cnt);
+  } catch (_) {}
+
   return {
     month: now.toISOString().slice(0, 7),
     ai_spend_usd: Number(aiSpent.toFixed(2)),
@@ -1363,7 +1383,13 @@ function getUsageStats() {
     email_spend_usd: Number(emailSpent.toFixed(2)),
     email_budget_cap_usd: emailCap,
     email_pct: Math.min(100, Math.round((emailSpent / emailCap) * 100)),
-    email_count_mtd: emailCount
+    email_count_mtd: emailCount,
+    signals: {
+      unedited: signalUnedited,
+      edited: signalEdited,
+      skipped: signalSkipped,
+      redrafted: signalRedrafted
+    }
   };
 }
 

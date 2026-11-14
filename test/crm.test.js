@@ -1151,14 +1151,14 @@ test('Step 8: M2 Daily Action Plan without AI (Acceptance Tests 12 & 13)', async
     assert.equal(candidates.find(c => c.contact_id === idPast).rule, 'past_client_touch');
   });
 
-  await t.test('Idempotency & Max 10 Cap (AC #12)', () => {
+  await t.test('Idempotency & Max 10 Cap (AC #12)', async () => {
     // Generate plan for testNow
-    const plan1 = actionPlan.generateDailyActionPlan(database, testNow);
+    const plan1 = await actionPlan.generateDailyActionPlan(database, testNow);
     assert.ok(plan1.ok);
     assert.ok(plan1.total <= 10, 'Plan items must not exceed 10');
 
     // Run again immediately on the same day
-    const plan2 = actionPlan.generateDailyActionPlan(database, testNow);
+    const plan2 = await actionPlan.generateDailyActionPlan(database, testNow);
     assert.equal(plan2.added, 0, 'Second run on the same day must not add duplicate contacts');
     assert.equal(plan2.total, plan1.total);
   });
@@ -1290,6 +1290,322 @@ test('Step 8: M2 Daily Action Plan without AI (Acceptance Tests 12 & 13)', async
     assert.equal(editedRow.edited, 1);
     assert.equal(editedRow.draft_subject, 'Customized Subject');
     assert.equal(editedRow.draft_body, 'Personalized Body');
+  });
+});
+
+test('Step 9: Gemini AI Integration (Acceptance Tests 14, 15 & 16)', async (t) => {
+  const ai = require('../site/lib/ai');
+  const actionPlan = require('../site/lib/actionPlan');
+  const database = db.getDb();
+  const testNow = new Date('2026-11-14T14:00:00.000Z');
+
+  // Clear any residual ai_runs for clean test isolation
+  database.prepare('DELETE FROM ai_runs').run();
+
+  // Acceptance Test 14: AI data limits & sanitization
+  await t.test('AI data limits & sanitization (AC #14)', async () => {
+    const contact = {
+      id: 991,
+      first_name: 'David',
+      last_name: 'Rockefeller',
+      display_name: 'David Rockefeller',
+      discreet: 0,
+      preferences: JSON.stringify({
+        interest: 'buyer',
+        price_range: '$3.5M-$5M',
+        timeline: '1-3 months',
+        areas: 'Ruby Hill, Pleasanton'
+      })
+    };
+
+    const activities = [
+      {
+        id: 1,
+        kind: 'email_in',
+        direction: 'in',
+        subject: 'Inquiry note about golf course homes',
+        occurred_at: '2026-11-10T12:00:00.000Z'
+      },
+      {
+        id: 2,
+        kind: 'note',
+        direction: null,
+        subject: 'Confidential client wealth notes — NEVER SEND THIS',
+        occurred_at: '2026-11-11T12:00:00.000Z'
+      }
+    ];
+
+    const payload = ai.buildSanitizedPayload(
+      contact,
+      'new_lead',
+      'email',
+      { reason: 'New lead from portal', last_message: 'Looking for a home on the golf course.' },
+      activities
+    );
+
+    assert.ok(payload);
+    assert.equal(payload.first_name, 'David');
+    assert.equal(payload.last_name, undefined);
+
+    const payloadStr = JSON.stringify(payload);
+    assert.ok(!payloadStr.includes('Rockefeller'), 'Payload must not contain last name');
+    assert.ok(!payloadStr.includes('david@'), 'Payload must not contain email');
+    assert.ok(!payloadStr.includes('555'), 'Payload must not contain phone');
+    assert.ok(!payloadStr.includes('Confidential client wealth notes'), 'Payload must not contain internal note body');
+
+    assert.equal(payload.preferences.price_range, '$3.5M-$5M');
+    assert.equal(payload.preferences.areas, 'Ruby Hill, Pleasanton');
+
+    // Discreet Contact: Must never send anything to model
+    const discreetContact = {
+      id: 992,
+      first_name: 'Celebrity',
+      last_name: 'Athlete',
+      display_name: 'Celebrity Athlete',
+      discreet: 1
+    };
+
+    const discreetPayload = ai.buildSanitizedPayload(discreetContact, 'new_lead', 'email');
+    assert.equal(discreetPayload, null, 'Discreet contact payload must be null');
+
+    let modelCalled = false;
+    const mockClient = {
+      models: {
+        generateContent: async () => {
+          modelCalled = true;
+          return { text: '{}' };
+        }
+      }
+    };
+
+    const draft = await ai.draftMessage({
+      contact: discreetContact,
+      rule: 'new_lead',
+      channel: 'email',
+      clientOverride: mockClient
+    });
+
+    assert.equal(modelCalled, false, 'Model must never be called for discreet contacts');
+    assert.equal(draft.source, 'template', 'Discreet contacts must use deterministic template');
+    assert.ok(draft.body.includes('Best regards'));
+  });
+
+  // Acceptance Test 15: AI output checks (invented price, blocked phrase, valid draft)
+  await t.test('AI output validation, anti-hallucination & phrase blocklist (AC #15)', async () => {
+    database.prepare('DELETE FROM ai_runs').run();
+    const contact = {
+      id: 993,
+      first_name: 'Sarah',
+      display_name: 'Sarah Connor',
+      discreet: 0,
+      preferences: JSON.stringify({
+        interest: 'buyer',
+        price_range: '$2.5M-$3M',
+        areas: 'Pleasanton'
+      })
+    };
+
+    // 1. Invented price check: Model hallucinates a price not in the prompt
+    let callCount = 0;
+    const mockInventedPrice = {
+      models: {
+        generateContent: async () => {
+          callCount++;
+          return {
+            text: JSON.stringify({
+              subject: 'Pleasanton market update',
+              body: 'I found a gorgeous home for $6,200,000 near downtown that would be ideal for you.'
+            }),
+            usageMetadata: { promptTokenCount: 150, candidatesTokenCount: 40 }
+          };
+        }
+      }
+    };
+
+    const draftBlockedPrice = await ai.draftMessage({
+      contact,
+      rule: 'new_lead',
+      channel: 'email',
+      clientOverride: mockInventedPrice,
+      dbInstance: database
+    });
+
+    assert.equal(callCount, 2, 'Should retry once on output check failure');
+    assert.equal(draftBlockedPrice.source, 'template', 'Blocked output must fallback to template');
+
+    const blockedRun = database.prepare(`
+      SELECT * FROM ai_runs WHERE contact_id = 993 AND status = 'blocked' ORDER BY id DESC LIMIT 1
+    `).get();
+    assert.ok(blockedRun, 'Audit log must record blocked status');
+    assert.ok(blockedRun.error.includes('unprompted dollar amount'));
+
+    // 2. Blocked phrase check: Model outputs steering / superlatives / Fair Housing terms
+    const mockBlockedPhrase = {
+      models: {
+        generateContent: async () => {
+          return {
+            text: JSON.stringify({
+              subject: 'Exclusive neighborhood opportunity',
+              body: 'This enclave is very safe with the best schools and a family-friendly atmosphere.'
+            }),
+            usageMetadata: { promptTokenCount: 150, candidatesTokenCount: 40 }
+          };
+        }
+      }
+    };
+
+    const draftBlockedPhrase = await ai.draftMessage({
+      contact,
+      rule: 'new_lead',
+      channel: 'email',
+      clientOverride: mockBlockedPhrase,
+      dbInstance: database
+    });
+
+    assert.equal(draftBlockedPhrase.source, 'template');
+    const blockedPhraseRun = database.prepare(`
+      SELECT * FROM ai_runs WHERE contact_id = 993 AND status = 'blocked' ORDER BY id DESC LIMIT 1
+    `).get();
+    assert.ok(blockedPhraseRun);
+    assert.ok(blockedPhraseRun.error.includes('blocked phrase'));
+
+    // 3. Valid compliant draft: Passes all checks and returns gemini source
+    const mockValid = {
+      models: {
+        generateContent: async () => {
+          return {
+            text: JSON.stringify({
+              subject: 'Following up on your Pleasanton search',
+              body: 'Hi Sarah, I saw your interest in Pleasanton properties in the $2.5M-$3M range. Would later this week work for a brief call to discuss off-market opportunities?'
+            }),
+            usageMetadata: { promptTokenCount: 200, candidatesTokenCount: 50 }
+          };
+        }
+      }
+    };
+
+    const draftValid = await ai.draftMessage({
+      contact,
+      rule: 'new_lead',
+      channel: 'email',
+      clientOverride: mockValid,
+      dbInstance: database
+    });
+
+    assert.equal(draftValid.source, 'gemini', 'Compliant draft must have source gemini');
+    assert.equal(draftValid.subject, 'Following up on your Pleasanton search');
+    assert.ok(draftValid.body.includes('Hi Sarah'));
+
+    const successRun = database.prepare(`
+      SELECT * FROM ai_runs WHERE contact_id = 993 AND status = 'success' ORDER BY id DESC LIMIT 1
+    `).get();
+    assert.ok(successRun);
+    assert.equal(successRun.input_tokens, 200);
+    assert.equal(successRun.output_tokens, 50);
+    assert.ok(successRun.cost_usd > 0);
+  });
+
+  // Acceptance Test 16: Budget cap enforcement & Today banner
+  await t.test('Monthly budget cap enforcement & Today banner (AC #16)', async () => {
+    // 1. Seed ai_runs with spend exceeding the monthly cap
+    const nowIso = testNow.toISOString();
+    database.prepare(`
+      INSERT INTO ai_runs (
+        purpose, prompt_version, model, contact_id, input_json,
+        output_text, input_tokens, output_tokens, cost_usd, status, created_at
+      ) VALUES ('action_item_draft', 'draft-v1', 'gemini-2.5-flash', 1, '{}', 'text', 100000, 50000, 26.50, 'success', ?)
+    `).run(nowIso);
+
+    // Verify isOverBudget returns true
+    assert.equal(ai.isOverBudget(database, testNow), true);
+
+    // 2. Attempt to draft message when over budget
+    let modelCalled = false;
+    const mockClient = {
+      models: {
+        generateContent: async () => {
+          modelCalled = true;
+          return { text: '{}' };
+        }
+      }
+    };
+
+    const contact = { id: 994, first_name: 'BudgetTest', discreet: 0 };
+    const draft = await ai.draftMessage({
+      contact,
+      rule: 'new_lead',
+      channel: 'email',
+      clientOverride: mockClient,
+      dbInstance: database
+    });
+
+    assert.equal(modelCalled, false, 'No model call must be made when spend is at or over cap');
+    assert.equal(draft.source, 'template', 'Must fallback to template when over budget');
+
+    const overBudgetRun = database.prepare(`
+      SELECT * FROM ai_runs WHERE contact_id = 994 AND status = 'over_budget' ORDER BY id DESC LIMIT 1
+    `).get();
+    assert.ok(overBudgetRun);
+    assert.equal(overBudgetRun.cost_usd, 0);
+
+    // 3. Verify Today overview includes the budget banner
+    const overview = await actionPlan.getTodayOverview(database, testNow);
+    assert.ok(overview.banners.some(b => b.type === 'ai_budget'), 'Today overview must show AI budget banner');
+  });
+
+  // Redrafting Action Items (Max 3 redrafts)
+  await t.test('Redraft action item workflow & 3-attempt limit', async () => {
+    // Clear residual test spend from ai_runs to allow mock redrafts under budget
+    database.prepare('DELETE FROM ai_runs').run();
+
+    const planDate = actionPlan.getPlanDate(testNow);
+    const cRes = database.prepare(`
+      INSERT INTO contacts (first_name, display_name, type, stage, created_at, updated_at)
+      VALUES ('Redraft', 'Redraft User', 'lead', 'new', ?, ?)
+    `).run(testNow.toISOString(), testNow.toISOString());
+    const testCid = Number(cRes.lastInsertRowid);
+
+    const itemRes = database.prepare(`
+      INSERT INTO action_items (
+        plan_date, contact_id, rule, reason, channel,
+        draft_subject, draft_body, draft_source, status, created_at
+      ) VALUES (?, ?, 'new_lead', 'Inquiry', 'email', 'Old Subject', 'Old Body', 'template', 'open', ?)
+    `).run(planDate, testCid, testNow.toISOString());
+    const itemId = Number(itemRes.lastInsertRowid);
+
+    let redraftCounter = 0;
+    const mockRedraft = {
+      models: {
+        generateContent: async () => {
+          redraftCounter++;
+          return {
+            text: JSON.stringify({
+              subject: `Redraft Attempt ${redraftCounter}`,
+              body: `Hello, this is regenerated draft version ${redraftCounter}.`
+            }),
+            usageMetadata: { promptTokenCount: 100, candidatesTokenCount: 30 }
+          };
+        }
+      }
+    };
+
+    // Attempt 1: Success
+    const r1 = await ai.redraftActionItem(itemId, database, mockRedraft);
+    assert.equal(r1.draft_source, 'gemini');
+    assert.equal(r1.draft_subject, 'Redraft Attempt 1');
+
+    // Attempt 2: Success
+    const r2 = await ai.redraftActionItem(itemId, database, mockRedraft);
+    assert.equal(r2.draft_subject, 'Redraft Attempt 2');
+
+    // Attempt 3: Success
+    const r3 = await ai.redraftActionItem(itemId, database, mockRedraft);
+    assert.equal(r3.draft_subject, 'Redraft Attempt 3');
+
+    // Attempt 4: Should throw REDRAFT_LIMIT
+    await assert.rejects(async () => {
+      await ai.redraftActionItem(itemId, database, mockRedraft);
+    }, /Maximum of 3 redrafts reached/);
   });
 });
 

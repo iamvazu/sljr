@@ -193,6 +193,18 @@ async function handleAdminApi(req, res, parsedUrl) {
     db.audit('action_item_skip', `Skipped #${id}: ${body.reason || 'no reason'}`, ip);
     return sendJson(res, 200, result);
   }
+  if ((m = /^\/action-items\/(\d+)\/redraft$/.exec(route)) && method === 'POST') {
+    const id = Number(m[1]);
+    try {
+      const ai = require('../lib/ai');
+      const result = await ai.redraftActionItem(id, db.getDb());
+      db.audit('action_item_redraft', `Redrafted action item #${id} via Gemini`, ip);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      const status = err.code === 'REDRAFT_LIMIT' ? 429 : 400;
+      return sendJson(res, status, { ok: false, error: err.message });
+    }
+  }
 
   // ---- Dashboard ----
   if (method === 'GET' && route === '/stats') return sendJson(res, 200, { ok: true, stats: db.adminStats() });
