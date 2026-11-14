@@ -246,6 +246,37 @@ async function handleAdminApi(req, res, parsedUrl) {
       if (ok) db.audit('contact_update', `Contact #${contactId} updated`, ip);
       return sendJson(res, ok ? 200 : 400, ok ? { ok: true, contact: db.adminGetContact(contactId) } : { ok: false, error: 'Nothing to update.' });
     }
+    if (method === 'DELETE') {
+      try {
+        const result = db.adminDeleteContact(contactId);
+        db.audit('contact_privacy_delete', `Permanently deleted Contact #${contactId}`, ip);
+        return sendJson(res, 200, result);
+      } catch (err) {
+        return sendJson(res, 400, { ok: false, error: err.message });
+      }
+    }
+  }
+
+  // ---- CRM: Privacy Export & Merge ----
+  if ((m = /^\/contacts\/(\d+)\/export$/.exec(route)) && method === 'GET') {
+    const contactId = Number(m[1]);
+    const data = db.adminExportContact(contactId);
+    if (!data) return sendJson(res, 404, { ok: false, error: 'Contact not found.' });
+    db.audit('contact_privacy_export', `Exported all data for Contact #${contactId}`, ip);
+    return sendJson(res, 200, { ok: true, data });
+  }
+
+  if ((m = /^\/contacts\/(\d+)\/merge$/.exec(route)) && method === 'POST') {
+    const contactId = Number(m[1]);
+    const body = await readJsonBody(req);
+    const otherId = Number(body.other_id);
+    try {
+      const result = db.adminMergeContacts(contactId, otherId);
+      db.audit('contact_merge', `Merged Contact #${otherId} into #${contactId}`, ip);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
   }
 
   // ---- CRM: Outbound Email ----

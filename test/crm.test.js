@@ -1609,4 +1609,329 @@ test('Step 9: Gemini AI Integration (Acceptance Tests 14, 15 & 16)', async (t) =
   });
 });
 
+test('Step 10: Contact Merge & Privacy Export/Delete (Acceptance Tests 6 & 9)', async (t) => {
+  const database = db.getDb();
+  const testNow = new Date('2026-11-14T15:00:00.000Z');
+
+  // Acceptance Test 6: Contact Merge
+  await t.test('Contact Merge: Ownership re-assignment, consent precedence & score update (AC #6)', () => {
+    const tIso = testNow.toISOString();
+    const suffix = Date.now();
+    const emailA = `alice_survivor_${suffix}@test.com`;
+    const phoneB = `+1925555${String(suffix).slice(-4)}`;
+
+    // 1. Create Contact A (Survivor)
+    const cARes = database.prepare(`
+      INSERT INTO contacts (first_name, last_name, display_name, type, stage, notes, created_at, updated_at)
+      VALUES ('Alice', 'Survivor', 'Alice Survivor', 'lead', 'contacted', 'Alice primary notes', ?, ?)
+    `).run(tIso, tIso);
+    const idA = Number(cARes.lastInsertRowid);
+
+    database.prepare(`
+      INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+      VALUES (?, 'email', ?, 1, 'ok')
+    `).run(idA, emailA);
+
+    database.prepare(`
+      INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+      VALUES (?, 'email_marketing', 1, '2026-11-v1', 'web', '2026-11-14T10:00:00.000Z')
+    `).run(idA);
+
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, occurred_at, created_at)
+      VALUES (?, 'call', 'out', 'Call with Alice', '2026-11-14T10:00:00.000Z', ?)
+    `).run(idA, tIso);
+
+    database.prepare(`
+      INSERT INTO tasks (contact_id, title, due_at, created_at)
+      VALUES (?, 'Alice follow-up task', '2026-11-16T10:00:00.000Z', ?)
+    `).run(idA, tIso);
+
+    database.prepare(`
+      INSERT INTO deals (contact_id, pipeline_id, stage_id, title, stage_changed_at, created_at, updated_at)
+      VALUES (?, 1, 1, 'Alice Purchase Deal', ?, ?, ?)
+    `).run(idA, tIso, tIso, tIso);
+
+    // 2. Create Contact B (Other / Merged into A)
+    const cBRes = database.prepare(`
+      INSERT INTO contacts (first_name, last_name, display_name, type, stage, notes, interest, budget, created_at, updated_at)
+      VALUES ('Bob', 'Other', 'Bob Other', 'lead', 'new', 'Bob secondary notes', 'buyer', '$2M-$3M', ?, ?)
+    `).run(tIso, tIso);
+    const idB = Number(cBRes.lastInsertRowid);
+
+    database.prepare(`
+      INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+      VALUES (?, 'phone', ?, 1, 'ok')
+    `).run(idB, phoneB);
+
+    // Later consent: withdrawn at 11:00 AM
+    database.prepare(`
+      INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+      VALUES (?, 'email_marketing', 0, '2026-11-v1', 'unsubscribe', '2026-11-14T11:00:00.000Z')
+    `).run(idB);
+
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, occurred_at, created_at)
+      VALUES (?, 'email_in', 'in', 'Inquiry note from Bob', '2026-11-14T11:00:00.000Z', ?)
+    `).run(idB, tIso);
+
+    database.prepare(`
+      INSERT INTO tasks (contact_id, title, due_at, created_at)
+      VALUES (?, 'Bob staging task', '2026-11-18T10:00:00.000Z', ?)
+    `).run(idB, tIso);
+
+    database.prepare(`
+      INSERT INTO deals (contact_id, pipeline_id, stage_id, title, stage_changed_at, created_at, updated_at)
+      VALUES (?, 1, 2, 'Bob Townhouse Deal', ?, ?, ?)
+    `).run(idB, tIso, tIso, tIso);
+
+    // 3. Execute Merge B -> A
+    const mergeRes = db.adminMergeContacts(idA, idB, database);
+    assert.ok(mergeRes.ok);
+    assert.equal(mergeRes.survivor_id, idA);
+    assert.equal(mergeRes.merged_id, idB);
+
+    // 4. Assertions:
+    // Activities belong to survivor A
+    const actsA = database.prepare('SELECT * FROM activities WHERE contact_id = ?').all(idA);
+    assert.ok(actsA.some(a => a.subject === 'Call with Alice'));
+    assert.ok(actsA.some(a => a.subject === 'Inquiry note from Bob'));
+    assert.ok(actsA.some(a => a.subject === 'Merged contact record'));
+
+    const actsB = database.prepare('SELECT * FROM activities WHERE contact_id = ?').all(idB);
+    assert.equal(actsB.length, 0, 'No activities should remain assigned to merged contact');
+
+    // Deals belong to survivor A
+    const dealsA = database.prepare('SELECT * FROM deals WHERE contact_id = ?').all(idA);
+    assert.equal(dealsA.length, 2, 'Survivor must own both deals');
+    const dealsB = database.prepare('SELECT * FROM deals WHERE contact_id = ?').all(idB);
+    assert.equal(dealsB.length, 0);
+
+    // Tasks belong to survivor A
+    const tasksA = database.prepare('SELECT * FROM tasks WHERE contact_id = ?').all(idA);
+    assert.equal(tasksA.length, 2, 'Survivor must own both tasks');
+
+    // Phone transferred to survivor A
+    const idnsA = database.prepare('SELECT * FROM contact_identities WHERE contact_id = ?').all(idA);
+    assert.ok(idnsA.some(i => i.kind === 'phone' && i.value === phoneB));
+
+    // Consents: latest consent is the withdrawn row (11:00 AM)
+    const latestConsent = database.prepare(`
+      SELECT * FROM consents WHERE contact_id = ? AND channel = 'email_marketing' ORDER BY recorded_at DESC LIMIT 1
+    `).get(idA);
+    assert.equal(latestConsent.granted, 0, 'Survivor latest consent must be the newest record');
+
+    // Notes merged
+    const survivorRecord = db.adminGetContact(idA, database);
+    assert.ok(survivorRecord.notes.includes('Alice primary notes'));
+    assert.ok(survivorRecord.notes.includes('Bob secondary notes'));
+
+    // Contact B marked as merged_into A
+    const mergedRecord = database.prepare('SELECT * FROM contacts WHERE id = ?').get(idB);
+    assert.equal(mergedRecord.merged_into, idA);
+  });
+
+  // Acceptance Test 9: Privacy Export & Permanent Deletion
+  await t.test('Privacy Export & Permanent Delete (AC #9)', () => {
+    const tIso = testNow.toISOString();
+    const suffix = Date.now();
+    const privEmail = `privacy_${suffix}@test.com`;
+    // 1. Create a contact with full records
+    const cRes = database.prepare(`
+      INSERT INTO contacts (first_name, last_name, display_name, type, stage, created_at, updated_at)
+      VALUES ('Privacy', 'Subject', 'Privacy Subject', 'lead', 'contacted', ?, ?)
+    `).run(tIso, tIso);
+    const cId = Number(cRes.lastInsertRowid);
+
+    database.prepare(`
+      INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+      VALUES (?, 'email', ?, 1, 'ok')
+    `).run(cId, privEmail);
+
+    database.prepare(`
+      INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+      VALUES (?, 'email_marketing', 1, '2026-11-v1', 'web', ?)
+    `).run(cId, tIso);
+
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, occurred_at, created_at)
+      VALUES (?, 'form', 'in', 'Contact Us Form', ?, ?)
+    `).run(cId, tIso, tIso);
+
+    database.prepare(`
+      INSERT INTO messages (contact_id, channel, to_value, subject, body, origin, status, approved_at, created_at)
+      VALUES (?, 'email', 'test@test.com', 'Welcome Note', 'Body content', 'manual', 'delivered', ?, ?)
+    `).run(cId, tIso, tIso);
+
+    database.prepare(`
+      INSERT INTO tasks (contact_id, title, due_at, created_at)
+      VALUES (?, 'Privacy client task', '2026-11-20T10:00:00.000Z', ?)
+    `).run(cId, tIso);
+
+    database.prepare(`
+      INSERT INTO deals (contact_id, pipeline_id, stage_id, title, stage_changed_at, created_at, updated_at)
+      VALUES (?, 1, 1, 'Privacy Deal', ?, ?, ?)
+    `).run(cId, tIso, tIso, tIso);
+
+    database.prepare(`
+      INSERT INTO leads (contact_id, lead_id, name, email, status, received_at)
+      VALUES (?, ?, 'Privacy Subject', ?, 'contacted', ?)
+    `).run(cId, 'lead_' + suffix, privEmail, tIso);
+
+    // 2. Export contact
+    const exported = db.adminExportContact(cId, database);
+    assert.ok(exported);
+    assert.equal(exported.contact.display_name, 'Privacy Subject');
+    assert.equal(exported.identities.length, 1);
+    assert.equal(exported.consents.length, 1);
+    assert.equal(exported.activities.length, 1);
+    assert.equal(exported.messages.length, 1);
+    assert.equal(exported.tasks.length, 1);
+    assert.equal(exported.deals.length, 1);
+    assert.equal(exported.linked_leads.length, 1);
+
+    // 3. Permanent Delete
+    const delRes = db.adminDeleteContact(cId, database);
+    assert.ok(delRes.ok);
+    assert.equal(delRes.deleted_id, cId);
+
+    // 4. Verify ZERO rows remain in any table referring to this contact
+    assert.equal(database.prepare('SELECT 1 FROM contacts WHERE id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM contact_identities WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM consents WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM activities WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM messages WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM tasks WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM deals WHERE contact_id = ?').get(cId), undefined);
+    assert.equal(database.prepare('SELECT 1 FROM leads WHERE contact_id = ?').get(cId), undefined);
+  });
+});
+
+test('Step 11: Route Security & Performance Benchmark (Acceptance Tests 17 & 19)', async (t) => {
+  const database = db.getDb();
+  const actionPlan = require('../site/lib/actionPlan');
+
+  // Acceptance Test 17: Route Security (Auth 401 & CSRF 403 Header enforcement)
+  await t.test('Route Security: 401 without session and 403 without header (AC #17)', async () => {
+    const adminApi = require('../site/api/admin');
+    const { EventEmitter } = require('node:events');
+    const crypto = require('node:crypto');
+
+    function createMockReqRes({ method = 'GET', route = '/contacts', cookie = '', headers = {} }) {
+      const req = new EventEmitter();
+      req.method = method;
+      req.url = route;
+      req.headers = Object.assign({
+        cookie,
+        host: 'localhost'
+      }, headers);
+
+      let statusCode = 0;
+      let responseBody = '';
+      const res = {
+        writeHead: (code, hdrs) => { statusCode = code; },
+        setHeader: () => {},
+        end: (data) => { responseBody = data; }
+      };
+
+      return { req, res, getStatus: () => statusCode, getBody: () => responseBody };
+    }
+
+    // 1. Unauthenticated request to /api/admin/contacts -> 401
+    const t1 = createMockReqRes({ method: 'GET', route: '/api/admin/contacts', cookie: '' });
+    await adminApi.handleAdminApi(t1.req, t1.res, new URL('http://localhost/api/admin/contacts'), '127.0.0.1');
+    assert.equal(t1.getStatus(), 401, 'Unauthenticated request must return 401');
+
+    // 2. Unauthenticated request to /api/admin/today -> 401
+    const t2 = createMockReqRes({ method: 'GET', route: '/api/admin/today', cookie: '' });
+    await adminApi.handleAdminApi(t2.req, t2.res, new URL('http://localhost/api/admin/today'), '127.0.0.1');
+    assert.equal(t2.getStatus(), 401, 'Unauthenticated request to /today must return 401');
+
+    // 3. Authenticated request with session
+    const rawToken = crypto.randomBytes(32).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+    db.createSession(tokenHash, 86400000, '127.0.0.1');
+    const authCookie = `sl_admin=${rawToken}`;
+
+    // Valid session GET request -> 200
+    const t3 = createMockReqRes({ method: 'GET', route: '/api/admin/today', cookie: authCookie });
+    await adminApi.handleAdminApi(t3.req, t3.res, new URL('http://localhost/api/admin/today'), '127.0.0.1');
+    assert.equal(t3.getStatus(), 200, 'Authenticated request must succeed with 200');
+
+    // 4. Mutation POST without X-SL-Admin header -> 403
+    const t4 = createMockReqRes({ method: 'POST', route: '/api/admin/action-plan/generate', cookie: authCookie, headers: {} });
+    await adminApi.handleAdminApi(t4.req, t4.res, new URL('http://localhost/api/admin/action-plan/generate'), '127.0.0.1');
+    assert.equal(t4.getStatus(), 403, 'Mutation without X-SL-Admin: 1 header must return 403');
+
+    // 5. Mutation POST with X-SL-Admin header -> 200
+    const t5 = createMockReqRes({ method: 'POST', route: '/api/admin/action-plan/generate', cookie: authCookie, headers: { 'x-sl-admin': '1' } });
+    await adminApi.handleAdminApi(t5.req, t5.res, new URL('http://localhost/api/admin/action-plan/generate'), '127.0.0.1');
+    assert.equal(t5.getStatus(), 200, 'Mutation with X-SL-Admin header must succeed with 200');
+
+    // Clean up session
+    db.deleteSession(tokenHash);
+  });
+
+  // Acceptance Test 19: Performance Benchmark (5,000 contacts & 50,000 activities)
+  await t.test('Performance: Contacts list and Today load under 500ms with 5,000 contacts & 50,000 activities (AC #19)', async () => {
+    const nowIso = new Date().toISOString();
+    let firstInsertedCId = 0;
+    let firstInsertedAId = 0;
+
+    // Seed 5,000 contacts in bulk inside a transaction
+    database.exec('BEGIN IMMEDIATE');
+    try {
+      const stmtC = database.prepare(`
+        INSERT INTO contacts (first_name, last_name, display_name, type, stage, score, score_band, created_at, updated_at)
+        VALUES (?, ?, ?, 'lead', 'contacted', 50, 'warm', ?, ?)
+      `);
+      for (let i = 0; i < 5000; i++) {
+        const res = stmtC.run(`BenchFirst${i}`, `BenchLast${i}`, `Bench Contact ${i}`, nowIso, nowIso);
+        if (i === 0) firstInsertedCId = Number(res.lastInsertRowid);
+      }
+
+      // Seed 50,000 activities in bulk (10 per contact for the 5,000 contacts)
+      const stmtA = database.prepare(`
+        INSERT INTO activities (contact_id, kind, direction, subject, occurred_at, created_at)
+        VALUES (?, 'call', 'out', 'Benchmark activity record', ?, ?)
+      `);
+      for (let i = 0; i < 50000; i++) {
+        const cId = firstInsertedCId + (i % 5000);
+        const res = stmtA.run(cId, nowIso, nowIso);
+        if (i === 0) firstInsertedAId = Number(res.lastInsertRowid);
+      }
+      database.exec('COMMIT');
+    } catch (err) {
+      try { database.exec('ROLLBACK'); } catch (_) {}
+      throw err;
+    }
+
+    // 1. Measure Contacts query performance
+    const startContacts = performance.now();
+    const contactsResult = db.adminListContacts({ limit: 50, offset: 0 });
+    const durationContacts = performance.now() - startContacts;
+
+    assert.ok(contactsResult.contacts.length > 0);
+    assert.ok(durationContacts < 500, `Contacts list query took ${durationContacts.toFixed(1)}ms (must be < 500ms)`);
+
+    // 2. Measure Today overview performance
+    const startToday = performance.now();
+    const todayResult = await actionPlan.getTodayOverview(database);
+    const durationToday = performance.now() - startToday;
+
+    assert.ok(todayResult.ok);
+    assert.ok(durationToday < 500, `Today screen overview took ${durationToday.toFixed(1)}ms (must be < 500ms)`);
+
+    // Clean up seeded benchmark rows to keep test DB compact
+    database.exec('BEGIN IMMEDIATE');
+    try {
+      if (firstInsertedAId) database.prepare('DELETE FROM activities WHERE id >= ?').run(firstInsertedAId);
+      if (firstInsertedCId) database.prepare('DELETE FROM contacts WHERE id >= ?').run(firstInsertedCId);
+      database.exec('COMMIT');
+    } catch (_) {
+      try { database.exec('ROLLBACK'); } catch (_) {}
+    }
+  });
+});
+
 

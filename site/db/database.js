@@ -1020,6 +1020,200 @@ function adminUpdateContact(contactId, updates = {}) {
   return changed;
 }
 
+function adminMergeContacts(survivorId, otherId, dbInstance) {
+  const database = dbInstance || getDb();
+  const sId = Number(survivorId);
+  const oId = Number(otherId);
+
+  if (!sId || !oId || sId === oId) {
+    throw new Error('Invalid contact IDs for merge (must be distinct)');
+  }
+
+  const survivor = adminGetContact(sId, database);
+  const other = adminGetContact(oId, database);
+  if (!survivor) throw new Error(`Survivor contact #${sId} not found`);
+  if (!other) throw new Error(`Other contact #${oId} not found`);
+  if (survivor.merged_into) throw new Error(`Survivor #${sId} is already merged into #${survivor.merged_into}`);
+  if (other.merged_into) throw new Error(`Other #${oId} is already merged into #${other.merged_into}`);
+
+  const now = new Date().toISOString();
+
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    // 1. Re-point activities
+    database.prepare('UPDATE activities SET contact_id = ? WHERE contact_id = ?').run(sId, oId);
+
+    // 2. Re-point deals
+    database.prepare('UPDATE deals SET contact_id = ?, updated_at = ? WHERE contact_id = ?').run(sId, now, oId);
+
+    // 3. Re-point tasks
+    database.prepare('UPDATE tasks SET contact_id = ? WHERE contact_id = ?').run(sId, oId);
+
+    // 4. Re-point messages
+    database.prepare('UPDATE messages SET contact_id = ? WHERE contact_id = ?').run(sId, oId);
+
+    // 5. Re-point leads
+    database.prepare('UPDATE leads SET contact_id = ? WHERE contact_id = ?').run(sId, oId);
+
+    // 6. Action items: avoid UNIQUE(plan_date, contact_id, rule) collisions
+    const otherItems = database.prepare('SELECT * FROM action_items WHERE contact_id = ?').all(oId);
+    for (const item of otherItems) {
+      const exists = database.prepare('SELECT 1 FROM action_items WHERE plan_date = ? AND contact_id = ? AND rule = ?').get(item.plan_date, sId, item.rule);
+      if (exists) {
+        database.prepare('DELETE FROM action_items WHERE id = ?').run(item.id);
+      } else {
+        database.prepare('UPDATE action_items SET contact_id = ? WHERE id = ?').run(sId, item.id);
+      }
+    }
+
+    // 7. Contact identities: migrate non-duplicates, remove duplicates to satisfy UNIQUE(kind, value)
+    const otherIdentities = database.prepare('SELECT * FROM contact_identities WHERE contact_id = ?').all(oId);
+    for (const idn of otherIdentities) {
+      const exists = database.prepare('SELECT 1 FROM contact_identities WHERE kind = ? AND value = ? AND contact_id = ?').get(idn.kind, idn.value, sId);
+      if (exists) {
+        database.prepare('DELETE FROM contact_identities WHERE id = ?').run(idn.id);
+      } else {
+        database.prepare('UPDATE contact_identities SET contact_id = ?, is_primary = 0 WHERE id = ?').run(sId, idn.id);
+      }
+    }
+
+    // 8. Consents: re-point all consent records; latest consent determines current state per PRD line 504
+    database.prepare('UPDATE consents SET contact_id = ? WHERE contact_id = ?').run(sId, oId);
+
+    // 9. Contact Tags: migrate non-duplicates
+    const otherTags = database.prepare('SELECT * FROM contact_tags WHERE contact_id = ?').all(oId);
+    for (const tag of otherTags) {
+      const exists = database.prepare('SELECT 1 FROM contact_tags WHERE contact_id = ? AND tag_id = ?').get(sId, tag.tag_id);
+      if (exists) {
+        database.prepare('DELETE FROM contact_tags WHERE contact_id = ? AND tag_id = ?').run(oId, tag.tag_id);
+      } else {
+        database.prepare('UPDATE contact_tags SET contact_id = ? WHERE contact_id = ? AND tag_id = ?').run(sId, oId, tag.tag_id);
+      }
+    }
+
+    // 10. Merge notes & missing preference fields
+    let combinedNotes = survivor.notes || '';
+    if (other.notes) {
+      combinedNotes = combinedNotes ? `${combinedNotes}\n\n[Merged from #${oId}]: ${other.notes}` : other.notes;
+    }
+
+    const updates = [];
+    const params = [];
+    if (combinedNotes !== (survivor.notes || '')) {
+      updates.push('notes = ?');
+      params.push(combinedNotes);
+    }
+    if (!survivor.interest && other.interest) {
+      updates.push('interest = ?');
+      params.push(other.interest);
+    }
+    if (!survivor.budget && other.budget) {
+      updates.push('budget = ?');
+      params.push(other.budget);
+    }
+    if (!survivor.timeline && other.timeline) {
+      updates.push('timeline = ?');
+      params.push(other.timeline);
+    }
+
+    updates.push('updated_at = ?');
+    params.push(now);
+    params.push(sId);
+
+    database.prepare(`UPDATE contacts SET ${updates.join(', ')} WHERE id = ?`).run(...params);
+
+    // 11. Mark other contact as merged_into
+    database.prepare(`
+      UPDATE contacts
+      SET merged_into = ?, updated_at = ?
+      WHERE id = ?
+    `).run(sId, now, oId);
+
+    // 12. Record merge activity on survivor
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, body, occurred_at, created_at)
+      VALUES (?, 'system', NULL, 'Merged contact record', ?, ?, ?)
+    `).run(sId, `Merged contact #${oId} (${other.display_name}) into this record.`, now, now);
+
+    // 13. Update next_follow_up_at
+    updateContactNextFollowUp(database, sId);
+
+    database.exec('COMMIT');
+  } catch (err) {
+    try { database.exec('ROLLBACK'); } catch (_) {}
+    throw err;
+  }
+
+  // 14. Rescore survivor with updated activities and preferences
+  rescoreContact(sId, database);
+
+  return { ok: true, survivor_id: sId, merged_id: oId };
+}
+
+function adminExportContact(contactId, dbInstance) {
+  const database = dbInstance || getDb();
+  const c = database.prepare('SELECT * FROM contacts WHERE id = ?').get(contactId);
+  if (!c) return null;
+
+  const identities = database.prepare('SELECT * FROM contact_identities WHERE contact_id = ?').all(contactId);
+  const consents = database.prepare('SELECT * FROM consents WHERE contact_id = ? ORDER BY recorded_at ASC').all(contactId);
+  const activities = database.prepare('SELECT * FROM activities WHERE contact_id = ? ORDER BY occurred_at ASC').all(contactId);
+  const messages = database.prepare('SELECT * FROM messages WHERE contact_id = ? ORDER BY created_at ASC').all(contactId);
+  const deals = database.prepare('SELECT * FROM deals WHERE contact_id = ?').all(contactId);
+  const tasks = database.prepare('SELECT * FROM tasks WHERE contact_id = ?').all(contactId);
+  const actionItems = database.prepare('SELECT * FROM action_items WHERE contact_id = ?').all(contactId);
+  const linkedLeads = database.prepare('SELECT * FROM leads WHERE contact_id = ?').all(contactId);
+  const tags = database.prepare(`
+    SELECT t.* FROM tags t
+    JOIN contact_tags ct ON ct.tag_id = t.id
+    WHERE ct.contact_id = ?
+  `).all(contactId);
+
+  return {
+    exported_at: new Date().toISOString(),
+    contact: parseContact(c),
+    identities,
+    consents,
+    activities,
+    messages,
+    deals,
+    tasks,
+    tags,
+    action_items: actionItems,
+    linked_leads: linkedLeads
+  };
+}
+
+function adminDeleteContact(contactId, dbInstance) {
+  const database = dbInstance || getDb();
+  const c = database.prepare('SELECT * FROM contacts WHERE id = ?').get(contactId);
+  if (!c) {
+    throw new Error(`Contact #${contactId} not found`);
+  }
+
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    database.prepare('DELETE FROM contact_identities WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM consents WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM activities WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM messages WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM contact_tags WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM tasks WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM deals WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM action_items WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM ai_runs WHERE contact_id = ?').run(contactId);
+    // Delete linked leads per PRD line 317: "including identities, consents, activities, messages and linked leads"
+    database.prepare('DELETE FROM leads WHERE contact_id = ?').run(contactId);
+    database.prepare('DELETE FROM contacts WHERE id = ?').run(contactId);
+    database.exec('COMMIT');
+  } catch (err) {
+    try { database.exec('ROLLBACK'); } catch (_) {}
+    throw err;
+  }
+
+  return { ok: true, deleted_id: Number(contactId) };
+}
+
 // ---------- Tasks & Deals (CRM M1) ----------
 function updateContactNextFollowUp(database, contactId) {
   if (!contactId) return;
@@ -1414,6 +1608,7 @@ module.exports = {
   createSession, getSession, deleteSession, audit, getAudit,
   LEAD_STATUSES, adminListLeads, adminGetLead, adminUpdateLead, adminDeleteLead, retryOutbox,
   CONTACT_STAGES, CONTACT_TYPES, SCORE_BANDS, adminListContacts, adminGetContact, adminUpdateContact,
+  adminMergeContacts, adminExportContact, adminDeleteContact,
   rescoreContact, rescoreAllContacts,
   adminCreateTask, adminUpdateTask, adminDeleteTask, updateContactNextFollowUp,
   adminListPipelines, adminCreateDeal, adminGetDeal, adminUpdateDeal,
