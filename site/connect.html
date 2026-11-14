@@ -127,23 +127,35 @@
           <input type="text" id="c-website" name="company_website" tabindex="-1" autocomplete="off" />
         </div>
         <div class="form-grid">
-          <div class="form-field"><label for="c-name">Name *</label><input type="text" id="c-name" required /></div>
-          <div class="form-field"><label for="c-email">Email *</label><input type="email" id="c-email" required /></div>
-          <div class="form-field"><label for="c-phone">Phone *</label><input type="tel" id="c-phone" required placeholder="(925) 555-0123" /></div>
+          <div
+            style="grid-column:1/-1;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--sw-accent);font-weight:700;margin-bottom:2px;">
+            1. Your Contact Details</div>
+          <div class="form-field"><label for="c-name">Name *</label><input type="text" id="c-name" name="name"
+              required autocomplete="name" maxlength="120" placeholder="Your full name" /></div>
+          <div class="form-field"><label for="c-email">Email *</label><input type="email" id="c-email"
+              name="email" required autocomplete="email" maxlength="160" placeholder="you@domain.com" /></div>
+          <div class="form-field full"><label for="c-phone">Phone <span
+                style="opacity:0.65;font-size:0.68rem;font-weight:400;">(Optional unless requesting text
+                updates)</span></label><input type="tel" id="c-phone" name="phone" autocomplete="tel"
+              placeholder="(925) 555-0123" maxlength="32" /></div>
+
+          <div
+            style="grid-column:1/-1;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--sw-accent);font-weight:700;margin-top:12px;margin-bottom:2px;">
+            2. Your Real Estate Goals</div>
           <div class="form-field">
             <label for="c-interest">I'm interested in *</label>
-            <select id="c-interest">
+            <select id="c-interest" name="interest" required>
               <option value="buying">Buying</option>
               <option value="selling">Selling</option>
               <option value="both">Buying &amp; Selling</option>
-              <option value="relocating">Relocating (Sports &amp; Entertainment)</option>
+              <option value="relocating">Relocating (Executive / Athlete)</option>
               <option value="investing">Investing</option>
               <option value="other">Something else</option>
             </select>
           </div>
           <div class="form-field">
             <label for="c-budget">Price range</label>
-            <select id="c-budget">
+            <select id="c-budget" name="budget">
               <option value="">Select range</option>
               <option value="<$750K">Under $750K</option>
               <option value="$750K-$1.5M">$750K – $1.5M</option>
@@ -151,43 +163,54 @@
               <option value="$2.5M+">$2.5M+</option>
             </select>
           </div>
-          <div class="form-field">
+          <div class="form-field full">
             <label for="c-timeline">Timeline</label>
-            <select id="c-timeline">
+            <select id="c-timeline" name="timeline">
               <option value="">Select timeline</option>
               <option value="0-3 months">0 – 3 months</option>
               <option value="3-6 months">3 – 6 months</option>
               <option value="6-12 months">6 – 12 months</option>
-              <option value="exploring">Exploring</option>
+              <option value="exploring">Exploring / Confidential</option>
             </select>
           </div>
           <div class="form-field full">
             <label>Areas of interest</label>
             <div class="area-chips">
-              <label class="area-chip"><input type="checkbox" name="areas" value="Pleasanton" /><span>Pleasanton</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Danville" /><span>Danville</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas"
+                  value="Pleasanton" /><span>Pleasanton</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas"
+                  value="Danville" /><span>Danville</span></label>
               <label class="area-chip"><input type="checkbox" name="areas" value="Alamo" /><span>Alamo</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="San Ramon" /><span>San Ramon</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas" value="Walnut Creek" /><span>Walnut
+                  Creek</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas" value="San Ramon" /><span>San
+                  Ramon</span></label>
               <label class="area-chip"><input type="checkbox" name="areas" value="Dublin" /><span>Dublin</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Livermore" /><span>Livermore</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Walnut Creek" /><span>Walnut Creek</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Lafayette" /><span>Lafayette</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Oakland" /><span>Oakland</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Berkeley" /><span>Berkeley</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Hayward" /><span>Hayward</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Fremont" /><span>Fremont</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="San Francisco" /><span>San Francisco</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Palo Alto" /><span>Palo Alto</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="San Jose" /><span>San Jose</span></label>
-              <label class="area-chip"><input type="checkbox" name="areas" value="Other" /><span>Other</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas"
+                  value="Livermore" /><span>Livermore</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas"
+                  value="Lafayette" /><span>Lafayette</span></label>
+              <label class="area-chip"><input type="checkbox" name="areas" value="Other" /><span>Other Bay
+                  Area</span></label>
             </div>
           </div>
-          <div class="form-field full"><label for="c-msg">Message</label><textarea id="c-msg" rows="3" placeholder="Tell Steven what you're looking for or your preferred time to connect."></textarea></div>
+          <div class="form-field full"><label for="c-msg">Message</label><textarea id="c-msg"
+              name="message" rows="2" maxlength="1000"
+              placeholder="Share what you're looking for or preferred timing."></textarea></div>
         </div>
-        <label class="consent-row"><input type="checkbox" id="c-discreet" /><span>Discreet / NDA-friendly inquiry (Sports &amp; Entertainment)</span></label>
-        <label class="consent-row"><input type="checkbox" id="c-email-consent" /><span>Email me listings, market updates, and follow-ups. Unsubscribe anytime.</span></label>
-        <label class="consent-row"><input type="checkbox" id="c-sms-consent" /><span>I agree to receive calls and text messages from Steven Lenz Jr. of Compass at the number provided, including messages sent using automated technology, about my real estate inquiry. Consent is not a condition of any purchase or service. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
-        <button type="submit" class="sw-btn sw-btn--primary" style="border:0;cursor:pointer;width:100%;justify-content:center;margin-top:14px;">Start a Private Conversation</button>
+        <label class="consent-row"><input type="checkbox" id="c-discreet" name="discreet" /><span>Discreet /
+            NDA-friendly inquiry (Sports &amp; Entertainment)</span></label>
+        <label class="consent-row"><input type="checkbox" id="c-email-consent" name="email_consent" /><span>Email me
+            listings, market updates, and follow-ups. Unsubscribe anytime.</span></label>
+        <label class="consent-row"><input type="checkbox" id="c-sms-consent" name="sms_consent" /><span>I agree to
+            receive calls and text messages from Steven Lenz Jr. of Compass at the number provided, including messages
+            sent using automated technology, about my real estate inquiry. Consent is not a condition of any purchase or
+            service. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
+        <p style="font-size:0.68rem;color:var(--sw-ink-soft);margin:8px 0 12px;">By submitting, you agree to the <a
+            href="privacy.html" style="color:var(--sw-accent);">Privacy Notice</a>, including how we use AI tools to
+          help Steven respond.</p>
+        <button type="submit" class="sw-btn sw-btn--primary" id="c-submit"
+          style="border:0;cursor:pointer;width:100%;justify-content:center;margin-top:14px;">Start a private conversation</button>
         <div id="c-status" class="form-status" hidden></div>
       </form>
     </div>
@@ -201,29 +224,47 @@
     (function () {
       var form = document.getElementById('connect-form');
       if (!form) return;
+      var phoneInput = document.getElementById('c-phone');
+      var smsConsent = document.getElementById('c-sms-consent');
+      var status = document.getElementById('c-status');
+
+      if (phoneInput && smsConsent) {
+        smsConsent.addEventListener('change', function () {
+          phoneInput.required = smsConsent.checked;
+        });
+      }
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var name = document.getElementById('c-name').value.trim();
-        var email = document.getElementById('c-email').value.trim();
-        var phone = document.getElementById('c-phone').value.trim();
-        var status = document.getElementById('c-status');
+        var name = (document.getElementById('c-name').value || '').trim();
+        var email = (document.getElementById('c-email').value || '').trim();
+        var phone = (document.getElementById('c-phone').value || '').trim();
+
         if (!name || !email) {
           status.hidden = false;
           status.textContent = 'Please enter your name and email address.';
           return;
         }
+
         var phoneDigits = phone.replace(/\D/g, '');
-        if (!phone || phoneDigits.length < 10) {
+        if (smsConsent && smsConsent.checked && phoneDigits.length < 10) {
           status.hidden = false;
-          status.textContent = 'Please enter a valid 10-digit phone number.';
+          status.textContent = 'A 10-digit phone number is required for call and text updates.';
+          return;
+        } else if (phoneDigits.length > 0 && phoneDigits.length < 10) {
+          status.hidden = false;
+          status.textContent = 'Please enter a valid 10-digit phone number or leave blank.';
           return;
         }
+
+        status.hidden = true;
+
         var areas = [];
         form.querySelectorAll('input[name="areas"]:checked').forEach(function (cb) { areas.push(cb.value); });
         var payload = {
           name: name,
           email: email,
-          phone: document.getElementById('c-phone').value.trim(),
+          phone: phone,
           interest: document.getElementById('c-interest').value,
           budget: document.getElementById('c-budget').value,
           timeline: document.getElementById('c-timeline').value,
@@ -232,18 +273,20 @@
           message: document.getElementById('c-msg').value.trim(),
           email_consent: document.getElementById('c-email-consent').checked,
           sms_consent: document.getElementById('c-sms-consent').checked,
+          consent_text_version: '2026-11-v1',
+          consent_timestamp: new Date().toISOString(),
           source_page: window.location.pathname,
           scene: 'connect',
-          company_website: document.getElementById('c-website').value
+          company_website: document.getElementById('c-website') ? document.getElementById('c-website').value : ''
         };
         var done = window.SLForms.busy(form);
-              window.SLForms.post('/api/lead', payload)
-                .then(function () {
-                  window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your message and will reply personally the same day.', false);
-                  form.reset();
-                })
-                .catch(function (err) { window.SLForms.show(status, err.message, true); })
-                .then(done);
+        window.SLForms.post('/api/lead', payload)
+          .then(function () {
+            window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your message and will reply personally the same day.', false);
+            form.reset();
+          })
+          .catch(function (err) { window.SLForms.show(status, err.message, true); })
+          .then(done);
       });
     })();
   </script>
