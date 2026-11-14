@@ -242,15 +242,6 @@
       if (fm) fm.outerHTML = parts.footer;
     }
 
-    var header = document.querySelector('.ed-header');
-    if (header) {
-      var onScroll = function () {
-        header.classList.toggle('is-scrolled', window.scrollY > 36);
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
-
     var ddBtn = document.getElementById('communities-dd-btn');
     var ddWrap = ddBtn ? ddBtn.closest('.ed-dropdown') : null;
     if (ddBtn && ddWrap) {

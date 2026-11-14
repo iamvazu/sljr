@@ -13,27 +13,7 @@
   gap: clamp(20px, 2.6vw, 40px);
   padding: 0 clamp(18px, 3vw, 48px);
   background: linear-gradient(180deg, rgba(13, 17, 23, 0.92) 0%, rgba(13, 17, 23, 0.58) 75%, transparent 100%);
-  transition: background 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
-}
-.ed-header.is-solid,
-.ed-header.is-scrolled,
-body.subpage .ed-header.is-scrolled {
-  background: rgba(10, 13, 18, 0.94);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--sw-border);
-  padding-top: 8px;
-  padding-bottom: 8px;
-  transition: all 0.3s ease;
-}
-.ed-header.is-scrolled .ed-brand__name {
-  font-size: 1.05rem;
-}
-.ed-header.is-scrolled .ed-brand__banner {
-  height: 22px;
-}
-.ed-header.is-scrolled .ed-brand__sub {
-  display: none;
+  pointer-events: auto;
 }
 
 .ed-nav-group--right .ed-burger {
