@@ -34,9 +34,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/theme.css?v=20261114d" />
-  <link rel="stylesheet" href="css/editorial.css?v=20261114d" />
-  <link rel="stylesheet" href="css/mobile.css?v=20261114d" />
+  <link rel="stylesheet" href="css/theme.css?v=20261114e" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="assets/img/hero-concierge.jpg" fetchpriority="high" />
 
   <!-- Structured Data: WebPage, Breadcrumbs, Service & FAQPage Schema -->
@@ -380,7 +380,7 @@
   <section class="pf-banner" style="background-image:url('assets/img/hero-concierge.jpg');">
     <div class="pf-banner__inner">
       <div class="pf-banner__eyebrow">Compass Concierge</div>
-      <h1>Get fronted for the cost of home improvement services with no interest — ever.</h1>
+      <h1>Get <span class="lenz-highlight"><em>Fronted</em></span> for the cost of home improvement services with <span class="lenz-highlight"><em>no interest — ever</em></span>.</h1>
     </div>
   </section>
 
@@ -410,20 +410,58 @@
     <!-- 4 Pillars: Smart, Fast, Transparent, Easy -->
     <div class="bs-pillars">
       <article class="bs-pillar">
-        <h3>Smart</h3>
-        <p>Your Compass agent will help you determine which services can deliver the greatest return on your investment.</p>
+        <div class="bs-pillar__top">
+          <div class="bs-pillar__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
+              <circle cx="12" cy="12" r="2.5" fill="#D8A55A"/>
+            </svg>
+          </div>
+          <span class="bs-pillar__label">01 · STRATEGY</span>
+        </div>
+        <h3 class="bs-pillar__title">Smart</h3>
+        <p class="bs-pillar__text">Your Compass agent will help you determine which services can deliver the greatest return on your investment.</p>
       </article>
+
       <article class="bs-pillar">
-        <h3>Fast</h3>
-        <p>The entire process is designed for speed, so that work can begin — and your home can sell — as quickly as possible.</p>
+        <div class="bs-pillar__top">
+          <div class="bs-pillar__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <span class="bs-pillar__label">02 · VELOCITY</span>
+        </div>
+        <h3 class="bs-pillar__title">Fast</h3>
+        <p class="bs-pillar__text">The entire process is designed for speed, so that work can begin — and your home can sell — as quickly as possible.</p>
       </article>
+
       <article class="bs-pillar">
-        <h3>Transparent</h3>
-        <p>You'll never have to worry about upfront costs or interest.</p>
+        <div class="bs-pillar__top">
+          <div class="bs-pillar__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="bs-pillar__label">03 · INTEGRITY</span>
+        </div>
+        <h3 class="bs-pillar__title">Transparent</h3>
+        <p class="bs-pillar__text">You'll never have to worry about upfront costs or interest.</p>
       </article>
+
       <article class="bs-pillar">
-        <h3>Easy</h3>
-        <p>Your Compass agent will be by your side throughout the process, advising you along the way.</p>
+        <div class="bs-pillar__top">
+          <div class="bs-pillar__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <span class="bs-pillar__label">04 · SUPPORT</span>
+        </div>
+        <h3 class="bs-pillar__title">Easy</h3>
+        <p class="bs-pillar__text">Your Compass agent will be by your side throughout the process, advising you along the way.</p>
       </article>
     </div>
 
@@ -858,7 +896,7 @@
         </div>
         <div class="cc-story__media" id="cc-video-wrapper">
           <div class="cc-video-cover" id="cc-video-cover" role="button" tabindex="0" aria-label="Play Compass Concierge Success Story Video featuring Julia in Oakland">
-            <img src="assets/img/julia-oakland-house.jpg" alt="Compass Concierge Home Transformation in Oakland" width="525" height="342" loading="lazy" />
+            <img src="assets/img/julia-oakland-house.jpg?v=20261114b" alt="Compass Concierge Home Transformation in Oakland" width="640" height="360" loading="lazy" />
             <div class="cc-play-btn" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <polygon points="9.5 7.5 16.5 12 9.5 16.5 9.5 7.5"></polygon>
