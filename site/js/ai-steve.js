@@ -19,7 +19,17 @@
   // Core properties fallback list (matches verified real listings)
   var SEED_HOMES = [
     {
-      id: 'prop-danville-genoa',
+      id: '2710-presidio',
+      address: '2710 Presidio, Brentwood, CA',
+      price: '$930,000',
+      priceNum: 930000,
+      beds: '4',
+      baths: '3',
+      sqft: '2,890',
+      photo: 'assets/img/ccar-listing-1.jpg'
+    },
+    {
+      id: '2261-genoa-st',
       address: '2261 Genoa St, Danville, CA',
       price: '$1,560,000',
       priceNum: 1560000,
@@ -29,7 +39,7 @@
       photo: 'assets/img/danville-genoa.jpg'
     },
     {
-      id: 'prop-livermore-altamont',
+      id: '1631-altamont-cir',
       address: '1631 Altamont Cir, Livermore, CA',
       price: '$900,000',
       priceNum: 900000,
@@ -37,30 +47,10 @@
       baths: '3',
       sqft: '2,829',
       photo: 'assets/img/livermore-altamont.jpg'
-    },
-    {
-      id: 'prop-york',
-      address: '1232 York St, Richmond, CA',
-      price: '$825,000',
-      priceNum: 825000,
-      beds: '3',
-      baths: '3',
-      sqft: '1,400',
-      photo: 'assets/img/listings/1240-york-st-1.jpg'
-    },
-    {
-      id: 'prop-segale',
-      address: '91 Segale Dr, Camp Connell, CA',
-      price: '$450,000',
-      priceNum: 450000,
-      beds: '2',
-      baths: '1',
-      sqft: '1,563',
-      photo: 'assets/img/listings/danville-genoa-1.jpg'
     }
   ];
 
-  cachedHomes = SEED_HOMES.slice(0, 2);
+  cachedHomes = SEED_HOMES.slice(0, 1);
 
   // Inject CSS
   var cssLink = document.createElement('link');
@@ -375,43 +365,113 @@
       leadView.classList.remove('is-visible');
     });
 
-    // Lead Form submission connected to POST /api/leads
+    // Lead Form submission connected to POST /api/lead
     leadForm.addEventListener('submit', function (e) {
       e.preventDefault();
+      var nameVal = (document.getElementById('sl-lead-name').value || '').trim();
+      var emailVal = (document.getElementById('sl-lead-email').value || '').trim();
+      var phoneVal = (document.getElementById('sl-lead-phone').value || '').trim();
+      var replyMethod = document.getElementById('sl-lead-reply-method').value || 'email';
+      var propVal = (document.getElementById('sl-lead-property').value || '').trim();
+      var msgVal = (document.getElementById('sl-lead-message').value || '').trim();
+
+      if (!nameVal || !emailVal) {
+        leadSuccess.textContent = 'Please enter your name and email.';
+        leadSuccess.style.color = '#e53e3e';
+        leadSuccess.style.display = 'block';
+        return;
+      }
+
+      var submitBtn = leadForm.querySelector('button[type="submit"]');
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+
       var leadPayload = {
-        name: document.getElementById('sl-lead-name').value,
-        email: document.getElementById('sl-lead-email').value,
-        phone: document.getElementById('sl-lead-phone').value,
-        reply_method: document.getElementById('sl-lead-reply-method').value,
-        property_address: document.getElementById('sl-lead-property').value,
-        message: document.getElementById('sl-lead-message').value,
-        sessionId: sessionId
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        interest: propVal ? 'Inquiry on ' + propVal : 'AI Chat Inquiry',
+        form_type: 'contact',
+        scene: 'ai-chat',
+        source_page: window.location.pathname || '/',
+        email_consent: true,
+        sms_consent: Boolean(phoneVal),
+        message: '[Preferred Reply: ' + replyMethod + ']' + (propVal ? ' [Property: ' + propVal + ']' : '') + (msgVal ? ' ' + msgVal : '')
       };
 
-      fetch('/api/leads', {
+      fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadPayload)
       })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        leadSuccess.style.display = 'block';
-        setTimeout(function () {
-          leadView.classList.remove('is-visible');
-          leadSuccess.style.display = 'none';
-          leadForm.reset();
-          addBotMessage('✓ Thank you, ' + leadPayload.name + '! Steven has received your note about ' + leadPayload.property_address + ' and will follow up with you by ' + leadPayload.reply_method + ' shortly.');
-        }, 1200);
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, data: data };
+        });
       })
-      .catch(function (err) {
-        leadSuccess.textContent = '✓ Note sent directly to Steven!';
+      .then(function (result) {
+        if (result.ok && result.data && result.data.ok) {
+          leadSuccess.textContent = '✓ Note sent directly to Steven!';
+          leadSuccess.style.color = '#38a169';
+          leadSuccess.style.display = 'block';
+          setTimeout(function () {
+            leadView.classList.remove('is-visible');
+            leadSuccess.style.display = 'none';
+            leadForm.reset();
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send to Steven'; }
+            addBotMessage('✓ Thank you, ' + nameVal + '! Steven has received your note' + (propVal ? ' regarding ' + propVal : '') + ' and will follow up with you by ' + replyMethod + ' shortly.');
+          }, 1200);
+        } else {
+          var errMsg = (result.data && result.data.error) ? result.data.error : 'Could not submit your note. Please call Steven at (925) 998-9711.';
+          leadSuccess.textContent = '⚠ ' + errMsg;
+          leadSuccess.style.color = '#e53e3e';
+          leadSuccess.style.display = 'block';
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send to Steven'; }
+        }
+      })
+      .catch(function () {
+        leadSuccess.textContent = '⚠ Network error. Please call Steven at (925) 998-9711.';
+        leadSuccess.style.color = '#e53e3e';
         leadSuccess.style.display = 'block';
-        setTimeout(function () {
-          leadView.classList.remove('is-visible');
-          leadSuccess.style.display = 'none';
-        }, 1200);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send to Steven'; }
       });
     });
+
+    // Scroll handling: compact FAB on scroll
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 80) {
+        fab.classList.add('is-compact');
+      } else {
+        fab.classList.remove('is-compact');
+      }
+    }, { passive: true });
+
+    // IntersectionObserver: hide FAB when lead form scene or footer is visible
+    if ('IntersectionObserver' in window) {
+      var hideObserver = new IntersectionObserver(function (entries) {
+        var shouldHide = entries.some(function (entry) {
+          return entry.isIntersecting;
+        });
+        if (shouldHide) {
+          fab.classList.add('is-hidden');
+        } else {
+          fab.classList.remove('is-hidden');
+        }
+      }, { rootMargin: '0px 0px 50px 0px', threshold: 0.1 });
+
+      var hideTargets = [
+        document.getElementById('terrace'),
+        document.querySelector('.sw-copy[data-scene="terrace"]'),
+        document.getElementById('lead-form'),
+        document.getElementById('connect-form'),
+        document.querySelector('.ld-form'),
+        document.getElementById('ed-footer-mount'),
+        document.querySelector('footer')
+      ];
+
+      hideTargets.forEach(function (target) {
+        if (target) hideObserver.observe(target);
+      });
+    }
 
     // Feedback thumbs up/down connected to POST /api/feedback
     document.querySelectorAll('.sl-ai-feedback-btn').forEach(function (btn) {

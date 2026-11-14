@@ -152,14 +152,7 @@ async function handleApi(req, res, parsedUrl) {
   // Health Check
   if (req.method === 'GET' && pathname === '/api/health') {
     db.getDb().prepare('SELECT 1').get();
-    return sendJson(res, 200, {
-      ok: true,
-      status: 'healthy',
-      service: 'Steven Lenz Jr. Full-Stack Platform & AI Steve Engine',
-      db: 'connected (node:sqlite)',
-      uptime: Math.round(process.uptime()),
-      timestamp: new Date().toISOString()
-    });
+    return sendJson(res, 200, { ok: true, status: 'healthy' });
   }
 
   // AI Chat endpoint (AI Steve)

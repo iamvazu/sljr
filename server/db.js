@@ -1,11 +1,15 @@
 /**
  * server/db.js
- * SQLite Database Connection & Schema Management for AI Steve
- * Uses native node:sqlite DatabaseSync (Node.js 22+)
+ * Database Connection & Schema Management for AI Assistant
+ * Bridges directly to site/db/database.js as the single source of truth for listings.
+ * Stores conversations and feedback locally in SQLite.
  */
+'use strict';
+
 const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 const fs = require('fs');
+const siteDb = require('../site/db/database');
 
 const DATA_DIR = path.join(__dirname, 'data');
 if (!fs.existsSync(DATA_DIR)) {
@@ -15,32 +19,12 @@ if (!fs.existsSync(DATA_DIR)) {
 const DB_PATH = path.join(DATA_DIR, 'steve.sqlite');
 const db = new DatabaseSync(DB_PATH);
 
-// Enable WAL mode for high concurrency
 db.exec('PRAGMA journal_mode = WAL;');
 db.exec('PRAGMA foreign_keys = ON;');
 
-// Initialize tables
+// Initialize tables for conversations, feedback, and leads
 function initDb() {
   db.exec(`
-    CREATE TABLE IF NOT EXISTS properties (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      address TEXT NOT NULL,
-      city TEXT NOT NULL,
-      state TEXT NOT NULL,
-      zip TEXT,
-      price INTEGER NOT NULL,
-      beds INTEGER NOT NULL,
-      baths REAL NOT NULL,
-      sqft INTEGER NOT NULL,
-      status TEXT DEFAULT 'Active',
-      image_url TEXT NOT NULL,
-      description TEXT,
-      agent TEXT DEFAULT 'Steven Lenz Jr.',
-      featured INTEGER DEFAULT 0,
-      created_at TEXT DEFAULT CURRENT_TIMESTAMP
-    );
-
     CREATE TABLE IF NOT EXISTS leads (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
@@ -75,177 +59,77 @@ function initDb() {
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
 
-    CREATE INDEX IF NOT EXISTS idx_properties_city ON properties(city);
-    CREATE INDEX IF NOT EXISTS idx_properties_price ON properties(price);
     CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
     CREATE INDEX IF NOT EXISTS idx_conversations_session ON conversations(session_id);
   `);
 
-  // Seed properties if table is empty
-  const countRow = db.prepare('SELECT COUNT(*) as count FROM properties').get();
-  if (countRow.count === 0) {
-    const insertProp = db.prepare(`
-      INSERT INTO properties (id, title, address, city, state, zip, price, beds, baths, sqft, status, image_url, description, featured)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const seedData = [
-      [
-        'prop-segale',
-        'Mountain Serenity Retreat',
-        '91 Segale Dr',
-        'Camp Connell',
-        'CA',
-        '95223',
-        450000,
-        2,
-        1,
-        1563,
-        'Active',
-        'assets/img/listings/danville-genoa-1.jpg',
-        'Secluded mountain retreat nestled among towering pines. Expansive wrap-around cedar deck, vaulted post-and-beam ceilings, and wood-burning stove.',
-        1
-      ],
-      [
-        'prop-york',
-        'Contemporary Hillside Haven',
-        '1232 York St',
-        'Richmond',
-        'CA',
-        '94801',
-        825000,
-        3,
-        3,
-        1400,
-        'Active',
-        'assets/img/listings/1240-york-st-1.jpg',
-        'Modern tri-level residence featuring sleek architectural lines, sun-drenched open living, designer kitchen with quartz waterfall island, and attached garage.',
-        1
-      ],
-      [
-        'prop-ruby-hill',
-        'Fairway Tuscan Villa',
-        '1100 Ruby Hill Blvd',
-        'Pleasanton',
-        'CA',
-        '94566',
-        3450000,
-        5,
-        5.5,
-        5200,
-        'Active',
-        'assets/img/pocket-pleasanton-ruby-hill.jpg',
-        'Prestigious gated Ruby Hill estate bordering the Jack Nicklaus signature fairway. Resort-style infinity pool, wine cellar, and outdoor loggia.',
-        1
-      ],
-      [
-        'prop-danville-blackhawk',
-        'Country Club Executive Estate',
-        '3217 Diablo Rd',
-        'Danville',
-        'CA',
-        '94526',
-        2895000,
-        4,
-        4.5,
-        4120,
-        'Active',
-        'assets/img/pocket-danville-blackhawk.jpg',
-        'Stately Danville manor with private gated motor court, soaring ceilings, chef kitchen, and panoramic Mount Diablo foothill views.',
-        1
-      ],
-      [
-        'prop-alamo-oaks',
-        'Oak-Studded Custom Residence',
-        '420 Alamo Oaks Rd',
-        'Alamo',
-        'CA',
-        '94507',
-        4195000,
-        5,
-        6,
-        6100,
-        'Active',
-        'assets/img/neighborhood-alamo.jpg',
-        'Unincorporated Alamo estate sprawling over 1.2 flat acres. Heritage oak canopy, detached guest casita, and equestrian zoning.',
-        1
-      ],
-      [
-        'prop-vintage-hills',
-        'Vintage Hills Classic',
-        '2840 Paseo Granada',
-        'Pleasanton',
-        'CA',
-        '94566',
-        1850000,
-        4,
-        2.5,
-        2450,
-        'Active',
-        'assets/img/pocket-pleasanton-vintage-hills.jpg',
-        'Single-story California ranch on a tranquil cul-de-sac. Direct walking path access to Vintage Hills Elementary and private lush yard.',
-        0
-      ],
-      [
-        'prop-camino-ramon',
-        'Gale Ranch Modern Craft',
-        '2244 Camino Ramon',
-        'San Ramon',
-        'CA',
-        '94583',
-        1495000,
-        4,
-        3,
-        2650,
-        'Active',
-        'assets/img/listings/for-sale-1240-york.jpg',
-        'Light-filled executive home in San Ramon. Upgraded hardwood flooring, open-concept kitchen, and close proximity to City Center Bishop Ranch.',
-        0
-      ]
-    ];
-
-    for (const prop of seedData) {
-      insertProp.run(...prop);
-    }
-    console.log(`[DB] Pre-seeded ${seedData.length} properties.`);
-  }
+  // Drop deprecated mockup properties table if it exists
+  db.exec('DROP TABLE IF EXISTS properties;');
 }
 
 initDb();
 
+function formatProperty(l) {
+  if (!l) return null;
+  const priceNum = l.price_num || Number(String(l.price || '').replace(/[^0-9]/g, '')) || 0;
+  return {
+    id: l.id,
+    title: l.address,
+    address: l.full_address || `${l.address}, ${l.city}, ${l.state || 'CA'} ${l.zip || ''}`.trim(),
+    city: l.city,
+    state: l.state || 'CA',
+    zip: l.zip,
+    price: priceNum,
+    beds: Number(l.beds) || 0,
+    baths: Number(l.baths) || 0,
+    sqft: Number(String(l.sqft || '0').replace(/[^0-9]/g, '')) || 0,
+    status: l.active ? 'Active' : 'Closed',
+    image_url: l.photo || 'assets/img/danville-genoa.jpg',
+    description: l.description || l.summary || '',
+    agent: 'Steven Lenz Jr. · Compass',
+    featured: l.active ? 1 : 0
+  };
+}
+
 module.exports = {
   db,
-  getProperties: (filter = {}) => {
-    let sql = 'SELECT * FROM properties WHERE 1=1';
-    const params = [];
 
+  getProperties: (filter = {}) => {
+    let all = siteDb.getAllListings();
+    if (filter.status === 'active') {
+      all = all.filter((l) => l.active);
+    } else if (filter.status === 'closed' || filter.status === 'sold') {
+      all = all.filter((l) => !l.active);
+    }
     if (filter.city) {
-      sql += ' AND LOWER(city) LIKE ?';
-      params.push(`%${filter.city.toLowerCase()}%`);
+      const c = filter.city.toLowerCase();
+      all = all.filter((l) => (l.city || '').toLowerCase().includes(c));
     }
     if (filter.maxPrice) {
-      sql += ' AND price <= ?';
-      params.push(Number(filter.maxPrice));
+      all = all.filter((l) => (l.price_num || 0) <= Number(filter.maxPrice));
     }
     if (filter.minBeds) {
-      sql += ' AND beds >= ?';
-      params.push(Number(filter.minBeds));
+      all = all.filter((l) => (Number(l.beds) || 0) >= Number(filter.minBeds));
     }
     if (filter.featured !== undefined) {
-      sql += ' AND featured = ?';
-      params.push(filter.featured ? 1 : 0);
+      all = all.filter((l) => (l.active ? 1 : 0) === (filter.featured ? 1 : 0));
     }
-
-    sql += ' ORDER BY featured DESC, price ASC';
-    return db.prepare(sql).all(...params);
+    return all.map(formatProperty);
   },
 
   getPropertyById: (id) => {
-    return db.prepare('SELECT * FROM properties WHERE id = ?').get(id);
+    const l = siteDb.getListingById(id);
+    return formatProperty(l);
   },
 
   getPropertyByAddress: (address) => {
-    return db.prepare('SELECT * FROM properties WHERE LOWER(address) LIKE ?').get(`%${address.toLowerCase()}%`);
+    const term = (address || '').toLowerCase();
+    const all = siteDb.getAllListings();
+    const found = all.find((l) =>
+      (l.address || '').toLowerCase().includes(term) ||
+      (l.full_address || '').toLowerCase().includes(term)
+    );
+    return formatProperty(found);
   },
 
   insertLead: (lead) => {
@@ -288,4 +172,3 @@ module.exports = {
     return { id: info.lastInsertRowid };
   }
 };
-

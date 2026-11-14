@@ -499,9 +499,20 @@ html, body {
   width: min(44vw, 560px);
 }
 .sw-panel[data-scene="terrace"] {
-  width: min(46vw, 540px); top: auto; bottom: 24px; translate: none;
-  max-height: calc(100vh - 110px); overflow-y: auto;
+  width: min(46vw, 540px); top: auto; bottom: 16px; translate: none;
+  max-height: calc(100vh - 90px); overflow-y: auto;
   transform: none !important;
+}
+.sw-panel[data-scene="terrace"] .glass-panel {
+  padding: 16px 20px;
+}
+.sw-panel[data-scene="terrace"] .form-grid {
+  gap: 8px;
+}
+.sw-panel[data-scene="terrace"] .form-field input,
+.sw-panel[data-scene="terrace"] .form-field select,
+.sw-panel[data-scene="terrace"] .form-field textarea {
+  padding: 6px 10px;
 }
 
 .glass-panel {
