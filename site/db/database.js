@@ -163,6 +163,7 @@ function getDb() {
 
   const listingCols = db.prepare('PRAGMA table_info(listings)').all().map((c) => c.name);
   if (!listingCols.includes('published')) db.exec('ALTER TABLE listings ADD COLUMN published INTEGER NOT NULL DEFAULT 1');
+  if (!listingCols.includes('photos_json')) db.exec('ALTER TABLE listings ADD COLUMN photos_json TEXT');
 
   seedListingsIfEmpty(db);
   runOnce(db, 'cleanup_2026_11_13_listings', () => {
@@ -419,19 +420,20 @@ function insertListingStmt(database) {
     INSERT OR REPLACE INTO listings (
       id, status, price, price_num, address, full_address, city, state, zip, county,
       beds, baths, sqft, year_built, lot_size, property_type, mls_id, photo,
-      summary, description, highlights_json, role, external_url, active, sort_order
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      summary, description, highlights_json, role, external_url, active, sort_order, photos_json
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 }
 
 function listingParams(item, idx) {
+  const photosList = Array.isArray(item.photos) && item.photos.length ? item.photos : [item.photo].filter(Boolean);
   return [
     item.id, item.status || 'For Sale', item.price || '$0', parsePriceNum(item.price),
     item.address || '', item.full_address || '', item.city || '', item.state || 'CA', item.zip || '', item.county || '',
     Number(item.beds) || 0, Number(item.baths) || 0, String(item.sqft || ''), String(item.year_built || ''),
     String(item.lot_size || ''), item.property_type || '', item.mls_id || '', item.photo || '',
     item.summary || '', item.description || '', JSON.stringify(item.highlights || []),
-    item.role || '', item.external_url || '', item.active ? 1 : 0, idx
+    item.role || '', item.external_url || '', item.active ? 1 : 0, idx, JSON.stringify(photosList)
   ];
 }
 
@@ -446,6 +448,9 @@ function formatListingRow(row) {
   if (!row) return null;
   let highlights = [];
   try { highlights = JSON.parse(row.highlights_json || '[]'); } catch (_) {}
+  let photos = [];
+  try { photos = JSON.parse(row.photos_json || '[]'); } catch (_) {}
+  if (!photos.length && row.photo) photos = [row.photo];
   return {
     id: row.id,
     status: row.status,
@@ -465,6 +470,7 @@ function formatListingRow(row) {
     property_type: row.property_type,
     mls_id: row.mls_id,
     photo: row.photo,
+    photos,
     summary: row.summary,
     description: row.description,
     highlights,

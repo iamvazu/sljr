@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="css/mobile.css?v=20261113d" />
   <style>
     body { overflow-y: auto; }
-    .prop-card { background: #141A23; border: 1px solid var(--sw-border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease; }
+    .prop-card { background: #141A23; border: 1px solid var(--sw-border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease; position: relative; }
     .prop-card:hover { transform: translateY(-3px); border-color: rgba(216, 165, 90, 0.45); }
     .prop-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
     .prop-body { padding: 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
@@ -47,6 +47,31 @@
     .prop-price { font-family: var(--sw-font-display); font-size: 1.45rem; color: var(--sw-accent); }
     .prop-desc { font-size: 0.86rem; color: var(--sw-ink-soft); line-height: 1.55; margin: 4px 0 8px; }
     .prop-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--sw-border); }
+
+    .pf-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0 32px;
+      align-items: center;
+    }
+    .pf-pill {
+      background: #141A23;
+      border: 1px solid var(--sw-border);
+      color: var(--sw-ink-soft);
+      padding: 9px 20px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      font-family: var(--sw-font-sans);
+    }
+    .pf-pill:hover, .pf-pill.is-active {
+      background: var(--sw-accent);
+      color: #0D1117;
+      border-color: var(--sw-accent);
+    }
   </style>
 
   <!-- Structured Data: CollectionPage & Breadcrumbs -->
@@ -108,23 +133,34 @@
       </div>
     </div>
 
-    <!-- On the Market / Available Now -->
-    <div class="pf-section-head">
-      <span class="pf-banner__eyebrow">On the Market</span>
-      <h2>Available Now</h2>
+    <!-- Filter Bar -->
+    <div class="pf-filter-bar">
+      <button type="button" class="pf-pill is-active" data-filter="all">All Properties (28)</button>
+      <button type="button" class="pf-pill" data-filter="active">Available Now (4)</button>
+      <button type="button" class="pf-pill" data-filter="sold">Recent Closings (24)</button>
     </div>
 
-    <div id="pf-spotlight-mount"></div>
-    <div class="pf-grid" id="pf-active-grid"></div>
+    <!-- On the Market / Available Now -->
+    <div id="pf-active-section">
+      <div class="pf-section-head">
+        <span class="pf-banner__eyebrow">On the Market</span>
+        <h2>Available Now</h2>
+      </div>
+
+      <div id="pf-spotlight-mount"></div>
+      <div class="pf-grid" id="pf-active-grid"></div>
+    </div>
 
     <!-- Track Record / Recent Closings -->
-    <div class="pf-section-head">
-      <span class="pf-banner__eyebrow">The Track Record</span>
-      <h2>Recent Closings</h2>
-      <p>Represented buyers and sellers across Danville, Livermore, Oakland, San Jose, Concord, San Pablo, Hayward, Antioch, and the greater East Bay corridor.</p>
-    </div>
+    <div id="pf-sold-section">
+      <div class="pf-section-head" style="margin-top: 48px;">
+        <span class="pf-banner__eyebrow">The Track Record</span>
+        <h2>Recent Closings</h2>
+        <p>Represented buyers and sellers across Danville, Livermore, Oakland, San Jose, Concord, San Pablo, Hayward, Antioch, and the greater East Bay corridor.</p>
+      </div>
 
-    <div class="pf-grid" id="pf-sold-grid"></div>
+      <div class="pf-grid" id="pf-sold-grid"></div>
+    </div>
   </main>
 
   <div id="ed-drawer-mount"></div>
@@ -149,10 +185,15 @@
           var spotMount = document.getElementById('pf-spotlight-mount');
           if (spotMount && active.length) {
             var lead = active[0];
+            var leadPhotos = lead.photos || (lead.photos_json ? JSON.parse(lead.photos_json) : [lead.photo]);
+            var leadCountBadge = leadPhotos && leadPhotos.length > 1
+              ? '<span style="position:absolute;bottom:16px;right:16px;background:rgba(13,17,23,0.85);backdrop-filter:blur(6px);color:#fff;font-size:0.8rem;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);">📷 ' + leadPhotos.length + ' Photos</span>'
+              : '';
             spotMount.innerHTML =
               '<article class="pf-spotlight">' +
-                '<a href="listing.html?id=' + encodeURIComponent(lead.id) + '" style="display:block;height:100%;">' +
+                '<a href="listing.html?id=' + encodeURIComponent(lead.id) + '" style="display:block;height:100%;position:relative;">' +
                   '<img class="pf-spotlight__img" src="' + esc(lead.photo) + '" alt="' + esc(lead.full_address) + '" width="600" height="375" loading="lazy" decoding="async">' +
+                  leadCountBadge +
                 '</a>' +
                 '<div class="pf-spotlight__body">' +
                   '<span class="listing-status" style="position:static;display:inline-block;background:rgba(216,165,90,0.92);color:#0D1117;border-color:transparent;">For Sale</span>' +
@@ -177,10 +218,15 @@
             var badgeStyle = isForSale
               ? 'background:rgba(216,165,90,0.92);color:#0D1117;border-color:transparent;'
               : '';
+            var pList = item.photos || (item.photos_json ? JSON.parse(item.photos_json) : [item.photo]);
+            var countBadge = pList && pList.length > 1
+              ? '<span class="listing-photo-count" style="position:absolute;bottom:12px;right:12px;background:rgba(13,17,23,0.85);backdrop-filter:blur(6px);color:#fff;font-size:0.75rem;padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:4px;">📷 ' + pList.length + ' Photos</span>'
+              : '';
             return '<article class="prop-card">' +
-              '<a href="listing.html?id=' + encodeURIComponent(item.id) + '" class="listing-photo-wrap">' +
+              '<a href="listing.html?id=' + encodeURIComponent(item.id) + '" class="listing-photo-wrap" style="position:relative;display:block;">' +
                 '<img src="' + esc(item.photo) + '" alt="' + esc(item.full_address) + '" width="600" height="375" loading="lazy" decoding="async">' +
                 '<span class="listing-status" style="' + badgeStyle + '">' + esc(item.status) + '</span>' +
+                countBadge +
               '</a>' +
               '<div class="prop-body">' +
                 '<div class="prop-price">' + esc(item.price) + '</div>' +
@@ -205,6 +251,28 @@
           if (soldGrid) {
             soldGrid.innerHTML = sold.map(function (i) { return renderCard(i, false); }).join('');
           }
+
+          var filterPills = document.querySelectorAll('.pf-pill');
+          var activeSec = document.getElementById('pf-active-section');
+          var soldSec = document.getElementById('pf-sold-section');
+
+          filterPills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+              filterPills.forEach(function (p) { p.classList.remove('is-active'); });
+              pill.classList.add('is-active');
+              var f = pill.getAttribute('data-filter');
+              if (f === 'active') {
+                if (activeSec) activeSec.style.display = '';
+                if (soldSec) soldSec.style.display = 'none';
+              } else if (f === 'sold') {
+                if (activeSec) activeSec.style.display = 'none';
+                if (soldSec) soldSec.style.display = '';
+              } else {
+                if (activeSec) activeSec.style.display = '';
+                if (soldSec) soldSec.style.display = '';
+              }
+            });
+          });
         });
     })();
   </script>

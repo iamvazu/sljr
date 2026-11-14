@@ -17,6 +17,175 @@
     .prop-card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
     .prop-body { padding: 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
     .prop-body h3 { font-family: var(--sw-font-display); font-weight: 400; font-size: 1.25rem; margin: 0; }
+
+    /* Photo Gallery Mosaic & Lightbox */
+    .ld-gallery-mosaic {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-gap: 12px;
+      margin-bottom: 24px;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      .ld-gallery-mosaic { grid-template-columns: 1fr; }
+      .ld-gallery-mosaic .mosaic-side { display: none; }
+    }
+    .ld-gallery-mosaic .mosaic-main {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .ld-gallery-mosaic .mosaic-main img {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      max-height: 480px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .ld-gallery-mosaic .mosaic-main:hover img {
+      transform: scale(1.02);
+    }
+    .ld-gallery-mosaic .mosaic-side {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ld-gallery-mosaic .mosaic-thumb {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .ld-gallery-mosaic .mosaic-thumb img {
+      width: 100%;
+      height: 100%;
+      max-height: 234px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .ld-gallery-mosaic .mosaic-thumb:hover img {
+      transform: scale(1.03);
+    }
+    .ld-view-all-btn {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(13, 17, 23, 0.88);
+      color: #F0F6FC;
+      border: 1px solid var(--sw-border);
+      backdrop-filter: blur(8px);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .ld-view-all-btn:hover {
+      background: var(--sw-accent);
+      color: #0D1117;
+      border-color: var(--sw-accent);
+    }
+    .ld-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .ld-gallery-item {
+      aspect-ratio: 4/3;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid var(--sw-border);
+      position: relative;
+    }
+    .ld-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .ld-gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Lightbox Modal */
+    .ld-lightbox {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 13, 18, 0.96);
+      backdrop-filter: blur(12px);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .ld-lightbox[hidden] { display: none !important; }
+    .ld-lightbox__img-wrap {
+      max-width: 90vw;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ld-lightbox__img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+    .ld-lightbox__bar {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 90vw;
+      color: var(--sw-ink-soft);
+      font-size: 0.9rem;
+    }
+    .ld-lightbox__controls {
+      display: flex;
+      gap: 12px;
+    }
+    .ld-lightbox-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .ld-lightbox-btn:hover {
+      background: var(--sw-accent);
+      color: #0D1117;
+    }
+    .ld-lightbox__close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 2.2rem;
+      color: #fff;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      line-height: 1;
+    }
   </style>
   <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
   <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
@@ -31,22 +200,144 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
 
+  <!-- Full-Screen Lightbox Modal -->
+  <div id="ld-lightbox" class="ld-lightbox" hidden role="dialog" aria-modal="true" aria-label="Photo Lightbox">
+    <button type="button" class="ld-lightbox__close" id="ld-close-btn" aria-label="Close photo viewer">&times;</button>
+    <div class="ld-lightbox__img-wrap">
+      <img id="ld-lightbox-img" class="ld-lightbox__img" src="" alt="Property photo" />
+    </div>
+    <div class="ld-lightbox__bar">
+      <span id="ld-lightbox-counter">Photo 1 of 1</span>
+      <div class="ld-lightbox__controls">
+        <button type="button" class="ld-lightbox-btn" id="ld-prev-btn" aria-label="Previous photo">← Prev</button>
+        <button type="button" class="ld-lightbox-btn" id="ld-next-btn" aria-label="Next photo">Next →</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/editorial-nav.js?v=20261113d"></script>
   <script>
     (function () {
       var params = new URLSearchParams(window.location.search);
-      var targetId = params.get('id') || '2710-presidio';
+      var targetId = params.get('id') || '2710-presidio-brentwood-ca-94513-41092034';
 
-      fetch('content/listings.json')
-        .then(function (r) { return r.json(); })
-        .then(function (items) {
-          var item = items.find(function (x) { return x.id === targetId; }) || items[0];
+      fetch('/api/listings/' + encodeURIComponent(targetId))
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (res) { return res.listing || Promise.reject(); })
+        .catch(function () {
+          return fetch('content/listings.json')
+            .then(function (r) { return r.json(); })
+            .then(function (items) {
+              return items.find(function (x) { return x.id === targetId; }) || items[0];
+            });
+        })
+        .then(function (item) {
           document.title = item.full_address + ' | Steven Lenz Jr. · Compass';
 
-          var others = items.filter(function (x) { return x.id !== item.id; }).slice(0, 3);
+          var photos = Array.isArray(item.photos) && item.photos.length ? item.photos : [item.photo].filter(Boolean);
+          var photoCount = photos.length;
+          var currentPhotoIdx = 0;
+
+          // Lightbox functions
+          var lightbox = document.getElementById('ld-lightbox');
+          var lbImg = document.getElementById('ld-lightbox-img');
+          var lbCounter = document.getElementById('ld-lightbox-counter');
+
+          window.openLightbox = function (idx) {
+            currentPhotoIdx = (idx >= 0 && idx < photos.length) ? idx : 0;
+            updateLightbox();
+            lightbox.hidden = false;
+            document.body.style.overflow = 'hidden';
+          };
+
+          window.closeLightbox = function () {
+            lightbox.hidden = true;
+            document.body.style.overflow = '';
+          };
+
+          function showNextPhoto() {
+            currentPhotoIdx = (currentPhotoIdx + 1) % photos.length;
+            updateLightbox();
+          }
+
+          function showPrevPhoto() {
+            currentPhotoIdx = (currentPhotoIdx - 1 + photos.length) % photos.length;
+            updateLightbox();
+          }
+
+          function updateLightbox() {
+            if (!photos.length) return;
+            lbImg.src = photos[currentPhotoIdx];
+            lbCounter.textContent = 'Photo ' + (currentPhotoIdx + 1) + ' of ' + photos.length;
+          }
+
+          document.getElementById('ld-close-btn').addEventListener('click', window.closeLightbox);
+          document.getElementById('ld-next-btn').addEventListener('click', showNextPhoto);
+          document.getElementById('ld-prev-btn').addEventListener('click', showPrevPhoto);
+
+          lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox || e.target.classList.contains('ld-lightbox__img-wrap')) {
+              window.closeLightbox();
+            }
+          });
+
+          window.addEventListener('keydown', function (e) {
+            if (lightbox.hidden) return;
+            if (e.key === 'Escape') window.closeLightbox();
+            if (e.key === 'ArrowRight') showNextPhoto();
+            if (e.key === 'ArrowLeft') showPrevPhoto();
+          });
+
           var badgeStyle = item.active
             ? 'background:rgba(216,165,90,0.92);color:#0D1117;border-color:transparent;'
             : '';
+
+          // Hero presentation: Mosaic if >= 3 photos, single photo otherwise
+          var heroHtml = '';
+          if (photoCount >= 3) {
+            heroHtml =
+              '<div class="ld-gallery-mosaic">' +
+                '<div class="mosaic-main" onclick="openLightbox(0)">' +
+                  '<img src="' + photos[0] + '" alt="' + item.full_address + '" loading="eager">' +
+                  '<span class="listing-status" style="top:18px;left:18px;font-size:0.78rem;padding:6px 14px;' + badgeStyle + '">' + item.status + '</span>' +
+                '</div>' +
+                '<div class="mosaic-side">' +
+                  '<div class="mosaic-thumb" onclick="openLightbox(1)">' +
+                    '<img src="' + photos[1] + '" alt="' + item.full_address + ' - Photo 2" loading="lazy">' +
+                  '</div>' +
+                  '<div class="mosaic-thumb" onclick="openLightbox(2)">' +
+                    '<img src="' + photos[2] + '" alt="' + item.full_address + ' - Photo 3" loading="lazy">' +
+                  '</div>' +
+                '</div>' +
+                '<button type="button" class="ld-view-all-btn" onclick="openLightbox(0)">' +
+                  '📷 View All ' + photoCount + ' Photos' +
+                '</button>' +
+              '</div>';
+          } else {
+            heroHtml =
+              '<div class="ld-hero-photo" onclick="openLightbox(0)" style="cursor:pointer;">' +
+                '<img src="' + (photos[0] || item.photo) + '" alt="' + item.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
+                '<span class="listing-status" style="top:18px;left:18px;font-size:0.78rem;padding:6px 14px;' + badgeStyle + '">' + item.status + '</span>' +
+                (photoCount > 1 ? '<button type="button" class="ld-view-all-btn" onclick="openLightbox(0)">📷 View All ' + photoCount + ' Photos</button>' : '') +
+              '</div>';
+          }
+
+          // Full gallery thumbnails
+          var gallerySectionHtml = '';
+          if (photoCount > 1) {
+            gallerySectionHtml =
+              '<section class="ld-section" style="margin-top:32px;">' +
+                '<h2>Photo Gallery (' + photoCount + ' Photos)</h2>' +
+                '<p style="color:var(--sw-ink-soft);font-size:0.88rem;margin-top:-6px;margin-bottom:14px;">Click any photo to open the high-resolution lightbox view.</p>' +
+                '<div class="ld-gallery-grid">' +
+                  photos.map(function (src, i) {
+                    return '<div class="ld-gallery-item" onclick="openLightbox(' + i + ')" title="View photo ' + (i + 1) + '">' +
+                      '<img src="' + src + '" alt="' + item.full_address + ' - Photo ' + (i + 1) + '" loading="lazy">' +
+                    '</div>';
+                  }).join('') +
+                '</div>' +
+              '</section>';
+          }
 
           var root = document.getElementById('ld-root');
           root.innerHTML =
@@ -56,10 +347,7 @@
               '<span style="color:var(--sw-ink);">' + item.full_address + '</span>' +
             '</nav>' +
 
-            '<div class="ld-hero-photo">' +
-              '<img src="' + item.photo + '" alt="' + item.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
-              '<span class="listing-status" style="top:18px;left:18px;font-size:0.78rem;padding:6px 14px;' + badgeStyle + '">' + item.status + '</span>' +
-            '</div>' +
+            heroHtml +
 
             '<div class="ld-top-bar">' +
               '<div>' +
@@ -93,6 +381,8 @@
                   '<p>' + item.description + '</p>' +
                 '</section>' +
 
+                gallerySectionHtml +
+
                 '<section class="ld-section">' +
                   '<h2>Property Highlights</h2>' +
                   '<ul class="ld-highlights">' +
@@ -105,14 +395,14 @@
                   '<div class="ld-kv-table">' +
                     '<div class="ld-kv"><span>Bedrooms</span><strong>' + item.beds + '</strong></div>' +
                     '<div class="ld-kv"><span>Bathrooms</span><strong>' + item.baths + '</strong></div>' +
-                    '<div class="ld-kv"><span>Living Area</span><strong>' + item.sqft + ' sq ft</strong></div>' +
+                    '<div class="ld-kv"><span>Living Area</span><strong>' + (item.sqft ? item.sqft + ' sq ft' : '—') + '</strong></div>' +
                     '<div class="ld-kv"><span>Property Type</span><strong>' + (item.property_type || 'Residence') + '</strong></div>' +
                     '<div class="ld-kv"><span>City</span><strong>' + item.city + '</strong></div>' +
                     '<div class="ld-kv"><span>County</span><strong>' + (item.county || 'East Bay') + '</strong></div>' +
                     '<div class="ld-kv"><span>Zip Code</span><strong>' + item.zip + '</strong></div>' +
-                    '<div class="ld-kv"><span>Record</span><strong>' + item.mls_id + '</strong></div>' +
+                    '<div class="ld-kv"><span>MLS® / Source ID</span><strong>' + item.mls_id + '</strong></div>' +
                   '</div>' +
-                  '<p style="margin-top:16px;"><a class="listing-link" href="' + item.external_url + '" target="_blank" rel="noopener noreferrer">View official transaction record on Compass ↗</a></p>' +
+                  (item.external_url ? '<p style="margin-top:16px;"><a class="listing-link" href="' + item.external_url + '" target="_blank" rel="noopener noreferrer">View official listing record on Compass ↗</a></p>' : '') +
                 '</section>' +
               '</div>' +
 
@@ -148,29 +438,76 @@
                   '</form>' +
                 '</div>' +
               '</aside>' +
-            '</div>' +
+            '</div>';
 
-            '<section style="margin-top:56px;padding-top:36px;border-top:1px solid var(--sw-border);">' +
-              '<span class="pf-banner__eyebrow">Portfolio</span>' +
-              '<h2 style="font-family:var(--sw-font-display);font-weight:400;font-size:1.85rem;margin:6px 0 22px;">More Properties</h2>' +
-              '<div class="pf-grid" style="margin-bottom:0;">' +
-                others.map(function (o) {
-                  return '<article class="prop-card">' +
-                    '<a href="listing.html?id=' + encodeURIComponent(o.id) + '" class="listing-photo-wrap">' +
-                      '<img src="' + o.photo + '" alt="' + o.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
-                      '<span class="listing-status">' + o.status + '</span>' +
-                    '</a>' +
-                    '<div class="prop-body">' +
-                      '<div style="color:var(--sw-accent);font-family:var(--sw-font-display);font-size:1.25rem;">' + o.price + '</div>' +
-                      '<h3>' + o.address + '</h3>' +
-                      '<span class="listing-city">' + o.city + ', ' + o.state + ' ' + o.zip + '</span>' +
-                      '<div class="listing-meta">' + (Number(o.beds) ? o.beds + ' Beds · ' + o.baths + ' Baths · ' + o.sqft + ' Sq.Ft.' : (o.property_type || 'Land') + (o.lot_size ? ' · ' + o.lot_size : '')) + '</div>' +
-                      '<a class="listing-link" style="margin-top:8px;" href="listing.html?id=' + encodeURIComponent(o.id) + '">View Property →</a>' +
-                    '</div>' +
-                  '</article>';
-                }).join('') +
-              '</div>' +
-            '</section>';
+          // Fetch other properties for bottom recommendations
+          fetch('/api/listings')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              var all = d.listings || [];
+              var others = all.filter(function (x) { return x.id !== item.id; }).slice(0, 3);
+              if (!others.length) return;
+              var recSection = document.createElement('section');
+              recSection.style.cssText = 'margin-top:56px;padding-top:36px;border-top:1px solid var(--sw-border);';
+              recSection.innerHTML =
+                '<span class="pf-banner__eyebrow">Portfolio</span>' +
+                '<h2 style="font-family:var(--sw-font-display);font-weight:400;font-size:1.85rem;margin:6px 0 22px;">More Properties</h2>' +
+                '<div class="pf-grid" style="margin-bottom:0;">' +
+                  others.map(function (o) {
+                    var pList = o.photos || [o.photo];
+                    return '<article class="prop-card">' +
+                      '<a href="listing.html?id=' + encodeURIComponent(o.id) + '" class="listing-photo-wrap">' +
+                        '<img src="' + o.photo + '" alt="' + o.full_address + '" width="600" height="375" loading="lazy" decoding="async">' +
+                        '<span class="listing-status">' + o.status + '</span>' +
+                        (pList.length > 1 ? '<span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.7);color:#fff;font-size:0.75rem;padding:3px 8px;border-radius:4px;">📷 ' + pList.length + '</span>' : '') +
+                      '</a>' +
+                      '<div class="prop-body">' +
+                        '<div style="color:var(--sw-accent);font-family:var(--sw-font-display);font-size:1.25rem;">' + o.price + '</div>' +
+                        '<h3>' + o.address + '</h3>' +
+                        '<span class="listing-city">' + o.city + ', ' + o.state + ' ' + o.zip + '</span>' +
+                        '<div class="listing-meta">' + (Number(o.beds) ? o.beds + ' Beds · ' + o.baths + ' Baths · ' + o.sqft + ' Sq.Ft.' : (o.property_type || 'Land') + (o.lot_size ? ' · ' + o.lot_size : '')) + '</div>' +
+                        '<a class="listing-link" style="margin-top:8px;" href="listing.html?id=' + encodeURIComponent(o.id) + '">View Property →</a>' +
+                      '</div>' +
+                    '</article>';
+                  }).join('') +
+                '</div>';
+              root.appendChild(recSection);
+            }).catch(function () {});
+
+          var ldForm = document.getElementById('ld-form');
+          if (ldForm) {
+            ldForm.addEventListener('submit', function (e) {
+              e.preventDefault();
+              var name = document.getElementById('ld-name').value.trim();
+              var email = document.getElementById('ld-email').value.trim();
+              var status = document.getElementById('ld-form-status');
+              if (!name || !email) {
+                status.hidden = false;
+                status.textContent = 'Please enter your name and email address.';
+                return;
+              }
+              var done = window.SLForms.busy(ldForm);
+              window.SLForms.post('/api/lead', {
+                  name: name,
+                  email: email,
+                  phone: document.getElementById('ld-phone').value.trim(),
+                  interest: 'buying',
+                  message: document.getElementById('ld-msg').value.trim(),
+                  email_consent: document.getElementById('ld-consent').checked,
+                  source_page: window.location.pathname + window.location.search,
+                  scene: 'listing-' + item.id
+                })
+                .then(function () {
+                  window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your inquiry regarding ' + item.address + ' and will follow up personally.', false);
+                  ldForm.reset();
+                })
+                .catch(function (err) { window.SLForms.show(status, err.message, true); })
+                .then(done);
+            });
+          }
+        });
+    })();
+  </script>
 
           var ldForm = document.getElementById('ld-form');
           if (ldForm) {
