@@ -821,18 +821,34 @@ html {
    Alexa Devaney Area Showcase & Guide Styles (alexadevaney.com/areas/...)
    ============================================================================ */
 .area-nav-tabs {
-  display: flex; gap: 10px; overflow-x: auto; padding: 14px 24px;
-  background: rgba(13, 17, 23, 0.96); backdrop-filter: blur(16px);
+  display: flex; gap: 10px; overflow-x: auto;
+  padding: 12px clamp(16px, 3vw, 24px);
+  background: rgba(13, 17, 23, 0.98); backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(243, 238, 230, 0.14);
-  position: sticky; top: 76px; z-index: 22; justify-content: center;
+  position: sticky; top: 90px; z-index: 55;
+  margin-top: 90px;
+  justify-content: flex-start; /* CRITICAL: Never center an overflowing scroll container or left items are permanently clipped */
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 16px;
 }
 .area-nav-tabs::-webkit-scrollbar { display: none; }
+
+@media (min-width: 1024px) {
+  .area-nav-tabs {
+    justify-content: center;
+  }
+}
+
 .area-nav-tab {
   padding: 8px 18px; border-radius: 999px; text-decoration: none;
   font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
   color: rgba(243, 238, 230, 0.78); border: 1px solid rgba(243, 238, 230, 0.2);
   transition: all 0.2s ease; white-space: nowrap;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 .area-nav-tab:hover {
   color: #FFFFFF; border-color: #D8A55A;
@@ -848,18 +864,44 @@ html {
 }
 .area-subnav-label {
   font-weight: 600; text-transform: uppercase; color: var(--sw-accent); letter-spacing: 0.18em;
+  flex-shrink: 0;
 }
 .area-subnav-strip a {
   color: rgba(243, 238, 230, 0.85); text-decoration: none; padding: 3px 8px;
   border-radius: 4px; transition: color 0.2s, background 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .area-subnav-strip a:hover {
   color: var(--sw-accent); background: rgba(216, 165, 90, 0.14);
 }
 
+@media (max-width: 820px) {
+  .area-nav-tabs {
+    top: 90px;
+    margin-top: 90px;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+  .area-nav-tab {
+    padding: 7px 14px;
+    font-size: 0.70rem;
+  }
+  .area-subnav-strip {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 8px 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .area-subnav-strip::-webkit-scrollbar { display: none; }
+}
+
 .area-hero {
   position: relative; min-height: 60vh; display: flex; align-items: center; justify-content: center;
   text-align: center; background-size: cover; background-position: center; padding: 90px 24px 70px;
+  scroll-margin-top: 155px;
 }
 .area-hero__overlay {
   position: absolute; inset: 0;

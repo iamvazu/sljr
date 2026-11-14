@@ -888,7 +888,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 860px) {
   .sl-ai-fab {
     width: 48px !important;
     height: 48px !important;
@@ -906,6 +906,9 @@
     width: 42px !important;
     height: 42px !important;
   }
+}
+
+@media (max-width: 640px) {
   .sl-ai-window {
     width: calc(100vw - 16px);
     right: 8px;

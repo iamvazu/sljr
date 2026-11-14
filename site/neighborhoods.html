@@ -737,7 +737,7 @@
       <h2 class="area-homes__h2">Steven’s Listings &amp; Recent Sales in the Bay Area</h2>
 
       <div class="area-homes-grid" data-area-grid></div>
-      <p class="area-homes__note" data-area-empty hidden>Steven has no listings or recent closings to show in the Bay Area right now. Inventory changes daily — ask him for a current list, including Compass Private Exclusives.</p>
+      <p class="area-homes__note" data-area-empty hidden>Off-market opportunities and upcoming listings in the Bay Area are available via Compass Private Exclusives. Connect directly with Steven for discreet access and current market inventory.</p>
       <div class="area-homes__cta">
         <a class="sw-btn sw-btn--primary" href="connect.html">Ask Steven About the Bay Area</a>
         <a class="sw-btn sw-btn--ghost" href="properties.html">View Full Portfolio</a>
@@ -749,22 +749,36 @@
   <div id="ed-footer-mount"></div>
   <script src="js/editorial-nav.js?v=20261113d"></script>
   <script>
-    // Tab active state on scroll
+    // Tab active state on scroll with horizontal auto-centering
     (function () {
       var tabs = document.querySelectorAll('.area-nav-tab');
+      var tabContainer = document.querySelector('.area-nav-tabs');
       var sections = ['pleasanton', 'danville', 'livermore', 'walnut-creek', 'east-bay', 'peninsula'].map(function(id){
         return document.getElementById(id);
       }).filter(Boolean);
 
+      var lastActiveId = '';
+
       window.addEventListener('scroll', function () {
-        var scrollPos = window.scrollY + 140;
+        var scrollPos = window.scrollY + 160;
         var current = sections[0];
         sections.forEach(function (sec) {
           if (sec.offsetTop <= scrollPos) current = sec;
         });
-        if (current) {
+        if (current && current.id !== lastActiveId) {
+          lastActiveId = current.id;
           tabs.forEach(function (tab) {
-            tab.classList.toggle('is-active', tab.getAttribute('href') === '#' + current.id);
+            var isActive = tab.getAttribute('href') === '#' + current.id;
+            tab.classList.toggle('is-active', isActive);
+            if (isActive && tabContainer && tabContainer.scrollWidth > tabContainer.clientWidth) {
+              var tabLeft = tab.offsetLeft;
+              var tabWidth = tab.offsetWidth;
+              var contWidth = tabContainer.clientWidth;
+              tabContainer.scrollTo({
+                left: tabLeft - (contWidth / 2) + (tabWidth / 2),
+                behavior: 'smooth'
+              });
+            }
           });
         }
       }, { passive: true });
