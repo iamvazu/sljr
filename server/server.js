@@ -22,27 +22,37 @@ const KNOWN_AREAS = new Set([
 ]);
 
 const STATIC_REDIRECTS = {
-  '/home-valuation': '/valuation.html',
-  '/valuation': '/valuation.html',
-  '/testimonials': '/about.html#testimonials',
-  '/private-exclusives': '/experiences.html',
-  '/experiences': '/experiences.html',
-  '/home-search/listings': '/properties.html',
+  // Legacy Luxury Presence static routes
+  '/home-valuation': '/valuation',
+  '/home-valuation.html': '/valuation',
+  '/testimonials': '/about#testimonials',
+  '/testimonials.html': '/about#testimonials',
+  '/private-exclusives': '/experiences',
+  '/private-exclusives.html': '/experiences',
+  '/home-search/listings': '/properties',
   '/home-search/account': '/',
   '/home-search/auth': '/',
-  '/terms-and-conditions': '/terms.html',
-  '/terms': '/terms.html',
-  '/privacy': '/privacy.html',
+  '/terms-and-conditions': '/terms',
   '/sitemap': '/sitemap.xml',
-  '/neighborhoods': '/neighborhoods.html',
-  '/areas': '/neighborhoods.html',
-  '/properties': '/properties.html',
-  '/about': '/about.html',
-  '/concierge': '/concierge.html',
-  '/contact': '/contact.html',
-  '/buy': '/buy.html',
-  '/sell': '/sell.html',
-  '/ai-steve': '/ai-steve.html'
+  '/areas': '/neighborhoods',
+
+  // Canonical extensionless routes (upgrade .html -> clean URL)
+  '/about.html': '/about',
+  '/buy.html': '/buy',
+  '/sell.html': '/sell',
+  '/concierge.html': '/concierge',
+  '/properties.html': '/properties',
+  '/neighborhoods.html': '/neighborhoods',
+  '/experiences.html': '/experiences',
+  '/connect.html': '/connect',
+  '/resources.html': '/resources',
+  '/valuation.html': '/valuation',
+  '/terms.html': '/terms',
+  '/privacy.html': '/privacy',
+  '/accessibility.html': '/accessibility',
+  '/fair-housing.html': '/fair-housing',
+  '/cookies.html': '/cookies',
+  '/ai-steve.html': '/ai-steve'
 };
 
 function send301(res, target) {
@@ -59,47 +69,54 @@ function handleLegacyRedirects(req, res, parsedUrl) {
   let normPath = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
   normPath = normPath.toLowerCase();
 
-  // Skip assets, apis, and existing html files
-  if (normPath.endsWith('.html') || normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
+  // Skip assets, apis, and internal scripts
+  if (normPath.startsWith('/api/') || normPath.startsWith('/assets/') || normPath.startsWith('/css/') || normPath.startsWith('/js/') || normPath.startsWith('/content/')) {
     return false;
   }
 
-  // 1. Static redirect lookup
+  // 1. If trailing slash on non-root, redirect to normalized path
+  if (pathname.length > 1 && pathname.endsWith('/')) {
+    const target = STATIC_REDIRECTS[normPath] || normPath;
+    send301(res, target);
+    return true;
+  }
+
+  // 2. Static redirect lookup (e.g. /buy.html -> /buy, /home-valuation -> /valuation)
   if (STATIC_REDIRECTS[normPath]) {
     send301(res, STATIC_REDIRECTS[normPath]);
     return true;
   }
 
-  // 2. Legacy /neighborhoods/:slug -> /areas/:slug.html
+  // 3. Legacy /neighborhoods/:slug -> /areas/:slug.html
   if (normPath.startsWith('/neighborhoods/')) {
     const slug = normPath.slice('/neighborhoods/'.length).replace(/\/$/, '');
     if (KNOWN_AREAS.has(slug)) {
       send301(res, `/areas/${slug}.html`);
       return true;
     }
-    send301(res, '/neighborhoods.html');
+    send301(res, '/neighborhoods');
     return true;
   }
 
-  // 3. /areas/:slug -> /areas/:slug.html
+  // 4. /areas/:slug -> /areas/:slug.html
   if (normPath.startsWith('/areas/')) {
     const slug = normPath.slice('/areas/'.length).replace(/\/$/, '');
     if (KNOWN_AREAS.has(slug)) {
       send301(res, `/areas/${slug}.html`);
       return true;
     }
-    send301(res, '/neighborhoods.html');
+    send301(res, '/neighborhoods');
     return true;
   }
 
-  // 4. Legacy /properties/:slug -> /listing.html?id=:slug
+  // 5. Legacy /properties/:slug -> /listing.html?id=:slug
   if (normPath.startsWith('/properties/')) {
     const slug = normPath.slice('/properties/'.length).replace(/\/$/, '');
     if (slug) {
       send301(res, `/listing.html?id=${encodeURIComponent(slug)}`);
       return true;
     }
-    send301(res, '/properties.html');
+    send301(res, '/properties');
     return true;
   }
 

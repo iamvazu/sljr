@@ -183,12 +183,13 @@ test('CRM Lead to Contact Engine & Deduplication (M1 Core)', async (t) => {
 
   await t.test('Creates contact, identity, activity, and consents for new lead', () => {
     const uniqueEmail = `crm_test_${Date.now()}@realestate.com`;
+    const uniquePhone = `925-555-${Math.floor(1000 + Math.random() * 9000)}`;
     const lead = {
       lead_id: `lead_crm_${Date.now()}`,
       received_at: new Date().toISOString(),
       name: 'Victoria Beckham',
       email: uniqueEmail,
-      phone: '925-555-8899',
+      phone: uniquePhone,
       form_type: 'contact',
       interest: 'buying',
       budget: '$4M - $6M',
@@ -213,7 +214,7 @@ test('CRM Lead to Contact Engine & Deduplication (M1 Core)', async (t) => {
     const identities = database.prepare('SELECT * FROM contact_identities WHERE contact_id = ?').all(res.contact_id);
     assert.equal(identities.length, 2);
     assert.ok(identities.some(i => i.kind === 'email' && i.value === uniqueEmail && i.is_primary === 1));
-    assert.ok(identities.some(i => i.kind === 'phone' && i.value === '+19255558899'));
+    assert.ok(identities.some(i => i.kind === 'phone' && i.value === `+1${uniquePhone.replace(/[^0-9]/g, '')}`));
 
     const activities = database.prepare('SELECT * FROM activities WHERE contact_id = ?').all(res.contact_id);
     assert.equal(activities.length, 1);
@@ -398,6 +399,8 @@ test('CRM Tasks & Pipeline Deals (Step 4)', async (t) => {
   });
 
   await t.test('Task management & automatic contacts.next_follow_up_at update', () => {
+    database.prepare('DELETE FROM tasks WHERE contact_id = ?').run(contactId);
+    database.prepare('UPDATE contacts SET next_follow_up_at = NULL WHERE id = ?').run(contactId);
     const due1 = '2026-11-20T10:00:00.000Z';
     const due2 = '2026-11-18T10:00:00.000Z'; // Earlier date
 

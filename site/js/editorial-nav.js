@@ -114,12 +114,12 @@
     var pfx = isSubdir ? '../' : '';
     var header = '<header class="ed-header">' +
       '<nav class="ed-nav-group ed-nav-group--left" aria-label="Primary navigation">' +
-        '<a class="ed-nav-link" href="' + pfx + 'buy.html">Buy</a>' +
-        '<a class="ed-nav-link" href="' + pfx + 'sell.html">Sell</a>' +
-        '<a class="ed-nav-link" href="' + pfx + 'properties.html">Portfolio</a>' +
+        '<a class="ed-nav-link" href="/buy">Buy</a>' +
+        '<a class="ed-nav-link" href="/sell">Sell</a>' +
+        '<a class="ed-nav-link" href="/properties">Portfolio</a>' +
         '<a class="ed-nav-link" href="https://stevenlenzjr.com/home-search/listings" target="_blank" rel="noopener noreferrer">Search Homes</a>' +
       '</nav>' +
-      '<a class="ed-brand" href="' + pfx + 'index.html#top" aria-label="Steven Lenz Jr | Compass | Real Estate">' +
+      '<a class="ed-brand" href="/#top" aria-label="Steven Lenz Jr | Compass | Real Estate">' +
         '<span class="ed-brand__name">Steven Lenz Jr</span>' +
         '<div class="ed-brand__compass">' +
           '<img class="ed-brand__banner" src="' + pfx + 'assets/brand/sl-compass-banner.png" alt="Compass" />' +
@@ -127,34 +127,34 @@
         '<span class="ed-brand__sub">Real Estate</span>' +
       '</a>' +
       '<nav class="ed-nav-group ed-nav-group--right" aria-label="Secondary navigation">' +
-        '<a class="ed-nav-link" href="' + pfx + 'about.html">About</a>' +
+        '<a class="ed-nav-link" href="/about">About</a>' +
         '<div class="ed-dropdown ed-dropdown--mega" id="communities-dd-wrap">' +
           '<button type="button" class="ed-nav-link" id="communities-dd-btn" aria-expanded="false" aria-haspopup="true">Communities ▾</button>' +
           '<div class="ed-mega" role="menu">' +
-            '<div class="ed-mega__top"><span class="ed-mega__eyebrow">Bay Area &amp; Tri-Valley</span><a class="ed-mega__all" href="' + pfx + 'neighborhoods.html">View all communities →</a></div>' +
+            '<div class="ed-mega__top"><span class="ed-mega__eyebrow">Bay Area &amp; Tri-Valley</span><a class="ed-mega__all" href="/neighborhoods">View all communities →</a></div>' +
             '<div class="ed-mega__grid">' +
-              '<a class="ed-mega__card" href="' + pfx + 'neighborhoods.html#tri-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/danville-genoa.jpg" alt="Tri-Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Tri-Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Steven\'s hometown of Pleasanton alongside Danville estates, Livermore wine country, and San Ramon.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Tri-Valley Neighborhoods</span><div class="ed-mega__subs">Pleasanton · Danville · Livermore · San Ramon</div></div></a>' +
-              '<a class="ed-mega__card" href="' + pfx + 'neighborhoods.html#diablo-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/neighborhood-walnut-creek.jpg" alt="Diablo Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Diablo Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Vibrant downtowns, top-rated schools, and oak-studded estates along the Mt. Diablo foothills.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Diablo Valley Neighborhoods</span><div class="ed-mega__subs">Walnut Creek · Lafayette · Alamo</div></div></a>' +
-              '<a class="ed-mega__card" href="' + pfx + 'neighborhoods.html#east-bay"><img class="ed-mega__img" src="' + pfx + 'assets/img/oakland-greenwood.jpg" alt="East Bay Corridor" /><div class="ed-mega__title-row"><span>East Bay Corridor</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Architectural hills, bay views, and Silicon Valley gateway communities across Alameda County.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">East Bay Cities</span><div class="ed-mega__subs">Oakland · Berkeley · Hayward · Union City · Fremont · Milpitas</div></div></a>' +
-              '<a class="ed-mega__card" href="' + pfx + 'neighborhoods.html#peninsula"><img class="ed-mega__img" src="' + pfx + 'assets/img/hero-portfolio.jpg" alt="San Francisco, Peninsula and Silicon Valley" /><div class="ed-mega__title-row"><span>SF &amp; Peninsula</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Iconic city neighborhoods, mid-Peninsula enclaves, and premier Silicon Valley estates.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Peninsula &amp; South Bay</span><div class="ed-mega__subs">San Francisco · San Mateo · Redwood City · Palo Alto · Mountain View · Santa Clara · San Jose</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#tri-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/danville-genoa.jpg" alt="Tri-Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Tri-Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Steven\'s hometown of Pleasanton alongside Danville estates, Livermore wine country, and San Ramon.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Tri-Valley Neighborhoods</span><div class="ed-mega__subs">Pleasanton · Danville · Livermore · San Ramon</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#diablo-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/neighborhood-walnut-creek.jpg" alt="Diablo Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Diablo Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Vibrant downtowns, top-rated schools, and oak-studded estates along the Mt. Diablo foothills.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Diablo Valley Neighborhoods</span><div class="ed-mega__subs">Walnut Creek · Lafayette · Alamo</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#east-bay"><img class="ed-mega__img" src="' + pfx + 'assets/img/oakland-greenwood.jpg" alt="East Bay Corridor" /><div class="ed-mega__title-row"><span>East Bay Corridor</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Architectural hills, bay views, and Silicon Valley gateway communities across Alameda County.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">East Bay Cities</span><div class="ed-mega__subs">Oakland · Berkeley · Hayward · Union City · Fremont · Milpitas</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#peninsula"><img class="ed-mega__img" src="' + pfx + 'assets/img/hero-portfolio.jpg" alt="San Francisco, Peninsula and Silicon Valley" /><div class="ed-mega__title-row"><span>SF &amp; Peninsula</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Iconic city neighborhoods, mid-Peninsula enclaves, and premier Silicon Valley estates.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Peninsula &amp; South Bay</span><div class="ed-mega__subs">San Francisco · San Mateo · Redwood City · Palo Alto · Mountain View · Santa Clara · San Jose</div></div></a>' +
             '</div>' +
           '</div>' +
         '</div>' +
         '<div class="ed-dropdown" id="resources-dd-wrap">' +
           '<button type="button" class="ed-nav-link" id="resources-dd-btn" aria-expanded="false" aria-haspopup="true">Resources ▾</button>' +
           '<div class="ed-dropdown__menu" role="menu" aria-label="Real Estate News and Insights">' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=all">Real Estate News <small>All Insights</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=housing-market">Housing Market <small>Tri-Valley &amp; CA</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=buying-selling">Buying &amp; Selling <small>Advisory</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=mortgage-rates">Mortgage Rates <small>Jumbo &amp; 30-Yr</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=trends">Trends &amp; Insights <small>Prop 19</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=new-construction">New Construction <small>Luxury Builds</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=industry-news">Industry News <small>Compass Intel</small></a>' +
-            '<a class="ed-dropdown__item" href="' + pfx + 'resources.html?cat=market-reports">Market Reports <small>Quarterly Comps</small></a>' +
-            '<a class="ed-dropdown__all" href="' + pfx + 'resources.html">View All Resources &amp; News →</a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=all">Real Estate News <small>All Insights</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=housing-market">Housing Market <small>Tri-Valley &amp; CA</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=buying-selling">Buying &amp; Selling <small>Advisory</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=mortgage-rates">Mortgage Rates <small>Jumbo &amp; 30-Yr</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=trends">Trends &amp; Insights <small>Prop 19</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=new-construction">New Construction <small>Luxury Builds</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=industry-news">Industry News <small>Compass Intel</small></a>' +
+            '<a class="ed-dropdown__item" href="/resources?cat=market-reports">Market Reports <small>Quarterly Comps</small></a>' +
+            '<a class="ed-dropdown__all" href="/resources">View All Resources &amp; News →</a>' +
           '</div>' +
         '</div>' +
-        '<a class="ed-nav-link" href="' + pfx + 'connect.html">Let\'s Connect</a>' +
+        '<a class="ed-nav-link" href="/connect">Let\'s Connect</a>' +
         '<button type="button" class="ed-burger" id="menu-open-btn" aria-haspopup="dialog" aria-controls="site-drawer" aria-expanded="false" aria-label="Open menu"><span></span><span></span><span></span></button>' +
       '</nav>' +
       '<div class="ed-mobile-right">' +
@@ -165,7 +165,7 @@
     var drawer = '<div class="site-drawer-backdrop" id="drawer-backdrop"></div>' +
       '<aside class="site-drawer" id="site-drawer" role="dialog" aria-modal="true" aria-label="Site navigation">' +
         '<div class="drawer-head"><img src="' + pfx + 'assets/brand/compass-sl-white.png" alt="SL | Compass" width="124" height="22" /><button type="button" class="modal-close" id="menu-close-btn" aria-label="Close menu">×</button></div>' +
-        '<nav class="drawer-nav" aria-label="Full navigation"><a href="' + pfx + 'index.html#top">Home</a><a href="' + pfx + 'buy.html">Buy a Home</a><a href="' + pfx + 'sell.html">Sell Your Home</a><a href="' + pfx + 'properties.html">Portfolio</a><a href="https://stevenlenzjr.com/home-search/listings" target="_blank" rel="noopener noreferrer">Search Homes ↗</a><a href="' + pfx + 'resources.html">Resources &amp; News</a><div class="drawer-sub"><a href="' + pfx + 'resources.html?cat=housing-market">Housing Market</a><a href="' + pfx + 'resources.html?cat=buying-selling">Buying &amp; Selling</a><a href="' + pfx + 'resources.html?cat=mortgage-rates">Mortgage Rates</a><a href="' + pfx + 'resources.html?cat=trends">California Trends</a><a href="' + pfx + 'resources.html?cat=new-construction">New Construction</a><a href="' + pfx + 'resources.html?cat=market-reports">Market Reports</a></div><a href="' + pfx + 'neighborhoods.html">Communities &amp; Area Guides</a><div class="drawer-sub"><a href="' + pfx + 'areas/pleasanton.html">Pleasanton</a><a href="' + pfx + 'areas/danville.html">Danville</a><a href="' + pfx + 'areas/alamo.html">Alamo</a><a href="' + pfx + 'areas/san-ramon.html">San Ramon</a><a href="' + pfx + 'areas/dublin.html">Dublin</a><a href="' + pfx + 'areas/livermore.html">Livermore</a><a href="' + pfx + 'areas/walnut-creek.html">Walnut Creek</a><a href="' + pfx + 'areas/lafayette.html">Lafayette</a><a href="' + pfx + 'areas/oakland.html">Oakland</a><a href="' + pfx + 'areas/berkeley.html">Berkeley</a><a href="' + pfx + 'areas/hayward.html">Hayward</a><a href="' + pfx + 'areas/fremont.html">Fremont</a><a href="' + pfx + 'areas/san-francisco.html">San Francisco</a><a href="' + pfx + 'areas/palo-alto.html">Palo Alto</a><a href="' + pfx + 'areas/san-jose.html">San Jose</a></div><a href="' + pfx + 'about.html">About Steven</a><a href="' + pfx + 'concierge.html">Compass Concierge</a><a href="' + pfx + 'experiences.html">Private Exclusives</a><a href="https://stevenlenzjr.com/home-search/account" target="_blank" rel="noopener noreferrer">My Search Portal ↗</a><a href="' + pfx + 'connect.html" style="color:var(--sw-accent);">Let\'s Connect</a></nav>' +
+        '<nav class="drawer-nav" aria-label="Full navigation"><a href="/#top">Home</a><a href="/buy">Buy a Home</a><a href="/sell">Sell Your Home</a><a href="/properties">Portfolio</a><a href="https://stevenlenzjr.com/home-search/listings" target="_blank" rel="noopener noreferrer">Search Homes ↗</a><a href="/resources">Resources &amp; News</a><div class="drawer-sub"><a href="/resources?cat=housing-market">Housing Market</a><a href="/resources?cat=buying-selling">Buying &amp; Selling</a><a href="/resources?cat=mortgage-rates">Mortgage Rates</a><a href="/resources?cat=trends">California Trends</a><a href="/resources?cat=new-construction">New Construction</a><a href="/resources?cat=market-reports">Market Reports</a></div><a href="/neighborhoods">Communities &amp; Area Guides</a><div class="drawer-sub"><a href="/areas/pleasanton.html">Pleasanton</a><a href="/areas/danville.html">Danville</a><a href="/areas/alamo.html">Alamo</a><a href="/areas/san-ramon.html">San Ramon</a><a href="/areas/dublin.html">Dublin</a><a href="/areas/livermore.html">Livermore</a><a href="/areas/walnut-creek.html">Walnut Creek</a><a href="/areas/lafayette.html">Lafayette</a><a href="/areas/oakland.html">Oakland</a><a href="/areas/berkeley.html">Berkeley</a><a href="/areas/hayward.html">Hayward</a><a href="/areas/fremont.html">Fremont</a><a href="/areas/san-francisco.html">San Francisco</a><a href="/areas/palo-alto.html">Palo Alto</a><a href="/areas/san-jose.html">San Jose</a></div><a href="/about">About Steven</a><a href="/concierge">Compass Concierge</a><a href="/experiences">Private Exclusives</a><a href="https://stevenlenzjr.com/home-search/account" target="_blank" rel="noopener noreferrer">My Search Portal ↗</a><a href="/connect" style="color:var(--sw-accent);">Let\'s Connect</a></nav>' +
         '<div class="drawer-footer"><strong style="color:var(--sw-ink);display:block;">Steven Lenz Jr. · CA DRE# 01989811</strong>900 Main St., Pleasanton, CA 94566<br /><a href="tel:+19259989711" style="color:var(--sw-accent);text-decoration:none;">(925) 998-9711</a></div>' +
       '</aside>';
 
@@ -197,7 +197,7 @@
             '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-label="REALTOR"><path d="M3 2h12v14H3V2zm2.5 2.5v9H9v-3.2h2.1l2 3.2h2.4l-2.3-3.6c1.2-.5 2-1.6 2-3 0-2-1.4-3.4-3.6-3.4H5.5zm3.5 2h2.3c.9 0 1.5.5 1.5 1.4s-.6 1.4-1.5 1.4H9V6.5zM3 18h18v2H3v-2z"/></svg>' +
           '</div>' +
         '</div>' +
-        '<div class="ed-footer__col"><h4>Navigation</h4><ul class="ed-footer__links"><li><a href="' + pfx + 'properties.html">Portfolio</a></li><li><a href="' + pfx + 'concierge.html">Compass Concierge</a></li><li><a href="' + pfx + 'experiences.html">Private Exclusives</a></li><li><a href="' + pfx + 'neighborhoods.html">Communities &amp; Guides</a></li><li><a href="' + pfx + 'resources.html">Resources &amp; News</a></li><li><a href="' + pfx + 'about.html">About Steven</a></li><li><a href="' + pfx + 'connect.html">Let\'s Connect</a></li></ul>' +
+        '<div class="ed-footer__col"><h4>Navigation</h4><ul class="ed-footer__links"><li><a href="/properties">Portfolio</a></li><li><a href="/concierge">Compass Concierge</a></li><li><a href="/experiences">Private Exclusives</a></li><li><a href="/neighborhoods">Communities &amp; Guides</a></li><li><a href="/resources">Resources &amp; News</a></li><li><a href="/about">About Steven</a></li><li><a href="/connect">Let\'s Connect</a></li></ul>' +
         '<div class="ed-footer__socials">' +
           '<a href="https://www.instagram.com/steven_lenz_jr/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>' +
           '<a href="https://www.linkedin.com/in/stevenlenzjr/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>' +
@@ -208,7 +208,7 @@
           '<li><a href="https://www.homes.com/real-estate-agents/steven-lenz-jr/1q8sxz5" target="_blank" rel="noopener noreferrer">Steven Lenz Jr. on Homes.com ↗</a></li>' +
           '<li><a href="https://compass.com/agents/steven-lenz-jr" target="_blank" rel="noopener noreferrer">Steven Lenz Jr. on Compass ↗</a></li>' +
         '</ul></div>' +
-        '<div class="ed-footer__col"><h4>Communities</h4><ul class="ed-footer__links"><li><a href="' + pfx + 'neighborhoods.html#tri-valley">Tri-Valley: Pleasanton · Danville · Livermore · San Ramon <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="' + pfx + 'neighborhoods.html#diablo-valley">Diablo Valley: Walnut Creek · Lafayette · Alamo <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="' + pfx + 'neighborhoods.html#east-bay">East Bay: Oakland · Berkeley · Hayward · Fremont <span class="ed-footer__hood-label">Guide</span></a></li></ul></div>' +
+        '<div class="ed-footer__col"><h4>Communities</h4><ul class="ed-footer__links"><li><a href="/neighborhoods#tri-valley">Tri-Valley: Pleasanton · Danville · Livermore · San Ramon <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="/neighborhoods#diablo-valley">Diablo Valley: Walnut Creek · Lafayette · Alamo <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="/neighborhoods#east-bay">East Bay: Oakland · Berkeley · Hayward · Fremont <span class="ed-footer__hood-label">Guide</span></a></li></ul></div>' +
         '<div class="ed-footer__col ed-footer__contact"><h4>Contact</h4>' +
           '<p><strong style="color:var(--sw-ink);">Compass Real Estate</strong></p>' +
           '<p style="line-height:1.45;margin-bottom:8px;"><a href="https://www.google.com/maps/search/900+Main+St.%C2%A0+Pleasanton,+Ca.+94566" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;"><strong>Pleasanton:</strong> 900 Main St, Pleasanton, CA 94566</a><br /><a href="https://www.google.com/maps/search/1646+N+California+Blvd,+Suite+101,+Walnut+Creek,+CA+94596" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;margin-top:4px;display:inline-block;"><strong>Walnut Creek:</strong> 1646 N California Blvd, Ste 101, Walnut Creek, CA 94596</a></p>' +
@@ -218,18 +218,18 @@
           '<p style="font-size:0.78rem;">Compass California II, Inc. · Brokerage DRE# 01527235</p>' +
           '<div class="ed-stay"><h4>Stay in the Know</h4><p style="font-size:0.8rem;font-style:italic;margin:0 0 6px;">Tri-Valley &amp; East Bay Market Updates. New Listings. Local Insight.</p>' +
             '<form id="ed-stay-form" novalidate><div class="ed-stay__row"><input type="email" placeholder="Email Address" aria-label="Email Address" required /><button type="submit" aria-label="Subscribe">→</button></div>' +
-            '<label class="ed-stay__consent"><input type="checkbox" required /><span>I agree to receive email market updates and property alerts from Steven Lenz Jr. at Compass. Unsubscribe anytime. <a href="' + pfx + 'privacy.html" style="color:var(--sw-accent);">Privacy Policy</a>.</span></label>' +
+            '<label class="ed-stay__consent"><input type="checkbox" required /><span>I agree to receive email market updates and property alerts from Steven Lenz Jr. at Compass. Unsubscribe anytime. <a href="/privacy" style="color:var(--sw-accent);">Privacy Policy</a>.</span></label>' +
             '<p id="ed-stay-msg" style="font-size:0.74rem;color:var(--sw-accent);margin:6px 0 0;"></p></form></div>' +
         '</div>' +
       '</div>' +
       '<div class="ed-footer__legal">' +
         '<nav class="ed-legal-nav" aria-label="Legal">' +
-          '<a href="' + pfx + 'privacy.html">Privacy Policy</a>' +
-          '<a href="' + pfx + 'cookies.html">Cookie Policy</a>' +
-          '<a href="' + pfx + 'cookies.html#preferences">Cookie Preferences</a>' +
-          '<a href="' + pfx + 'terms.html">Terms &amp; Conditions</a>' +
-          '<a href="' + pfx + 'accessibility.html">Accessibility</a>' +
-          '<a href="' + pfx + 'fair-housing.html">Fair Housing</a>' +
+          '<a href="/privacy">Privacy Policy</a>' +
+          '<a href="/cookies">Cookie Policy</a>' +
+          '<a href="/cookies#preferences">Cookie Preferences</a>' +
+          '<a href="/terms">Terms &amp; Conditions</a>' +
+          '<a href="/accessibility">Accessibility</a>' +
+          '<a href="/fair-housing">Fair Housing</a>' +
         '</nav>' +
         mlsDisclaimerHTML +
         '<h5 class="ed-idx-title">Compass California II, Inc. | CA DRE# 01527235</h5>' +
