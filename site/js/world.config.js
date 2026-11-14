@@ -53,7 +53,7 @@
         clip: 'assets/vid/concierge.mp4',
         clipMobile: 'assets/vid/concierge-m.mp4',
         eyebrow: 'Services',
-        title: 'Prepare, position, and sell — privately if you prefer.',
+        title: 'Prepare, position, and sell — Privately if you prefer.',
         body: 'Buy, sell, Compass Concierge, and Private Exclusives tailored under one roof.',
         tags: ['Buy a Home', 'Sell Your Home', 'Compass Concierge', 'Private Exclusives']
       },
@@ -83,7 +83,7 @@
         clip: 'assets/vid/communities.mp4',
         clipMobile: 'assets/vid/communities-m.mp4',
         eyebrow: 'Communities & Neighborhoods',
-        title: 'From Tri-Valley Vineyards to Silicon Valley Foothills.',
+        title: 'From Tri-Valley Vineyards to Diablo Foothills.',
         body: 'Discover distinct enclaves, school districts, and lifestyle corridors across Northern California.',
         tags: ['Pleasanton', 'Danville & Alamo', 'Livermore', 'Walnut Creek']
       },
