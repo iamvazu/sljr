@@ -56,7 +56,10 @@ const STATIC_REDIRECTS = {
   '/relocation.html': '/relocation',
   '/relocation/san-francisco-to-pleasanton.html': '/relocation/san-francisco-to-pleasanton',
   '/relocation/silicon-valley-to-danville.html': '/relocation/silicon-valley-to-danville',
-  '/relocation/fremont-to-san-ramon.html': '/relocation/fremont-to-san-ramon'
+  '/relocation/fremont-to-san-ramon.html': '/relocation/fremont-to-san-ramon',
+  '/relocation/san-jose-to-dublin.html': '/relocation/san-jose-to-dublin',
+  '/relocation/oakland-to-walnut-creek.html': '/relocation/oakland-to-walnut-creek',
+  '/relocation/palo-alto-to-alamo.html': '/relocation/palo-alto-to-alamo'
 };
 
 function send301(res, target) {
