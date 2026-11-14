@@ -1524,6 +1524,88 @@ html {
   margin: 0;
 }
 
+/* ---------- Concierge FAQ Accordion ---------- */
+.cc-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 28px 0 36px;
+}
+
+.cc-faq details {
+  background: rgba(18, 24, 38, 0.75);
+  border: 1px solid rgba(216, 165, 90, 0.22);
+  border-radius: 12px;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.cc-faq details:hover {
+  border-color: rgba(216, 165, 90, 0.45);
+  background: rgba(21, 29, 44, 0.85);
+}
+
+.cc-faq details[open] {
+  background: rgba(21, 29, 44, 0.95);
+  border-color: rgba(216, 165, 90, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.cc-faq summary {
+  padding: 20px 24px;
+  font-family: var(--sw-font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F3EEE6;
+  line-height: 1.5;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.cc-faq summary::-webkit-details-marker,
+.cc-faq summary::marker {
+  display: none !important;
+  content: "";
+}
+
+.cc-faq summary:hover {
+  color: #FFFFFF;
+}
+
+.cc-faq summary::after {
+  content: "+";
+  font-family: var(--sw-font-body, 'Montserrat', sans-serif);
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--sw-accent, #D8A55A);
+  font-weight: 300;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.cc-faq details[open] summary::after {
+  content: "–";
+}
+
+.cc-faq details p {
+  padding: 16px 24px 22px;
+  margin: 0;
+  font-family: var(--sw-font-body, 'Montserrat', sans-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #F3EEE6;
+  border-top: 1px solid rgba(216, 165, 90, 0.14);
+}
+
 .ex-request {
   display: grid;
   grid-template-columns: 0.95fr 1.25fr;
