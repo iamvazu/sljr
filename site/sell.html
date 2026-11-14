@@ -36,9 +36,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="css/theme.css?v=20261113d" />
-  <link rel="stylesheet" href="css/editorial.css?v=20261113d" />
-  <link rel="stylesheet" href="css/mobile.css?v=20261113d" />
+  <link rel="stylesheet" href="css/theme.css?v=20261114b" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261114b" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261114b" />
   <style>
     body {
       overflow-y: auto;
@@ -319,35 +319,43 @@
   </section>
 
   <main class="pf-container">
-    <p class="pf-intro">
-      Selling a home is personal. I build each sale around a clear strategy: pricing grounded in current Tri-Valley and
-      East Bay comparables, Compass Concierge presentation that earns showings, and steady communication so you always
-      know where things stand.
-    </p>
+    <section class="pillars" aria-labelledby="pillars-sell-title">
+      <div class="pillars__intro" data-reveal>
+        <span class="pillars__eyebrow" id="pillars-sell-title">How I represent sellers</span>
+        <p class="pillars__statement">Selling a home is personal. I build each sale around <em class="accent">a clear strategy</em>: pricing grounded in current Tri-Valley and East Bay comparables, Compass Concierge presentation that earns showings, and steady communication so you always know where things stand.</p>
+      </div>
 
-    <div class="bs-pillars">
-      <article class="bs-pillar">
-        <h3>Pricing Grounded in Real Comparables</h3>
-        <p>Automated estimates miss what moves a Tri-Valley or East Bay sale: lot orientation, school boundaries,
-          architectural upgrades, and micro-neighborhood absorption. I price from recent sales and direct market
-          knowledge to draw qualified competition.</p>
+      <article class="pillar pillar--lead" data-reveal>
+        <div class="pillar__head">
+          <span class="pillar__label">01 · Pricing</span>
+          <h2 class="pillar__title">Pricing Grounded in <em class="accent">Real Comparables</em></h2>
+        </div>
+        <p class="pillar__body">Automated estimates miss what moves a Tri-Valley or East Bay sale: lot orientation, school boundaries, architectural upgrades, and micro-neighborhood absorption. I price from recent sales and direct market knowledge to draw qualified competition.</p>
       </article>
-      <article class="bs-pillar">
-        <h3>Ready for Market, Even When Life Is Busy</h3>
-        <p>With Compass Concierge, we coordinate staging, paint, flooring, and vetted vendors up front — with zero
-          out-of-pocket costs until closing — so the preparation never falls on your shoulders.</p>
-      </article>
-      <article class="bs-pillar">
-        <h3>Selling and Buying at the Same Time</h3>
-        <p>Contingent moves require precision. I have guided families through selling one home and buying the next in
-          the same season, bridging timelines cleanly and keeping both transactions on track.</p>
-      </article>
-      <article class="bs-pillar">
-        <h3>The Reach of Compass &amp; Private Exclusives</h3>
-        <p>Your listing benefits from the national Compass network, targeted digital presentation, and the option to
-          test demand privately via Compass Private Exclusives before going public on the MLS.</p>
-      </article>
-    </div>
+
+      <div class="pillars__grid">
+        <article class="pillar" data-reveal>
+          <span class="pillar__label">02 · Preparation</span>
+          <h3 class="pillar__title">Ready for Market, Even When Life Is <em class="accent">Busy</em></h3>
+          <p class="pillar__body">With Compass Concierge, we coordinate staging, paint, flooring, and vetted vendors up front — with zero out-of-pocket costs until closing — so the preparation never falls on your shoulders.</p>
+        </article>
+        <article class="pillar" data-reveal>
+          <span class="pillar__label">03 · Timing</span>
+          <h3 class="pillar__title">Selling and Buying at the <em class="accent">Same Time</em></h3>
+          <p class="pillar__body">Contingent moves require precision. I have guided families through selling one home and buying the next in the same season, bridging timelines cleanly and keeping both transactions on track.</p>
+        </article>
+        <article class="pillar" data-reveal>
+          <span class="pillar__label">04 · Reach</span>
+          <h3 class="pillar__title">Compass Reach &amp; <em class="accent">Private Exclusives</em></h3>
+          <p class="pillar__body">Your listing benefits from the national Compass network, targeted digital presentation, and the option to test demand privately via Compass Private Exclusives before going public on the MLS.</p>
+        </article>
+      </div>
+
+      <div class="pillars__cta" data-reveal>
+        <a class="sw-btn sw-btn--primary" href="connect.html">Request a pricing walkthrough</a>
+        <a class="pillars__link" href="properties.html">See recent closings →</a>
+      </div>
+    </section>
 
     <div class="pf-section-head">
       <span class="pf-banner__eyebrow">Recently Sold</span>
@@ -364,7 +372,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
 
-  <script src="js/editorial-nav.js?v=20261113d"></script>
+  <script src="js/editorial-nav.js?v=20261114b"></script>
   <script>
     (function () {
       var s1 = document.getElementById('sell-step-1');

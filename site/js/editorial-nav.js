@@ -407,11 +407,34 @@
     });
   }
 
+  /* Scroll reveal observer (Option B pillars and data-reveal elements) */
+  function initScrollReveal() {
+    var items = document.querySelectorAll('[data-reveal]');
+    if (!items.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    document.documentElement.classList.add('js-reveal');
+
+    var observer = new IntersectionObserver(function (entries) {
+      var shown = 0;
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.style.setProperty('--reveal-delay', (shown * 80) + 'ms');
+        entry.target.classList.add('is-in');
+        observer.unobserve(entry.target);
+        shown += 1;
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    items.forEach(function (el) { observer.observe(el); });
+  }
+
   function boot() {
     var isSubdir = (typeof window !== 'undefined' && (window.location.pathname.indexOf('/areas/') !== -1 || window.location.pathname.indexOf('/articles/') !== -1));
     var pfx = isSubdir ? '../' : '';
     initHeader();
     initCookieConsent(pfx);
+    initScrollReveal();
 
     // Mount AI Steve Real Estate Advisor
     if (!document.getElementById('ai-steve-script')) {
