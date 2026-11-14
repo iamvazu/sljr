@@ -174,4 +174,3 @@ Timing: 500ms fade and 16px rise per item, 80ms apart for items that enter toget
 - [ ] Body text contrast is at least 4.5:1 against the card background.
 - [ ] Nothing else on either page moved: hero, search form, valuation wizard, listings and footer look the same as before.
 
-Two existing bugs on these pages are outside this spec but should be fixed in the same pass: the fixed header lets page content show through behind the navigation when scrolled, and the Buy page's "Search Listings" button wraps to two lines on its own row.

@@ -1417,21 +1417,21 @@ function adminCreateContact({ first_name, last_name, display_name, email, phone,
     if (email) {
       const cleanEmail = String(email).trim().toLowerCase();
       database.prepare(`
-        INSERT INTO contact_identities (contact_id, kind, value, is_primary, verified, first_seen_at, last_seen_at)
-        VALUES (?, 'email', ?, 1, 0, ?, ?)
-      `).run(contactId, cleanEmail, now, now);
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+        VALUES (?, 'email', ?, 1, 'ok')
+      `).run(contactId, cleanEmail);
       database.prepare(`
-        INSERT INTO consents (contact_id, channel, status, scope, source, recorded_at)
-        VALUES (?, 'email', 1, 'transactional', 'back_office_created', ?)
+        INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+        VALUES (?, 'email', 1, 'v1', 'back_office_created', ?)
       `).run(contactId, now);
     }
 
     if (phone) {
       const cleanPhone = String(phone).trim();
       database.prepare(`
-        INSERT INTO contact_identities (contact_id, kind, value, is_primary, verified, first_seen_at, last_seen_at)
-        VALUES (?, 'phone', ?, 1, 0, ?, ?)
-      `).run(contactId, cleanPhone, now, now);
+        INSERT INTO contact_identities (contact_id, kind, value, is_primary, status)
+        VALUES (?, 'phone', ?, 1, 'ok')
+      `).run(contactId, cleanPhone);
     }
 
     database.prepare(`
