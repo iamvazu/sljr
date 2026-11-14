@@ -331,6 +331,23 @@
     closeBtn.addEventListener('click', function () { toggleChat(false); });
     if (minBtn) minBtn.addEventListener('click', function () { toggleChat(false); });
 
+    // Ticket 2: Collapse fab to avatar circle after scroll, hide when footer enters view
+    var onScrollFab = function () {
+      fab.classList.toggle('is-compact', window.scrollY > 30);
+    };
+    window.addEventListener('scroll', onScrollFab, { passive: true });
+    onScrollFab();
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      var footerObserver = new IntersectionObserver(function (entries) {
+        var visible = entries.some(function (e) { return e.isIntersecting; });
+        fab.classList.toggle('is-hidden', visible);
+      }, { rootMargin: '0px 0px -20px 0px', threshold: 0.05 });
+
+      var footers = document.querySelectorAll('.ed-footer, .compliance-footer, footer');
+      footers.forEach(function (f) { footerObserver.observe(f); });
+    }
+
     if (homesCloseBtn) {
       homesCloseBtn.addEventListener('click', function () {
         toggleHomesPanel(false);

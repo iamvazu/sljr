@@ -29,6 +29,25 @@
   border-color: #D8A55A;
 }
 
+.sl-ai-fab.is-compact {
+  padding: 5px;
+  border-radius: 50%;
+  gap: 0;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+}
+
+.sl-ai-fab.is-compact .sl-ai-fab__label {
+  display: none !important;
+}
+
+.sl-ai-fab.is-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) !important;
+}
+
 .sl-ai-fab__avatar-wrap {
   position: relative;
   width: 38px;

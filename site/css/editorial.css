@@ -3,6 +3,10 @@
    Steven Lenz Jr. | Compass Real Estate
    ============================================================================ */
 
+html {
+  scroll-padding-top: 80px;
+}
+
 /* ---------- Editorial Header (Screenshot 5 layout) ---------- */
 .ed-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 60;
@@ -10,9 +14,12 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: clamp(20px, 2.6vw, 40px);
+  gap: clamp(16px, 2.2vw, 36px);
   padding: 0 clamp(18px, 3vw, 48px);
-  background: linear-gradient(180deg, rgba(13, 17, 23, 0.92) 0%, rgba(13, 17, 23, 0.58) 75%, transparent 100%);
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   pointer-events: auto;
 }
 
@@ -22,15 +29,16 @@
 
 .ed-nav-group {
   display: flex; align-items: center;
+  width: 100%;
+  max-width: 460px;
 }
 .ed-nav-group--left {
   justify-content: space-between;
-  width: 100%;
-  max-width: 480px;
+  gap: clamp(10px, 1.4vw, 20px);
 }
 .ed-nav-group--right {
-  justify-content: flex-end;
-  gap: clamp(14px, 1.6vw, 24px);
+  justify-content: space-between;
+  gap: clamp(10px, 1.4vw, 20px);
 }
 
 .ed-nav-link {
@@ -172,7 +180,7 @@
   background: #0A0D12;
   border-top: 1px solid var(--sw-border);
   color: var(--sw-ink-soft);
-  padding: 64px clamp(20px, 5vw, 64px) 36px;
+  padding: 64px clamp(20px, 5vw, 64px) 96px;
 }
 .ed-footer__grid {
   max-width: 1240px; margin: 0 auto;
@@ -761,21 +769,49 @@
   font-size: clamp(1.9rem, 3.4vw, 2.6rem); margin: 8px 0 16px;
 }
 .ab-split p { color: var(--sw-ink-soft); line-height: 1.75; margin: 0 0 16px; font-size: 0.98rem; }
+
+@media (min-width: 961px) {
+  .ab-split > .ld-card {
+    position: sticky;
+    top: 96px;
+    align-self: flex-start;
+  }
+}
+
 .ab-timeline {
   border-top: 1px solid var(--sw-border); margin-bottom: 56px;
+  padding: 0;
 }
 .ab-row {
-  display: grid; grid-template-columns: 260px 1fr; gap: 28px;
+  display: grid; grid-template-columns: 280px 1fr; gap: 28px;
   padding: 26px 0; border-bottom: 1px solid var(--sw-border);
+}
+.ab-row dt, .ab-row dd {
+  margin: 0; padding: 0;
 }
 .ab-row h3 {
   font-family: var(--sw-font-display); font-weight: 400; font-size: 1.35rem;
   margin: 0; color: var(--sw-ink);
 }
-.ab-row p { margin: 0; color: var(--sw-ink-soft); line-height: 1.7; font-size: 0.95rem; }
+.ab-row p {
+  margin: 0;
+  color: #B8C2D0;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  max-width: 70ch;
+}
 
 @media (max-width: 960px) {
-  .ex-intro, .ex-cards, .ex-request, .ab-split, .ab-row { grid-template-columns: 1fr; }
+  .ex-intro, .ex-cards, .ex-request, .ab-row { grid-template-columns: 1fr; }
+  .ab-split {
+    display: flex;
+    flex-direction: column;
+  }
+  .ab-split > .ld-card {
+    order: -1;
+    width: 100%;
+    margin-bottom: 36px;
+  }
   .ex-worlds { grid-template-columns: 1fr 1fr; }
   .ex-steps { grid-template-columns: 1fr 1fr; }
 }
@@ -1580,6 +1616,12 @@
   scroll-behavior: auto;
   user-select: none;
 }
+.hq-arrow-btn:disabled,
+.hq-arrow-btn[aria-disabled="true"] {
+  opacity: 0.4 !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .hq-review-card {
   flex: 0 0 340px;
   min-width: 320px;
@@ -1600,7 +1642,7 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
 }
 .hq-review-card__stars {
-  color: #E26D45;
+  color: #D8A55A;
   font-size: 1.15rem;
   letter-spacing: 2px;
   margin-bottom: 16px;
@@ -1610,7 +1652,7 @@
 .hq-review-card__stars svg {
   width: 17px;
   height: 17px;
-  fill: #E26D45;
+  fill: #D8A55A;
 }
 .hq-review-card__quote {
   font-size: 1.05rem;
@@ -1630,6 +1672,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  margin-top: auto;
 }
 .hq-review-card__name {
   font-size: 0.98rem;
@@ -1651,9 +1694,11 @@
     align-self: flex-end;
   }
   .hq-review-card {
-    flex: 0 0 290px;
-    min-width: 280px;
-    padding: 26px 20px 22px;
+    flex: 0 0 calc(100vw - 48px);
+    min-width: 0;
+    max-width: 100%;
+    scroll-snap-align: center;
+    padding: 24px 20px 22px;
   }
   .hq-review-card__quote {
     font-size: 0.98rem;
