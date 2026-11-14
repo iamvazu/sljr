@@ -156,6 +156,9 @@ function handleLegacyRedirects(req, res, parsedUrl) {
 
   // 4. /areas/:slug -> /areas/:slug.html
   if (normPath.startsWith('/areas/')) {
+    if (normPath.endsWith('.html')) {
+      return false; // Already the canonical .html file; let serveStatic handle it
+    }
     const slug = normPath.slice('/areas/'.length).replace(/\/$/, '');
     if (KNOWN_AREAS.has(slug)) {
       send301(res, `/areas/${slug}.html`);
