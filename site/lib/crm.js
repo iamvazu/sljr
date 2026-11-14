@@ -226,6 +226,12 @@ function leadToContact(lead, dbInstance) {
     db.prepare('UPDATE leads SET contact_id = ? WHERE lead_id = ?').run(contactId, lead.lead_id);
   }
 
+  // 7. Auto-score contact using M2 deterministic scoring engine
+  try {
+    const { rescoreContact } = require('../db/database');
+    rescoreContact(contactId, db);
+  } catch (_) {}
+
   return { contact_id: contactId, action };
 }
 
@@ -449,6 +455,11 @@ function sendOutboundEmail({ contact_id, to_value, subject, body, origin = 'manu
     setImmediate(() => { outbox.drain().catch(() => {}); });
   } catch (_) {}
 
+  try {
+    const { rescoreContact } = require('../db/database');
+    rescoreContact(contact_id, db);
+  } catch (_) {}
+
   return { ok: true, message_id: messageId, stage: newStage, unsub_url: unsubUrl };
 }
 
@@ -468,6 +479,11 @@ function unsubscribeContact(contactId, token, dbInstance) {
     INSERT INTO activities (contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at)
     VALUES (?, 'system', 'in', 'Unsubscribed from email', 'Client unsubscribed via email link.', ?, ?, ?)
   `).run(contactId, JSON.stringify({ channel: 'email_marketing', action: 'unsubscribe' }), now, now);
+
+  try {
+    const { rescoreContact } = require('../db/database');
+    rescoreContact(contactId, db);
+  } catch (_) {}
 
   return { ok: true };
 }

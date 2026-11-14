@@ -212,6 +212,20 @@ async function handleAdminApi(req, res, parsedUrl) {
     return sendJson(res, 200, { ok: true, messages });
   }
 
+  // ---- CRM: Rescore Contacts ----
+  if ((m = /^\/contacts\/(\d+)\/rescore$/.exec(route)) && method === 'POST') {
+    const contactId = Number(m[1]);
+    const scored = db.rescoreContact(contactId);
+    if (!scored) return sendJson(res, 404, { ok: false, error: 'Contact not found.' });
+    db.audit('contact_rescore', `Contact #${contactId} scored ${scored.score} (${scored.score_band})`, ip);
+    return sendJson(res, 200, { ok: true, scoring: scored, contact: db.adminGetContact(contactId) });
+  }
+  if (method === 'POST' && route === '/contacts/rescore-all') {
+    const result = db.rescoreAllContacts();
+    db.audit('contacts_rescore_all', `Rescored ${result.rescored} contacts`, ip);
+    return sendJson(res, 200, result);
+  }
+
   // ---- CRM: Pipelines & Deals ----
   if (method === 'GET' && route === '/pipelines') {
     return sendJson(res, 200, { ok: true, pipelines: db.adminListPipelines() });

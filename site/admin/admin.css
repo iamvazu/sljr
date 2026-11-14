@@ -67,8 +67,9 @@ input[type=checkbox] { width: 20px; height: 20px; min-height: 0; padding: 0; acc
 .pill--lost, .pill--spam, .pill--dead, .pill--off { color: var(--red); border-color: rgba(232,120,104,.5); }
 .pill--hot { color: #FFA07A; border-color: rgba(255,160,122,.6); background: rgba(255,160,122,.12); }
 .pill--warm { color: var(--gold); border-color: rgba(216,165,90,.6); background: rgba(216,165,90,.12); }
+.pill--cool { color: #82AAFF; border-color: rgba(130,170,255,.6); background: rgba(130,170,255,.12); }
 .pill--nurture { color: #87CEEB; border-color: rgba(135,206,235,.6); }
-.pill--cold { color: var(--soft); border-color: var(--line); }
+.pill--cold { color: var(--soft); border-color: var(--line); background: rgba(255,255,255,.04); }
 .pill--discreet { color: #E5C384; border-color: #E5C384; letter-spacing: .12em; }
 .thumb { width: 64px; height: 48px; object-fit: cover; border-radius: 6px; background: #000; }
 .row--media { grid-template-columns: 64px 1fr auto; align-items: center; }

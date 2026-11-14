@@ -289,7 +289,15 @@
 
       var html =
         '<h2>' + esc(c.display_name) + (c.discreet ? ' <span class="pill pill--discreet">Discreet</span>' : '') + '</h2>' +
-        '<p class="eyebrow">' + esc(c.type) + ' · Stage: ' + esc(c.stage) + ' · Score: ' + esc(c.score) + ' (' + esc(c.score_band) + ')</p>' +
+        '<div style="display:flex; align-items:center; gap:8px; margin: 4px 0 10px; flex-wrap:wrap;">' +
+          '<span class="eyebrow" style="margin:0;">' + esc(c.type) + ' · ' + esc(c.stage) + '</span>' +
+          '<span class="pill pill--' + esc(c.score_band) + '">' + esc(c.score_band).toUpperCase() + ' ' + esc(c.score) + '/100</span>' +
+          '<button class="btn btn--quiet small" id="btn-rescore-contact" style="min-height:28px; padding:0 8px; font-size:.72rem;">↻ Rescore</button>' +
+        '</div>' +
+        (c.score_reasons && c.score_reasons.length ?
+          '<div style="margin: 0 0 14px; display:flex; flex-wrap:wrap; gap:4px;">' +
+            c.score_reasons.map(function (r) { return '<span class="pill" style="font-size:.76rem; border-color:rgba(255,255,255,.1);">' + esc(r) + '</span>'; }).join('') +
+          '</div>' : '') +
         '<div class="actions" style="margin: 8px 0 16px;">' +
           (emails.length ? '<button class="btn btn--primary" id="btn-toggle-composer">✉ Send Email</button>' : '') +
           (phones.length ? '<a class="btn" href="tel:' + esc(phones[0].value) + '">Call ' + esc(phones[0].value) + '</a>' : '') +
@@ -462,6 +470,18 @@
           }).catch(fail);
         };
       });
+
+      var btnRescore = $('btn-rescore-contact');
+      if (btnRescore) {
+        btnRescore.onclick = function () {
+          btnRescore.disabled = true;
+          api('/contacts/' + encodeURIComponent(id) + '/rescore', 'POST').then(function (res) {
+            toast('Contact rescored: ' + res.scoring.score + ' (' + res.scoring.score_band + ')');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      }
 
       var form = $('contact-edit-form');
       form.onsubmit = function (e) {

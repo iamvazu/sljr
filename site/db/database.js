@@ -837,7 +837,7 @@ const CONTACT_STAGES = [
   'under_contract', 'closed', 'lost', 'spam', 'archive', 'past_client'
 ];
 const CONTACT_TYPES = ['lead', 'client', 'past_client', 'sphere', 'agent', 'vendor'];
-const SCORE_BANDS = ['hot', 'warm', 'nurture', 'cold'];
+const SCORE_BANDS = ['hot', 'warm', 'cool', 'cold'];
 
 function parseContact(row) {
   if (!row) return null;
@@ -893,8 +893,8 @@ function adminListContacts({ stage = '', type = '', score_band = '', q = '', lim
   return { total, contacts: rows.map(parseContact), limit, offset };
 }
 
-function adminGetContact(contactId) {
-  const database = getDb();
+function adminGetContact(contactId, dbInstance) {
+  const database = dbInstance || getDb();
   const raw = database.prepare('SELECT * FROM contacts WHERE id = ?').get(contactId);
   if (!raw) return null;
   const contact = parseContact(raw);
@@ -939,6 +939,42 @@ function adminGetContact(contactId) {
   return contact;
 }
 
+function rescoreContact(contactId, dbInstance) {
+  const database = dbInstance || getDb();
+  const contact = adminGetContact(contactId, database);
+  if (!contact) return null;
+
+  const { scoreContact } = require('../lib/scoring');
+  const scored = scoreContact(contact, contact.activities, contact.consents, new Date());
+
+  const now = new Date().toISOString();
+  database.prepare(`
+    UPDATE contacts
+    SET score = ?, score_band = ?, score_reasons_json = ?, score_updated_at = ?
+    WHERE id = ?
+  `).run(scored.score, scored.band, JSON.stringify(scored.reasons), now, contactId);
+
+  return {
+    id: contactId,
+    score: scored.score,
+    score_band: scored.band,
+    score_reasons: scored.reasons,
+    score_updated_at: now,
+    breakdown: scored.breakdown
+  };
+}
+
+function rescoreAllContacts(dbInstance) {
+  const database = dbInstance || getDb();
+  const rows = database.prepare('SELECT id FROM contacts WHERE merged_into IS NULL').all();
+  let count = 0;
+  for (const row of rows) {
+    rescoreContact(row.id, database);
+    count++;
+  }
+  return { ok: true, rescored: count };
+}
+
 function adminUpdateContact(contactId, updates = {}) {
   const database = getDb();
   const sets = [];
@@ -977,7 +1013,11 @@ function adminUpdateContact(contactId, updates = {}) {
   sets.push("updated_at = ?");
   params.push(new Date().toISOString());
 
-  return database.prepare(`UPDATE contacts SET ${sets.join(', ')} WHERE id = ?`).run(...params, contactId).changes > 0;
+  const changed = database.prepare(`UPDATE contacts SET ${sets.join(', ')} WHERE id = ?`).run(...params, contactId).changes > 0;
+  if (changed) {
+    try { rescoreContact(contactId, database); } catch (_) {}
+  }
+  return changed;
 }
 
 // ---------- Tasks & Deals (CRM M1) ----------
@@ -1348,6 +1388,7 @@ module.exports = {
   createSession, getSession, deleteSession, audit, getAudit,
   LEAD_STATUSES, adminListLeads, adminGetLead, adminUpdateLead, adminDeleteLead, retryOutbox,
   CONTACT_STAGES, CONTACT_TYPES, SCORE_BANDS, adminListContacts, adminGetContact, adminUpdateContact,
+  rescoreContact, rescoreAllContacts,
   adminCreateTask, adminUpdateTask, adminDeleteTask, updateContactNextFollowUp,
   adminListPipelines, adminCreateDeal, adminGetDeal, adminUpdateDeal,
   getPushSubscriptions, addPushSubscription, removePushSubscription,

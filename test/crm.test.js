@@ -674,3 +674,296 @@ test('Step 6: PWA, Web Push & Mobile Hardening', async (t) => {
   });
 });
 
+test('Step 7: M2 Scoring Engine (Acceptance Tests 10 & 11)', async (t) => {
+  const { scoreContact, SCORING_CONFIG } = require('../site/lib/scoring');
+  const fixedNow = new Date('2026-11-14T12:00:00.000Z');
+
+  // Acceptance Test 10: 12 Fixed Fixtures
+  await t.test('Fixture 1: Hot Buyer (Immediate timeline, $3.5M, Pleasanton enclave)', () => {
+    const contact = {
+      timeline: '0-3 months',
+      interest: 'buy and sell',
+      budget: '$3.5M',
+      areas: ['Pleasanton'],
+      phone: '+19255550199',
+      stage: 'new',
+      type: 'lead',
+      created_at: '2026-11-13T12:00:00.000Z'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'valuation' }), occurred_at: '2026-11-13T12:00:00.000Z' }
+    ];
+    const consents = [{ channel: 'sms_calls', granted: 1 }];
+    const res = scoreContact(contact, activities, consents, fixedNow);
+
+    assert.equal(res.band, 'hot');
+    assert.ok(res.score >= 70, `Score should be >= 70, got ${res.score}`);
+    assert.ok(res.reasons.some(r => r.includes('Wants to move within 3 months')));
+  });
+
+  await t.test('Fixture 2: Hot Engaged Client (High engagement, showing logged)', () => {
+    const contact = {
+      timeline: '3-6 months',
+      budget: '$2.2M',
+      areas: ['Danville'],
+      phone: '+19255550188',
+      stage: 'showing',
+      type: 'client'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'contact' }), occurred_at: '2026-11-10T12:00:00.000Z' },
+      { kind: 'showing', occurred_at: '2026-11-13T10:00:00.000Z' },
+      { kind: 'email_in', direction: 'in', occurred_at: '2026-11-13T18:00:00.000Z' },
+      { kind: 'sms_in', direction: 'in', occurred_at: '2026-11-14T08:00:00.000Z' }
+    ];
+    const consents = [{ channel: 'sms_calls', granted: 1 }];
+    const res = scoreContact(contact, activities, consents, fixedNow);
+
+    assert.equal(res.band, 'hot');
+    assert.ok(res.score >= 70);
+    assert.ok(res.reasons.some(r => r.includes('showing') || r.includes('Active within past 2 days')));
+  });
+
+  await t.test('Fixture 3: Warm Seller (Valuation form, 3-6mo, Danville)', () => {
+    const contact = {
+      timeline: '3-6 months',
+      areas: ['Danville'],
+      phone: '+19255550177',
+      stage: 'contacted',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'valuation', occurred_at: '2026-11-09T12:00:00.000Z' } // 5 days ago
+    ];
+    const consents = [];
+    const res = scoreContact(contact, activities, consents, fixedNow);
+
+    assert.equal(res.band, 'warm');
+    assert.ok(res.score >= 40 && res.score < 70, `Score should be 40-69, got ${res.score}`);
+    assert.ok(res.reasons.some(r => r.includes('valuation') || r.includes('3 to 6 months')));
+  });
+
+  await t.test('Fixture 4: Cool Prospect (Exploring, modest budget, 12 days ago)', () => {
+    const contact = {
+      timeline: 'exploring',
+      budget: '$850,000',
+      stage: 'contacted',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'contact' }), occurred_at: '2026-11-02T12:00:00.000Z' } // 12 days ago
+    ];
+    const consents = [];
+    const res = scoreContact(contact, activities, consents, fixedNow);
+
+    assert.equal(res.band, 'cool');
+    assert.ok(res.score >= 15 && res.score < 40, `Score should be 15-39, got ${res.score}`);
+  });
+
+  await t.test('Fixture 5: Cold Subscriber (Newsletter only, no phone, 45 days ago)', () => {
+    const contact = {
+      timeline: '',
+      stage: 'new',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'newsletter' }), occurred_at: '2026-09-30T12:00:00.000Z' }
+    ];
+    const consents = [];
+    const res = scoreContact(contact, activities, consents, fixedNow);
+
+    assert.equal(res.band, 'cold');
+    assert.ok(res.score < 15, `Score should be < 15, got ${res.score}`);
+  });
+
+  await t.test('Fixture 6: Override - Stage spam forces score 0', () => {
+    const contact = {
+      timeline: '0-3 months',
+      budget: '$4M',
+      areas: ['Pleasanton'],
+      phone: '+19255550111',
+      stage: 'spam',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'valuation' }), occurred_at: '2026-11-14T10:00:00.000Z' }
+    ];
+    const res = scoreContact(contact, activities, [], fixedNow);
+
+    assert.equal(res.score, 0);
+    assert.equal(res.band, 'cold');
+    assert.ok(res.reasons.some(r => r.includes('spam')));
+  });
+
+  await t.test('Fixture 7: Override - Stage lost forces score 0', () => {
+    const contact = {
+      timeline: '0-3 months',
+      budget: '$2M',
+      areas: ['Danville'],
+      stage: 'lost',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'form', occurred_at: '2026-11-14T10:00:00.000Z' }
+    ];
+    const res = scoreContact(contact, activities, [], fixedNow);
+
+    assert.equal(res.score, 0);
+    assert.equal(res.band, 'cold');
+    assert.ok(res.reasons.some(r => r.includes('lost')));
+  });
+
+  await t.test('Fixture 8: Override - Type past_client capped at 30', () => {
+    const contact = {
+      timeline: '0-3 months',
+      budget: '$5M',
+      areas: ['Alamo'],
+      phone: '+19255550222',
+      stage: 'contacted',
+      type: 'past_client'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'valuation' }), occurred_at: '2026-11-14T10:00:00.000Z' }
+    ];
+    const res = scoreContact(contact, activities, [], fixedNow);
+
+    assert.equal(res.score, 30);
+    assert.equal(res.band, 'cool');
+    assert.ok(res.reasons.some(r => r.includes('Past client / transaction closed')));
+  });
+
+  await t.test('Fixture 9: Override - Stage closed capped at 30', () => {
+    const contact = {
+      timeline: '0-3 months',
+      budget: '$3M',
+      areas: ['Walnut Creek'],
+      stage: 'closed',
+      type: 'client'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'valuation' }), occurred_at: '2026-11-14T10:00:00.000Z' }
+    ];
+    const res = scoreContact(contact, activities, [], fixedNow);
+
+    assert.equal(res.score, 30);
+    assert.equal(res.band, 'cool');
+  });
+
+  await t.test('Fixture 10: Override - Bounced email penalty (-15)', () => {
+    const contact = {
+      timeline: '0-3 months',
+      budget: '$2M',
+      areas: ['Lafayette'],
+      stage: 'contacted',
+      type: 'lead',
+      identities: [{ type: 'email', value: 'bounced@client.com', status: 'bounced' }]
+    };
+    const activities = [
+      { kind: 'form', occurred_at: '2026-11-10T12:00:00.000Z' }
+    ];
+    const resNormal = scoreContact(Object.assign({}, contact, { identities: [] }), activities, [], fixedNow);
+    const resBounced = scoreContact(contact, activities, [], fixedNow);
+
+    assert.equal(resBounced.score, Math.max(0, resNormal.score - 15));
+    assert.ok(resBounced.reasons.some(r => r.includes('Primary email bounced')));
+  });
+
+  await t.test('Fixture 11: Override - Withdrawn marketing consent penalty (-10)', () => {
+    const contact = {
+      timeline: '3-6 months',
+      budget: '$1.8M',
+      areas: ['Dublin'],
+      stage: 'contacted',
+      type: 'lead'
+    };
+    const activities = [{ kind: 'form', occurred_at: '2026-11-10T12:00:00.000Z' }];
+    const consentsWithdrawn = [{ channel: 'email_marketing', granted: 0 }];
+
+    const resGranted = scoreContact(contact, activities, [{ channel: 'email_marketing', granted: 1 }], fixedNow);
+    const resWithdrawn = scoreContact(contact, activities, consentsWithdrawn, fixedNow);
+
+    assert.equal(resWithdrawn.score, Math.max(0, resGranted.score - 10));
+    assert.ok(resWithdrawn.reasons.some(r => r.includes('Email marketing consent withdrawn')));
+  });
+
+  await t.test('Fixture 12: Multiple distinct forms and submissions within 30 days', () => {
+    const contact = {
+      timeline: '3-6 months',
+      areas: ['Livermore'],
+      stage: 'new',
+      type: 'lead'
+    };
+    const activities = [
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'valuation' }), occurred_at: '2026-11-01T12:00:00.000Z' },
+      { kind: 'form', meta_json: JSON.stringify({ form_type: 'concierge' }), occurred_at: '2026-11-10T12:00:00.000Z' }
+    ];
+    const res = scoreContact(contact, activities, [], fixedNow);
+
+    assert.ok(res.all_reasons.some(r => r.includes('distinct inquiry forms submitted')));
+    assert.ok(res.all_reasons.some(r => r.includes('forms within 30 days')));
+  });
+
+  // Acceptance Test 11: Decay Test
+  await t.test('Decay Test: Score decays monotonically as clock advances past boundaries', () => {
+    const contact = {
+      timeline: '3-6 months',
+      budget: '$2.5M',
+      areas: ['San Ramon'],
+      phone: '+19255550333',
+      stage: 'contacted',
+      type: 'lead'
+    };
+    const baseDate = new Date('2026-11-01T12:00:00.000Z');
+    const activities = [
+      { kind: 'form', occurred_at: baseDate.toISOString() }
+    ];
+    const consents = [];
+
+    // T0 + 1 day: within 2 days -> +15 recency pts
+    const score1d = scoreContact(contact, activities, consents, new Date(baseDate.getTime() + 1 * 86400000)).score;
+
+    // T0 + 5 days: within 7 days -> +10 recency pts (drops by 5)
+    const score5d = scoreContact(contact, activities, consents, new Date(baseDate.getTime() + 5 * 86400000)).score;
+
+    // T0 + 10 days: within 14 days -> +6 recency pts (drops by 4)
+    const score10d = scoreContact(contact, activities, consents, new Date(baseDate.getTime() + 10 * 86400000)).score;
+
+    // T0 + 20 days: within 30 days -> +3 recency pts (drops by 3)
+    const score20d = scoreContact(contact, activities, consents, new Date(baseDate.getTime() + 20 * 86400000)).score;
+
+    // T0 + 40 days: older than 30 days -> 0 recency pts (drops by 3)
+    const score40d = scoreContact(contact, activities, consents, new Date(baseDate.getTime() + 40 * 86400000)).score;
+
+    assert.equal(score1d - score5d, 5, 'Should decay by 5 points between 2d and 7d');
+    assert.equal(score5d - score10d, 4, 'Should decay by 4 points between 7d and 14d');
+    assert.equal(score10d - score20d, 3, 'Should decay by 3 points between 14d and 30d');
+    assert.equal(score20d - score40d, 3, 'Should decay by 3 points past 30 days');
+    assert.ok(score1d > score5d && score5d > score10d && score10d > score20d && score20d > score40d, 'Decay must be strictly monotonic');
+  });
+
+  await t.test('Database rescoreContact and rescoreAllContacts operations', () => {
+    // 1. Rescore all contacts in DB
+    const resBulk = db.rescoreAllContacts();
+    assert.ok(resBulk.ok);
+    assert.ok(resBulk.rescored >= 3);
+
+    // 2. Verify individual contact rescore updates database row
+    const contacts = db.adminListContacts().contacts;
+    assert.ok(contacts.length > 0);
+    const targetId = contacts[0].id;
+
+    const scored = db.rescoreContact(targetId);
+    assert.ok(scored);
+    assert.equal(scored.id, targetId);
+    assert.ok(typeof scored.score === 'number');
+    assert.ok(['hot', 'warm', 'cool', 'cold'].includes(scored.score_band));
+
+    // Verify row in DB reflects updated score
+    const updated = db.adminGetContact(targetId);
+    assert.equal(updated.score, scored.score);
+    assert.equal(updated.score_band, scored.score_band);
+    assert.ok(updated.score_updated_at);
+  });
+});
+
+
