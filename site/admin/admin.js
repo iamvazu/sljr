@@ -40,6 +40,10 @@
   }
 
   function api(path, method, body) {
+    if (typeof method === 'object' && method !== null) {
+      body = method.body !== undefined ? (typeof method.body === 'string' ? (function () { try { return JSON.parse(method.body); } catch (_) { return method.body; } })() : method.body) : undefined;
+      method = method.method || 'GET';
+    }
     var opts = { method: method || 'GET', credentials: 'same-origin', headers: { Accept: 'application/json' } };
     if (opts.method !== 'GET') { opts.headers['X-SL-Admin'] = '1'; opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body || {}); }
     return fetch('/api/admin' + path, opts).then(function (res) {
@@ -1714,12 +1718,21 @@
       return { supported: false, subscribed: false };
     }
     try {
-      var reg = await navigator.serviceWorker.ready;
-      var sub = await reg.pushManager.getSubscription();
+      var timeout = new Promise(function (resolve) { setTimeout(resolve, 350, null); });
+      var regPromise = navigator.serviceWorker.getRegistration('/admin/').catch(function () { return null; });
+      var reg = await Promise.race([regPromise, timeout]);
+      if (!reg || !reg.pushManager) {
+        return {
+          supported: true,
+          subscribed: false,
+          permission: typeof Notification !== 'undefined' ? Notification.permission : 'default'
+        };
+      }
+      var sub = await reg.pushManager.getSubscription().catch(function () { return null; });
       return {
         supported: true,
         subscribed: Boolean(sub),
-        permission: Notification.permission,
+        permission: typeof Notification !== 'undefined' ? Notification.permission : 'default',
         subscription: sub
       };
     } catch (_) {
@@ -1731,7 +1744,10 @@
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
       throw new Error('Web Push is not supported in this browser.');
     }
-    var reg = await navigator.serviceWorker.ready;
+    var reg = await (navigator.serviceWorker.getRegistration('/admin/').catch(function () { return null; }));
+    if (!reg) {
+      reg = await navigator.serviceWorker.ready;
+    }
     if (enable) {
       var perm = await Notification.requestPermission();
       if (perm !== 'granted') {
@@ -1745,21 +1761,15 @@
         applicationServerKey: convertedVapidKey
       });
       var subJson = sub.toJSON();
-      await api('/push/subscribe', {
-        method: 'POST',
-        body: JSON.stringify({
-          endpoint: sub.endpoint,
-          keys: subJson.keys
-        })
+      await api('/push/subscribe', 'POST', {
+        endpoint: sub.endpoint,
+        keys: subJson.keys
       });
       return true;
     } else {
       var sub = await reg.pushManager.getSubscription();
       if (sub) {
-        await api('/push/subscribe', {
-          method: 'DELETE',
-          body: JSON.stringify({ endpoint: sub.endpoint })
-        });
+        await api('/push/subscribe', 'DELETE', { endpoint: sub.endpoint });
         await sub.unsubscribe();
       }
       return false;
@@ -1768,14 +1778,10 @@
 
   /* ---------- Settings Screen ---------- */
   function settings() {
-    api('/settings').then(async function (d) {
+    api('/settings').then(function (d) {
       var s = d.settings || {};
       var u = d.usage || {};
       var b = d.last_backup;
-      var pushInfo = await getPushStatus().catch(function () { return { supported: false }; });
-
-      var pushLabel = !pushInfo.supported ? '<span class="pill pill--off">Not supported in this browser</span>'
-        : (pushInfo.subscribed ? '<span class="pill pill--on">Active on this device</span>' : '<span class="pill pill--off">Disabled on this device</span>');
 
       var aiPct = u.ai_pct || 0;
       var emailPct = u.email_pct || 0;
@@ -1788,14 +1794,11 @@
             '<div class="card" style="margin-bottom:16px;">' +
               '<h3>Web Push Notifications</h3>' +
               '<p class="muted small">Instant alerts on your phone or desktop when a new lead submits an inquiry.</p>' +
-              '<div style="margin:14px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
-                pushLabel +
-                (pushInfo.supported ? (pushInfo.subscribed ?
-                  '<button id="btn-push-toggle" class="btn btn--danger" style="font-size:.78rem;">Disable notifications</button>' :
-                  '<button id="btn-push-toggle" class="btn btn--primary" style="font-size:.78rem;">Enable notifications</button>') : '') +
+              '<div id="push-status-container" style="margin:14px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
+                '<span class="pill">Checking push status…</span>' +
               '</div>' +
               '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">' +
-                '<button id="btn-push-test" class="btn" ' + (pushInfo.subscribed ? '' : 'disabled') + ' style="font-size:.78rem;">Send Test Push</button>' +
+                '<button id="btn-push-test" class="btn" disabled style="font-size:.78rem;">Send Test Push</button>' +
                 '<span id="push-test-msg" class="muted small" style="margin-left:10px;"></span>' +
               '</div>' +
             '</div>' +
@@ -1873,29 +1876,50 @@
           '</div>' +
         '</div>';
 
-      // Event listeners for Settings
-      var btnToggle = $('btn-push-toggle');
-      if (btnToggle) {
-        btnToggle.addEventListener('click', async function () {
-          btnToggle.disabled = true;
-          try {
-            await toggleWebPush(!pushInfo.subscribed);
-            toast(pushInfo.subscribed ? 'Web push disabled on this device.' : 'Web push enabled successfully!');
-            settings();
-          } catch (err) {
-            fail(err);
-            btnToggle.disabled = false;
-          }
-        });
-      }
+      // Asynchronously resolve Web Push status without blocking the UI
+      var pushInfo = { supported: false, subscribed: false };
+      getPushStatus().then(function (info) {
+        pushInfo = info || { supported: false, subscribed: false };
+        var container = $('push-status-container');
+        if (!container) return;
+        var pushLabel = !pushInfo.supported ? '<span class="pill pill--off">Not supported in this browser</span>'
+          : (pushInfo.subscribed ? '<span class="pill pill--on">Active on this device</span>' : '<span class="pill pill--off">Disabled on this device</span>');
+        container.innerHTML =
+          pushLabel +
+          (pushInfo.supported ? (pushInfo.subscribed ?
+            '<button id="btn-push-toggle" class="btn btn--danger" style="font-size:.78rem;">Disable notifications</button>' :
+            '<button id="btn-push-toggle" class="btn btn--primary" style="font-size:.78rem;">Enable notifications</button>') : '');
 
+        var btnTest = $('btn-push-test');
+        if (btnTest) btnTest.disabled = !pushInfo.subscribed;
+
+        var btnToggle = $('btn-push-toggle');
+        if (btnToggle) {
+          btnToggle.addEventListener('click', async function () {
+            btnToggle.disabled = true;
+            try {
+              await toggleWebPush(!pushInfo.subscribed);
+              toast(pushInfo.subscribed ? 'Web push disabled on this device.' : 'Web push enabled successfully!');
+              settings();
+            } catch (err) {
+              fail(err);
+              btnToggle.disabled = false;
+            }
+          });
+        }
+      }).catch(function () {
+        var container = $('push-status-container');
+        if (container) container.innerHTML = '<span class="pill pill--off">Status unavailable</span>';
+      });
+
+      // Event listeners for Push Test
       var btnTest = $('btn-push-test');
       if (btnTest) {
         btnTest.addEventListener('click', function () {
           btnTest.disabled = true;
           var msg = $('push-test-msg');
           msg.textContent = 'Sending…';
-          api('/push/test', { method: 'POST' }).then(function (res) {
+          api('/push/test', 'POST').then(function (res) {
             msg.textContent = 'Test push sent (' + res.sent + ' delivered).';
             toast('Test notification sent!');
             setTimeout(function () { btnTest.disabled = false; }, 2000);
@@ -1906,6 +1930,7 @@
         });
       }
 
+      // Event listeners for Settings Form
       var f = $('settings-form');
       if (f) {
         f.addEventListener('submit', function (e) {
@@ -1914,13 +1939,10 @@
           saveBtn.disabled = true;
           var msg = $('settings-save-msg');
           msg.textContent = 'Saving…';
-          api('/settings', {
-            method: 'PATCH',
-            body: JSON.stringify({
-              sender_name: $('set-sender-name').value.trim(),
-              working_hours: $('set-working-hours').value.trim(),
-              sender_signature: $('set-sender-signature').value.trim()
-            })
+          api('/settings', 'PATCH', {
+            sender_name: $('set-sender-name').value.trim(),
+            working_hours: $('set-working-hours').value.trim(),
+            sender_signature: $('set-sender-signature').value.trim()
           }).then(function () {
             msg.textContent = 'Settings saved.';
             toast('Settings saved successfully.');
@@ -1934,13 +1956,14 @@
         });
       }
 
+      // Event listener for Database Backup
       var btnBackup = $('btn-backup-now');
       if (btnBackup) {
         btnBackup.addEventListener('click', function () {
           btnBackup.disabled = true;
           var msg = $('backup-run-msg');
           msg.textContent = 'Running VACUUM INTO backup…';
-          api('/backup/run', { method: 'POST' }).then(function (res) {
+          api('/backup/run', 'POST').then(function (res) {
             msg.textContent = 'Backup completed: ' + res.backup.filename;
             toast('Database backup completed successfully!');
             setTimeout(function () { settings(); }, 1500);
