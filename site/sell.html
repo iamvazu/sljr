@@ -398,45 +398,6 @@
       document.getElementById('sv-next-2').addEventListener('click', function () { setStep(3); });
       document.getElementById('sv-back-3').addEventListener('click', function () { setStep(2); });
 
-      // Steven Lenz AI Valuation Engine (submarket PPSF + property profile + Concierge uplift)
-      function computeStevenLenzAI(addr, type, beds, baths, sqft, timeline) {
-        var low = addr.toLowerCase();
-        var submarket = 'Tri-Valley & East Bay';
-        var ppsf = 625;
-        if (low.indexOf('alamo') !== -1 || low.indexOf('94507') !== -1) { submarket = 'Alamo'; ppsf = 815; }
-        else if (low.indexOf('danville') !== -1 || low.indexOf('blackhawk') !== -1 || low.indexOf('94506') !== -1 || low.indexOf('94526') !== -1) { submarket = 'Danville / Blackhawk'; ppsf = 760; }
-        else if (low.indexOf('pleasanton') !== -1 || low.indexOf('94566') !== -1 || low.indexOf('94588') !== -1) { submarket = 'Pleasanton'; ppsf = 745; }
-        else if (low.indexOf('walnut creek') !== -1 || low.indexOf('94596') !== -1 || low.indexOf('94595') !== -1 || low.indexOf('94598') !== -1) { submarket = 'Walnut Creek'; ppsf = 695; }
-        else if (low.indexOf('orinda') !== -1 || low.indexOf('lafayette') !== -1) { submarket = 'Lamorinda'; ppsf = 860; }
-        else if (low.indexOf('livermore') !== -1 || low.indexOf('94550') !== -1 || low.indexOf('94551') !== -1) { submarket = 'Livermore'; ppsf = 610; }
-        else if (low.indexOf('san ramon') !== -1 || low.indexOf('94582') !== -1 || low.indexOf('94583') !== -1) { submarket = 'San Ramon'; ppsf = 690; }
-        else if (low.indexOf('brentwood') !== -1 || low.indexOf('94513') !== -1) { submarket = 'Brentwood'; ppsf = 410; }
-        else if (low.indexOf('oakland') !== -1 || low.indexOf('946') !== -1) { submarket = 'Oakland'; ppsf = 670; }
-        else if (low.indexOf('richmond') !== -1 || low.indexOf('948') !== -1) { submarket = 'Richmond'; ppsf = 560; }
-
-        var typeMult = type === 'Estate / Acreage' ? 1.16 : type === 'Townhome / Condo' ? 0.88 : type === 'Multi-Family' ? 1.08 : 1.0;
-        var bedAdj = (Number(beds) - 3) * 28000;
-        var bathAdj = (Number(baths) - 2) * 22000;
-        var area = Math.max(600, Number(sqft) || 2000);
-        var mid = Math.round((area * ppsf * typeMult + bedAdj + bathAdj) / 5000) * 5000;
-        var lowEst = Math.round(mid * 0.94 / 5000) * 5000;
-        var highEst = Math.round(mid * 1.06 / 5000) * 5000;
-        var conciergeUplift = Math.round(mid * 0.055 / 5000) * 5000;
-        var strategy = timeline === 'Ready now'
-          ? 'Immediate Compass Private Exclusive preview followed by full MLS launch.'
-          : '4-week Compass Concierge prep (paint, staging, lighting) to capture top-quartile offers.';
-
-        return {
-          submarket: submarket,
-          ppsf: Math.round(mid / area),
-          low: '$' + lowEst.toLocaleString(),
-          mid: '$' + mid.toLocaleString(),
-          high: '$' + highEst.toLocaleString(),
-          uplift: '+$' + conciergeUplift.toLocaleString(),
-          strategy: strategy
-        };
-      }
-
       function esc(s) {
         return String(s == null ? '' : s)
           .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')

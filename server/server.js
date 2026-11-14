@@ -92,12 +92,8 @@ function handleRequest(req, res) {
   // Healthcheck endpoint
   if (pathname === '/api/health' && method === 'GET') {
     return sendJson(res, 200, {
-      status: 'healthy',
-      service: 'AI Steve Real Estate Engine',
-      db: 'connected (node:sqlite)',
-      tables: ['properties', 'leads', 'conversations', 'feedback'],
-      uptime: Math.round(process.uptime()),
-      timestamp: new Date().toISOString()
+      ok: true,
+      status: 'healthy'
     });
   }
 
