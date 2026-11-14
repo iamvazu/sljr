@@ -16,17 +16,27 @@
   var activePropertyAddress = '1232 York St';
   var cachedHomes = [];
 
-  // Core properties fallback list (matches SQLite database seeds)
+  // Core properties fallback list (matches verified real listings)
   var SEED_HOMES = [
     {
-      id: 'prop-segale',
-      address: '91 Segale Dr, Camp Connell, CA',
-      price: '$450,000',
-      priceNum: 450000,
-      beds: '2',
-      baths: '1',
-      sqft: '1,563',
-      photo: 'assets/img/listings/danville-genoa-1.jpg'
+      id: 'prop-danville-genoa',
+      address: '2261 Genoa St, Danville, CA',
+      price: '$1,560,000',
+      priceNum: 1560000,
+      beds: '4',
+      baths: '3',
+      sqft: '3,186',
+      photo: 'assets/img/danville-genoa.jpg'
+    },
+    {
+      id: 'prop-livermore-altamont',
+      address: '1631 Altamont Cir, Livermore, CA',
+      price: '$900,000',
+      priceNum: 900000,
+      beds: '5',
+      baths: '3',
+      sqft: '2,829',
+      photo: 'assets/img/livermore-altamont.jpg'
     },
     {
       id: 'prop-york',
@@ -39,24 +49,14 @@
       photo: 'assets/img/listings/1240-york-st-1.jpg'
     },
     {
-      id: 'prop-ruby-hill',
-      address: '1100 Ruby Hill Blvd, Pleasanton, CA',
-      price: '$3,450,000',
-      priceNum: 3450000,
-      beds: '5',
-      baths: '5.5',
-      sqft: '5,200',
-      photo: 'assets/img/pocket-pleasanton-ruby-hill.jpg'
-    },
-    {
-      id: 'prop-danville',
-      address: '3217 Diablo Rd, Danville, CA',
-      price: '$2,895,000',
-      priceNum: 2895000,
-      beds: '4',
-      baths: '4.5',
-      sqft: '4,120',
-      photo: 'assets/img/pocket-danville-blackhawk.jpg'
+      id: 'prop-segale',
+      address: '91 Segale Dr, Camp Connell, CA',
+      price: '$450,000',
+      priceNum: 450000,
+      beds: '2',
+      baths: '1',
+      sqft: '1,563',
+      photo: 'assets/img/listings/danville-genoa-1.jpg'
     }
   ];
 
@@ -65,7 +65,7 @@
   // Inject CSS
   var cssLink = document.createElement('link');
   cssLink.rel = 'stylesheet';
-  cssLink.href = pfx + 'css/ai-steve.css?v=20261113f';
+  cssLink.href = pfx + 'css/ai-steve.css?v=20261113g';
   document.head.appendChild(cssLink);
 
   function createWidget() {
@@ -74,15 +74,15 @@
     fab.type = 'button';
     fab.className = 'sl-ai-fab';
     fab.id = 'sl-ai-fab';
-    fab.setAttribute('aria-label', 'Open AI Steve Real Estate Advisor');
+    fab.setAttribute('aria-label', 'Open AI Assistant for Steven Lenz Jr.');
     fab.innerHTML =
       '<div class="sl-ai-fab__avatar-wrap">' +
-        '<img class="sl-ai-fab__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="Steve" />' +
-        '<span class="sl-ai-fab__status"></span>' +
+        '<img class="sl-ai-fab__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="AI Assistant" />' +
+        '<span class="sl-ai-fab__status">AI</span>' +
       '</div>' +
       '<div class="sl-ai-fab__label">' +
-        '<span class="sl-ai-fab__name">Steve</span>' +
-        '<span class="sl-ai-fab__hint">Ask AI Steve · Free</span>' +
+        '<span class="sl-ai-fab__name">AI Assistant</span>' +
+        '<span class="sl-ai-fab__hint">Steven Lenz Jr. Desk</span>' +
       '</div>';
 
     // 2. Chat & Homes Split Window Container
@@ -90,15 +90,15 @@
     win.className = 'sl-ai-window';
     win.id = 'sl-ai-window';
     win.setAttribute('role', 'dialog');
-    win.setAttribute('aria-label', 'Chat with AI Steve');
+    win.setAttribute('aria-label', 'Chat with AI Assistant for Steven Lenz Jr.');
 
     win.innerHTML =
-      // LEFT PANEL: HOMES EXPLORER (Screenshots 1 & 2)
+      // LEFT PANEL: HOMES EXPLORER
       '<div class="sl-ai-homes-panel" id="sl-ai-homes-panel">' +
         '<div class="sl-ai-homes-header">' +
           '<div class="sl-ai-homes-title-wrap">' +
-            '<span class="sl-ai-homes-title">Homes</span>' +
-            '<span class="sl-ai-homes-subtitle" id="sl-ai-homes-subtitle">2 homes from this answer</span>' +
+            '<span class="sl-ai-homes-title">Featured Homes</span>' +
+            '<span class="sl-ai-homes-subtitle" id="sl-ai-homes-subtitle">Showcasing Tri-Valley &amp; East Bay</span>' +
           '</div>' +
           '<button type="button" class="sl-ai-homes-close-btn" id="sl-ai-homes-close-btn" aria-label="Close homes panel">' +
             '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
@@ -118,11 +118,11 @@
         '<div class="sl-ai-header">' +
           '<div class="sl-ai-header__left">' +
             '<div class="sl-ai-header__avatar-wrap">' +
-              '<img class="sl-ai-header__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="Steve" />' +
+              '<img class="sl-ai-header__avatar" src="' + pfx + 'assets/img/steven-headshot.jpg" alt="AI Assistant" />' +
             '</div>' +
             '<div class="sl-ai-header__info">' +
-              '<span class="sl-ai-header__name">Steve</span>' +
-              '<span class="sl-ai-header__sub">Steven Lenz Jr. · Compass California II, Inc.</span>' +
+              '<span class="sl-ai-header__name">AI Assistant · Steven Lenz Jr.</span>' +
+              '<span class="sl-ai-header__sub">Automated Real Estate Assistant · Compass CA DRE# 01989811</span>' +
             '</div>' +
           '</div>' +
           '<div class="sl-ai-header__actions">' +
@@ -165,12 +165,12 @@
         '<div class="sl-ai-body" id="sl-ai-body">' +
           '<div class="sl-ai-msg sl-ai-msg--bot">' +
             '<div class="sl-ai-bubble">' +
-              'Hi! I\'m Steve. Ask about Steven\'s homes, homes in Camp Connell, CA or Richmond, CA, or what a home would cost a month.' +
+              'Hello! I am an automated AI assistant for Steven Lenz Jr. at Compass (CA DRE# 01989811). I can answer questions about Steven\'s listings, Tri-Valley market trends, buying or selling timelines, or connect you directly with Steven.' +
             '</div>' +
             '<div class="sl-ai-pills" id="sl-ai-starter-pills">' +
+              '<button type="button" class="sl-ai-pill-btn" data-query="Which areas does Steven cover?">Which areas does Steven cover?</button>' +
               '<button type="button" class="sl-ai-pill-btn" data-query="What homes does Steven have?">What homes does Steven have?</button>' +
-              '<button type="button" class="sl-ai-pill-btn" data-query="What would a $700K home cost a month?">What would a $700K home cost a month?</button>' +
-              '<button type="button" class="sl-ai-pill-btn" data-query="Which areas do you cover?">Which areas do you cover?</button>' +
+              '<button type="button" class="sl-ai-pill-btn" data-query="How does Compass Concierge work?">How does Compass Concierge work?</button>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -602,31 +602,43 @@
 
     function handleOfflineQuery(query) {
       var text = query.toLowerCase();
-      if (text.indexOf('area') !== -1 || text.indexOf('cover') !== -1) {
-        renderHomesList(SEED_HOMES.slice(0, 2));
+      if (text.indexOf('area') !== -1 || text.indexOf('cover') !== -1 || text.indexOf('where') !== -1 || text.indexOf('cities') !== -1) {
+        renderHomesList(SEED_HOMES);
         addBotMessage(
-          'I cover Camp Connell, CA and Richmond, CA. If you want, I can also show you the homes I have there.',
+          'Steven specializes in the Tri-Valley and East Bay corridor, focusing on Pleasanton, Danville, Alamo, Walnut Creek, San Ramon, Livermore, and Lafayette. He also handles discreet luxury transactions across the broader Bay Area.',
           {
             eyebrow: 'HOMES · SHOWING NOW',
-            title: '2 homes',
-            priceRange: '$450,000 to $825,000',
+            title: 'Featured Properties',
+            priceRange: '$825,000 to $1,560,000+',
             actionText: 'Browse homes →',
             actionType: 'browse_homes'
           },
-          ['Browse homes', 'Tell me about 1232 York St', 'Talk to Steven']
+          ['Browse homes', 'Tell me about 2261 Genoa St', 'Talk to Steven']
         );
         toggleHomesPanel(true);
+      } else if (text.indexOf('concierge') !== -1) {
+        addBotMessage(
+          'Compass Concierge fronts 100% of upfront home preparation and cosmetic upgrade costs—including high-end staging, interior/exterior painting, flooring, and landscaping—with $0 upfront fees and 0% interest until close of escrow. Would you like Steven to evaluate your home\'s potential?',
+          {
+            eyebrow: 'COMPASS CONCIERGE',
+            title: 'Prep Now, Pay at Escrow',
+            priceRange: '$0 Upfront Fees · 0% Interest',
+            actionText: 'Learn more →',
+            actionType: 'talk_to_steve'
+          },
+          ['Talk to Steven', 'Which areas does Steven cover?', 'Browse homes']
+        );
       } else {
         addBotMessage(
           'I can help you review Steven\'s available homes, estimate monthly mortgage payments, or schedule a tour. Click "Browse homes" or "Talk to Steven" below.',
           {
             eyebrow: 'FEATURED HOMES',
             title: 'Steven\'s Exclusive Portfolio',
-            priceRange: '$450K - $4.2M',
+            priceRange: '$825K - $1.56M+',
             actionText: 'Browse homes →',
             actionType: 'browse_homes'
           },
-          ['Which areas do you cover?', 'What would a $700K home cost a month?']
+          ['Which areas does Steven cover?', 'What would a $700K home cost a month?', 'How does Compass Concierge work?']
         );
       }
     }

@@ -678,7 +678,7 @@ html, body {
   border-radius: 2px; transition: transform 0.18s ease;
 }
 
-/* Scene 5 — Testimonials (HoneyQuote-style cream cards) */
+/* Scene 5 — Testimonials (Belvedere dark luxury cards) */
 .tq-track {
   display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
   scrollbar-width: none; padding: 2px 2px 6px;
@@ -686,19 +686,20 @@ html, body {
 .tq-track::-webkit-scrollbar { display: none; }
 .tq-card {
   flex: 0 0 calc((100% - 14px) / 2); scroll-snap-align: start;
-  background: #F5F0E6; color: #1C2230; border-radius: 16px;
+  background: rgba(18, 24, 38, 0.88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  color: #F3EEE6; border-radius: 16px; border: 1px solid rgba(216, 165, 90, 0.28);
   padding: 24px 24px 20px; display: flex; flex-direction: column; min-height: 280px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 }
-.tq-stars { color: #B5562E; letter-spacing: 3px; font-size: 0.9rem; }
+.tq-stars { color: #D8A55A; letter-spacing: 3px; font-size: 0.95rem; }
 .tq-quote {
-  margin: 14px 0 18px; font-family: var(--sw-font-body); font-weight: 500;
-  font-size: clamp(0.98rem, 1.15vw, 1.08rem); line-height: 1.5; color: #1C2230;
-  display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden;
+  margin: 14px 0 18px; font-family: var(--sw-font-body); font-weight: 400;
+  font-size: clamp(0.94rem, 1.1vw, 1.02rem); line-height: 1.6; color: #F3EEE6;
+  white-space: normal; overflow: visible;
 }
-.tq-person { margin-top: auto; border-top: 1px solid rgba(28, 34, 48, 0.16); padding-top: 14px; }
-.tq-name { display: block; font-weight: 600; font-size: 0.9rem; color: #1C2230; }
-.tq-context { display: block; font-size: 0.78rem; color: #5B6272; margin-top: 2px; }
+.tq-person { margin-top: auto; border-top: 1px solid rgba(243, 238, 230, 0.16); padding-top: 14px; }
+.tq-name { display: block; font-weight: 600; font-size: 0.92rem; color: #FFFFFF; }
+.tq-context { display: block; font-size: 0.78rem; color: #D8A55A; margin-top: 2px; }
 .tq-head {
   font-family: var(--sw-font-display); font-weight: 300; color: var(--sw-ink);
   font-size: clamp(1.35rem, 2vw, 1.8rem); line-height: 1.2; margin: 0;
@@ -777,7 +778,13 @@ html, body {
   display: inline-block; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--sw-border);
   font-size: 0.7rem; color: var(--sw-ink-soft); cursor: pointer;
 }
-.area-chip input:checked + span { background: rgba(216, 165, 90, 0.16); border-color: var(--sw-accent); color: var(--sw-accent); }
+.area-chip input:checked + span {
+  background: #D8A55A;
+  border-color: #D8A55A;
+  color: #0C121C;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(216, 165, 90, 0.35);
+}
 .consent-row { display: flex; align-items: flex-start; gap: 8px; font-size: 0.7rem; color: var(--sw-ink-soft); line-height: 1.4; margin-top: 5px; }
 .consent-row input[type="checkbox"] { margin-top: 2px; accent-color: var(--sw-accent); flex-shrink: 0; }
 .honeypot-field { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; pointer-events: none; }
@@ -785,7 +792,7 @@ html, body {
 
 /* Right-side Route Dots (Belvedere style) */
 .sw-route {
-  position: fixed; right: clamp(12px, 2vw, 26px); top: 50%; z-index: 40;
+  position: fixed; right: 12px; top: 50%; z-index: 40;
   transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; padding: 16px 8px;
 }
 .sw-route::before {
@@ -811,7 +818,7 @@ html, body {
   padding: 4px 10px; border-radius: 999px; border: 1px solid var(--sw-border);
   opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s;
 }
-.sw-route__dot:hover .sw-route__label, .sw-route__dot.is-active .sw-route__label {
+.sw-route__dot:hover .sw-route__label {
   opacity: 1; transform: translateY(-50%) translateX(0);
 }
 

@@ -37,8 +37,8 @@ function formatCurrency(num) {
 
 class AIAgent {
   constructor() {
-    this.name = 'Steve';
-    this.agentIdentity = 'Steven Lenz Jr. · Compass California II, Inc.';
+    this.name = 'AI Assistant';
+    this.agentIdentity = 'Steven Lenz Jr. · Compass California II, Inc. · CA DRE# 01989811';
   }
 
   processQuery(userMessage, sessionHistory = []) {
@@ -47,21 +47,22 @@ class AIAgent {
 
     // 1. Check for Areas Covered
     if (text.includes('area') || text.includes('cover') || text.includes('where do you') || text.includes('cities') || text.includes('location')) {
-      const campConnell = db.getPropertyByAddress('91 Segale');
+      const danville = db.getPropertyByAddress('2261 Genoa');
       const richmond = db.getPropertyByAddress('1232 York');
-      const properties = [campConnell, richmond].filter(Boolean);
+      const campConnell = db.getPropertyByAddress('91 Segale');
+      const properties = [danville, richmond, campConnell].filter(Boolean);
 
       return {
-        reply: "I cover Camp Connell, CA and Richmond, CA, as well as Pleasanton, Danville, Alamo, and the broader Bay Area. If you want, I can also show you the homes I have there.",
+        reply: "Steven specializes in the Tri-Valley and East Bay corridor, with focus in Pleasanton, Danville, Alamo, Walnut Creek, San Ramon, Livermore, and Lafayette. He also represents clients across Alameda and Contra Costa counties as well as discrete transactions across the Bay Area.",
         properties: properties,
         card: {
           eyebrow: 'HOMES · SHOWING NOW',
-          title: `${properties.length} homes`,
-          priceRange: `${formatCurrency(450000)} to ${formatCurrency(825000)}`,
+          title: 'Featured Properties',
+          priceRange: `${formatCurrency(825000)} to ${formatCurrency(1560000)}+`,
           actionText: 'Browse homes →',
           actionType: 'browse_homes'
         },
-        quickReplies: ['Browse homes', 'Tell me about 1232 York St', 'Talk to Steven'],
+        quickReplies: ['Browse homes', 'Tell me about 2261 Genoa St', 'Talk to Steven'],
         intent: 'AREAS_COVERED'
       };
     }

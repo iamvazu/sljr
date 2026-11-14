@@ -321,7 +321,7 @@ body.subpage .ed-header.is-scrolled {
   color: var(--sw-ink); margin: 0 0 8px; font-weight: 600;
 }
 .ed-idx-copy {
-  font-size: 0.72rem; line-height: 1.6; color: rgba(243, 238, 230, 0.62);
+  font-size: 0.76rem; line-height: 1.65; color: rgba(243, 238, 230, 0.78);
   margin: 0 0 18px;
 }
 .ed-legal-details {

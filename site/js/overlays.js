@@ -52,6 +52,8 @@
         (item.sqft && item.sqft !== '0') ? item.sqft.toLocaleString() + ' SQ.FT' : ''
       ].filter(Boolean).join(' · ') || String(item.property_type || 'Land').toUpperCase();
 
+      var agentRole = item.role || 'Represented Client · Compass';
+
       return (
         '<article class="listing-card">' +
           '<a class="listing-card__hit" href="listing.html?id=' + encodeURIComponent(item.id) + '">' +
@@ -63,6 +65,8 @@
               '<div class="listing-price">' + esc(formattedPrice) + '</div>' +
               '<h3 class="listing-address">' + esc(addressLine) + '</h3>' +
               '<div class="listing-specs">' + esc(specsLine) + '</div>' +
+              '<div class="listing-role-badge" style="font-size:0.7rem;color:var(--sw-accent,#D8A55A);margin-top:6px;font-weight:600;">' + esc(agentRole) + '</div>' +
+              '<div class="listing-photo-credit" style="font-size:0.64rem;color:rgba(243,238,230,0.5);margin-top:2px;">Photo via MLS / CCAR</div>' +
             '</div>' +
           '</a>' +
         '</article>'
@@ -204,16 +208,27 @@
     var statusEl = document.getElementById('form-status');
     var submitBtn = document.getElementById('lead-submit');
 
+    var smsConsent = document.getElementById('lead-sms-consent');
+
     if (phoneInput) {
-      phoneInput.required = true;
+      phoneInput.required = false;
+      if (smsConsent) {
+        smsConsent.addEventListener('change', function () {
+          phoneInput.required = smsConsent.checked;
+        });
+      }
     }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (phoneInput) {
         var digits = (phoneInput.value || '').replace(/\D/g, '');
-        if (digits.length < 10) {
-          phoneInput.setCustomValidity('Please enter a valid 10-digit phone number.');
+        if (smsConsent && smsConsent.checked && digits.length < 10) {
+          phoneInput.setCustomValidity('A 10-digit phone number is required for call and text updates.');
+          phoneInput.reportValidity();
+          return;
+        } else if (digits.length > 0 && digits.length < 10) {
+          phoneInput.setCustomValidity('Please enter a valid 10-digit phone number or leave blank.');
           phoneInput.reportValidity();
           return;
         } else {

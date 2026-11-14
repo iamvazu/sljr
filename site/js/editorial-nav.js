@@ -197,15 +197,15 @@
         '</ul></div>' +
         '<div class="ed-footer__col"><h4>Communities</h4><ul class="ed-footer__links"><li><a href="' + pfx + 'neighborhoods.html#tri-valley">Tri-Valley: Pleasanton · Danville · Livermore · San Ramon <span class="ed-footer__hood-label">Neighborhood Guide</span></a></li><li><a href="' + pfx + 'neighborhoods.html#diablo-valley">Diablo Valley: Walnut Creek · Lafayette · Alamo <span class="ed-footer__hood-label">Neighborhood Guide</span></a></li><li><a href="' + pfx + 'neighborhoods.html#east-bay">East Bay: Oakland · Berkeley · Hayward · Fremont <span class="ed-footer__hood-label">Neighborhood Guide</span></a></li><li><a href="' + pfx + 'neighborhoods.html#peninsula">SF, Peninsula &amp; Silicon Valley: SF · Palo Alto · San Jose <span class="ed-footer__hood-label">Neighborhood Guide</span></a></li></ul></div>' +
         '<div class="ed-footer__col ed-footer__contact"><h4>Contact</h4>' +
-          '<p><strong style="color:var(--sw-ink);">Compass</strong></p>' +
-          '<p><a href="https://www.google.com/maps/search/900+Main+St.%C2%A0+Pleasanton,+Ca.+94566?entry=gmail&source=g" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">900 Main St.<br />Pleasanton, CA 94566</a></p>' +
+          '<p><strong style="color:var(--sw-ink);">Compass Real Estate</strong></p>' +
+          '<p style="line-height:1.45;margin-bottom:8px;"><a href="https://www.google.com/maps/search/900+Main+St.%C2%A0+Pleasanton,+Ca.+94566" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;"><strong>Pleasanton:</strong> 900 Main St, Pleasanton, CA 94566</a><br /><a href="https://www.google.com/maps/search/1646+N+California+Blvd,+Suite+101,+Walnut+Creek,+CA+94596" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;margin-top:4px;display:inline-block;"><strong>Walnut Creek:</strong> 1646 N California Blvd, Ste 101, Walnut Creek, CA 94596</a></p>' +
           '<p><a href="tel:+19259989711">(925) 998-9711</a></p>' +
           '<p><a href="mailto:steven.lenzjr@compass.com">steven.lenzjr@compass.com</a></p>' +
           '<p style="font-size:0.78rem;margin-bottom:4px;">CA DRE# 01989811</p>' +
-          '<p style="font-size:0.78rem;">&ldquo;Compass California II, Inc. DRE# 01527235&rdquo;</p>' +
+          '<p style="font-size:0.78rem;">Compass California II, Inc. · Brokerage DRE# 01527235</p>' +
           '<div class="ed-stay"><h4>Stay in the Know</h4><p style="font-size:0.8rem;font-style:italic;margin:0 0 6px;">Tri-Valley &amp; East Bay Market Updates. New Listings. Local Insight.</p>' +
             '<form id="ed-stay-form" novalidate><div class="ed-stay__row"><input type="email" placeholder="Email Address" aria-label="Email Address" required /><button type="submit" aria-label="Subscribe">→</button></div>' +
-            '<label class="ed-stay__consent"><input type="checkbox" /><span>I agree to be contacted by Steven Lenz Jr. of Compass via call, email, and text for real estate services. To opt out, reply \'stop\' at any time. Message and data rates may apply. <a href="privacy.html" style="color:var(--sw-accent);">Privacy Policy</a>.</span></label>' +
+            '<label class="ed-stay__consent"><input type="checkbox" required /><span>I agree to receive email market updates and property alerts from Steven Lenz Jr. at Compass. Unsubscribe anytime. <a href="' + pfx + 'privacy.html" style="color:var(--sw-accent);">Privacy Policy</a>.</span></label>' +
             '<p id="ed-stay-msg" style="font-size:0.74rem;color:var(--sw-accent);margin:6px 0 0;"></p></form></div>' +
         '</div>' +
       '</div>' +
@@ -217,7 +217,6 @@
 '<a href="' + pfx + 'terms.html">Terms &amp; Conditions</a>' +
 '<a href="' + pfx + 'accessibility.html">Accessibility</a>' +
 '<a href="' + pfx + 'fair-housing.html">Fair Housing</a>' +
-'<a href="' + pfx + 'pitch.html">Pitch Deck</a>' +
 '</nav>' +
         '<h5 class="ed-idx-title">MLS Disclaimer &amp; IDX Information</h5>' +
         '<p class="ed-idx-copy">This information is deemed reliable but not guaranteed. You should rely on this information only to decide whether or not to further investigate a particular property. BEFORE MAKING ANY OTHER DECISION, YOU SHOULD PERSONALLY INVESTIGATE THE FACTS (e.g., square footage and lot size) with the assistance of an appropriate professional. You may use this information only to identify properties you may be interested in investigating further. All uses except for personal, noncommercial use in accordance with the foregoing purpose are prohibited. Redistribution or copying of this information, any photographs, or video tours is strictly prohibited. Displayed property listings may be held by a brokerage firm other than the broker and/or agent responsible for this display. The information, photographs, video tours, and the compilation from which they are derived are protected by copyright. Compilation © 2026 CCAR / Bay East MLS.</p>' +
