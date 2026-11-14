@@ -110,7 +110,11 @@
   'use strict';
 
   function subpageShellHTML() {
-    var isSubdir = (typeof window !== 'undefined' && (window.location.pathname.indexOf('/areas/') !== -1 || window.location.pathname.indexOf('/articles/') !== -1));
+    var isSubdir = (typeof window !== 'undefined' && (
+      window.location.pathname.indexOf('/areas/') !== -1 ||
+      window.location.pathname.indexOf('/articles/') !== -1 ||
+      window.location.pathname.indexOf('/relocation/') !== -1
+    ));
     var pfx = isSubdir ? '../' : '';
     var header = '<header class="ed-header">' +
       '<nav class="ed-nav-group ed-nav-group--left" aria-label="Primary navigation">' +
@@ -122,7 +126,7 @@
       '<a class="ed-brand" href="/#top" aria-label="Steven Lenz Jr | Compass | Real Estate">' +
         '<span class="ed-brand__name">Steven Lenz Jr</span>' +
         '<div class="ed-brand__compass">' +
-          '<img class="ed-brand__banner" src="' + pfx + 'assets/brand/sl-compass-banner.png" alt="Compass" />' +
+          '<img class="ed-brand__banner" src="/assets/brand/sl-compass-banner.png" alt="Compass" />' +
         '</div>' +
         '<span class="ed-brand__sub">Real Estate</span>' +
       '</a>' +
@@ -133,10 +137,10 @@
           '<div class="ed-mega" role="menu">' +
             '<div class="ed-mega__top"><span class="ed-mega__eyebrow">Bay Area &amp; Tri-Valley</span><a class="ed-mega__all" href="/neighborhoods">View all communities →</a></div>' +
             '<div class="ed-mega__grid">' +
-              '<a class="ed-mega__card" href="/neighborhoods#tri-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/danville-genoa.jpg" alt="Tri-Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Tri-Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Steven\'s hometown of Pleasanton alongside Danville estates, Livermore wine country, and San Ramon.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Tri-Valley Neighborhoods</span><div class="ed-mega__subs">Pleasanton · Danville · Livermore · San Ramon</div></div></a>' +
-              '<a class="ed-mega__card" href="/neighborhoods#diablo-valley"><img class="ed-mega__img" src="' + pfx + 'assets/img/neighborhood-walnut-creek.jpg" alt="Diablo Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Diablo Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Vibrant downtowns, top-rated schools, and oak-studded estates along the Mt. Diablo foothills.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Diablo Valley Neighborhoods</span><div class="ed-mega__subs">Walnut Creek · Lafayette · Alamo</div></div></a>' +
-              '<a class="ed-mega__card" href="/neighborhoods#east-bay"><img class="ed-mega__img" src="' + pfx + 'assets/img/oakland-greenwood.jpg" alt="East Bay Corridor" /><div class="ed-mega__title-row"><span>East Bay Corridor</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Architectural hills, bay views, and Silicon Valley gateway communities across Alameda County.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">East Bay Cities</span><div class="ed-mega__subs">Oakland · Berkeley · Hayward · Union City · Fremont · Milpitas</div></div></a>' +
-              '<a class="ed-mega__card" href="/neighborhoods#peninsula"><img class="ed-mega__img" src="' + pfx + 'assets/img/hero-portfolio.jpg" alt="San Francisco, Peninsula and Silicon Valley" /><div class="ed-mega__title-row"><span>SF &amp; Peninsula</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Iconic city neighborhoods, mid-Peninsula enclaves, and premier Silicon Valley estates.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Peninsula &amp; South Bay</span><div class="ed-mega__subs">San Francisco · San Mateo · Redwood City · Palo Alto · Mountain View · Santa Clara · San Jose</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#tri-valley"><img class="ed-mega__img" src="/assets/img/danville-genoa.jpg" alt="Tri-Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Tri-Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Steven\'s hometown of Pleasanton alongside Danville estates, Livermore wine country, and San Ramon.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Tri-Valley Neighborhoods</span><div class="ed-mega__subs">Pleasanton · Danville · Livermore · San Ramon</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#diablo-valley"><img class="ed-mega__img" src="/assets/img/neighborhood-walnut-creek.jpg" alt="Diablo Valley Neighborhoods" /><div class="ed-mega__title-row"><span>Diablo Valley</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Vibrant downtowns, top-rated schools, and oak-studded estates along the Mt. Diablo foothills.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Diablo Valley Neighborhoods</span><div class="ed-mega__subs">Walnut Creek · Lafayette · Alamo</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#east-bay"><img class="ed-mega__img" src="/assets/img/oakland-greenwood.jpg" alt="East Bay Corridor" /><div class="ed-mega__title-row"><span>East Bay Corridor</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Architectural hills, bay views, and Silicon Valley gateway communities across Alameda County.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">East Bay Cities</span><div class="ed-mega__subs">Oakland · Berkeley · Hayward · Union City · Fremont · Milpitas</div></div></a>' +
+              '<a class="ed-mega__card" href="/neighborhoods#peninsula"><img class="ed-mega__img" src="/assets/img/hero-portfolio.jpg" alt="San Francisco, Peninsula and Silicon Valley" /><div class="ed-mega__title-row"><span>SF &amp; Peninsula</span><span class="ed-mega__arrow">→</span></div><p class="ed-mega__desc">Iconic city neighborhoods, mid-Peninsula enclaves, and premier Silicon Valley estates.</p><div class="ed-mega__guide"><span class="ed-mega__guide-label">Peninsula &amp; South Bay</span><div class="ed-mega__subs">San Francisco · San Mateo · Redwood City · Palo Alto · Mountain View · Santa Clara · San Jose</div></div></a>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -165,7 +169,7 @@
 
     var drawer = '<div class="site-drawer-backdrop" id="drawer-backdrop"></div>' +
       '<aside class="site-drawer" id="site-drawer" role="dialog" aria-modal="true" aria-label="Site navigation">' +
-        '<div class="drawer-head"><img src="' + pfx + 'assets/brand/compass-sl-white.png" alt="SL | Compass" width="124" height="22" /><button type="button" class="modal-close" id="menu-close-btn" aria-label="Close menu">×</button></div>' +
+        '<div class="drawer-head"><img src="/assets/brand/compass-sl-white.png" alt="SL | Compass" width="124" height="22" /><button type="button" class="modal-close" id="menu-close-btn" aria-label="Close menu">×</button></div>' +
         '<nav class="drawer-nav" aria-label="Full navigation"><a href="/#top">Home</a><a href="/buy">Buy a Home</a><a href="/sell">Sell Your Home</a><a href="/properties">Portfolio</a><a href="https://stevenlenzjr.com/home-search/listings" target="_blank" rel="noopener noreferrer">Search Homes ↗</a><a href="/resources">Resources &amp; News</a><div class="drawer-sub"><a href="/resources?cat=housing-market">Housing Market</a><a href="/resources?cat=buying-selling">Buying &amp; Selling</a><a href="/resources?cat=mortgage-rates">Mortgage Rates</a><a href="/resources?cat=trends">California Trends</a><a href="/resources?cat=new-construction">New Construction</a><a href="/resources?cat=market-reports">Market Reports</a></div><a href="/neighborhoods">Communities &amp; Area Guides</a><div class="drawer-sub"><a href="/areas/pleasanton.html">Pleasanton</a><a href="/areas/danville.html">Danville</a><a href="/areas/alamo.html">Alamo</a><a href="/areas/san-ramon.html">San Ramon</a><a href="/areas/dublin.html">Dublin</a><a href="/areas/livermore.html">Livermore</a><a href="/areas/walnut-creek.html">Walnut Creek</a><a href="/areas/lafayette.html">Lafayette</a><a href="/areas/oakland.html">Oakland</a><a href="/areas/berkeley.html">Berkeley</a><a href="/areas/hayward.html">Hayward</a><a href="/areas/fremont.html">Fremont</a><a href="/areas/san-francisco.html">San Francisco</a><a href="/areas/palo-alto.html">Palo Alto</a><a href="/areas/san-jose.html">San Jose</a></div><a href="/relocation">Bay Area Relocation Matrix</a><div class="drawer-sub"><a href="/relocation/san-francisco-to-pleasanton">San Francisco → Pleasanton</a><a href="/relocation/silicon-valley-to-danville">Silicon Valley → Danville</a><a href="/relocation/fremont-to-san-ramon">Fremont → San Ramon</a></div><a href="/about">About Steven</a><a href="/concierge">Compass Concierge</a><a href="/private-exclusives">Private Exclusives</a><a href="https://stevenlenzjr.com/home-search/account" target="_blank" rel="noopener noreferrer">My Search Portal ↗</a><a href="/connect" style="color:var(--sw-accent);">Let\'s Connect</a></nav>' +
         '<div class="drawer-footer"><strong style="color:var(--sw-ink);display:block;">Steven Lenz Jr. · CA DRE# 01989811</strong>900 Main St., Pleasanton, CA 94566<br /><a href="tel:+19259989711" style="color:var(--sw-accent);text-decoration:none;">(925) 998-9711</a></div>' +
       '</aside>';
@@ -188,7 +192,7 @@
           '<div class="ed-footer__brand-wrap">' +
             '<h3 class="ed-footer__brand-name">Steven Lenz Jr</h3>' +
             '<div class="ed-footer__brand-block">' +
-              '<img class="ed-footer__brand-logo" src="' + pfx + 'assets/brand/sl-compass-banner.png" alt="Compass Real Estate" />' +
+              '<img class="ed-footer__brand-logo" src="/assets/brand/sl-compass-banner.png" alt="Compass Real Estate" />' +
               '<div class="ed-footer__brand-sub">Real Estate</div>' +
             '</div>' +
           '</div>' +
@@ -431,7 +435,11 @@
   }
 
   function boot() {
-    var isSubdir = (typeof window !== 'undefined' && (window.location.pathname.indexOf('/areas/') !== -1 || window.location.pathname.indexOf('/articles/') !== -1));
+    var isSubdir = (typeof window !== 'undefined' && (
+      window.location.pathname.indexOf('/areas/') !== -1 ||
+      window.location.pathname.indexOf('/articles/') !== -1 ||
+      window.location.pathname.indexOf('/relocation/') !== -1
+    ));
     var pfx = isSubdir ? '../' : '';
     initHeader();
     initCookieConsent(pfx);
@@ -441,7 +449,7 @@
     if (!document.getElementById('ai-steve-script')) {
       var s = document.createElement('script');
       s.id = 'ai-steve-script';
-      s.src = pfx + 'js/ai-steve.js?v=20261113';
+      s.src = '/js/ai-steve.js?v=20261113';
       s.defer = true;
       document.body.appendChild(s);
     }
