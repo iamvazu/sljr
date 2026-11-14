@@ -7,7 +7,7 @@
     brand: { name: 'Steven Lenz Jr. | Compass', href: '#top' },
     diveScroll: 1.4,
     connScroll: 0.9,
-    crossfade: 0.08,
+    crossfade: 0.22,
     hint: 'Scroll to look closer',
     nav: true,
     atmosphere: false,

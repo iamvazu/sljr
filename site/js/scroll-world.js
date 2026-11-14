@@ -22,7 +22,7 @@
     var CONNECTORS_M = config.connectorsMobile || [];
     var DIVE_W = config.diveScroll || 1.4;
     var CONN_W = config.connScroll || 0.9;
-    var CROSSFADE = config.crossfade != null ? config.crossfade : 0.10;
+    var CROSSFADE = config.crossfade != null ? config.crossfade : 0.22;
     var N = SECTIONS.length;
 
     var pageMode = safeGet('sw_view_as_page') === '1';
@@ -79,6 +79,7 @@
         var scene = document.createElement('div');
         scene.className = 'sw-scene';
         scene.style.setProperty('--sw-accent', '#D8A55A');
+        scene.style.zIndex = String(10 + idx);
         var img = document.createElement('img');
         img.className = 'sw-scene__still';
         img.alt = '';
@@ -240,43 +241,94 @@
 
       for (var i = 0; i < NSEG; i++) {
         var s = SEGMENTS[i];
-        if (y > s.start - 1.8 * vh && y < s.end + 1.8 * vh) loadClip(s);
+        if (y > s.start - 2.5 * vh && y < s.end + 2.5 * vh) loadClip(s);
         var local = clamp((y - s.start) / Math.max(1, s.end - s.start), 0, 1);
         s.target = s.linger ? lingerEase(local, s.linger) : local;
-        var outside = 0;
-        if (y < s.start) outside = s.start - y;
-        else if (y > s.end) outside = y - s.end;
-        var op = smooth(1 - outside / fade);
+
+        var op = 0;
+        var vis = false;
+
+        if (i === 0) {
+          // Base first scene
+          if (NSEG > 1) {
+            // Next scene (1) finishes fading in at SEGMENTS[1].start == s.end
+            if (y >= s.end) {
+              op = 0;
+              vis = false;
+            } else {
+              op = 1;
+              vis = true;
+            }
+          } else {
+            op = 1;
+            vis = true;
+          }
+        } else {
+          // Scenes 1..NSEG-1: incoming transition window [s.start - fade, s.start]
+          if (y < s.start - fade) {
+            op = 0;
+            vis = false;
+          } else if (y < s.start) {
+            op = smooth((y - (s.start - fade)) / fade);
+            vis = op > 0.005;
+          } else if (i === NSEG - 1 || y < s.end) {
+            op = 1;
+            vis = true;
+          } else {
+            // Past s.end: next scene (i+1) is now covering us completely
+            op = 0;
+            vis = false;
+          }
+        }
+
         if (s.el) {
           s.el.style.opacity = op;
-          s.visible = op > 0.001;
-          s.el.style.zIndex = (i === ci) ? '120' : String(100 + Math.round(op * 10));
+          s.el.style.visibility = vis ? 'visible' : 'hidden';
+          s.visible = vis;
         }
       }
 
       // Update left editorial copy & right/interactive panels
       for (var i = 0; i < N; i++) {
         var seg = SECTIONS[i]._seg;
-        var pr = clamp((y - seg.start) / Math.max(1, seg.end - seg.start), 0, 1);
+        var span = Math.max(1, seg.end - seg.start);
+        var pr = clamp((y - seg.start) / span, 0, 1);
         var before = y < seg.start;
         var after = y > seg.end;
         var cop = 0;
-        if (i === 0) cop = after ? 0 : smooth(1 - pr / 0.72);
-        else if (i === N - 1) cop = before ? 0 : smooth(pr / 0.35);
-        else cop = (before || after) ? 0 : smooth(1 - Math.abs(pr - 0.5) / 0.5);
+
+        if (i === 0) {
+          // Hero scene: fully visible from start, stays solid until 35% through scroll, then fades out smoothly
+          cop = after ? 0 : (pr < 0.35 ? 1 : smooth(1 - (pr - 0.35) / 0.50));
+        } else if (i === N - 1) {
+          // Final scene (Terrace / Contact): fades in smoothly, stays solid to the bottom
+          cop = before ? 0 : (pr > 0.30 ? 1 : smooth(pr / 0.30));
+        } else {
+          // Middle scenes: generous reading plateau (full 1.0 opacity between 0.18 and 0.82)
+          if (before || after) {
+            cop = 0;
+          } else if (pr < 0.18) {
+            cop = smooth(pr / 0.18);
+          } else if (pr > 0.82) {
+            cop = smooth((1 - pr) / 0.18);
+          } else {
+            cop = 1;
+          }
+        }
 
         var c = copyNodes[i];
         if (c) {
           c.style.opacity = cop;
-          // Anchor safely below fixed header; apply gentle vertical parallax drift without translateY(-50%)
-          c.style.transform = reduce ? 'none' : 'translateY(' + ((0.5 - pr) * 2.0).toFixed(2) + 'vh)';
+          c.style.transform = reduce ? 'none' : 'translate3d(0, ' + ((0.5 - pr) * 2.0).toFixed(2) + 'vh, 0)';
           c.style.pointerEvents = cop > 0.45 ? 'auto' : 'none';
         }
         var p = panelNodes[i];
         if (p) {
           p.style.opacity = cop;
           p.style.pointerEvents = cop > 0.45 ? 'auto' : 'none';
-          p.style.transform = reduce ? 'none' : 'translateY(' + ((0.5 - pr) * 2.5).toFixed(2) + 'vh)';
+          if (SECTIONS[i].id !== 'terrace') {
+            p.style.transform = reduce ? 'none' : 'translate3d(0, ' + ((0.5 - pr) * 2.2).toFixed(2) + 'vh, 0)';
+          }
         }
       }
 
@@ -300,13 +352,13 @@
     }
 
     function raf() {
-      var eps = isMobile() ? 0.02 : 0.006;
+      var eps = isMobile() ? 0.015 : 0.005;
       for (var i = 0; i < NSEG; i++) {
         var s = SEGMENTS[i];
         if (!s.hasClip || !s.ready || !s.video) continue;
+        s.cur += (s.target - s.cur) * (reduce ? 1 : 0.18);
         if (s.video.seeking) continue;
         if (!s.visible && Math.abs(s.cur - s.target) < 0.002) continue;
-        s.cur += (s.target - s.cur) * (reduce ? 1 : 0.18);
         var dur = s.video.duration || 1;
         var t = clamp(s.cur, 0, 0.998) * dur;
         if (Math.abs(s.video.currentTime - t) > eps) {
