@@ -1524,6 +1524,205 @@ html {
   margin: 0;
 }
 
+/* ---------- Concierge Success Story Section with Video ---------- */
+.cc-story {
+  margin: 64px 0 72px;
+}
+
+.cc-story__card {
+  background: rgba(18, 24, 38, 0.82);
+  border: 1px solid rgba(216, 165, 90, 0.28);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cc-story__content {
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cc-story__title {
+  font-family: var(--sw-font-display);
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-weight: 400;
+  color: var(--sw-ink, #F3EEE6);
+  margin: 8px 0 16px;
+  line-height: 1.25;
+}
+
+.cc-story__quote {
+  font-family: var(--sw-font-serif);
+  font-style: italic;
+  font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+  line-height: 1.65;
+  color: #F3EEE6;
+  margin: 0 0 16px;
+  position: relative;
+}
+
+.cc-story__author {
+  font-family: var(--sw-font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sw-accent, #D8A55A);
+  margin-bottom: 24px;
+}
+
+.cc-story__stats {
+  display: flex;
+  gap: 36px;
+  padding: 18px 0;
+  border-top: 1px solid rgba(216, 165, 90, 0.18);
+  border-bottom: 1px solid rgba(216, 165, 90, 0.18);
+  margin-bottom: 16px;
+}
+
+.cc-story__stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-story__stat-val {
+  font-family: var(--sw-font-display);
+  font-size: clamp(2.2rem, 3.2vw, 2.8rem);
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.cc-story__stat-lbl {
+  font-family: var(--sw-font-body);
+  font-size: 0.82rem;
+  color: rgba(243, 238, 230, 0.72);
+  margin-top: 6px;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+.cc-story__disclaimer {
+  font-family: var(--sw-font-body);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  color: rgba(243, 238, 230, 0.55);
+  margin: 0 0 22px;
+}
+
+.cc-story__cta {
+  margin-top: auto;
+}
+
+.cc-story__media {
+  position: relative;
+  min-height: 380px;
+  background: #0d121b;
+  display: flex;
+  align-items: stretch;
+}
+
+.cc-video-cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-video-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.cc-video-cover:hover img {
+  transform: scale(1.04);
+  filter: brightness(0.92);
+}
+
+.cc-play-btn {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #121826;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(255, 255, 255, 0.2);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, background 0.2s ease;
+  z-index: 2;
+}
+
+.cc-play-btn svg {
+  width: 26px;
+  height: 26px;
+  margin-left: 3px;
+  fill: #121826;
+}
+
+.cc-video-cover:hover .cc-play-btn {
+  transform: scale(1.1);
+  background: var(--sw-accent, #D8A55A);
+  color: #0d121b;
+  box-shadow: 0 12px 32px rgba(216, 165, 90, 0.5), 0 0 0 8px rgba(216, 165, 90, 0.3);
+}
+
+.cc-video-cover:hover .cc-play-btn svg {
+  fill: #0d121b;
+}
+
+.cc-video-badge {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  background: rgba(18, 24, 38, 0.88);
+  border: 1px solid rgba(216, 165, 90, 0.35);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--sw-font-body);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  color: #F3EEE6;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+.cc-video-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 960px) {
+  .cc-story__card {
+    grid-template-columns: 1fr;
+  }
+  .cc-story__content {
+    padding: 32px 24px;
+  }
+  .cc-story__media {
+    min-height: 280px;
+  }
+}
+
 /* ---------- Concierge FAQ Accordion ---------- */
 .cc-faq {
   display: flex;

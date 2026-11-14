@@ -34,9 +34,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/theme.css?v=20261114c" />
-  <link rel="stylesheet" href="css/editorial.css?v=20261114c" />
-  <link rel="stylesheet" href="css/mobile.css?v=20261114c" />
+  <link rel="stylesheet" href="css/theme.css?v=20261114d" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261114d" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261114d" />
   <link rel="preload" as="image" href="assets/img/hero-concierge.jpg" fetchpriority="high" />
 
   <!-- Structured Data: WebPage, Breadcrumbs, Service & FAQPage Schema -->
@@ -426,30 +426,6 @@
         <p>Your Compass agent will be by your side throughout the process, advising you along the way.</p>
       </article>
     </div>
-
-    <!-- Success Story -->
-    <section class="ld-card" style="padding:36px;margin-bottom:56px;">
-      <span class="pf-banner__eyebrow">Success Stories</span>
-      <blockquote style="margin:14px 0 18px;font-family:var(--sw-font-serif);font-style:italic;font-size:clamp(1.3rem,2.2vw,1.75rem);line-height:1.5;color:var(--sw-ink);">
-        “The thing that was the most daunting for me about selling the home was how would I get it to market, based on being retired and have limited income. And that's where the Compass Concierge service was absolutely remarkable.”
-      </blockquote>
-      <p style="color:var(--sw-accent);font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin:0 0 22px;">Julia, Seller | Oakland</p>
-      <div class="pf-stats" style="margin-bottom:14px;padding:20px 0;">
-        <div>
-          <div class="pf-stat__num">12</div>
-          <div class="pf-stat__label">Days on Market</div>
-        </div>
-        <div>
-          <div class="pf-stat__num">47%</div>
-          <div class="pf-stat__label">Over Ask</div>
-        </div>
-        <div>
-          <div class="pf-stat__num">$0</div>
-          <div class="pf-stat__label">Upfront Costs or Interest</div>
-        </div>
-      </div>
-      <p style="font-size:0.76rem;color:var(--sw-ink-soft);margin:0;">Individual results may vary. Testimonials are not intended to guarantee the same or similar results.</p>
-    </section>
 
     <!-- Covered Services -->
     <section>
@@ -853,6 +829,47 @@
       </div>
     </section>
 
+    <!-- Success Stories Video Case Study -->
+    <section class="cc-story" id="concierge-success-story">
+      <div class="cc-story__card">
+        <div class="cc-story__content">
+          <span class="pf-banner__eyebrow">SUCCESS STORIES</span>
+          <h2 class="cc-story__title">From Daunting to <span class="lenz-highlight"><em>Remarkable</em></span></h2>
+          <blockquote class="cc-story__quote">
+            “The thing that was the most daunting for me about selling the home was how would I get it to market, based on being retired and have limited income. And that's where the Compass Concierge service was absolutely remarkable.”
+          </blockquote>
+          <div class="cc-story__author">Julia, Seller | Oakland</div>
+          <div class="cc-story__stats">
+            <div class="cc-story__stat">
+              <span class="cc-story__stat-val">12</span>
+              <span class="cc-story__stat-lbl">days on market</span>
+            </div>
+            <div class="cc-story__stat">
+              <span class="cc-story__stat-val">47%</span>
+              <span class="cc-story__stat-lbl">over ask</span>
+            </div>
+          </div>
+          <p class="cc-story__disclaimer">
+            Individual results may vary. Testimonials are not intended to guarantee the same or similar results.
+          </p>
+          <div class="cc-story__cta">
+            <a href="#concierge-connect" class="sw-btn sw-btn--primary">LET'S CONNECT &nearr;</a>
+          </div>
+        </div>
+        <div class="cc-story__media" id="cc-video-wrapper">
+          <div class="cc-video-cover" id="cc-video-cover" role="button" tabindex="0" aria-label="Play Compass Concierge Success Story Video featuring Julia in Oakland">
+            <img src="assets/img/julia-oakland-house.jpg" alt="Compass Concierge Home Transformation in Oakland" width="525" height="342" loading="lazy" />
+            <div class="cc-play-btn" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="9.5 7.5 16.5 12 9.5 16.5 9.5 7.5"></polygon>
+              </svg>
+            </div>
+            <div class="cc-video-badge">Watch Julia's Story (0:54)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ -->
     <section>
       <div class="pf-section-head">
@@ -940,6 +957,23 @@
                 })
                 .catch(function (err) { window.SLForms.show(status, err.message, true); })
                 .then(done);
+      });
+    })();
+
+    (function() {
+      var cover = document.getElementById('cc-video-cover');
+      if (!cover) return;
+      function playVideo() {
+        var wrapper = document.getElementById('cc-video-wrapper');
+        if (!wrapper) return;
+        wrapper.innerHTML = '<iframe class="cc-video-iframe" src="https://www.youtube-nocookie.com/embed/4hd018raScA?autoplay=1&rel=0" title="Compass Concierge Success Story — Julia, Oakland" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+      }
+      cover.addEventListener('click', playVideo);
+      cover.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          playVideo();
+        }
       });
     })();
   </script>
