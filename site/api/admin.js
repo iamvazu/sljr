@@ -143,6 +143,107 @@ async function handleAdminApi(req, res, parsedUrl) {
   if (method === 'GET' && route === '/stats') return sendJson(res, 200, { ok: true, stats: db.adminStats() });
   if (method === 'GET' && route === '/audit') return sendJson(res, 200, { ok: true, entries: db.getAudit(150) });
 
+  // ---- CRM: Contacts ----
+  if (method === 'GET' && route === '/contacts') {
+    const result = db.adminListContacts({
+      stage: stripHtml(sp.get('stage') || '').slice(0, 30),
+      type: stripHtml(sp.get('type') || '').slice(0, 30),
+      score_band: stripHtml(sp.get('score_band') || '').slice(0, 20),
+      q: stripHtml(sp.get('q') || '').slice(0, 80),
+      limit: Math.min(200, Math.max(1, Number(sp.get('limit')) || 50)),
+      offset: Math.max(0, Number(sp.get('offset')) || 0)
+    });
+    return sendJson(res, 200, Object.assign({
+      ok: true,
+      stages: db.CONTACT_STAGES,
+      types: db.CONTACT_TYPES,
+      score_bands: db.SCORE_BANDS
+    }, result));
+  }
+  if (method === 'GET' && route === '/contacts.csv') {
+    const { contacts } = db.adminListContacts({ limit: 100000 });
+    db.audit('export_contacts', `${contacts.length} rows`, ip);
+    return sendCsv(res, `contacts-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['id', 'name', 'type', 'stage', 'score', 'score_band', 'discreet', 'email', 'phone', 'interest', 'budget', 'timeline', 'source', 'created_at'],
+      contacts.map((c) => [c.id, c.display_name, c.type, c.stage, c.score, c.score_band, c.discreet ? 'yes' : 'no', c.primary_email || '', c.primary_phone || '', c.interest || '', c.budget || '', c.timeline || '', c.source || '', c.created_at]));
+  }
+  if ((m = /^\/contacts\/(\d+)$/.exec(route))) {
+    const contactId = Number(m[1]);
+    if (method === 'GET') {
+      const contact = db.adminGetContact(contactId);
+      return contact ? sendJson(res, 200, { ok: true, contact }) : sendJson(res, 404, { ok: false, error: 'Contact not found.' });
+    }
+    if (method === 'PATCH') {
+      const body = await readJsonBody(req);
+      const ok = db.adminUpdateContact(contactId, body);
+      if (ok) db.audit('contact_update', `Contact #${contactId} updated`, ip);
+      return sendJson(res, ok ? 200 : 400, ok ? { ok: true, contact: db.adminGetContact(contactId) } : { ok: false, error: 'Nothing to update.' });
+    }
+  }
+
+  // ---- CRM: Pipelines & Deals ----
+  if (method === 'GET' && route === '/pipelines') {
+    return sendJson(res, 200, { ok: true, pipelines: db.adminListPipelines() });
+  }
+
+  if (method === 'POST' && route === '/deals') {
+    const body = await readJsonBody(req);
+    const deal = db.adminCreateDeal({
+      contact_id: Number(body.contact_id),
+      pipeline_id: Number(body.pipeline_id) || 1,
+      stage_id: body.stage_id ? Number(body.stage_id) : undefined,
+      title: body.title,
+      value_usd: body.value_usd,
+      property_address: body.property_address,
+      expected_close: body.expected_close
+    });
+    db.audit('deal_create', `Deal #${deal.id} for Contact #${deal.contact_id}`, ip);
+    return sendJson(res, 200, { ok: true, deal });
+  }
+
+  if ((m = /^\/deals\/(\d+)$/.exec(route))) {
+    const dealId = Number(m[1]);
+    if (method === 'GET') {
+      const deal = db.adminGetDeal(dealId);
+      return deal ? sendJson(res, 200, { ok: true, deal }) : sendJson(res, 404, { ok: false, error: 'Deal not found.' });
+    }
+    if (method === 'PATCH') {
+      const body = await readJsonBody(req);
+      const deal = db.adminUpdateDeal(dealId, body);
+      if (deal) db.audit('deal_update', `Deal #${dealId} updated`, ip);
+      return sendJson(res, deal ? 200 : 400, deal ? { ok: true, deal } : { ok: false, error: 'Deal not found or invalid.' });
+    }
+  }
+
+  // ---- CRM: Tasks ----
+  if (method === 'POST' && route === '/tasks') {
+    const body = await readJsonBody(req);
+    const task = db.adminCreateTask({
+      contact_id: body.contact_id ? Number(body.contact_id) : null,
+      deal_id: body.deal_id ? Number(body.deal_id) : null,
+      title: body.title,
+      due_at: body.due_at
+    });
+    if (!task) return sendJson(res, 400, { ok: false, error: 'Task title is required.' });
+    db.audit('task_create', `Task #${task.id}: ${task.title}`, ip);
+    return sendJson(res, 200, { ok: true, task });
+  }
+
+  if ((m = /^\/tasks\/(\d+)$/.exec(route))) {
+    const taskId = Number(m[1]);
+    if (method === 'PATCH') {
+      const body = await readJsonBody(req);
+      const task = db.adminUpdateTask(taskId, body);
+      if (task) db.audit('task_update', `Task #${taskId} updated`, ip);
+      return sendJson(res, task ? 200 : 400, task ? { ok: true, task } : { ok: false, error: 'Task not found.' });
+    }
+    if (method === 'DELETE') {
+      const ok = db.adminDeleteTask(taskId);
+      if (ok) db.audit('task_delete', `Task #${taskId} deleted`, ip);
+      return sendJson(res, ok ? 200 : 404, { ok });
+    }
+  }
+
   // ---- Leads ----
   if (method === 'GET' && route === '/leads') {
     const result = db.adminListLeads({

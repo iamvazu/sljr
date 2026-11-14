@@ -181,7 +181,227 @@ function getDb() {
     readJson(TESTIMONIALS_JSON).forEach((t, i) => ins.run(t.quote, t.name, t.context || '', t.source || '', t.permission_on_file ? 1 : 0, t.permission_on_file ? 1 : 0, i));
     readJson(path.join(DATA_DIR, 'testimonials-pending.json')).forEach((t, i) => ins.run(t.quote, t.name, t.context || '', t.source || '', 0, 0, 100 + i));
   });
+
+  runOnce(db, 'm1_crm_schema_v1', () => {
+    runCrmMigrations(db);
+  });
+
   return db;
+}
+
+function runCrmMigrations(database) {
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS contacts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      first_name TEXT NOT NULL DEFAULT '',
+      last_name TEXT NOT NULL DEFAULT '',
+      display_name TEXT NOT NULL,
+      type TEXT NOT NULL DEFAULT 'lead',
+      stage TEXT NOT NULL DEFAULT 'new',
+      discreet INTEGER NOT NULL DEFAULT 0,
+      source TEXT,
+      first_utm_json TEXT,
+      interest TEXT, budget TEXT, timeline TEXT, areas_json TEXT,
+      notes TEXT,
+      score INTEGER NOT NULL DEFAULT 0,
+      score_band TEXT NOT NULL DEFAULT 'cold',
+      score_reasons_json TEXT,
+      score_updated_at TEXT,
+      last_inbound_at TEXT,
+      last_outbound_at TEXT,
+      next_follow_up_at TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      merged_into INTEGER REFERENCES contacts(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS contact_identities (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      kind TEXT NOT NULL,
+      value TEXT NOT NULL,
+      is_primary INTEGER NOT NULL DEFAULT 0,
+      status TEXT NOT NULL DEFAULT 'ok',
+      UNIQUE (kind, value)
+    );
+
+    CREATE TABLE IF NOT EXISTS consents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      channel TEXT NOT NULL,
+      granted INTEGER NOT NULL,
+      text_version TEXT,
+      source TEXT NOT NULL,
+      recorded_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS activities (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      kind TEXT NOT NULL,
+      direction TEXT,
+      subject TEXT,
+      body TEXT,
+      meta_json TEXT,
+      occurred_at TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_activities_contact ON activities (contact_id, occurred_at DESC);
+
+    CREATE TABLE IF NOT EXISTS pipelines (
+      id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS pipeline_stages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      pipeline_id INTEGER NOT NULL REFERENCES pipelines(id),
+      name TEXT NOT NULL,
+      sort_order INTEGER NOT NULL,
+      is_won INTEGER NOT NULL DEFAULT 0,
+      is_lost INTEGER NOT NULL DEFAULT 0
+    );
+
+    CREATE TABLE IF NOT EXISTS deals (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      pipeline_id INTEGER NOT NULL REFERENCES pipelines(id),
+      stage_id INTEGER NOT NULL REFERENCES pipeline_stages(id),
+      title TEXT NOT NULL,
+      value_usd INTEGER,
+      property_address TEXT,
+      expected_close TEXT,
+      closed_at TEXT,
+      stage_changed_at TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER REFERENCES contacts(id),
+      deal_id INTEGER REFERENCES deals(id),
+      title TEXT NOT NULL,
+      due_at TEXT,
+      done_at TEXT,
+      created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS tags (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT UNIQUE NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS contact_tags (
+      contact_id INTEGER NOT NULL,
+      tag_id INTEGER NOT NULL,
+      PRIMARY KEY (contact_id, tag_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      channel TEXT NOT NULL,
+      to_value TEXT NOT NULL,
+      subject TEXT,
+      body TEXT NOT NULL,
+      origin TEXT NOT NULL,
+      action_item_id INTEGER,
+      status TEXT NOT NULL DEFAULT 'queued',
+      provider_id TEXT,
+      error TEXT,
+      approved_at TEXT NOT NULL,
+      sent_at TEXT,
+      created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS action_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      plan_date TEXT NOT NULL,
+      contact_id INTEGER NOT NULL REFERENCES contacts(id),
+      rule TEXT NOT NULL,
+      reason TEXT NOT NULL,
+      channel TEXT NOT NULL,
+      draft_subject TEXT,
+      draft_body TEXT,
+      draft_source TEXT,
+      status TEXT NOT NULL DEFAULT 'open',
+      snoozed_until TEXT,
+      skip_reason TEXT,
+      edited INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL,
+      resolved_at TEXT,
+      UNIQUE (plan_date, contact_id, rule)
+    );
+
+    CREATE TABLE IF NOT EXISTS ai_runs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      purpose TEXT NOT NULL,
+      prompt_version TEXT NOT NULL,
+      model TEXT NOT NULL,
+      contact_id INTEGER,
+      input_json TEXT NOT NULL,
+      output_text TEXT,
+      input_tokens INTEGER,
+      output_tokens INTEGER,
+      cost_usd REAL,
+      status TEXT NOT NULL,
+      error TEXT,
+      created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS push_subscriptions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      endpoint TEXT UNIQUE NOT NULL,
+      keys_json TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
+  `);
+
+  const leadCols = database.prepare('PRAGMA table_info(leads)').all().map((c) => c.name);
+  if (!leadCols.includes('contact_id')) {
+    database.exec('ALTER TABLE leads ADD COLUMN contact_id INTEGER REFERENCES contacts(id)');
+  }
+
+  const pipelineCount = database.prepare('SELECT COUNT(*) as count FROM pipelines').get().count;
+  if (pipelineCount === 0) {
+    const insPipeline = database.prepare('INSERT INTO pipelines (id, name) VALUES (?, ?)');
+    insPipeline.run(1, 'Buyer');
+    insPipeline.run(2, 'Seller');
+
+    const insStage = database.prepare(`
+      INSERT INTO pipeline_stages (pipeline_id, name, sort_order, is_won, is_lost)
+      VALUES (?, ?, ?, ?, ?)
+    `);
+
+    const buyerStages = [
+      { name: 'New', order: 1, won: 0, lost: 0 },
+      { name: 'Contacted', order: 2, won: 0, lost: 0 },
+      { name: 'Qualified', order: 3, won: 0, lost: 0 },
+      { name: 'Showing', order: 4, won: 0, lost: 0 },
+      { name: 'Offer', order: 5, won: 0, lost: 0 },
+      { name: 'Under contract', order: 6, won: 0, lost: 0 },
+      { name: 'Closed', order: 7, won: 1, lost: 0 },
+      { name: 'Lost', order: 8, won: 0, lost: 1 }
+    ];
+    for (const s of buyerStages) {
+      insStage.run(1, s.name, s.order, s.won, s.lost);
+    }
+
+    const sellerStages = [
+      { name: 'New', order: 1, won: 0, lost: 0 },
+      { name: 'Contacted', order: 2, won: 0, lost: 0 },
+      { name: 'Qualified', order: 3, won: 0, lost: 0 },
+      { name: 'Listing prep', order: 4, won: 0, lost: 0 },
+      { name: 'Offer', order: 5, won: 0, lost: 0 },
+      { name: 'Under contract', order: 6, won: 0, lost: 0 },
+      { name: 'Closed', order: 7, won: 1, lost: 0 },
+      { name: 'Lost', order: 8, won: 0, lost: 1 }
+    ];
+    for (const s of sellerStages) {
+      insStage.run(2, s.name, s.order, s.won, s.lost);
+    }
+  }
 }
 
 function readJson(file) {
@@ -311,36 +531,51 @@ function searchListings({ q = '', city = '', minPrice = 0, maxPrice = 999999999,
 
 function insertLead(lead) {
   const database = getDb();
-  database.prepare(`
-    INSERT INTO leads (
-      lead_id, received_at, source_page, scene, name, email, phone,
-      interest, budget, timeline, areas_json, segment, message,
-      email_consent, sms_consent, consent_text_version, consent_timestamp, ip_hash,
-      form_type, utm_json, referrer
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    lead.lead_id,
-    lead.received_at,
-    lead.source_page,
-    lead.scene,
-    lead.name,
-    lead.email,
-    lead.phone,
-    lead.interest,
-    lead.budget,
-    lead.timeline,
-    JSON.stringify(lead.areas || []),
-    lead.segment,
-    lead.message,
-    lead.email_consent ? 1 : 0,
-    lead.sms_consent ? 1 : 0,
-    lead.consent_text_version,
-    lead.consent_timestamp,
-    lead.ip_hash || '',
-    lead.form_type || 'contact',
-    JSON.stringify(lead.utm || {}),
-    lead.referrer || ''
-  );
+  database.exec('BEGIN IMMEDIATE');
+  try {
+    database.prepare(`
+      INSERT INTO leads (
+        lead_id, received_at, source_page, scene, name, email, phone,
+        interest, budget, timeline, areas_json, segment, message,
+        email_consent, sms_consent, consent_text_version, consent_timestamp, ip_hash,
+        form_type, utm_json, referrer
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      lead.lead_id,
+      lead.received_at,
+      lead.source_page,
+      lead.scene,
+      lead.name,
+      lead.email,
+      lead.phone,
+      lead.interest,
+      lead.budget,
+      lead.timeline,
+      JSON.stringify(lead.areas || []),
+      lead.segment,
+      lead.message,
+      lead.email_consent ? 1 : 0,
+      lead.sms_consent ? 1 : 0,
+      lead.consent_text_version,
+      lead.consent_timestamp,
+      lead.ip_hash || '',
+      lead.form_type || 'contact',
+      JSON.stringify(lead.utm || {}),
+      lead.referrer || ''
+    );
+
+    try {
+      const { leadToContact } = require('../lib/crm');
+      leadToContact(lead, database);
+    } catch (crmErr) {
+      console.error('Warning: CRM leadToContact failed:', crmErr);
+    }
+
+    database.exec('COMMIT');
+  } catch (err) {
+    try { database.exec('ROLLBACK'); } catch (_) {}
+    throw err;
+  }
 }
 
 // ---------- Outbox (durable notification queue) ----------
@@ -588,11 +823,415 @@ function adminDeleteTestimonial(id) {
   return getDb().prepare('DELETE FROM testimonials WHERE id = ?').run(id).changes > 0;
 }
 
+// ---------- Admin: Contacts (CRM M1) ----------
+const CONTACT_STAGES = [
+  'new', 'contacted', 'qualified', 'showing', 'listing_prep', 'offer',
+  'under_contract', 'closed', 'lost', 'spam', 'archive', 'past_client'
+];
+const CONTACT_TYPES = ['lead', 'client', 'past_client', 'sphere', 'agent', 'vendor'];
+const SCORE_BANDS = ['hot', 'warm', 'nurture', 'cold'];
+
+function parseContact(row) {
+  if (!row) return null;
+  const out = Object.assign({}, row);
+  try { out.areas = JSON.parse(row.areas_json || '[]'); } catch (_) { out.areas = []; }
+  try { out.first_utm = JSON.parse(row.first_utm_json || '{}'); } catch (_) { out.first_utm = {}; }
+  try { out.score_reasons = JSON.parse(row.score_reasons_json || '[]'); } catch (_) { out.score_reasons = []; }
+  delete out.areas_json;
+  delete out.first_utm_json;
+  delete out.score_reasons_json;
+  out.discreet = Boolean(row.discreet);
+  return out;
+}
+
+function adminListContacts({ stage = '', type = '', score_band = '', q = '', limit = 50, offset = 0 } = {}) {
+  const database = getDb();
+  const clauses = ['c.merged_into IS NULL'];
+  const params = [];
+
+  if (stage) { clauses.push('c.stage = ?'); params.push(stage); }
+  if (type) { clauses.push('c.type = ?'); params.push(type); }
+  if (score_band) { clauses.push('c.score_band = ?'); params.push(score_band); }
+  if (q) {
+    const like = `%${q.toLowerCase()}%`;
+    clauses.push(`(
+      LOWER(c.display_name) LIKE ? OR
+      LOWER(c.first_name) LIKE ? OR
+      LOWER(c.last_name) LIKE ? OR
+      LOWER(c.notes) LIKE ? OR
+      EXISTS (
+        SELECT 1 FROM contact_identities ci
+        WHERE ci.contact_id = c.id AND LOWER(ci.value) LIKE ?
+      )
+    )`);
+    params.push(like, like, like, like, like);
+  }
+
+  const where = clauses.length ? 'WHERE ' + clauses.join(' AND ') : '';
+  const total = database.prepare(`SELECT COUNT(*) AS n FROM contacts c ${where}`).get(...params).n;
+
+  const rows = database.prepare(`
+    SELECT c.*,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'email' ORDER BY is_primary DESC, id ASC LIMIT 1) as primary_email,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'phone' ORDER BY is_primary DESC, id ASC LIMIT 1) as primary_phone,
+      (SELECT COUNT(*) FROM tasks WHERE contact_id = c.id AND done_at IS NULL) as open_tasks_count,
+      (SELECT COUNT(*) FROM deals WHERE contact_id = c.id) as deals_count
+    FROM contacts c
+    ${where}
+    ORDER BY c.last_inbound_at DESC, c.created_at DESC
+    LIMIT ? OFFSET ?
+  `).all(...params, limit, offset);
+
+  return { total, contacts: rows.map(parseContact), limit, offset };
+}
+
+function adminGetContact(contactId) {
+  const database = getDb();
+  const raw = database.prepare('SELECT * FROM contacts WHERE id = ?').get(contactId);
+  if (!raw) return null;
+  const contact = parseContact(raw);
+
+  contact.identities = database.prepare(
+    'SELECT * FROM contact_identities WHERE contact_id = ? ORDER BY is_primary DESC, kind ASC, id ASC'
+  ).all(contactId);
+
+  contact.activities = database.prepare(
+    'SELECT * FROM activities WHERE contact_id = ? ORDER BY occurred_at DESC, id DESC LIMIT 100'
+  ).all(contactId).map(a => {
+    try { a.meta = JSON.parse(a.meta_json || '{}'); } catch (_) { a.meta = {}; }
+    delete a.meta_json;
+    return a;
+  });
+
+  contact.consents = database.prepare(
+    'SELECT * FROM consents WHERE contact_id = ? ORDER BY recorded_at DESC, id DESC'
+  ).all(contactId);
+
+  contact.deals = database.prepare(`
+    SELECT d.*, p.name as pipeline_name, s.name as stage_name, s.is_won, s.is_lost
+    FROM deals d
+    JOIN pipelines p ON p.id = d.pipeline_id
+    JOIN pipeline_stages s ON s.id = d.stage_id
+    WHERE d.contact_id = ?
+    ORDER BY d.created_at DESC
+  `).all(contactId);
+
+  contact.tasks = database.prepare(
+    'SELECT * FROM tasks WHERE contact_id = ? ORDER BY done_at ASC, due_at ASC, id DESC'
+  ).all(contactId);
+
+  contact.tags = database.prepare(`
+    SELECT t.id, t.name
+    FROM tags t
+    JOIN contact_tags ct ON ct.tag_id = t.id
+    WHERE ct.contact_id = ?
+    ORDER BY t.name ASC
+  `).all(contactId);
+
+  return contact;
+}
+
+function adminUpdateContact(contactId, updates = {}) {
+  const database = getDb();
+  const sets = [];
+  const params = [];
+
+  if (updates.stage !== undefined && CONTACT_STAGES.includes(updates.stage)) {
+    sets.push('stage = ?');
+    params.push(updates.stage);
+  }
+  if (updates.type !== undefined && CONTACT_TYPES.includes(updates.type)) {
+    sets.push('type = ?');
+    params.push(updates.type);
+  }
+  if (updates.discreet !== undefined) {
+    sets.push('discreet = ?');
+    params.push(updates.discreet ? 1 : 0);
+  }
+  if (updates.notes !== undefined) {
+    sets.push('notes = ?');
+    params.push(String(updates.notes).slice(0, 5000));
+  }
+  if (updates.interest !== undefined) {
+    sets.push('interest = ?');
+    params.push(String(updates.interest).slice(0, 60));
+  }
+  if (updates.budget !== undefined) {
+    sets.push('budget = ?');
+    params.push(String(updates.budget).slice(0, 40));
+  }
+  if (updates.timeline !== undefined) {
+    sets.push('timeline = ?');
+    params.push(String(updates.timeline).slice(0, 60));
+  }
+
+  if (!sets.length) return false;
+  sets.push("updated_at = ?");
+  params.push(new Date().toISOString());
+
+  return database.prepare(`UPDATE contacts SET ${sets.join(', ')} WHERE id = ?`).run(...params, contactId).changes > 0;
+}
+
+// ---------- Tasks & Deals (CRM M1) ----------
+function updateContactNextFollowUp(database, contactId) {
+  if (!contactId) return;
+  const row = database.prepare(`
+    SELECT MIN(due_at) as earliest
+    FROM tasks
+    WHERE contact_id = ? AND done_at IS NULL AND due_at IS NOT NULL AND due_at != ''
+  `).get(contactId);
+
+  const earliest = row ? row.earliest : null;
+  database.prepare(`
+    UPDATE contacts SET next_follow_up_at = ?, updated_at = ?
+    WHERE id = ?
+  `).run(earliest || null, new Date().toISOString(), contactId);
+}
+
+function adminCreateTask({ contact_id, deal_id, title, due_at }) {
+  if (!title) return null;
+  const database = getDb();
+  const now = new Date().toISOString();
+  const res = database.prepare(`
+    INSERT INTO tasks (contact_id, deal_id, title, due_at, done_at, created_at)
+    VALUES (?, ?, ?, ?, NULL, ?)
+  `).run(contact_id || null, deal_id || null, String(title).slice(0, 255), due_at || null, now);
+
+  const taskId = Number(res.lastInsertRowid);
+  if (contact_id) {
+    updateContactNextFollowUp(database, contact_id);
+  }
+  return database.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+}
+
+function adminUpdateTask(taskId, { done, title, due_at }) {
+  const database = getDb();
+  const existing = database.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+  if (!existing) return null;
+
+  const now = new Date().toISOString();
+  const sets = [];
+  const params = [];
+
+  if (done !== undefined) {
+    if (done) {
+      sets.push('done_at = ?');
+      params.push(now);
+      if (existing.contact_id) {
+        database.prepare(`
+          INSERT INTO activities (contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at)
+          VALUES (?, 'task_done', NULL, ?, ?, ?, ?, ?)
+        `).run(
+          existing.contact_id,
+          `Task completed: ${existing.title}`,
+          `Task "${existing.title}" was marked completed.`,
+          JSON.stringify({ task_id: taskId, deal_id: existing.deal_id }),
+          now,
+          now
+        );
+      }
+    } else {
+      sets.push('done_at = NULL');
+    }
+  }
+
+  if (title !== undefined) {
+    sets.push('title = ?');
+    params.push(String(title).slice(0, 255));
+  }
+  if (due_at !== undefined) {
+    sets.push('due_at = ?');
+    params.push(due_at ? String(due_at).slice(0, 40) : null);
+  }
+
+  if (sets.length) {
+    database.prepare(`UPDATE tasks SET ${sets.join(', ')} WHERE id = ?`).run(...params, taskId);
+  }
+
+  if (existing.contact_id) {
+    updateContactNextFollowUp(database, existing.contact_id);
+  }
+
+  return database.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+}
+
+function adminDeleteTask(taskId) {
+  const database = getDb();
+  const existing = database.prepare('SELECT * FROM tasks WHERE id = ?').get(taskId);
+  if (!existing) return false;
+
+  database.prepare('DELETE FROM tasks WHERE id = ?').run(taskId);
+  if (existing.contact_id) {
+    updateContactNextFollowUp(database, existing.contact_id);
+  }
+  return true;
+}
+
+function adminListPipelines() {
+  const database = getDb();
+  const pipelines = database.prepare('SELECT * FROM pipelines ORDER BY id ASC').all();
+  const stages = database.prepare('SELECT * FROM pipeline_stages ORDER BY pipeline_id ASC, sort_order ASC').all();
+
+  return pipelines.map((p) => ({
+    id: p.id,
+    name: p.name,
+    stages: stages.filter((s) => s.pipeline_id === p.id)
+  }));
+}
+
+function adminCreateDeal({ contact_id, pipeline_id, stage_id, title, value_usd, property_address, expected_close }) {
+  const database = getDb();
+  const contact = database.prepare('SELECT * FROM contacts WHERE id = ?').get(contact_id);
+  if (!contact) throw new Error('Contact not found');
+
+  const pipeId = Number(pipeline_id) || 1;
+  let stId = Number(stage_id);
+  if (!stId) {
+    const firstStage = database.prepare('SELECT id FROM pipeline_stages WHERE pipeline_id = ? ORDER BY sort_order ASC LIMIT 1').get(pipeId);
+    stId = firstStage ? firstStage.id : (pipeId === 1 ? 1 : 9);
+  }
+
+  const pName = pipeId === 1 ? 'Buyer' : 'Seller';
+  const dealTitle = title ? String(title).slice(0, 160) : `${contact.display_name} - ${pName} Deal`;
+  const now = new Date().toISOString();
+
+  const res = database.prepare(`
+    INSERT INTO deals (
+      contact_id, pipeline_id, stage_id, title, value_usd,
+      property_address, expected_close, closed_at, stage_changed_at,
+      created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?, ?, ?)
+  `).run(
+    contact_id,
+    pipeId,
+    stId,
+    dealTitle,
+    value_usd ? Number(value_usd) : null,
+    property_address ? String(property_address).slice(0, 200) : null,
+    expected_close ? String(expected_close).slice(0, 40) : null,
+    now,
+    now,
+    now
+  );
+
+  const dealId = Number(res.lastInsertRowid);
+  const stageRow = database.prepare('SELECT name FROM pipeline_stages WHERE id = ?').get(stId);
+
+  database.prepare(`
+    INSERT INTO activities (contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at)
+    VALUES (?, 'stage_change', NULL, ?, ?, ?, ?, ?)
+  `).run(
+    contact_id,
+    `Started ${pName} deal: ${dealTitle}`,
+    `Deal entered stage "${stageRow ? stageRow.name : 'New'}".`,
+    JSON.stringify({ deal_id: dealId, pipeline_id: pipeId, stage_id: stId }),
+    now,
+    now
+  );
+
+  return adminGetDeal(dealId);
+}
+
+function adminGetDeal(dealId) {
+  const database = getDb();
+  return database.prepare(`
+    SELECT d.*, p.name as pipeline_name, s.name as stage_name, s.is_won, s.is_lost
+    FROM deals d
+    JOIN pipelines p ON p.id = d.pipeline_id
+    JOIN pipeline_stages s ON s.id = d.stage_id
+    WHERE d.id = ?
+  `).get(dealId);
+}
+
+function adminUpdateDeal(dealId, updates = {}) {
+  const database = getDb();
+  const deal = database.prepare(`
+    SELECT d.*, s.name as current_stage_name
+    FROM deals d
+    JOIN pipeline_stages s ON s.id = d.stage_id
+    WHERE d.id = ?
+  `).get(dealId);
+  if (!deal) return null;
+
+  const now = new Date().toISOString();
+  const sets = [];
+  const params = [];
+
+  let stageChanged = false;
+  let newStageRow = null;
+
+  if (updates.stage_id !== undefined && Number(updates.stage_id) !== deal.stage_id) {
+    const stId = Number(updates.stage_id);
+    newStageRow = database.prepare('SELECT * FROM pipeline_stages WHERE id = ? AND pipeline_id = ?').get(stId, deal.pipeline_id);
+    if (newStageRow) {
+      sets.push('stage_id = ?', 'stage_changed_at = ?');
+      params.push(stId, now);
+      stageChanged = true;
+
+      if (newStageRow.is_won) {
+        sets.push('closed_at = ?');
+        params.push(now);
+        database.prepare("UPDATE contacts SET type = 'past_client', updated_at = ? WHERE id = ?").run(now, deal.contact_id);
+      } else {
+        sets.push('closed_at = NULL');
+      }
+    }
+  }
+
+  if (updates.title !== undefined) {
+    sets.push('title = ?');
+    params.push(String(updates.title).slice(0, 160));
+  }
+  if (updates.value_usd !== undefined) {
+    sets.push('value_usd = ?');
+    params.push(updates.value_usd ? Number(updates.value_usd) : null);
+  }
+  if (updates.property_address !== undefined) {
+    sets.push('property_address = ?');
+    params.push(updates.property_address ? String(updates.property_address).slice(0, 200) : null);
+  }
+  if (updates.expected_close !== undefined) {
+    sets.push('expected_close = ?');
+    params.push(updates.expected_close ? String(updates.expected_close).slice(0, 40) : null);
+  }
+
+  if (sets.length) {
+    sets.push('updated_at = ?');
+    params.push(now);
+    database.prepare(`UPDATE deals SET ${sets.join(', ')} WHERE id = ?`).run(...params, dealId);
+  }
+
+  if (stageChanged && newStageRow) {
+    database.prepare(`
+      INSERT INTO activities (contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at)
+      VALUES (?, 'stage_change', NULL, ?, ?, ?, ?, ?)
+    `).run(
+      deal.contact_id,
+      `Deal moved to ${newStageRow.name}`,
+      `Deal "${updates.title || deal.title}" changed from "${deal.current_stage_name}" to "${newStageRow.name}".`,
+      JSON.stringify({
+        deal_id: dealId,
+        old_stage_id: deal.stage_id,
+        new_stage_id: newStageRow.id,
+        old_stage_name: deal.current_stage_name,
+        new_stage_name: newStageRow.name
+      }),
+      now,
+      now
+    );
+  }
+
+  return adminGetDeal(dealId);
+}
+
 module.exports = {
   getDb,
   getPublishedTestimonials,
   createSession, getSession, deleteSession, audit, getAudit,
   LEAD_STATUSES, adminListLeads, adminGetLead, adminUpdateLead, adminDeleteLead, retryOutbox,
+  CONTACT_STAGES, CONTACT_TYPES, SCORE_BANDS, adminListContacts, adminGetContact, adminUpdateContact,
+  adminCreateTask, adminUpdateTask, adminDeleteTask, updateContactNextFollowUp,
+  adminListPipelines, adminCreateDeal, adminGetDeal, adminUpdateDeal,
   adminStats, adminSubscribers,
   adminListListings, adminSaveListing,
   adminListTestimonials, adminSaveTestimonial, adminDeleteTestimonial,
@@ -606,6 +1245,7 @@ module.exports = {
   markOutboxFailed,
   outboxSummary,
   insertValuation,
-  upsertNewsletter
+  upsertNewsletter,
+  runCrmMigrations
 };
 

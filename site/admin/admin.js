@@ -5,8 +5,16 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var view = $('view');
-  var state = { view: 'dashboard', leads: { status: '', type: '', q: '', offset: 0 }, statuses: [] };
+  var state = { view: 'dashboard', contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 }, leads: { status: '', type: '', q: '', offset: 0 }, statuses: [], pipelines: [] };
   var LIMIT = 50;
+
+  function getPipelines() {
+    if (state.pipelines && state.pipelines.length) return Promise.resolve(state.pipelines);
+    return api('/pipelines').then(function (d) {
+      state.pipelines = d.pipelines || [];
+      return state.pipelines;
+    }).catch(function () { return []; });
+  }
 
   function esc(v) {
     return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -70,7 +78,7 @@
     state.view = name;
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
     view.innerHTML = '<p class="muted">Loading…</p>';
-    var routes = { dashboard: dashboard, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity };
+    var routes = { dashboard: dashboard, contacts: contacts, leads: leads, listings: listings, reviews: reviews, subscribers: subscribers, activity: activity };
     if (routes[name]) routes[name]();
     else dashboard();
   }
@@ -108,6 +116,322 @@
           '<section class="card"><h2>By page, last 90 days</h2>' + bars(s.by_page) + '</section>' +
           '<section class="card"><h2>By campaign source, last 90 days</h2>' + bars(s.by_source) + '</section>' +
         '</div>';
+    }).catch(fail);
+  }
+
+  /* ---------- Contacts (CRM M1) ---------- */
+  function contacts() {
+    var f = state.contacts;
+    var qs = '?limit=' + LIMIT + '&offset=' + f.offset +
+      '&stage=' + encodeURIComponent(f.stage) +
+      '&type=' + encodeURIComponent(f.type) +
+      '&score_band=' + encodeURIComponent(f.score_band) +
+      '&q=' + encodeURIComponent(f.q);
+
+    api('/contacts' + qs).then(function (d) {
+      var stages = d.stages || [];
+      var scoreBands = d.score_bands || [];
+
+      view.innerHTML =
+        '<h1>Contacts</h1>' +
+        '<div class="toolbar">' +
+          '<input type="search" id="cq" placeholder="Search name, email, phone, notes…" value="' + esc(f.q) + '" aria-label="Search contacts" />' +
+          '<select id="cstage" aria-label="Stage"><option value="">All stages</option>' + stages.map(function (s) { return '<option' + (s === f.stage ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '</select>' +
+          '<select id="cscore" aria-label="Score Band"><option value="">All score bands</option>' + scoreBands.map(function (b) { return '<option' + (b === f.score_band ? ' selected' : '') + '>' + b + '</option>'; }).join('') + '</select>' +
+          '<a class="btn" href="/api/admin/contacts.csv">Export CSV</a>' +
+        '</div>' +
+        (d.contacts.length ? '<div class="list">' + d.contacts.map(contactRow).join('') + '</div>' : '<div class="empty">No contacts match. Every inbound inquiry automatically creates or matches a contact profile here.</div>') +
+        '<div class="pager"><span>' + (d.total ? (f.offset + 1) + '–' + Math.min(f.offset + LIMIT, d.total) + ' of ' + d.total : '') + '</span><span>' +
+          (f.offset > 0 ? '<button class="btn" id="cprev">Newer</button> ' : '') + (f.offset + LIMIT < d.total ? '<button class="btn" id="cnext">Older</button>' : '') + '</span></div>';
+
+      var t;
+      $('cq').addEventListener('input', function (e) { clearTimeout(t); t = setTimeout(function () { f.q = e.target.value.trim(); f.offset = 0; contacts(); }, 350); });
+      $('cstage').addEventListener('change', function (e) { f.stage = e.target.value; f.offset = 0; contacts(); });
+      $('cscore').addEventListener('change', function (e) { f.score_band = e.target.value; f.offset = 0; contacts(); });
+      if ($('cprev')) $('cprev').onclick = function () { f.offset = Math.max(0, f.offset - LIMIT); contacts(); };
+      if ($('cnext')) $('cnext').onclick = function () { f.offset += LIMIT; contacts(); };
+      view.querySelectorAll('[data-contact]').forEach(function (b) { b.onclick = function () { contactDetail(b.getAttribute('data-contact')); }; });
+      if (f.q) { var i = $('cq'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
+    }).catch(fail);
+  }
+
+  function contactRow(c) {
+    var metaParts = [
+      c.primary_email,
+      c.primary_phone,
+      c.interest,
+      c.budget,
+      c.timeline
+    ].filter(Boolean).join(' · ');
+
+    var pills = [];
+    if (c.discreet) pills.push('<span class="pill pill--discreet">Discreet</span>');
+    if (c.score > 0 || c.score_band !== 'cold') pills.push('<span class="pill pill--' + esc(c.score_band) + '">' + esc(c.score_band) + ' (' + c.score + ')</span>');
+    pills.push('<span class="pill pill--' + esc(c.stage) + '">' + esc(c.stage) + '</span>');
+
+    return '<button class="row' + (c.stage === 'new' ? ' is-new' : '') + '" data-contact="' + esc(c.id) + '">' +
+      '<span class="row__title">' + esc(c.display_name) + ' ' + pills.join(' ') + '</span>' +
+      '<span class="row__side">' + when(c.last_inbound_at || c.created_at) + '</span>' +
+      '<span class="row__meta">' + esc(metaParts) + (c.notes ? ' — ' + esc(c.notes) : '') + '</span></button>';
+  }
+
+  function contactDetail(id) {
+    Promise.all([
+      api('/contacts/' + encodeURIComponent(id)),
+      getPipelines()
+    ]).then(function (results) {
+      var c = results[0].contact;
+      var pipelines = results[1] || [];
+      var emails = (c.identities || []).filter(function (i) { return i.kind === 'email'; });
+      var phones = (c.identities || []).filter(function (i) { return i.kind === 'phone'; });
+
+      // Deals HTML
+      var dealsHtml =
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 8px;">' +
+          '<h2 style="margin:0;">Deals & Pipeline</h2>' +
+          '<div style="display:flex; gap:6px;">' +
+            '<button class="btn btn--quiet small" id="btn-start-buyer">+ Start Buyer Deal</button>' +
+            '<button class="btn btn--quiet small" id="btn-start-seller">+ Start Seller Deal</button>' +
+          '</div>' +
+        '</div>';
+
+      if (c.deals && c.deals.length) {
+        dealsHtml += '<div class="list" style="margin-bottom:16px;">' +
+          c.deals.map(function (dl) {
+            var pMatch = pipelines.find(function (p) { return p.id === dl.pipeline_id; });
+            var pStages = pMatch ? pMatch.stages : [];
+            var stageOptions = pStages.map(function (st) {
+              return '<option value="' + st.id + '"' + (st.id === dl.stage_id ? ' selected' : '') + '>' + esc(st.name) + '</option>';
+            }).join('');
+
+            var statusPill = dl.is_won ? ' <span class="pill pill--closed">Closed Won</span>' : (dl.is_lost ? ' <span class="pill pill--lost">Lost</span>' : '');
+            var valStr = dl.value_usd ? '$' + Number(dl.value_usd).toLocaleString() : '';
+
+            return '<div class="card" style="padding:12px; margin-bottom:8px;">' +
+              '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+                '<strong style="font-size:0.95rem;">' + esc(dl.title) + statusPill + '</strong>' +
+                (valStr ? '<span style="color:var(--gold); font-weight:600;">' + esc(valStr) + '</span>' : '') +
+              '</div>' +
+              (dl.property_address ? '<p class="small muted" style="margin:0 0 8px;">' + esc(dl.property_address) + '</p>' : '') +
+              '<div style="display:flex; align-items:center; gap:8px;">' +
+                '<span class="small muted">' + esc(dl.pipeline_name) + ' Stage:</span>' +
+                '<select class="deal-stage-select" data-deal-id="' + dl.id + '" style="min-height:36px; padding:4px 8px; font-size:0.85rem; width:auto; flex:1;">' +
+                  stageOptions +
+                '</select>' +
+              '</div>' +
+            '</div>';
+          }).join('') + '</div>';
+      } else {
+        dealsHtml += '<p class="muted small" style="margin:0 0 16px;">No active deals yet. Click above to start a buyer or seller deal.</p>';
+      }
+
+      // Tasks HTML
+      var openTasks = (c.tasks || []).filter(function (t) { return !t.done_at; });
+      var doneTasks = (c.tasks || []).filter(function (t) { return Boolean(t.done_at); });
+
+      var tasksHtml =
+        '<div style="margin:16px 0 8px;">' +
+          '<h2 style="margin:0 0 8px;">Tasks & Follow-up</h2>' +
+          '<form id="task-add-form" style="display:grid; grid-template-columns: 1fr 130px auto; gap:6px; margin-bottom:10px;">' +
+            '<input type="text" id="task-add-title" placeholder="New follow-up task…" required style="min-height:36px; padding:6px 10px; font-size:0.85rem;" />' +
+            '<input type="date" id="task-add-due" style="min-height:36px; padding:6px 8px; font-size:0.85rem;" />' +
+            '<button type="submit" class="btn btn--primary" style="min-height:36px; padding:0 12px; font-size:0.75rem;">Add</button>' +
+          '</form>' +
+          '<div class="list" style="margin-bottom:16px;">' +
+            (openTasks.length ? openTasks.map(function (tk) {
+              return '<div class="row is-new" style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px;">' +
+                '<label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer; flex:1;">' +
+                  '<input type="checkbox" data-task-toggle="' + tk.id + '" data-done="1" style="width:18px; height:18px;" />' +
+                  '<span style="font-weight:600; font-size:0.88rem;">' + esc(tk.title) + '</span>' +
+                '</label>' +
+                '<span class="row__side" style="display:flex; align-items:center; gap:8px;">' +
+                  (tk.due_at ? '<span style="color:var(--gold);">' + when(tk.due_at) + '</span>' : '<span class="muted">No due date</span>') +
+                  '<button class="btn btn--quiet small" data-task-del="' + tk.id + '" style="min-height:28px; padding:0 6px;" title="Delete task">×</button>' +
+                '</span>' +
+              '</div>';
+            }).join('') : '<p class="muted small" style="margin:0 0 6px;">No open tasks.</p>') +
+            (doneTasks.length ? doneTasks.map(function (tk) {
+              return '<div class="row" style="opacity:0.6; display:flex; align-items:center; justify-content:space-between; padding:8px 12px;">' +
+                '<label style="display:flex; align-items:center; gap:8px; margin:0; cursor:pointer; flex:1;">' +
+                  '<input type="checkbox" checked data-task-toggle="' + tk.id + '" data-done="0" style="width:18px; height:18px;" />' +
+                  '<span style="text-decoration:line-through; font-size:0.88rem;">' + esc(tk.title) + '</span>' +
+                '</label>' +
+                '<span class="row__side" style="display:flex; align-items:center; gap:8px;">' +
+                  '<span class="pill pill--closed">Done</span> ' + when(tk.done_at) +
+                  '<button class="btn btn--quiet small" data-task-del="' + tk.id + '" style="min-height:28px; padding:0 6px;" title="Delete task">×</button>' +
+                '</span>' +
+              '</div>';
+            }).join('') : '') +
+          '</div>' +
+        '</div>';
+
+      var actsHtml = '';
+      if (c.activities && c.activities.length) {
+        actsHtml = '<h2>Activity Stream</h2><div class="list" style="margin-bottom:16px;">' +
+          c.activities.map(function (a) {
+            return '<div class="row"><span class="row__title">' + esc(a.subject || a.kind) + '</span>' +
+              '<span class="row__side">' + when(a.occurred_at || a.created_at) + '</span>' +
+              (a.body ? '<span class="row__meta">' + esc(a.body) + '</span>' : '') +
+              '</div>';
+          }).join('') + '</div>';
+      }
+
+      var consentsHtml = '';
+      if (c.consents && c.consents.length) {
+        consentsHtml = '<h2>Consent Records (Immutable)</h2><div class="list" style="margin-bottom:16px;">' +
+          c.consents.map(function (cn) {
+            return '<div class="row"><span class="row__title">' + esc(cn.channel) + ': ' + (cn.granted ? '<span class="pill pill--on">Granted</span>' : '<span class="pill pill--off">Withdrawn</span>') + '</span>' +
+              '<span class="row__side">' + when(cn.recorded_at) + '</span>' +
+              '<span class="row__meta">Source: ' + esc(cn.source) + ' (ver ' + esc(cn.text_version) + ')</span>' +
+              '</div>';
+          }).join('') + '</div>';
+      }
+
+      var html =
+        '<h2>' + esc(c.display_name) + (c.discreet ? ' <span class="pill pill--discreet">Discreet</span>' : '') + '</h2>' +
+        '<p class="eyebrow">' + esc(c.type) + ' · Stage: ' + esc(c.stage) + ' · Score: ' + esc(c.score) + ' (' + esc(c.score_band) + ')</p>' +
+        '<div class="actions" style="margin: 8px 0 16px;">' +
+          (emails.length ? '<a class="btn btn--primary" href="mailto:' + esc(emails[0].value) + '">Email ' + esc(emails[0].value) + '</a>' : '') +
+          (phones.length ? '<a class="btn" href="tel:' + esc(phones[0].value) + '">Call ' + esc(phones[0].value) + '</a>' : '') +
+        '</div>' +
+        '<dl class="kv">' +
+          kv('Email', emails.map(function (e) { return '<a href="mailto:' + esc(e.value) + '">' + esc(e.value) + '</a>'; }).join(', ')) +
+          kv('Phone', phones.map(function (p) { return '<a href="tel:' + esc(p.value) + '">' + esc(p.value) + '</a>'; }).join(', ')) +
+          kv('Interest', esc(c.interest)) +
+          kv('Budget', esc(c.budget)) +
+          kv('Timeline', esc(c.timeline)) +
+          kv('Areas', esc((c.areas || []).join(', '))) +
+          kv('Source', esc(c.source)) +
+          kv('Next Follow-Up', when(c.next_follow_up_at)) +
+          kv('Last Inbound', when(c.last_inbound_at)) +
+          kv('Last Outbound', when(c.last_outbound_at)) +
+          kv('Created', when(c.created_at)) +
+        '</dl>' +
+        (c.notes ? '<div class="quote"><strong>Notes:</strong>\n' + esc(c.notes) + '</div>' : '') +
+        dealsHtml +
+        tasksHtml +
+        actsHtml +
+        consentsHtml +
+        '<form id="contact-edit-form" class="card" style="margin-top:16px;">' +
+          '<h2>Update Contact Profile</h2>' +
+          '<label for="contact-stage">Stage</label>' +
+          '<select id="contact-stage">' +
+            ['new', 'contacted', 'qualified', 'showing', 'listing_prep', 'offer', 'under_contract', 'closed', 'lost', 'spam', 'past_client'].map(function (s) {
+              return '<option' + (s === c.stage ? ' selected' : '') + '>' + s + '</option>';
+            }).join('') +
+          '</select>' +
+          '<label for="contact-type">Type</label>' +
+          '<select id="contact-type">' +
+            ['lead', 'client', 'past_client', 'sphere', 'agent', 'vendor'].map(function (tp) {
+              return '<option' + (tp === c.type ? ' selected' : '') + '>' + tp + '</option>';
+            }).join('') +
+          '</select>' +
+          '<label class="check"><input type="checkbox" id="contact-discreet"' + (c.discreet ? ' checked' : '') + ' /> High-Net-Worth / Discreet Client</label>' +
+          '<label for="contact-interest">Interest</label>' +
+          '<input type="text" id="contact-interest" value="' + esc(c.interest || '') + '" placeholder="e.g. Buying, Selling, Relocation" />' +
+          '<label for="contact-budget">Budget</label>' +
+          '<input type="text" id="contact-budget" value="' + esc(c.budget || '') + '" placeholder="e.g. $2.5M - $4M" />' +
+          '<label for="contact-timeline">Timeline</label>' +
+          '<input type="text" id="contact-timeline" value="' + esc(c.timeline || '') + '" placeholder="e.g. 1-3 months" />' +
+          '<label for="contact-notes">Internal Notes</label>' +
+          '<textarea id="contact-notes" placeholder="Private notes, conversation details, preferences…">' + esc(c.notes || '') + '</textarea>' +
+          '<div class="actions">' +
+            '<button type="submit" class="btn btn--primary">Save Changes</button>' +
+          '</div>' +
+        '</form>';
+
+      openDrawer(html);
+
+      var drawer = $('drawer-body');
+
+      // Deal button bindings
+      var btnBuyer = $('btn-start-buyer');
+      if (btnBuyer) {
+        btnBuyer.onclick = function () {
+          api('/deals', 'POST', { contact_id: id, pipeline_id: 1 }).then(function () {
+            toast('Started Buyer deal.');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      }
+      var btnSeller = $('btn-start-seller');
+      if (btnSeller) {
+        btnSeller.onclick = function () {
+          api('/deals', 'POST', { contact_id: id, pipeline_id: 2 }).then(function () {
+            toast('Started Seller deal.');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      }
+      drawer.querySelectorAll('.deal-stage-select').forEach(function (sel) {
+        sel.onchange = function () {
+          var dealId = sel.getAttribute('data-deal-id');
+          api('/deals/' + dealId, 'PATCH', { stage_id: sel.value }).then(function (res) {
+            toast('Deal moved to ' + (res.deal ? res.deal.stage_name : 'new stage'));
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      });
+
+      // Task bindings
+      var taskForm = $('task-add-form');
+      if (taskForm) {
+        taskForm.onsubmit = function (e) {
+          e.preventDefault();
+          api('/tasks', 'POST', {
+            contact_id: id,
+            title: $('task-add-title').value.trim(),
+            due_at: $('task-add-due').value || null
+          }).then(function () {
+            toast('Task added.');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      }
+      drawer.querySelectorAll('[data-task-toggle]').forEach(function (chk) {
+        chk.onchange = function () {
+          var taskId = chk.getAttribute('data-task-toggle');
+          var isDone = chk.getAttribute('data-done') === '1';
+          api('/tasks/' + taskId, 'PATCH', { done: isDone }).then(function () {
+            toast(isDone ? 'Task marked complete.' : 'Task reopened.');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      });
+      drawer.querySelectorAll('[data-task-del]').forEach(function (delBtn) {
+        delBtn.onclick = function (e) {
+          e.stopPropagation();
+          var taskId = delBtn.getAttribute('data-task-del');
+          api('/tasks/' + taskId, 'DELETE').then(function () {
+            toast('Task deleted.');
+            contactDetail(id);
+            contacts();
+          }).catch(fail);
+        };
+      });
+
+      var form = $('contact-edit-form');
+      form.onsubmit = function (e) {
+        e.preventDefault();
+        api('/contacts/' + encodeURIComponent(id), 'PATCH', {
+          stage: $('contact-stage').value,
+          type: $('contact-type').value,
+          discreet: $('contact-discreet').checked,
+          interest: $('contact-interest').value.trim(),
+          budget: $('contact-budget').value.trim(),
+          timeline: $('contact-timeline').value.trim(),
+          notes: $('contact-notes').value
+        }).then(function () {
+          toast('Contact profile updated.');
+          closeDrawer();
+          contacts();
+        }).catch(fail);
+      };
     }).catch(fail);
   }
 
