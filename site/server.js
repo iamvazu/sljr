@@ -11,6 +11,7 @@ try { process.loadEnvFile(path.join(__dirname, '..', '.env')); } catch (_) {}
 const zlib = require('zlib');
 const db = require('./db/database');
 const outbox = require('./lib/outbox');
+const backup = require('./lib/backup');
 const { submitLead } = require('./api/lead');
 const { handleAdminApi } = require('./api/admin');
 const aiAgent = require('../server/ai');
@@ -568,9 +569,10 @@ function serveStatic(req, res, parsedUrl) {
   });
 }
 
-// Initialize SQLite database and the notification worker on boot
+// Initialize SQLite database, notification worker, and backup scheduler on boot
 db.getDb();
 outbox.start();
+backup.scheduleNightlyBackup();
 
 const server = http.createServer(async (req, res) => {
   const start = Date.now();
