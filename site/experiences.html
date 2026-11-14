@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Compass Private Exclusives | Steven Lenz Jr. · Compass Real Estate</title>
   <meta name="description" content="Discreet off-market sales with complete digital discretion and privacy across Pleasanton, Danville, Alamo, and the East Bay with Steven Lenz Jr. at Compass." />
-  <link rel="canonical" href="https://stevenlenzjr.com/experiences.html" />
+  <link rel="canonical" href="https://stevenlenzjr.com/private-exclusives" />
 
   <!-- GEO & Local Search Authority -->
   <meta name="geo.region" content="US-CA" />
@@ -15,7 +15,7 @@
 
   <!-- Open Graph -->
   <meta property="og:site_name" content="Steven Lenz Jr. | Compass" />
-  <meta property="og:url" content="https://stevenlenzjr.com/experiences.html" />
+  <meta property="og:url" content="https://stevenlenzjr.com/private-exclusives" />
   <meta property="og:title" content="Compass Private Exclusives | Steven Lenz Jr. · Compass Real Estate" />
   <meta property="og:description" content="Discreet off-market real estate representation with complete digital discretion and privacy across Northern California." />
   <meta property="og:type" content="website" />
@@ -47,15 +47,15 @@
     "@graph": [
       {
         "@type": "WebPage",
-        "@id": "https://stevenlenzjr.com/experiences.html#webpage",
-        "url": "https://stevenlenzjr.com/experiences.html",
+        "@id": "https://stevenlenzjr.com/private-exclusives#webpage",
+        "url": "https://stevenlenzjr.com/private-exclusives",
         "name": "Compass Private Exclusives | Steven Lenz Jr. · Compass Real Estate",
         "description": "Confidential off-market real estate transactions without public MLS syndication for high-profile sellers and athletes.",
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://stevenlenzjr.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Private Exclusives", "item": "https://stevenlenzjr.com/experiences.html" }
+            { "@type": "ListItem", "position": 2, "name": "Private Exclusives", "item": "https://stevenlenzjr.com/private-exclusives" }
           ]
         }
       },
@@ -84,7 +84,7 @@
   <section class="pf-banner" style="background-image:url('assets/img/hero-experiences.jpg');">
     <div class="pf-banner__inner">
       <div class="pf-banner__eyebrow">Private Exclusives</div>
-      <h1>Work with Steven to sell your home as a Compass Private Exclusive.</h1>
+      <h1>Work with Steven to sell your home as a <span class="lenz-highlight"><em>Compass Private Exclusive</em></span>.</h1>
     </div>
   </section>
 
@@ -93,12 +93,12 @@
     <section class="ex-intro">
       <div>
         <span class="pf-banner__eyebrow">Compass Private Exclusives</span>
-        <h2>Control What Is Shared. Keep Compass Reach.</h2>
+        <h2><span class="lenz-highlight"><em>Control</em></span> What Is <span class="lenz-highlight"><em>Shared</em></span>. Keep Compass Reach.</h2>
         <p>
-          Listing your home as a private exclusive allows you to control what information is shared about you and your home while still getting exposure to top agents at Compass.
+          Listing your home as a private exclusive allows you to <span class="lenz-highlight"><em>control</em></span> what information is <span class="lenz-highlight"><em>shared</em></span> about you and your home while still getting exposure to top agents at Compass.
         </p>
         <p>
-          A private exclusive listing is an off-market home that can be shared by a Compass agent directly with their colleagues and their buyers. Property details aren’t disseminated widely and won’t appear on public home search websites.
+          A private exclusive listing is an off-market home that can be <span class="lenz-highlight"><em>shared</em></span> by a Compass agent directly with their colleagues and their buyers. Property details aren’t disseminated widely and won’t appear on public home search websites.
         </p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;">
           <a class="sw-btn sw-btn--primary" href="#request-access">Work With Steven</a>
@@ -107,7 +107,7 @@
       </div>
       <div>
         <div class="ex-portrait-ring">
-          <img src="assets/img/steven-headshot.jpg" alt="Steven Lenz Jr., East Bay's Tri-Valley Real Estate Agent" width="2111" height="2472" loading="lazy" decoding="async">
+          <img src="assets/img/steven-private-exclusives.jpg" alt="Steven Lenz Jr., East Bay's Tri-Valley Real Estate Agent" width="800" height="800" style="object-position:center 20%;" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
@@ -219,25 +219,25 @@
         }
         var interestVal = document.getElementById('ex-interest').value;
         var done = window.SLForms.busy(form);
-              window.SLForms.post('/api/lead', {
-            name: name,
-            email: email,
-            phone: document.getElementById('ex-phone').value.trim(),
-            interest: interestVal,
-            timeline: document.getElementById('ex-dates').value.trim(),
-            areas: [document.getElementById('ex-city').value.trim()].filter(Boolean),
-            message: document.getElementById('ex-notes').value.trim(),
-            segment: 'sports_entertainment',
-            email_consent: document.getElementById('ex-consent').checked,
-            source_page: window.location.pathname,
-            scene: 'private-exclusives'
+        window.SLForms.post('/api/lead', {
+          name: name,
+          email: email,
+          phone: document.getElementById('ex-phone').value.trim(),
+          interest: interestVal,
+          timeline: document.getElementById('ex-dates').value.trim(),
+          areas: [document.getElementById('ex-city').value.trim()].filter(Boolean),
+          message: document.getElementById('ex-notes').value.trim(),
+          segment: 'sports_entertainment',
+          email_consent: document.getElementById('ex-consent').checked,
+          source_page: window.location.pathname,
+          scene: 'private-exclusives'
+        })
+          .then(function () {
+            window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your confidential Private Exclusives inquiry and will follow up personally.', false);
+            form.reset();
           })
-                .then(function () {
-                  window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your confidential Private Exclusives inquiry and will follow up personally.', false);
-                  form.reset();
-                })
-                .catch(function (err) { window.SLForms.show(status, err.message, true); })
-                .then(done);
+          .catch(function (err) { window.SLForms.show(status, err.message, true); })
+          .then(done);
       });
     })();
   </script>
