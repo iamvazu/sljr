@@ -199,7 +199,6 @@
           '</div>' +
           '<div class="sl-ai-subfooter">' +
             '<span>AI can make mistakes, verify details.</span>' +
-            '<a href="https://stevenlenzjr.com" target="_blank" class="sl-ai-subfooter__brand">EuKreate AI</a>' +
           '</div>' +
         '</div>' +
 
@@ -229,7 +228,7 @@
               '<button type="button" class="sl-ai-lead-cancel" id="sl-lead-cancel">Cancel</button>' +
             '</div>' +
             '<div class="sl-ai-lead-success" id="sl-lead-success">✓ Your note has been delivered to Steven. He will reach out shortly!</div>' +
-            '<p class="sl-ai-lead-disclaimer">Your details go only to Steven, through EuKreate. Steven can also read this chat.</p>' +
+            '<p class="sl-ai-lead-disclaimer">Your inquiry is sent directly to Steven Lenz Jr. at Compass.</p>' +
           '</form>' +
         '</div>' +
       '</div>';
