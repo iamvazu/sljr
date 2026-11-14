@@ -95,7 +95,11 @@ const STATIC_REDIRECTS = {
   '/accessibility.html': '/accessibility',
   '/fair-housing.html': '/fair-housing',
   '/cookies.html': '/cookies',
-  '/ai-steve.html': '/ai-steve'
+  '/ai-steve.html': '/ai-steve',
+  '/relocation.html': '/relocation',
+  '/relocation/san-francisco-to-pleasanton.html': '/relocation/san-francisco-to-pleasanton',
+  '/relocation/silicon-valley-to-danville.html': '/relocation/silicon-valley-to-danville',
+  '/relocation/fremont-to-san-ramon.html': '/relocation/fremont-to-san-ramon'
 };
 
 function send301(res, target) {
@@ -127,6 +131,12 @@ function handleLegacyRedirects(req, res, parsedUrl) {
   // 2. Static redirect lookup (e.g. /buy.html -> /buy, /home-valuation -> /valuation)
   if (STATIC_REDIRECTS[normPath]) {
     send301(res, STATIC_REDIRECTS[normPath]);
+    return true;
+  }
+
+  // 2b. Relocation .html -> clean extensionless
+  if (normPath.startsWith('/relocation/') && normPath.endsWith('.html')) {
+    send301(res, normPath.slice(0, -5));
     return true;
   }
 
@@ -590,9 +600,14 @@ function serveStatic(req, res, parsedUrl) {
   }
 
   // Support clean URLs without .html extension
-  if (!path.extname(filePath) && fs.existsSync(filePath + '.html')) {
-    filePath = filePath + '.html';
-    reqPath = reqPath + '.html';
+  if (!path.extname(filePath)) {
+    if (fs.existsSync(filePath + '.html')) {
+      filePath = filePath + '.html';
+      reqPath = reqPath + '.html';
+    } else if (fs.existsSync(path.join(filePath, 'index.html'))) {
+      filePath = path.join(filePath, 'index.html');
+      reqPath = path.posix.join(reqPath, 'index.html');
+    }
   }
 
   const ext = path.extname(filePath).toLowerCase();

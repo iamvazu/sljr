@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bay Area Relocation Guide &amp; Route Matrix | Steven Lenz Jr. Compass</title>
+  <meta name="description" content="Strategic Bay Area relocation guide comparing commute times, school districts, median home prices, and lifestyle shifts across Tri-Valley, Diablo Valley, and Silicon Valley corridors with Steven Lenz Jr. at Compass." />
+  <link rel="canonical" href="https://stevenlenzjr.com/relocation" />
+
+  <!-- GEO & Local Search Authority -->
+  <meta name="geo.region" content="US-CA" />
+  <meta name="geo.placename" content="Pleasanton, California" />
+  <meta name="geo.position" content="37.6624;-121.8747" />
+  <meta name="ICBM" content="37.6624, -121.8747" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Steven Lenz Jr. | Compass" />
+  <meta property="og:url" content="https://stevenlenzjr.com/relocation" />
+  <meta property="og:title" content="Bay Area Relocation Guide &amp; Route Matrix | Steven Lenz Jr. Compass" />
+  <meta property="og:description" content="Strategic Bay Area relocation guide comparing commute times, school districts, median home prices, and lifestyle shifts across Tri-Valley and East Bay corridors." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://stevenlenzjr.com/assets/img/neighborhood-pleasanton.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@StevenLenzJr" />
+  <meta name="twitter:creator" content="@StevenLenzJr" />
+  <meta name="twitter:title" content="Bay Area Relocation Guide &amp; Route Matrix | Steven Lenz Jr. Compass" />
+  <meta name="twitter:description" content="Strategic Bay Area relocation guide comparing commute times, school districts, median home prices, and lifestyle shifts across Tri-Valley corridors." />
+  <meta name="twitter:image" content="https://stevenlenzjr.com/assets/img/neighborhood-pleasanton.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/theme.css?v=20261114e" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261114e" />
+  <link rel="preload" as="image" href="assets/img/neighborhood-pleasanton.jpg" fetchpriority="high" />
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
+
+  <style>
+    body { overflow-y: auto; }
+    .rl-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 56px;
+    }
+    .rl-corridor-card {
+      background: linear-gradient(145deg, #131922 0%, #0F141C 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      text-decoration: none;
+      color: inherit;
+    }
+    .rl-corridor-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(216, 165, 90, 0.45);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(216, 165, 90, 0.15);
+    }
+    .rl-card-thumb {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .rl-card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .rl-corridor-card:hover .rl-card-thumb img {
+      transform: scale(1.05);
+    }
+    .rl-card-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(15, 20, 28, 0.85);
+      border: 1px solid rgba(216, 165, 90, 0.4);
+      color: #D8A55A;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .rl-card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .rl-route-heading {
+      font-family: var(--sw-font-display, "Playfair Display", serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: #F9FAFB;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+    .rl-route-arrow {
+      color: #D8A55A;
+      margin: 0 4px;
+    }
+    .rl-card-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 14px 0 16px;
+    }
+    .rl-metric-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .rl-metric-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9CA3AF;
+      margin-bottom: 2px;
+    }
+    .rl-metric-val {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #F3EEE6;
+    }
+    .rl-card-desc {
+      font-size: 0.86rem;
+      line-height: 1.6;
+      color: #9CA3AF;
+      margin: 0 0 20px;
+      flex: 1;
+    }
+    .rl-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #D8A55A;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-top: auto;
+    }
+    .rl-comparison-table-wrap {
+      overflow-x: auto;
+      margin-bottom: 56px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0F141C;
+    }
+    .rl-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    .rl-table th, .rl-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .rl-table th {
+      background: rgba(255, 255, 255, 0.03);
+      color: #D8A55A;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .rl-table td {
+      color: #D1D5DB;
+    }
+    .rl-table tr:hover td {
+      background: rgba(216, 165, 90, 0.03);
+    }
+    @media (max-width: 980px) {
+      .rl-matrix-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .rl-matrix-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <!-- Structured Data: WebPage, Breadcrumbs & FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://stevenlenzjr.com/relocation#webpage",
+        "url": "https://stevenlenzjr.com/relocation",
+        "name": "Bay Area Relocation Guide & Route Matrix | Steven Lenz Jr. Compass",
+        "description": "Strategic Bay Area relocation guide comparing commute times, school districts, median home prices, and lifestyle shifts across Tri-Valley and East Bay corridors.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://stevenlenzjr.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Relocation Matrix", "item": "https://stevenlenzjr.com/relocation" }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://stevenlenzjr.com/relocation#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Why are families moving from San Francisco and Silicon Valley to the Tri-Valley?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Buyers relocating to the Tri-Valley (Pleasanton, Danville, San Ramon, Dublin) gain substantial lot sizes, top 2% California public school districts (PUSD, SRVUSD), 260+ days of annual sunshine, and family-oriented enclaves while retaining direct BART and highway connectivity back to San Francisco and Silicon Valley tech employers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long is the commute from Pleasanton or Danville to Silicon Valley and San Francisco?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "From Pleasanton, direct BART transit reaches the SF Financial District in approximately 46-50 minutes. For Silicon Valley tech campuses (Sunnyvale, Santa Clara, North San Jose), the ACE Train from Pleasanton Station takes 38-44 minutes, while driving via I-680 South averages 32-45 minutes depending on departure time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can Steven Lenz Jr. coordinate selling my current home while buying in the Tri-Valley?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Through Compass Bridge Loan Services, Compass Private Exclusives, and synchronized escrow management, Steven coordinates concurrent sales and purchases without putting clients in temporary rentals or contingent vulnerability."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="subpage">
+  <div id="ed-header-mount"></div>
+
+  <section class="pf-banner" style="background-image:url('assets/img/neighborhood-pleasanton.jpg');">
+    <div class="pf-banner__inner">
+      <div class="pf-banner__eyebrow">Bay Area Relocation Matrix</div>
+      <h1>Navigate Your <span class="lenz-highlight"><em>Bay Area Relocation</em></span> with Precision &amp; Local Mastery.</h1>
+    </div>
+  </section>
+
+  <main class="pf-container">
+    <!-- Intro Narrative -->
+    <section class="ex-intro" style="margin-bottom:56px;">
+      <div>
+        <span class="pf-banner__eyebrow">Strategic Corridor Analysis</span>
+        <h2>Moving Within the <span class="lenz-highlight"><em>Bay Area</em></span> Requires Local Intelligence</h2>
+        <p>
+          Relocating between Bay Area micro-regions isn't just a change in zip code—it is an upgrade in quality of life, schooling, and outdoor living. When transitioning from high-density urban centers like San Francisco or high-priced tech epicenters like Silicon Valley into the sun-drenched valleys of Pleasanton, Danville, and San Ramon, buyers unlock private acreage, premier school systems, and serene foothill settings.
+        </p>
+        <p>
+          Steven Lenz Jr. provides white-glove relocation advisory, translating neighborhood characteristics, transit patterns, and micro-market values so you make your move with complete clarity and confidence.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;">
+          <a class="sw-btn sw-btn--primary" href="#relocation-consult">Schedule Relocation Tour</a>
+          <a class="sw-btn sw-btn--ghost" href="tel:+19259989711">Call (925) 998-9711</a>
+        </div>
+      </div>
+      <div>
+        <div class="ex-portrait-ring">
+          <img src="assets/img/steven-private-exclusives.jpg" alt="Steven Lenz Jr. Bay Area Relocation Specialist" width="800" height="800" style="object-position:center 20%;" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <!-- Corridors Matrix Section -->
+    <section>
+      <div class="pf-section-head">
+        <span class="pf-banner__eyebrow">Select Your Corridor</span>
+        <h2>High-Intent <span class="lenz-highlight"><em>Relocation Corridors</em></span></h2>
+        <p>Explore detailed commute breakdowns, school metrics, price comparisons, and neighborhood translations for your specific origin and destination.</p>
+      </div>
+
+      <div class="rl-matrix-grid">
+        <!-- Corridor 1: San Francisco to Pleasanton -->
+        <a class="rl-corridor-card" href="/relocation/san-francisco-to-pleasanton">
+          <div class="rl-card-thumb">
+            <img src="assets/img/neighborhood-pleasanton.jpg" alt="Relocating from San Francisco to Pleasanton" width="800" height="450" loading="lazy">
+            <span class="rl-card-badge">Urban-to-Suburban Top Pick</span>
+          </div>
+          <div class="rl-card-body">
+            <h3 class="rl-route-heading">San Francisco <span class="rl-route-arrow">→</span> Pleasanton</h3>
+            <div class="rl-card-metrics">
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Commute Transit</span>
+                <span class="rl-metric-val">46 min BART</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Schools</span>
+                <span class="rl-metric-val">PUSD (Top 2% CA)</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Lot Size Shift</span>
+                <span class="rl-metric-val">3x to 5x Larger</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Sunshine Days</span>
+                <span class="rl-metric-val">260+ Sunny Days</span>
+              </div>
+            </div>
+            <p class="rl-card-desc">
+              Trade compact urban condominium living for tree-lined avenues, private backyards, and historic Downtown Pleasanton dining while retaining direct BART train connectivity to the Financial District.
+            </p>
+            <span class="rl-card-link">Explore SF → Pleasanton Guide →</span>
+          </div>
+        </a>
+
+        <!-- Corridor 2: Silicon Valley to Danville -->
+        <a class="rl-corridor-card" href="/relocation/silicon-valley-to-danville">
+          <div class="rl-card-thumb">
+            <img src="assets/img/danville-genoa.jpg" alt="Relocating from Silicon Valley to Danville" width="800" height="450" loading="lazy">
+            <span class="rl-card-badge">Estate &amp; Acreage Arbitrage</span>
+          </div>
+          <div class="rl-card-body">
+            <h3 class="rl-route-heading">Silicon Valley <span class="rl-route-arrow">→</span> Danville</h3>
+            <div class="rl-card-metrics">
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Commute Drive</span>
+                <span class="rl-metric-val">35-45 min I-680</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Schools</span>
+                <span class="rl-metric-val">SRVUSD Gold Ribbon</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Space Value</span>
+                <span class="rl-metric-val">+45% Sq Ft Delta</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Enclaves</span>
+                <span class="rl-metric-val">Westside &amp; Blackhawk</span>
+              </div>
+            </div>
+            <p class="rl-card-desc">
+              Tech executives and growing families swapping tight 1,800 sq ft South Bay parcels for custom half-acre and full-acre luxury estates nestled against the foothills of Mount Diablo.
+            </p>
+            <span class="rl-card-link">Explore Silicon Valley → Danville Guide →</span>
+          </div>
+        </a>
+
+        <!-- Corridor 3: Fremont to San Ramon -->
+        <a class="rl-corridor-card" href="/relocation/fremont-to-san-ramon">
+          <div class="rl-card-thumb">
+            <img src="assets/img/hero-portfolio.jpg" alt="Relocating from Fremont to San Ramon" width="800" height="450" loading="lazy">
+            <span class="rl-card-badge">East Bay Luxury Step-Up</span>
+          </div>
+          <div class="rl-card-body">
+            <h3 class="rl-route-heading">Fremont <span class="rl-route-arrow">→</span> San Ramon</h3>
+            <div class="rl-card-metrics">
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Commute Drive</span>
+                <span class="rl-metric-val">20-25 min I-680</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Schools</span>
+                <span class="rl-metric-val">Dougherty Valley High</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Architecture</span>
+                <span class="rl-metric-val">New Master-Planned</span>
+              </div>
+              <div class="rl-metric-item">
+                <span class="rl-metric-label">Lifestyle</span>
+                <span class="rl-metric-val">City Center &amp; Trails</span>
+              </div>
+            </div>
+            <p class="rl-card-desc">
+              Upgrade from older South Bay parcels into contemporary master-planned architecture in Gale Ranch, Windemere, and The Bridges with top-performing academic rankings and an easy 20-minute drive.
+            </p>
+            <span class="rl-card-link">Explore Fremont → San Ramon Guide →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Side-by-Side Metric Comparison Table -->
+    <section>
+      <div class="pf-section-head">
+        <span class="pf-banner__eyebrow">Objective Data Comparison</span>
+        <h2>Regional Migration <span class="lenz-highlight"><em>Comparison Matrix</em></span></h2>
+        <p>Compare the fundamental lifestyle, architectural, and financial metrics across key origin and destination markets.</p>
+      </div>
+
+      <div class="rl-comparison-table-wrap">
+        <table class="rl-table" aria-label="Bay Area Relocation Comparison Matrix">
+          <thead>
+            <tr>
+              <th>Metropolitan Area</th>
+              <th>Typical Lot Size</th>
+              <th>Avg $/Sq Ft</th>
+              <th>Top High Schools</th>
+              <th>Commute Transit</th>
+              <th>Atmosphere</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#FFF;">Pleasanton</strong></td>
+              <td>7,500 – 25,000+ sq ft</td>
+              <td>$750 – $980</td>
+              <td>Amador Valley, Foothill (Top 2% CA)</td>
+              <td>Direct BART (Dublin/Pleasanton) &amp; ACE</td>
+              <td>Historic downtown, wine country, family parks</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#FFF;">Danville</strong></td>
+              <td>12,000 – 43,560+ sq ft (1 acre)</td>
+              <td>$820 – $1,150</td>
+              <td>Monte Vista, San Ramon Valley High</td>
+              <td>I-680 Carpool, express transit</td>
+              <td>Equestrian trails, custom estates, country clubs</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#FFF;">San Ramon</strong></td>
+              <td>5,500 – 12,000 sq ft</td>
+              <td>$720 – $920</td>
+              <td>Dougherty Valley, California High</td>
+              <td>I-680 Corridor, Bishop Ranch Transit Center</td>
+              <td>Modern master-planned, pristine golf communities</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#9CA3AF;">San Francisco</strong></td>
+              <td>1,800 – 3,000 sq ft</td>
+              <td>$1,050 – $1,600+</td>
+              <td>Lowell, St. Ignatius, Private Academies</td>
+              <td>MUNI, Bart, Walking</td>
+              <td>Dense urban, marine layer fog, walk-to-dining</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#9CA3AF;">Silicon Valley (Sunnyvale/MV)</strong></td>
+              <td>5,000 – 7,500 sq ft</td>
+              <td>$1,250 – $1,850+</td>
+              <td>Homestead, Mountain View High</td>
+              <td>Caltrain, VTA Light Rail, Highway 101/85</td>
+              <td>High-tech corporate campuses, compact parcels</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#9CA3AF;">Fremont</strong></td>
+              <td>5,000 – 8,000 sq ft</td>
+              <td>$850 – $1,100</td>
+              <td>Mission San Jose, Irvington High</td>
+              <td>Warm Springs BART, I-680/I-880</td>
+              <td>Established suburban, tech corridor hubs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Relocation Inquiry Form -->
+    <section class="ex-request" id="relocation-consult" style="margin-bottom:60px;">
+      <div>
+        <span class="pf-banner__eyebrow">Relocation Concierge</span>
+        <h2 style="font-family:var(--sw-font-display);font-weight:400;font-size:clamp(1.85rem,3.2vw,2.55rem);margin:8px 0 12px;">Request a Customized Relocation Analysis</h2>
+        <p style="color:var(--sw-ink-soft);line-height:1.7;">
+          Considering a move to Pleasanton, Danville, San Ramon, or surrounding Diablo Valley enclaves? Steven will prepare a personalized corridor report outlining commute options, school boundaries, and private off-market listings matching your exact criteria.
+        </p>
+      </div>
+
+      <form id="rl-form" class="glass-panel" novalidate>
+        <div class="form-grid">
+          <div class="form-field"><label for="rl-name">Full Name *</label><input type="text" id="rl-name" required /></div>
+          <div class="form-field"><label for="rl-email">Email Address *</label><input type="email" id="rl-email" required /></div>
+          <div class="form-field"><label for="rl-phone">Phone Number</label><input type="tel" id="rl-phone" placeholder="(925) 555-0123" /></div>
+          <div class="form-field">
+            <label for="rl-corridor">Preferred Relocation Corridor</label>
+            <select id="rl-corridor">
+              <option value="San Francisco to Pleasanton">San Francisco → Pleasanton</option>
+              <option value="Silicon Valley to Danville">Silicon Valley → Danville</option>
+              <option value="Fremont to San Ramon">Fremont → San Ramon</option>
+              <option value="San Jose to Dublin">San Jose → Dublin</option>
+              <option value="Oakland to Walnut Creek">Oakland → Walnut Creek</option>
+              <option value="Palo Alto to Alamo">Palo Alto → Alamo</option>
+              <option value="Out-of-State / Other to East Bay">Out-of-State / Other to East Bay</option>
+            </select>
+          </div>
+          <div class="form-field"><label for="rl-timeline">Target Move Date</label><input type="text" id="rl-timeline" placeholder="e.g., Immediate / 3 to 6 months" /></div>
+          <div class="form-field"><label for="rl-budget">Estimated Budget</label><input type="text" id="rl-budget" placeholder="e.g., $2.5M - $4M" /></div>
+          <div class="form-field full"><label for="rl-notes">Priorities &amp; Must-Haves</label><textarea id="rl-notes" rows="3" placeholder="Tell us about your school needs, commute requirements, lot size preferences, or whether you have a home to sell concurrently."></textarea></div>
+        </div>
+        <label class="consent-row" style="margin:12px 0 16px;">
+          <input type="checkbox" id="rl-consent" />
+          <span>I agree to receive personalized relocation insights and market reports from Steven Lenz Jr. at Compass. Unsubscribe at any time.</span>
+        </label>
+        <button type="submit" class="sw-btn sw-btn--primary" style="border:0;cursor:pointer;width:100%;justify-content:center;">Request Free Relocation Roadmap</button>
+        <div id="rl-status" class="form-status" hidden></div>
+      </form>
+    </section>
+  </main>
+
+  <div id="ed-drawer-mount"></div>
+  <div id="ed-footer-mount"></div>
+
+  <script src="js/editorial-nav.js?v=20261114e"></script>
+  <script>
+    (function () {
+      var form = document.getElementById('rl-form');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = document.getElementById('rl-name').value.trim();
+        var email = document.getElementById('rl-email').value.trim();
+        var status = document.getElementById('rl-status');
+        if (!name || !email) {
+          status.hidden = false;
+          status.textContent = 'Please enter your name and email address.';
+          return;
+        }
+        var corridor = document.getElementById('rl-corridor').value;
+        var done = window.SLForms.busy(form);
+        window.SLForms.post('/api/lead', {
+          name: name,
+          email: email,
+          phone: document.getElementById('rl-phone').value.trim(),
+          interest: 'buying',
+          budget: document.getElementById('rl-budget').value.trim(),
+          timeline: document.getElementById('rl-timeline').value.trim(),
+          message: 'Relocation Corridor: ' + corridor + ' | Notes: ' + document.getElementById('rl-notes').value.trim(),
+          segment: 'relocation',
+          email_consent: document.getElementById('rl-consent').checked,
+          source_page: window.location.pathname,
+          scene: 'relocation-hub'
+        })
+          .then(function () {
+            window.SLForms.show(status, 'Thank you, ' + name + '. Steven Lenz Jr. has received your relocation inquiry and will prepare your tailored corridor analysis.', false);
+            form.reset();
+          })
+          .catch(function (err) { window.SLForms.show(status, err.message, true); })
+          .then(done);
+      });
+    })();
+  </script>
+</body>
+</html>
