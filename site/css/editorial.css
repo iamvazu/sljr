@@ -2662,13 +2662,16 @@ html {
    HoneyQuote-Style Testimonials Carousel (About Page)
    ============================================================================ */
 .hq-reviews-section {
-  background: #F6F2EB;
-  color: #1A1E24;
-  border-radius: 24px;
+  background: rgba(18, 24, 38, 0.88);
+  color: #F3EEE6;
+  border-radius: 20px;
+  border: 1px solid rgba(216, 165, 90, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   padding: 56px 40px;
   margin: 64px 0 72px;
   position: relative;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 768px) {
@@ -2693,11 +2696,11 @@ html {
 
 .hq-reviews-eyebrow {
   display: inline-block;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 700;
-  color: #926A38;
+  color: var(--sw-accent, #D8A55A);
   margin-bottom: 10px;
 }
 
@@ -2705,16 +2708,16 @@ html {
   font-family: var(--sw-font-display, "Cormorant Garamond", Georgia, serif);
   font-size: clamp(2rem, 3.2vw, 3rem);
   line-height: 1.15;
-  color: #161A22;
+  color: #FFFFFF;
   font-weight: 400;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .hq-reviews-title em {
   font-style: italic;
   font-weight: 400;
-  color: #161A22;
+  color: var(--sw-accent, #D8A55A);
 }
 
 .hq-reviews-arrows {
@@ -2726,31 +2729,35 @@ html {
 }
 
 .hq-arrow-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  border: 1px solid #D5CEBF;
-  background: #FFFFFF;
-  color: #161A22;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(216, 165, 90, 0.4);
+  background: rgba(18, 24, 38, 0.85);
+  color: var(--sw-accent, #D8A55A);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .hq-arrow-btn:hover:not(:disabled) {
-  background: #161A22;
-  color: #FFFFFF;
-  border-color: #161A22;
+  background: var(--sw-accent, #D8A55A);
+  color: #0D1117;
+  border-color: var(--sw-accent, #D8A55A);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 18px rgba(216, 165, 90, 0.35);
 }
 
-.hq-arrow-btn:disabled {
-  opacity: 0.35;
+.hq-arrow-btn:disabled,
+.hq-arrow-btn[aria-disabled="true"] {
+  opacity: 0.35 !important;
   cursor: not-allowed;
+  pointer-events: none;
+  border-color: rgba(243, 238, 230, 0.15);
+  color: rgba(243, 238, 230, 0.4);
   box-shadow: none;
 }
 
@@ -2799,36 +2806,33 @@ html {
   user-select: none;
 }
 
-.hq-arrow-btn:disabled,
-.hq-arrow-btn[aria-disabled="true"] {
-  opacity: 0.4 !important;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 .hq-review-card {
-  flex: 0 0 340px;
+  flex: 0 0 360px;
   min-width: 320px;
   max-width: 85vw;
-  background: #FFFFFF;
-  border-radius: 20px;
-  padding: 34px 28px 28px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: rgba(13, 17, 23, 0.88);
+  border-radius: 16px;
+  padding: 32px 28px 26px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(216, 165, 90, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   scroll-snap-align: start;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  color: #F3EEE6;
 }
 
 .hq-review-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.09);
+  border-color: rgba(216, 165, 90, 0.65);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
 }
 
 .hq-review-card__stars {
-  color: #D8A55A;
+  color: var(--sw-accent, #D8A55A);
   font-size: 1.15rem;
   letter-spacing: 2px;
   margin-bottom: 16px;
@@ -2839,21 +2843,21 @@ html {
 .hq-review-card__stars svg {
   width: 17px;
   height: 17px;
-  fill: #D8A55A;
+  fill: var(--sw-accent, #D8A55A);
 }
 
 .hq-review-card__quote {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   line-height: 1.6;
-  color: #1A1E24;
-  font-weight: 500;
+  color: #F3EEE6;
+  font-weight: 400;
   margin: 0 0 24px;
   font-family: var(--sw-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
 }
 
 .hq-review-card__divider {
   height: 1px;
-  background: #ECE6DD;
+  background: rgba(243, 238, 230, 0.16);
   border: none;
   margin: auto 0 20px;
 }
@@ -2871,27 +2875,27 @@ html {
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 1.5px solid var(--sw-accent, #B89047);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  border: 1.5px solid var(--sw-accent, #D8A55A);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .hq-review-card__info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   min-width: 0;
 }
 
 .hq-review-card__name {
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: #161A22;
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: #FFFFFF;
   font-family: var(--sw-font-body, sans-serif);
 }
 
 .hq-review-card__context {
-  font-size: 0.82rem;
-  color: #726E67;
+  font-size: 0.8rem;
+  color: var(--sw-accent, #D8A55A);
 }
 
 @media (max-width: 640px) {
