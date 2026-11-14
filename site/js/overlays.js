@@ -56,19 +56,19 @@
 
       return (
         '<article class="listing-card">' +
-          '<a class="listing-card__hit" href="listing.html?id=' + encodeURIComponent(item.id) + '">' +
-            '<div class="listing-photo-wrap">' +
-              '<img src="' + esc(item.photo) + '" alt="' + esc(item.address) + '" loading="lazy" />' +
-              '<span class="listing-badge ' + (statusText === 'SOLD' ? 'badge--sold' : 'badge--active') + '">' + esc(statusText) + '</span>' +
-            '</div>' +
-            '<div class="listing-body">' +
-              '<div class="listing-price">' + esc(formattedPrice) + '</div>' +
-              '<h3 class="listing-address">' + esc(addressLine) + '</h3>' +
-              '<div class="listing-specs">' + esc(specsLine) + '</div>' +
-              '<div class="listing-role-badge" style="font-size:0.7rem;color:var(--sw-accent,#D8A55A);margin-top:6px;font-weight:600;">' + esc(agentRole) + '</div>' +
-              '<div class="listing-photo-credit" style="font-size:0.64rem;color:rgba(243,238,230,0.5);margin-top:2px;">Photo via MLS / CCAR</div>' +
-            '</div>' +
-          '</a>' +
+        '<a class="listing-card__hit" href="listing.html?id=' + encodeURIComponent(item.id) + '">' +
+        '<div class="listing-photo-wrap">' +
+        '<img src="' + esc(item.photo) + '" alt="' + esc(item.address) + '" loading="lazy" />' +
+        '<span class="listing-badge ' + (statusText === 'SOLD' ? 'badge--sold' : 'badge--active') + '">' + esc(statusText) + '</span>' +
+        '</div>' +
+        '<div class="listing-body">' +
+        '<div class="listing-price">' + esc(formattedPrice) + '</div>' +
+        '<h3 class="listing-address">' + esc(addressLine) + '</h3>' +
+        '<div class="listing-specs">' + esc(specsLine) + '</div>' +
+        '<div class="listing-role-badge" style="font-size:0.7rem;color:var(--sw-accent,#D8A55A);margin-top:6px;font-weight:600;">' + esc(agentRole) + '</div>' +
+        '<div class="listing-photo-credit" style="font-size:0.64rem;color:rgba(243,238,230,0.5);margin-top:2px;">Photo via MLS / CCAR</div>' +
+        '</div>' +
+        '</a>' +
         '</article>'
       );
     }).join('');
@@ -114,15 +114,15 @@
         }
         return (
           '<div class="tq-card">' +
-            '<div class="tq-stars" aria-label="5 out of 5 stars">★★★★★</div>' +
-            '<p class="tq-quote">“' + esc(t.quote) + '”</p>' +
-            '<div class="tq-person">' +
-              '<img src="' + esc(avatarSrc) + '" alt="' + esc(t.name) + '" class="tq-avatar" width="44" height="44" loading="lazy" />' +
-              '<div class="tq-person__info">' +
-                '<span class="tq-name">' + esc(t.name) + '</span>' +
-                '<span class="tq-context">' + esc(t.context) + '</span>' +
-              '</div>' +
-            '</div>' +
+          '<div class="tq-stars" aria-label="5 out of 5 stars">★★★★★</div>' +
+          '<p class="tq-quote">“' + esc(t.quote) + '”</p>' +
+          '<div class="tq-person">' +
+          '<img src="' + esc(avatarSrc) + '" alt="' + esc(t.name) + '" class="tq-avatar" width="44" height="44" loading="lazy" />' +
+          '<div class="tq-person__info">' +
+          '<span class="tq-name">' + esc(t.name) + '</span>' +
+          '<span class="tq-context">' + esc(t.context) + '</span>' +
+          '</div>' +
+          '</div>' +
           '</div>'
         );
       }).join('');
@@ -329,10 +329,10 @@
         return '<a class="hero-search-result-item" href="listing.html?id=' + encodeURIComponent(item.id) + '">' +
           '<img src="' + esc(item.photo) + '" alt="' + esc(item.address) + '" />' +
           '<div class="hero-search-result-meta">' +
-            '<strong>' + esc(item.address) + ' · ' + esc(item.price) + '</strong>' +
-            '<span>' + esc(item.city) + ', ' + esc(item.state) + ' · ' + esc(item.status) + ' · ' + esc(item.beds) + ' Bd / ' + esc(item.baths) + ' Ba</span>' +
+          '<strong>' + esc(item.address) + ' · ' + esc(item.price) + '</strong>' +
+          '<span>' + esc(item.city) + ', ' + esc(item.state) + ' · ' + esc(item.status) + ' · ' + esc(item.beds) + ' Bd / ' + esc(item.baths) + ' Ba</span>' +
           '</div>' +
-        '</a>';
+          '</a>';
       }).join('');
       resultsBox.hidden = false;
     }
@@ -358,7 +358,7 @@
                 });
                 renderResults(filtered, q);
               })
-              .catch(function () {});
+              .catch(function () { });
           });
       }, 180);
     });
