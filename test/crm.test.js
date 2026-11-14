@@ -468,6 +468,86 @@ test('CRM Tasks & Pipeline Deals (Step 4)', async (t) => {
   });
 });
 
+test('CRM Outbound Email & Unsubscribe Flow (Step 5 & AC #7)', async (t) => {
+  const database = getDb();
+  const { sendOutboundEmail, unsubscribeContact, getUnsubscribeToken } = require('../site/lib/crm');
+  const { adminCreateDeal, adminListContacts, adminGetContact } = require('../site/db/database');
+
+  // Create a dedicated fresh test contact in stage 'new'
+  const res = database.prepare(`
+    INSERT INTO contacts (first_name, last_name, display_name, stage, type, created_at, updated_at)
+    VALUES ('Email', 'Recipient', 'Email Recipient', 'new', 'lead', ?, ?)
+  `).run(new Date().toISOString(), new Date().toISOString());
+  const testContactId = Number(res.lastInsertRowid);
+  const testEmail = `recipient_${Date.now()}@example.com`;
+
+  await t.test('Sends outbound email, enqueues outbox, writes email_out activity, sets last_outbound_at, advances stage', () => {
+    const emailRes = sendOutboundEmail({
+      contact_id: testContactId,
+      to_value: testEmail,
+      subject: 'Exclusive Pocket Listings in Pleasanton',
+      body: 'Hi, I wanted to follow up with an off-market estate near Ruby Hill.',
+      origin: 'manual'
+    }, database);
+
+    assert.equal(emailRes.ok, true);
+    assert.ok(emailRes.message_id > 0);
+    assert.equal(emailRes.stage, 'contacted', 'First outbound email must advance stage new -> contacted');
+    assert.ok(emailRes.unsub_url.includes('/api/unsubscribe?c=' + testContactId));
+
+    // Verify messages table
+    const msg = database.prepare('SELECT * FROM messages WHERE id = ?').get(emailRes.message_id);
+    assert.ok(msg);
+    assert.equal(msg.contact_id, testContactId);
+    assert.equal(msg.to_value, testEmail);
+    assert.equal(msg.status, 'queued');
+    assert.ok(msg.body.includes('Compass | CA DRE# 01989811'));
+    assert.ok(msg.body.includes('Unsubscribe from future emails'));
+
+    // Verify outbox
+    const outboxRow = database.prepare("SELECT * FROM outbox WHERE lead_id = ? AND channel = 'contact_email'").get(`contact_${testContactId}`);
+    assert.ok(outboxRow, 'Email job must exist in outbox');
+
+    // Verify email_out activity
+    const acts = database.prepare("SELECT * FROM activities WHERE contact_id = ? AND kind = 'email_out'").all(testContactId);
+    assert.equal(acts.length, 1);
+    assert.ok(acts[0].subject.includes('Exclusive Pocket Listings in Pleasanton'));
+
+    // Verify contact updated
+    const contact = adminGetContact(testContactId);
+    assert.equal(contact.stage, 'contacted');
+    assert.ok(contact.last_outbound_at);
+  });
+
+  await t.test('Unsubscribe link flips consent row to 0 and blocks future marketing emails', () => {
+    const token = getUnsubscribeToken(testContactId);
+    const unsubRes = unsubscribeContact(testContactId, token, database);
+    assert.equal(unsubRes.ok, true);
+
+    // Verify consents table has granted = 0
+    const consent = database.prepare("SELECT * FROM consents WHERE contact_id = ? AND channel = 'email_marketing' ORDER BY id DESC LIMIT 1").get(testContactId);
+    assert.ok(consent);
+    assert.equal(consent.granted, 0);
+
+    // Attempting to send marketing email to unsubscribed contact should throw an error
+    assert.throws(() => {
+      sendOutboundEmail({
+        contact_id: testContactId,
+        to_value: testEmail,
+        subject: 'Another follow-up',
+        body: 'Check this new home.'
+      }, database);
+    }, { message: 'This contact has unsubscribed from email marketing communications.' });
+  });
+
+  // Clean up test contact
+  database.prepare('DELETE FROM messages WHERE contact_id = ?').run(testContactId);
+  database.prepare('DELETE FROM outbox WHERE lead_id = ?').run(`contact_${testContactId}`);
+  database.prepare('DELETE FROM activities WHERE contact_id = ?').run(testContactId);
+  database.prepare('DELETE FROM consents WHERE contact_id = ?').run(testContactId);
+  database.prepare('DELETE FROM contacts WHERE id = ?').run(testContactId);
+});
+
 test('CRM Admin & Session Foundation', async (t) => {
   await t.test('Admin sessions lifecycle and audit logging', () => {
     const tokenHash = 'test_token_hash_' + Date.now();

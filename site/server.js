@@ -386,6 +386,46 @@ async function handleApi(req, res, parsedUrl) {
     return sendJson(res, 200, { ok: true });
   }
 
+  // Unsubscribe route for CRM emails
+  if (req.method === 'GET' && (pathname === '/api/unsubscribe' || pathname === '/unsubscribe')) {
+    const contactId = Number(parsedUrl.searchParams.get('c'));
+    const token = parsedUrl.searchParams.get('t');
+    const { unsubscribeContact } = require('./lib/crm');
+    const result = unsubscribeContact(contactId, token);
+
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    if (result.ok) {
+      res.end(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Unsubscribed — Steven Lenz Jr.</title>
+  <style>
+    body { background: #0D1117; color: #F3EEE6; font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #141A23; border: 1px solid rgba(243,238,230,.14); border-radius: 12px; padding: 32px; max-width: 480px; text-align: center; }
+    h1 { color: #D8A55A; font-weight: 300; margin-top: 0; font-size: 1.6rem; }
+    p { color: #A9A398; line-height: 1.6; }
+    a { color: #D8A55A; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Unsubscribed</h1>
+    <p>You have been successfully unsubscribed from email communications from Steven Lenz Jr. at Compass.</p>
+    <p>If this was a mistake, or if you need to reach Steven directly, please call or text (925) 998-9711.</p>
+    <a href="/">Return to Homepage &rarr;</a>
+  </div>
+</body>
+</html>`);
+    } else {
+      res.end(`<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Unsubscribe — Steven Lenz Jr.</title>
+<style>body { background: #0D1117; color: #F3EEE6; font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; } .card { background: #141A23; border: 1px solid rgba(232,120,104,.4); border-radius: 12px; padding: 32px; max-width: 480px; text-align: center; } h1 { color: #E87868; font-weight: 300; margin-top: 0; } p { color: #A9A398; } a { color: #D8A55A; text-decoration: none; }</style></head>
+<body><div class="card"><h1>Link Invalid or Expired</h1><p>We could not process this unsubscribe link. Please contact steven.lenzjr@compass.com directly.</p><a href="/">Return to Homepage &rarr;</a></div></body></html>`);
+    }
+    return;
+  }
+
   return sendJson(res, 404, { ok: false, error: 'API route not found' });
 }
 

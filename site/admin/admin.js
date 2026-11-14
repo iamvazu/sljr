@@ -291,9 +291,23 @@
         '<h2>' + esc(c.display_name) + (c.discreet ? ' <span class="pill pill--discreet">Discreet</span>' : '') + '</h2>' +
         '<p class="eyebrow">' + esc(c.type) + ' · Stage: ' + esc(c.stage) + ' · Score: ' + esc(c.score) + ' (' + esc(c.score_band) + ')</p>' +
         '<div class="actions" style="margin: 8px 0 16px;">' +
-          (emails.length ? '<a class="btn btn--primary" href="mailto:' + esc(emails[0].value) + '">Email ' + esc(emails[0].value) + '</a>' : '') +
+          (emails.length ? '<button class="btn btn--primary" id="btn-toggle-composer">✉ Send Email</button>' : '') +
           (phones.length ? '<a class="btn" href="tel:' + esc(phones[0].value) + '">Call ' + esc(phones[0].value) + '</a>' : '') +
         '</div>' +
+        '<form id="email-compose-form" class="card" style="margin: 12px 0 16px; border: 1px solid var(--gold);" hidden>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+            '<h2 style="margin:0; font-size:1.05rem; color:var(--gold);">Compose Email to Client</h2>' +
+            '<button type="button" class="btn btn--quiet small" id="btn-cancel-compose">Cancel</button>' +
+          '</div>' +
+          '<label for="compose-to">Recipient</label>' +
+          '<input type="email" id="compose-to" value="' + esc(emails[0] ? emails[0].value : '') + '" required />' +
+          '<label for="compose-subject">Subject</label>' +
+          '<input type="text" id="compose-subject" placeholder="e.g. Following up regarding luxury homes in Pleasanton" required />' +
+          '<label for="compose-body">Message</label>' +
+          '<textarea id="compose-body" placeholder="Write your personal email here…" style="min-height:120px;" required></textarea>' +
+          '<p class="muted small" style="margin:8px 0 12px;">Compass CA DRE# 01989811 signature and one-click unsubscribe link will be automatically appended.</p>' +
+          '<button type="submit" class="btn btn--primary" id="btn-send-email-submit">Send Email</button>' +
+        '</form>' +
         '<dl class="kv">' +
           kv('Email', emails.map(function (e) { return '<a href="mailto:' + esc(e.value) + '">' + esc(e.value) + '</a>'; }).join(', ')) +
           kv('Phone', phones.map(function (p) { return '<a href="tel:' + esc(p.value) + '">' + esc(p.value) + '</a>'; }).join(', ')) +
@@ -343,6 +357,40 @@
       openDrawer(html);
 
       var drawer = $('drawer-body');
+
+      // Email composer bindings
+      var toggleComposer = $('btn-toggle-composer');
+      var composeForm = $('email-compose-form');
+      var cancelComposer = $('btn-cancel-compose');
+
+      if (toggleComposer && composeForm) {
+        toggleComposer.onclick = function () {
+          composeForm.hidden = !composeForm.hidden;
+          if (!composeForm.hidden) $('compose-subject').focus();
+        };
+      }
+      if (cancelComposer && composeForm) {
+        cancelComposer.onclick = function () { composeForm.hidden = true; };
+      }
+      if (composeForm) {
+        composeForm.onsubmit = function (e) {
+          e.preventDefault();
+          var btn = $('btn-send-email-submit');
+          btn.disabled = true;
+          api('/contacts/' + encodeURIComponent(id) + '/email', 'POST', {
+            to_value: $('compose-to').value.trim(),
+            subject: $('compose-subject').value.trim(),
+            body: $('compose-body').value.trim()
+          }).then(function () {
+            toast('Email sent and recorded.');
+            contactDetail(id);
+            contacts();
+          }).catch(function (err) {
+            fail(err);
+            btn.disabled = false;
+          });
+        };
+      }
 
       // Deal button bindings
       var btnBuyer = $('btn-start-buyer');

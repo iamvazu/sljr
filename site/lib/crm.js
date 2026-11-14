@@ -6,6 +6,7 @@
  * consent tracking, pipeline management, and backfill migration.
  */
 
+const crypto = require('crypto');
 const { getDb } = require('../db/database');
 const { stripHtml, isValidEmail, normalizePhone } = require('../middleware/security');
 
@@ -316,9 +317,168 @@ function runBackfill(dbInstance) {
   return stats;
 }
 
+function getUnsubscribeToken(contactId) {
+  const salt = process.env.IP_HASH_SALT || 'steven-lenz-crm-salt';
+  return crypto.createHmac('sha256', salt).update(`unsub_${contactId}`).digest('hex').slice(0, 16);
+}
+
+function verifyUnsubscribeToken(contactId, token) {
+  if (!contactId || !token) return false;
+  const expected = getUnsubscribeToken(contactId);
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(String(token)));
+  } catch (_) {
+    return false;
+  }
+}
+
+function sendOutboundEmail({ contact_id, to_value, subject, body, origin = 'manual', action_item_id = null, baseUrl = '' }, dbInstance) {
+  const db = dbInstance || getDb();
+  const contact = db.prepare('SELECT * FROM contacts WHERE id = ?').get(contact_id);
+  if (!contact) throw new Error('Contact not found');
+
+  const cleanSubject = stripHtml(subject || 'Message from Steven Lenz Jr.').slice(0, 200);
+  const cleanBody = String(body || '').trim();
+  if (!cleanBody) throw new Error('Email body is required');
+
+  const recipient = (to_value || '').toLowerCase().trim();
+  if (!isValidEmail(recipient)) throw new Error('Valid recipient email address is required');
+
+  // Check consent for email_marketing
+  const lastConsent = db.prepare(`
+    SELECT granted FROM consents
+    WHERE contact_id = ? AND channel = 'email_marketing'
+    ORDER BY recorded_at DESC, id DESC LIMIT 1
+  `).get(contact_id);
+
+  if (lastConsent && Number(lastConsent.granted) === 0) {
+    throw new Error('This contact has unsubscribed from email marketing communications.');
+  }
+
+  // Construct CAN-SPAM compliant footer with tokenized unsubscribe link
+  const token = getUnsubscribeToken(contact_id);
+  const rootUrl = (baseUrl || process.env.APP_URL || 'https://sljr.2.25.90.226.sslip.io').replace(/\/+$/, '');
+  const unsubUrl = `${rootUrl}/api/unsubscribe?c=${contact_id}&t=${token}`;
+
+  const footer =
+    `\n\n------------------------------------------------------------\n` +
+    `Steven Lenz Jr. | Luxury Real Estate Advisor\n` +
+    `Compass | CA DRE# 01989811\n` +
+    `900 Main St, Pleasanton, CA 94566\n` +
+    `Direct: (925) 998-9711 | steven.lenzjr@compass.com\n` +
+    `Compass California II, Inc. | Brokerage DRE# 01527235\n\n` +
+    `Unsubscribe from future emails: ${unsubUrl}`;
+
+  const fullBody = cleanBody + footer;
+  const now = new Date().toISOString();
+
+  // 1. Insert into messages table
+  const insMsg = db.prepare(`
+    INSERT INTO messages (
+      contact_id, channel, to_value, subject, body, origin,
+      action_item_id, status, approved_at, sent_at, created_at
+    ) VALUES (?, 'email', ?, ?, ?, ?, ?, 'queued', ?, NULL, ?)
+  `);
+  const msgRes = insMsg.run(
+    contact_id,
+    recipient,
+    cleanSubject,
+    fullBody,
+    origin,
+    action_item_id || null,
+    now,
+    now
+  );
+  const messageId = Number(msgRes.lastInsertRowid);
+
+  // 2. Enqueue in durable outbox
+  const outboxPayload = {
+    message_id: messageId,
+    contact_id,
+    to_value: recipient,
+    subject: cleanSubject,
+    body_with_footer: fullBody
+  };
+  db.prepare(`
+    INSERT INTO outbox (lead_id, channel, payload_json, next_attempt_at)
+    VALUES (?, 'contact_email', ?, ?)
+  `).run(`contact_${contact_id}`, JSON.stringify(outboxPayload), now);
+
+  // 3. Record email_out activity
+  db.prepare(`
+    INSERT INTO activities (
+      contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at
+    ) VALUES (?, 'email_out', 'out', ?, ?, ?, ?, ?)
+  `).run(
+    contact_id,
+    `Email: ${cleanSubject}`,
+    cleanBody,
+    JSON.stringify({ message_id: messageId, to: recipient, origin }),
+    now,
+    now
+  );
+
+  // 4. Update contact last_outbound_at and advance stage if 'new' -> 'contacted'
+  const oldStage = contact.stage;
+  const newStage = oldStage === 'new' ? 'contacted' : oldStage;
+
+  db.prepare(`
+    UPDATE contacts SET
+      last_outbound_at = ?,
+      stage = ?,
+      updated_at = ?
+    WHERE id = ?
+  `).run(now, newStage, now, contact_id);
+
+  if (oldStage === 'new') {
+    db.prepare(`
+      INSERT INTO activities (
+        contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at
+      ) VALUES (?, 'stage_change', NULL, 'Stage changed to contacted', 'First outbound email automatically advanced contact from new to contacted.', ?, ?, ?)
+    `).run(
+      contact_id,
+      JSON.stringify({ old_stage: 'new', new_stage: 'contacted', reason: 'first_outbound_email' }),
+      now,
+      now
+    );
+  }
+
+  // Drain outbox in background
+  try {
+    const outbox = require('./outbox');
+    setImmediate(() => { outbox.drain().catch(() => {}); });
+  } catch (_) {}
+
+  return { ok: true, message_id: messageId, stage: newStage, unsub_url: unsubUrl };
+}
+
+function unsubscribeContact(contactId, token, dbInstance) {
+  const db = dbInstance || getDb();
+  if (!verifyUnsubscribeToken(contactId, token)) {
+    return { ok: false, error: 'Invalid or expired unsubscribe link.' };
+  }
+
+  const now = new Date().toISOString();
+  db.prepare(`
+    INSERT INTO consents (contact_id, channel, granted, text_version, source, recorded_at)
+    VALUES (?, 'email_marketing', 0, '2026-11-v1', 'unsubscribe', ?)
+  `).run(contactId, now);
+
+  db.prepare(`
+    INSERT INTO activities (contact_id, kind, direction, subject, body, meta_json, occurred_at, created_at)
+    VALUES (?, 'system', 'in', 'Unsubscribed from email', 'Client unsubscribed via email link.', ?, ?, ?)
+  `).run(contactId, JSON.stringify({ channel: 'email_marketing', action: 'unsubscribe' }), now, now);
+
+  return { ok: true };
+}
+
 module.exports = {
   splitName,
   leadToContact,
-  runBackfill
+  runBackfill,
+  getUnsubscribeToken,
+  verifyUnsubscribeToken,
+  sendOutboundEmail,
+  unsubscribeContact
 };
 

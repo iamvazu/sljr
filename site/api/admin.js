@@ -181,6 +181,35 @@ async function handleAdminApi(req, res, parsedUrl) {
     }
   }
 
+  // ---- CRM: Outbound Email ----
+  if ((m = /^\/contacts\/(\d+)\/email$/.exec(route)) && method === 'POST') {
+    const contactId = Number(m[1]);
+    const body = await readJsonBody(req);
+    const { sendOutboundEmail } = require('../lib/crm');
+    try {
+      const result = sendOutboundEmail({
+        contact_id: contactId,
+        to_value: body.to_value || body.to,
+        subject: body.subject,
+        body: body.body,
+        origin: 'manual',
+        baseUrl: req.headers['x-forwarded-proto'] ? `${req.headers['x-forwarded-proto']}://${req.headers.host}` : `http://${req.headers.host}`
+      });
+      db.audit('contact_email_sent', `Email sent to Contact #${contactId} (${body.to_value || ''})`, ip);
+      return sendJson(res, 200, result);
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
+  }
+
+  if ((m = /^\/contacts\/(\d+)\/messages$/.exec(route)) && method === 'GET') {
+    const contactId = Number(m[1]);
+    const messages = db.getDb().prepare(`
+      SELECT * FROM messages WHERE contact_id = ? ORDER BY id DESC LIMIT 50
+    `).all(contactId);
+    return sendJson(res, 200, { ok: true, messages });
+  }
+
   // ---- CRM: Pipelines & Deals ----
   if (method === 'GET' && route === '/pipelines') {
     return sendJson(res, 200, { ok: true, pipelines: db.adminListPipelines() });

@@ -102,6 +102,39 @@ const SENDERS = {
   },
   sheet_webhook(lead) {
     return postJson(env('LEAD_PERSIST_WEBHOOK_URL'), lead);
+  },
+  contact_email(payload) {
+    const hasResend = Boolean(env('RESEND_API_KEY') && env('RESEND_FROM_EMAIL'));
+    if (!hasResend) {
+      console.log(`[outbox] Simulated outbound email to ${payload.to_value}: "${payload.subject}"`);
+      if (payload.message_id) {
+        try {
+          db.getDb().prepare("UPDATE messages SET status = 'sent', sent_at = ? WHERE id = ?").run(new Date().toISOString(), payload.message_id);
+        } catch (_) {}
+      }
+      return Promise.resolve();
+    }
+    return sendResend({
+      from: env('RESEND_FROM_EMAIL'),
+      to: [payload.to_value],
+      reply_to: env('LEAD_NOTIFY_EMAIL') || 'steven.lenzjr@compass.com',
+      subject: payload.subject,
+      text: payload.body_with_footer
+    }).then((res) => {
+      if (payload.message_id) {
+        try {
+          db.getDb().prepare("UPDATE messages SET status = 'sent', sent_at = ? WHERE id = ?").run(new Date().toISOString(), payload.message_id);
+        } catch (_) {}
+      }
+      return res;
+    }).catch((err) => {
+      if (payload.message_id) {
+        try {
+          db.getDb().prepare("UPDATE messages SET status = 'failed', error = ? WHERE id = ?").run(err.message, payload.message_id);
+        } catch (_) {}
+      }
+      throw err;
+    });
   }
 };
 
