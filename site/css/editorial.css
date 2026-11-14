@@ -2860,9 +2860,26 @@ html {
 
 .hq-review-card__author {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.hq-review-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid var(--sw-accent, #B89047);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.hq-review-card__info {
+  display: flex;
   flex-direction: column;
   gap: 3px;
-  margin-top: auto;
+  min-width: 0;
 }
 
 .hq-review-card__name {

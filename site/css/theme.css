@@ -757,7 +757,28 @@ html, body {
   font-size: clamp(0.94rem, 1.1vw, 1.02rem); line-height: 1.6; color: #F3EEE6;
   white-space: normal; overflow: visible;
 }
-.tq-person { margin-top: auto; border-top: 1px solid rgba(243, 238, 230, 0.16); padding-top: 14px; }
+.tq-person {
+  margin-top: auto;
+  border-top: 1px solid rgba(243, 238, 230, 0.16);
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tq-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1.5px solid var(--sw-accent, #D8A55A);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.tq-person__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 .tq-name { display: block; font-weight: 600; font-size: 0.92rem; color: #FFFFFF; }
 .tq-context { display: block; font-size: 0.78rem; color: #D8A55A; margin-top: 2px; }
 .tq-head {

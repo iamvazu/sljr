@@ -103,13 +103,25 @@
 
     if (tqTrack && Array.isArray(items) && items.length) {
       tqTrack.innerHTML = items.map(function (t) {
+        var avatarSrc = t.avatar;
+        if (!avatarSrc) {
+          if (t.name === 'Nicole Y.') avatarSrc = 'assets/img/testimonials/nicole.jpg';
+          else if (t.name === 'Buyer & Seller') avatarSrc = 'assets/img/testimonials/buyer-seller-woman.jpg';
+          else if (t.name === 'Ray') avatarSrc = 'assets/img/testimonials/ray.jpg';
+          else if (t.name === 'Frank T.') avatarSrc = 'assets/img/testimonials/frank.jpg';
+          else if (t.name === 'Peter L.') avatarSrc = 'assets/img/testimonials/peter.jpg';
+          else avatarSrc = 'assets/img/testimonials/buyer-man.jpg';
+        }
         return (
           '<div class="tq-card">' +
             '<div class="tq-stars" aria-label="5 out of 5 stars">★★★★★</div>' +
             '<p class="tq-quote">“' + esc(t.quote) + '”</p>' +
             '<div class="tq-person">' +
-              '<span class="tq-name">' + esc(t.name) + '</span>' +
-              '<span class="tq-context">' + esc(t.context) + '</span>' +
+              '<img src="' + esc(avatarSrc) + '" alt="' + esc(t.name) + '" class="tq-avatar" width="44" height="44" loading="lazy" />' +
+              '<div class="tq-person__info">' +
+                '<span class="tq-name">' + esc(t.name) + '</span>' +
+                '<span class="tq-context">' + esc(t.context) + '</span>' +
+              '</div>' +
             '</div>' +
           '</div>'
         );
