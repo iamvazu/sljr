@@ -188,7 +188,7 @@ function handleLegacyRedirects(req, res, parsedUrl) {
 // Only these folders and root files are ever served. Everything else in
 // site/ (server.js, db/, api/, lib/, middleware/, scratch/, package.json…)
 // is invisible to visitors — a 404, not a 403, so nothing is confirmed.
-const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles', 'relocation', 'admin']);
+const PUBLIC_DIRS = new Set(['assets', 'css', 'js', 'content', 'areas', 'articles', 'relocation', 'admin', 'vendor']);
 const PUBLIC_ROOT_FILES = new Set(['robots.txt', 'sitemap.xml', 'llms.txt', 'manifest.webmanifest', 'favicon.ico', 'admin.js', 'admin.css']);
 // Internal review pages: available on your own machine, never in production.
 const INTERNAL_PAGES = new Set(['pitch.html', 'preview.html']);

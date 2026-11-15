@@ -11,19 +11,22 @@
     var mapEl = document.getElementById('area-interactive-map');
     if (!mapEl) return;
 
-    // Load Leaflet dynamically if not already present
+    // Load Leaflet locally if not already present
     if (typeof L === 'undefined') {
       if (!document.getElementById('leaflet-css')) {
         var link = document.createElement('link');
         link.id = 'leaflet-css';
         link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        link.href = '/vendor/leaflet/leaflet.css';
         document.head.appendChild(link);
       }
       var script = document.createElement('script');
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.src = '/vendor/leaflet/leaflet.js';
       script.onload = function () {
         renderMap(mapEl);
+      };
+      script.onerror = function () {
+        console.error('Failed to load local Leaflet script');
       };
       document.head.appendChild(script);
     } else {
@@ -32,6 +35,8 @@
   }
 
   function renderMap(mapEl) {
+    if (mapEl._leaflet_id) return; // Prevent double-initialization
+
     var rawCenter = mapEl.getAttribute('data-center') || '37.6624,-121.8747';
     var centerParts = rawCenter.split(',').map(function (n) { return parseFloat(n.trim()); });
     var zoom = parseInt(mapEl.getAttribute('data-zoom') || '13', 10);
@@ -59,6 +64,14 @@
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(map);
+
+    setTimeout(function () {
+      map.invalidateSize();
+    }, 200);
+
+    window.addEventListener('resize', function () {
+      map.invalidateSize();
+    });
 
     // Custom Gold Marker Icons
     function createIcon(category, number) {

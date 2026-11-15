@@ -2666,8 +2666,11 @@ html {
 .area-map-section {
   background: #0D1117;
   color: #F3EEE6;
-  padding: 72px 24px 84px;
+  padding: 88px 24px 96px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  scroll-margin-top: 100px;
+  position: relative;
+  z-index: 2;
 }
 .area-map__inner {
   max-width: 1280px;
@@ -2677,7 +2680,9 @@ html {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin: 20px 0 28px;
+  margin: 24px 0 32px;
+  position: relative;
+  z-index: 3;
 }
 .area-map-filter-btn {
   background: rgba(255, 255, 255, 0.04);
