@@ -223,8 +223,6 @@
           '<a href="https://twitter.com/StevenLenzJr" target="_blank" rel="noopener noreferrer" aria-label="Twitter / X" title="X / Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>' +
         '</div>' +
         '<ul class="ed-footer__links" style="margin-top:14px;">' +
-          '<li><a href="https://open.spotify.com/show/2jBHXSd0PXS5J0stSqgNL0?si=_PfWJwLrQvmMJqgG4un_Nw" target="_blank" rel="noopener noreferrer">On The Spot Podcast (Spotify) ↗</a></li>' +
-          '<li><a href="https://www.compass.com/agents/steven-lenz-jr/" target="_blank" rel="noopener noreferrer">Steven Lenz Jr. on Compass ↗</a></li>' +
           '<li><a href="https://www.homes.com/real-estate-agents/steven-lenz-jr/1q8sxz5" target="_blank" rel="noopener noreferrer">Steven Lenz Jr. on Homes.com ↗</a></li>' +
         '</ul></div>' +
         '<div class="ed-footer__col"><h4>Communities</h4><ul class="ed-footer__links"><li><a href="/neighborhoods#tri-valley">Tri-Valley: Pleasanton · Danville · Livermore · San Ramon <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="/neighborhoods#diablo-valley">Diablo Valley: Walnut Creek · Lafayette · Alamo <span class="ed-footer__hood-label">Guide</span></a></li><li><a href="/neighborhoods#east-bay">East Bay: Oakland · Berkeley · Hayward · Fremont <span class="ed-footer__hood-label">Guide</span></a></li></ul></div>' +
