@@ -42,12 +42,6 @@
   display: none !important;
 }
 
-.sl-ai-fab.is-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateY(20px) !important;
-}
-
 .sl-ai-fab__avatar-wrap {
   position: relative;
   width: 38px;

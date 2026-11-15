@@ -55,7 +55,7 @@
   // Inject CSS
   var cssLink = document.createElement('link');
   cssLink.rel = 'stylesheet';
-  cssLink.href = pfx + 'css/ai-steve.css?v=20261113g';
+  cssLink.href = pfx + 'css/ai-steve.css?v=20261115b';
   document.head.appendChild(cssLink);
 
   function createWidget() {
@@ -321,22 +321,12 @@
     closeBtn.addEventListener('click', function () { toggleChat(false); });
     if (minBtn) minBtn.addEventListener('click', function () { toggleChat(false); });
 
-    // Ticket 2: Collapse fab to avatar circle after scroll, hide when footer enters view
+    // Collapse fab to avatar circle after scroll
     var onScrollFab = function () {
-      fab.classList.toggle('is-compact', window.scrollY > 30);
+      fab.classList.toggle('is-compact', window.scrollY > 40);
     };
     window.addEventListener('scroll', onScrollFab, { passive: true });
     onScrollFab();
-
-    if (typeof IntersectionObserver !== 'undefined') {
-      var footerObserver = new IntersectionObserver(function (entries) {
-        var visible = entries.some(function (e) { return e.isIntersecting; });
-        fab.classList.toggle('is-hidden', visible);
-      }, { rootMargin: '0px 0px -20px 0px', threshold: 0.05 });
-
-      var footers = document.querySelectorAll('.ed-footer, .compliance-footer, footer');
-      footers.forEach(function (f) { footerObserver.observe(f); });
-    }
 
     if (homesCloseBtn) {
       homesCloseBtn.addEventListener('click', function () {
@@ -435,43 +425,6 @@
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send to Steven'; }
       });
     });
-
-    // Scroll handling: compact FAB on scroll
-    window.addEventListener('scroll', function () {
-      if (window.scrollY > 80) {
-        fab.classList.add('is-compact');
-      } else {
-        fab.classList.remove('is-compact');
-      }
-    }, { passive: true });
-
-    // IntersectionObserver: hide FAB when lead form scene or footer is visible
-    if ('IntersectionObserver' in window) {
-      var hideObserver = new IntersectionObserver(function (entries) {
-        var shouldHide = entries.some(function (entry) {
-          return entry.isIntersecting;
-        });
-        if (shouldHide) {
-          fab.classList.add('is-hidden');
-        } else {
-          fab.classList.remove('is-hidden');
-        }
-      }, { rootMargin: '0px 0px 50px 0px', threshold: 0.1 });
-
-      var hideTargets = [
-        document.getElementById('terrace'),
-        document.querySelector('.sw-copy[data-scene="terrace"]'),
-        document.getElementById('lead-form'),
-        document.getElementById('connect-form'),
-        document.querySelector('.ld-form'),
-        document.getElementById('ed-footer-mount'),
-        document.querySelector('footer')
-      ];
-
-      hideTargets.forEach(function (target) {
-        if (target) hideObserver.observe(target);
-      });
-    }
 
     // Feedback thumbs up/down connected to POST /api/feedback
     document.querySelectorAll('.sl-ai-feedback-btn').forEach(function (btn) {
