@@ -416,9 +416,15 @@ html {
 }
 
 .ed-footer__socials a svg {
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   fill: currentColor;
+  transition: all 0.2s ease;
+}
+
+.ed-footer__socials a svg[fill="none"] {
+  fill: none;
+  stroke: currentColor;
 }
 
 .ed-footer__socials a:hover {
