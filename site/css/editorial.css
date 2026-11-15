@@ -2727,6 +2727,11 @@ html {
   position: relative;
   background: #0B0E14;
 }
+/* Luxury Dark Map Tile Filter (Crisp charcoal & gold tones, 100% watermark-free) */
+.area-map-viewport .leaflet-tile-pane .sl-dark-tile {
+  filter: brightness(0.55) invert(1) contrast(1.35) hue-rotate(205deg) saturate(0.25);
+  transition: opacity 0.2s ease;
+}
 .area-map-sidebar {
   padding: 20px;
   max-height: 520px;
