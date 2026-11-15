@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/oakland-greenwood.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,170 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Oakland</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Vibrant Urban Culture Meets Redwood Hills</h3>
+          <p class="area-pillar-desc">A dynamic cultural melting pot where bustling waterfront plazas transition into serene, forested hillsides with breathtaking Golden Gate views.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Lake Merritt Strolls, Michelin Dining & Arts</h3>
+          <p class="area-pillar-desc">Morning jogs around Lake Merritt, dining along College Avenue in Rockridge, and weekend artisan browsing in Temescal and Grand Lake.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Redwood Regional Park & Secret Hillside Trails</h3>
+          <p class="area-pillar-desc">Hidden groves of 150-foot coastal redwoods, quiet creek canyons, and winding hillside staircases that feel miles away from the city.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From Rockridge Craftsman to Montclair Hillside Retreats</h3>
+          <p class="area-pillar-desc">Coveted 1920s Craftsman homes in Rockridge, mid-century architectural view homes in Montclair, and grand estates in Piedmont Pines.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Rapid San Francisco Access & Community Spirit</h3>
+          <p class="area-pillar-desc">A quick 14-minute BART commute into Downtown San Francisco paired with an energetic, proud local arts and culinary identity.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.8044,-122.2712" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Rockridge & College Avenue</span>
+              <span class="area-landmark-tag">CHARMING ENCLAVE</span>
+            </div>
+            <p class="area-landmark-desc">Pedestrian-friendly avenue lined with Market Hall, Michelin-rated dining, independent bookstores, and Craftsman bungalows.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Lake Merritt & Grand Lake</span>
+              <span class="area-landmark-tag">URBAN JEWEL</span>
+            </div>
+            <p class="area-landmark-desc">Heart of Oakland featuring 3.4-mile shoreline path, historic Grand Lake Theatre, and Saturday morning farmers’ market.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Montclair Village & Hills</span>
+              <span class="area-landmark-tag">WOODED HILLSIDE RETREAT</span>
+            </div>
+            <p class="area-landmark-desc">Charming wooded village surrounded by private hillside architectural homes nestled beneath coastal redwoods.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Redwood Regional Park</span>
+              <span class="area-landmark-tag">COASTAL REDWOOD FOREST</span>
+            </div>
+            <p class="area-landmark-desc">1,830-acre hidden redwood forest with serene canyon trails, equestrian paths, and native wildlife.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">14m</span>
+          <span class="area-commute-mode">Direct BART / Bay Bridge</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">45m</span>
+          <span class="area-commute-mode">via I-880 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Walnut Creek</span>
+          <span class="area-commute-time">20m</span>
+          <span class="area-commute-mode">via Hwy 24 East</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Berkeley</span>
+          <span class="area-commute-time">10m</span>
+          <span class="area-commute-mode">Direct Neighbor</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Rockridge & College Avenue","category":"dining","lat":37.844,"lng":-122.252,"tag":"CHARMING ENCLAVE","desc":"Pedestrian-friendly avenue lined with Market Hall, Michelin-rated dining, independent bookstores, and Craftsman bungalows.","highlight":"Coveted walk-to-dining neighborhood"},{"title":"Lake Merritt & Grand Lake","category":"parks","lat":37.801,"lng":-122.258,"tag":"URBAN JEWEL","desc":"Heart of Oakland featuring 3.4-mile shoreline path, historic Grand Lake Theatre, and Saturday morning farmers’ market.","highlight":"Oakland’s iconic 3.4-mile shoreline jewel"},{"title":"Montclair Village & Hills","category":"enclaves","lat":37.834,"lng":-122.214,"tag":"WOODED HILLSIDE RETREAT","desc":"Charming wooded village surrounded by private hillside architectural homes nestled beneath coastal redwoods.","highlight":"Secluded redwood forest village"},{"title":"Redwood Regional Park","category":"parks","lat":37.818,"lng":-122.164,"tag":"COASTAL REDWOOD FOREST","desc":"1,830-acre hidden redwood forest with serene canyon trails, equestrian paths, and native wildlife.","highlight":"1,830 acres of coastal redwoods"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Oakland</h2>
+      <p class="area-schools__intro">Oakland is home to some of California’s most prestigious independent college preparatory schools alongside high-achieving neighborhood public academies.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Ranked #1 Private School in CA</span>
+          <h3 class="area-school-name">The College Preparatory School</h3>
+          <div class="area-school-level">Private Independent Day (Grades 9-12)</div>
+          <p class="area-school-desc">Nationally renowned college prep academy nestled in a quiet valley, leading the state in academic decathlon and Ivy League matriculation.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> #1 Private High School in CA</div><div class="area-school-hallmark-item"><span>★</span> 100% University Matriculation</div><div class="area-school-hallmark-item"><span>★</span> World-Class Faculty & Scholars</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Historic Independent Prep</span>
+          <h3 class="area-school-name">Head-Royce School</h3>
+          <div class="area-school-level">Private K-12 College Prep</div>
+          <p class="area-school-desc">Historic 22-acre hillside campus founded in 1887, celebrated for holistic scholarship, civic engagement, and leadership.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> 22-Acre Hillside Campus</div><div class="area-school-hallmark-item"><span>★</span> K-12 Continuous Learning</div><div class="area-school-hallmark-item"><span>★</span> Top Tier University Placement</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -219,6 +383,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

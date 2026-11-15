@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/neighborhood-dublin.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,188 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Dublin</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Modern Master-Planned Living & Energy</h3>
+          <p class="area-pillar-desc">State-of-the-art contemporary architecture, brand-new community parks, sleek shopping centers, and top-tier infrastructure.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">The Wave Waterpark, Dining & Trails</h3>
+          <p class="area-pillar-desc">Weekend sports tournaments, shopping at Persimmon Place and Regal Cinemas, and recreation at The Wave aquatic complex.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Schaefer Ranch & Foothill Open Space</h3>
+          <p class="area-pillar-desc">Secluded western foothill enclaves like Schaefer Ranch offering peaceful canyon living just minutes from the freeway.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">Dublin Ranch Estates to Modern Brownstones</h3>
+          <p class="area-pillar-desc">Sprawling luxury view homes in Dublin Ranch Golf Club, contemporary townhomes near BART, and single-family executive enclaves.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Rapid Growth & Two State-of-the-Art High Schools</h3>
+          <p class="area-pillar-desc">The newly opened Emerald High School and Dublin High anchor an energetic, forward-looking city with unparalleled transit connectivity.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.7022,-121.9358" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Dublin Ranch Golf Course & Enclave</span>
+              <span class="area-landmark-tag">GOLF ESTATES</span>
+            </div>
+            <p class="area-landmark-desc">Scenic rolling foothill golf course surrounded by executive luxury homes with sweeping Tri-Valley canyon views.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Dublin High School & Performing Arts Center</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Flagship public high school featuring award-winning Engineering and Biomedical academies.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Emerald High School</span>
+              <span class="area-landmark-tag">STATE-OF-THE-ART CAMPUS</span>
+            </div>
+            <p class="area-landmark-desc">Brand-new $374M state-of-the-art comprehensive secondary campus serving East Dublin.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">West Dublin / Pleasanton BART Station</span>
+              <span class="area-landmark-tag">RAPID TRANSIT</span>
+            </div>
+            <p class="area-landmark-desc">Convenient rapid transit portal providing direct access to Downtown SF and Oakland airports.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">The Wave Waterpark & Sports Park</span>
+              <span class="area-landmark-tag">AQUATIC COMPLEX</span>
+            </div>
+            <p class="area-landmark-desc">31,000 sq ft aquatic park with water slides, Olympic pool, and year-round swimming.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">42m</span>
+          <span class="area-commute-mode">Direct East Dublin BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">35m</span>
+          <span class="area-commute-mode">via I-680 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">32m</span>
+          <span class="area-commute-mode">via I-580 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Pleasanton</span>
+          <span class="area-commute-time">5m</span>
+          <span class="area-commute-mode">Across I-580 Corridor</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Dublin Ranch Golf Course & Enclave","category":"enclaves","lat":37.728,"lng":-121.879,"tag":"GOLF ESTATES","desc":"Scenic rolling foothill golf course surrounded by executive luxury homes with sweeping Tri-Valley canyon views.","highlight":"Scenic foothill golf community"},{"title":"Dublin High School & Performing Arts Center","category":"schools","lat":37.712,"lng":-121.922,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Flagship public high school featuring award-winning Engineering and Biomedical academies.","highlight":"Flagship engineering & biotech academy"},{"title":"Emerald High School","category":"schools","lat":37.729,"lng":-121.868,"tag":"STATE-OF-THE-ART CAMPUS","desc":"Brand-new $374M state-of-the-art comprehensive secondary campus serving East Dublin.","highlight":"Brand new $374M secondary campus"},{"title":"West Dublin / Pleasanton BART Station","category":"parks","lat":37.6995,"lng":-121.928,"tag":"RAPID TRANSIT","desc":"Convenient rapid transit portal providing direct access to Downtown SF and Oakland airports.","highlight":"Direct 42-min connection to SF"},{"title":"The Wave Waterpark & Sports Park","category":"parks","lat":37.708,"lng":-121.902,"tag":"AQUATIC COMPLEX","desc":"31,000 sq ft aquatic park with water slides, Olympic pool, and year-round swimming.","highlight":"Premier regional aquatic park"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Dublin</h2>
+      <p class="area-schools__intro">Dublin Unified is one of the fastest growing and most technologically advanced districts in Northern California, distinguished by newly built campuses and rigorous STEM academies.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top Ranked STEM</span>
+          <h3 class="area-school-name">Dublin High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Gaels</div>
+          <p class="area-school-desc">Flagship high school featuring an acclaimed Engineering and Biomedical Sciences Academy, state-of-the-art performing arts center, and top athletics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Gael Force Robotics Champions</div><div class="area-school-hallmark-item"><span>★</span> Biomedical & Engineering Academy</div><div class="area-school-hallmark-item"><span>★</span> 96% College Bound</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Brand New Campus</span>
+          <h3 class="area-school-name">Emerald High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Aeris</div>
+          <p class="area-school-desc">Brand-new, multi-million-dollar state-of-the-art secondary campus in East Dublin equipped with cutting-edge laboratories and athletics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> New $374M High School Campus</div><div class="area-school-hallmark-item"><span>★</span> Next-Gen Science & Tech Labs</div><div class="area-school-hallmark-item"><span>★</span> Comprehensive Arts & Athletics</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Distinguished Middle School</span>
+          <h3 class="area-school-name">Fallon Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">High-performing middle school feeder serving Dublin Ranch with accelerated STEM and visual arts pathways.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> State Science Olympiad Finalists</div><div class="area-school-hallmark-item"><span>★</span> Comprehensive Music Program</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -231,6 +413,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

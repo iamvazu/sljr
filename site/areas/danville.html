@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/neighborhood-alamo.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,242 @@
       </div>
     </div>
   </section>
+
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Danville & Alamo</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Upscale Suburban Serenity & Historic Downtown</h3>
+          <p class="area-pillar-desc">A storybook downtown with historic gas lamps, tree-lined boutiques, acclaimed restaurants, and an overwhelmingly safe, welcoming community rhythm.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Outdoor Splendor & Elevated Community Gatherings</h3>
+          <p class="area-pillar-desc">Morning rides on the Iron Horse Regional Trail, weekend tee times at Blackhawk Country Club, and signature events beneath the historic Danville Oak.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Mount Diablo’s Dramatic Foothill Canvas</h3>
+          <p class="area-pillar-desc">Immediate access to thousands of acres of state park wilderness, panoramic mountain trailheads, and sunsets that paint the canyon gold.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">Sprawling Custom Estates & Traditional Enclaves</h3>
+          <p class="area-pillar-desc">Gated country club mansions in Blackhawk, secluded multi-acre oak parcels in Alamo, and charming Craftsman bungalows in Westside Danville.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">The Balance of Prestige & Authentic Warmth</h3>
+          <p class="area-pillar-desc">Danville offers all the perks of an elite, top-tier enclave while preserving the heartwarming, friendly character of a true American hometown.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.8216,-122.0000" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Historic Downtown Danville & Hartz Ave</span>
+              <span class="area-landmark-tag">VILLAGE CORE</span>
+            </div>
+            <p class="area-landmark-desc">Boutique shopping, Bridges Restaurant, Danville Harvest, and the historic Village Theatre along tree-lined Hartz Avenue.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Blackhawk Country Club & Gated Enclave</span>
+              <span class="area-landmark-tag">GATED GOLF ENCLAVE</span>
+            </div>
+            <p class="area-landmark-desc">Prestigious gated enclave with two championship 18-hole golf courses, Blackhawk Plaza shopping, and luxury estates.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">San Ramon Valley High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Historic public high school founded in 1910, consistently ranked in the top tier of California academic institutions.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Monte Vista High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">National Blue Ribbon institution known for cutting-edge STEM, speech, debate, and elite college matriculation.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">The Athenian School</span>
+              <span class="area-landmark-tag">INDEPENDENT PREP</span>
+            </div>
+            <p class="area-landmark-desc">Prestigious 75-acre independent college preparatory boarding and day school at the foot of Mount Diablo.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Mount Diablo State Park Entrance</span>
+              <span class="area-landmark-tag">STATE PARK</span>
+            </div>
+            <p class="area-landmark-desc">Direct access to South Gate Road leading up to Mount Diablo summit with panoramic vistas spanning the entire Bay Area.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Westside Danville</span>
+              <span class="area-landmark-tag">WALK TO TOWN</span>
+            </div>
+            <p class="area-landmark-desc">Coveted enclave of historic Craftsman homes, custom farmhouse residences, and generous tree-lined parcels.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Iron Horse Regional Trail Hub</span>
+              <span class="area-landmark-tag">REGIONAL TRAIL</span>
+            </div>
+            <p class="area-landmark-desc">Paved multi-use trail bridging Contra Costa County, beloved by cyclists, runners, and families walking to town.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">45m</span>
+          <span class="area-commute-mode">via Hwy 24 / BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">30m</span>
+          <span class="area-commute-mode">via Hwy 24 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">48m</span>
+          <span class="area-commute-mode">via I-680 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Walnut Creek</span>
+          <span class="area-commute-time">10m</span>
+          <span class="area-commute-mode">via I-680 North</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Historic Downtown Danville & Hartz Ave","category":"dining","lat":37.822,"lng":-122,"tag":"VILLAGE CORE","desc":"Boutique shopping, Bridges Restaurant, Danville Harvest, and the historic Village Theatre along tree-lined Hartz Avenue.","highlight":"Heart of Danville dining and culture"},{"title":"Blackhawk Country Club & Gated Enclave","category":"enclaves","lat":37.8245,"lng":-121.916,"tag":"GATED GOLF ENCLAVE","desc":"Prestigious gated enclave with two championship 18-hole golf courses, Blackhawk Plaza shopping, and luxury estates.","highlight":"World-class 24/7 guarded luxury"},{"title":"San Ramon Valley High School","category":"schools","lat":37.818,"lng":-122.001,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Historic public high school founded in 1910, consistently ranked in the top tier of California academic institutions.","highlight":"Top 1% public school in CA"},{"title":"Monte Vista High School","category":"schools","lat":37.8385,"lng":-121.986,"tag":"ACCLAIMED HIGH SCHOOL","desc":"National Blue Ribbon institution known for cutting-edge STEM, speech, debate, and elite college matriculation.","highlight":"National Blue Ribbon School"},{"title":"The Athenian School","category":"schools","lat":37.831,"lng":-121.948,"tag":"INDEPENDENT PREP","desc":"Prestigious 75-acre independent college preparatory boarding and day school at the foot of Mount Diablo.","highlight":"Premier independent prep academy"},{"title":"Mount Diablo State Park Entrance","category":"parks","lat":37.854,"lng":-121.932,"tag":"STATE PARK","desc":"Direct access to South Gate Road leading up to Mount Diablo summit with panoramic vistas spanning the entire Bay Area.","highlight":"Bay Area’s premier natural summit"},{"title":"Westside Danville","category":"enclaves","lat":37.82,"lng":-122.009,"tag":"WALK TO TOWN","desc":"Coveted enclave of historic Craftsman homes, custom farmhouse residences, and generous tree-lined parcels.","highlight":"Prime walk-to-downtown real estate"},{"title":"Iron Horse Regional Trail Hub","category":"parks","lat":37.821,"lng":-121.996,"tag":"REGIONAL TRAIL","desc":"Paved multi-use trail bridging Contra Costa County, beloved by cyclists, runners, and families walking to town.","highlight":"Car-free commute & leisure corridor"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Danville & Alamo</h2>
+      <p class="area-schools__intro">San Ramon Valley Unified is recognized as one of the highest-achieving public school districts in the state, boasting exemplary graduation rates, award-winning arts and STEM departments, and championship athletics.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1% in California</span>
+          <h3 class="area-school-name">San Ramon Valley High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Wolves</div>
+          <p class="area-school-desc">Historic powerhouse in downtown Danville distinguished by high AP participation, National Merit Scholars, and an exceptional athletics tradition.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> 98% College Bound</div><div class="area-school-hallmark-item"><span>★</span> Championship Athletics & Leadership</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 2% Nationwide</span>
+          <h3 class="area-school-name">Monte Vista High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Mustangs</div>
+          <p class="area-school-desc">High-performing academic academy serving Danville and Alamo, noted for exceptional biomedical sciences, robotics, and National Blue Ribbon recognition.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Blue Ribbon Winner</div><div class="area-school-hallmark-item"><span>★</span> Elite STEM & Speech / Debate</div><div class="area-school-hallmark-item"><span>★</span> Top-tier College Placement</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Premier Independent Prep</span>
+          <h3 class="area-school-name">The Athenian School</h3>
+          <div class="area-school-level">Private Day & Boarding (Grades 6-12)</div>
+          <p class="area-school-desc">World-renowned 75-acre campus at the base of Mt. Diablo emphasizing experiential education, engineering, environmental stewardship, and global citizenship.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> 75-Acre Wilderness Campus</div><div class="area-school-hallmark-item"><span>★</span> Maker Studio & Airplane Project</div><div class="area-school-hallmark-item"><span>★</span> 100% University Placement</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Distinguished Feeder</span>
+          <h3 class="area-school-name">Los Cerros Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Acclaimed middle school feeder for Monte Vista High, recognized for accelerated mathematics, foreign language immersion, and supportive community culture.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Gold Ribbon School</div><div class="area-school-hallmark-item"><span>★</span> Exemplary Music Programs</div><div class="area-school-hallmark-item"><span>★</span> Active Parent Community</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">State Honor School</span>
+          <h3 class="area-school-name">Diablo Vista Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Award-winning middle school serving the eastern Danville corridor with comprehensive technology integration and visual arts programs.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Outstanding Athletics</div><div class="area-school-hallmark-item"><span>★</span> Advanced Science Labs</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Downtown Walkable</span>
+          <h3 class="area-school-name">Montair Elementary School</h3>
+          <div class="area-school-level">Public Elementary (Grades K-5)</div>
+          <p class="area-school-desc">Charming neighborhood school situated in westside Danville, boasting exceptional literacy programs and family participation.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Walk to Downtown</div><div class="area-school-hallmark-item"><span>★</span> Strong Arts & Tech Foundation</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
 
   <section class="area-explore-section">
     <div class="area-explore__inner">
@@ -282,6 +518,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

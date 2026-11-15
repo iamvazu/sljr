@@ -40,7 +40,7 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/neighborhood-livermore.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -163,6 +163,178 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Livermore</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Historic Wine Country Heritage & Scientific Brilliance</h3>
+          <p class="area-pillar-desc">Rolling vineyards, 50+ award-winning wineries, vibrant downtown dining, and a highly educated community anchored by Lawrence Livermore National Lab.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Vineyard Tasting Rooms, Rodeo & Cycling</h3>
+          <p class="area-pillar-desc">Weekend tastings at Wente and Concannon, summer concerts on First Street, cycling scenic Arroyo Road, and stargazing under clear valley skies.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Lake Del Valle & Sycamore Grove Park</h3>
+          <p class="area-pillar-desc">Lake Del Valle offers boating, fishing, and camping, while Sycamore Grove Park features 847 acres of tranquil nature paths and oak savannas.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From South Livermore Vineyard Estates to Downtown Charm</h3>
+          <p class="area-pillar-desc">Custom vineyard estates on 1-to-5 acre parcels in South Livermore, equestrian properties, and modern suburban family enclaves.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Wine Country Living with Tri-Valley Convenience</h3>
+          <p class="area-pillar-desc">The relaxed pace and rustic romance of Napa and Sonoma, combined with modern Bay Area career access and top schools.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.6819,-121.7680" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Wente Vineyards & Restaurant</span>
+              <span class="area-landmark-tag">HISTORIC WINERY</span>
+            </div>
+            <p class="area-landmark-desc">America’s oldest continuously operated family-owned winery, featuring championship golf and farm-to-table dining.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Historic Downtown First Street</span>
+              <span class="area-landmark-tag">DOWNTOWN CORRIDOR</span>
+            </div>
+            <p class="area-landmark-desc">Walkable avenue of independent bistros, Bankhead Theater, local breweries, and vibrant community festivals.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Granada High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">International Baccalaureate (IB) World School with cutting-edge biotechnology pathways.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Lawrence Livermore National Laboratory</span>
+              <span class="area-landmark-tag">SCIENCE & INNOVATION</span>
+            </div>
+            <p class="area-landmark-desc">World-renowned premier research institution driving scientific breakthroughs and national security innovation.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Sycamore Grove Park</span>
+              <span class="area-landmark-tag">REGIONAL NATURE PARK</span>
+            </div>
+            <p class="area-landmark-desc">847-acre park along Arroyo del Valle with paved and unpaved multi-use trails beneath towering sycamore trees.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">52m</span>
+          <span class="area-commute-mode">via I-580 / BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">40m</span>
+          <span class="area-commute-mode">via I-680 South / ACE Train</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">38m</span>
+          <span class="area-commute-mode">via I-580 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Pleasanton</span>
+          <span class="area-commute-time">10m</span>
+          <span class="area-commute-mode">Direct Neighbor via I-580</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Wente Vineyards & Restaurant","category":"dining","lat":37.633,"lng":-121.761,"tag":"HISTORIC WINERY","desc":"America’s oldest continuously operated family-owned winery, featuring championship golf and farm-to-table dining.","highlight":"America’s oldest family winery"},{"title":"Historic Downtown First Street","category":"dining","lat":37.682,"lng":-121.768,"tag":"DOWNTOWN CORRIDOR","desc":"Walkable avenue of independent bistros, Bankhead Theater, local breweries, and vibrant community festivals.","highlight":"Downtown dining & theater district"},{"title":"Granada High School","category":"schools","lat":37.683,"lng":-121.792,"tag":"ACCLAIMED HIGH SCHOOL","desc":"International Baccalaureate (IB) World School with cutting-edge biotechnology pathways.","highlight":"Full IB World High School"},{"title":"Lawrence Livermore National Laboratory","category":"enclaves","lat":37.686,"lng":-121.706,"tag":"SCIENCE & INNOVATION","desc":"World-renowned premier research institution driving scientific breakthroughs and national security innovation.","highlight":"World-renowned scientific laboratory"},{"title":"Sycamore Grove Park","category":"parks","lat":37.652,"lng":-121.782,"tag":"REGIONAL NATURE PARK","desc":"847-acre park along Arroyo del Valle with paved and unpaved multi-use trails beneath towering sycamore trees.","highlight":"847 acres of trails and nature"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Livermore</h2>
+      <p class="area-schools__intro">Livermore schools emphasize innovative STEM and biotechnology pathways in partnership with Lawrence Livermore National Laboratory and Sandia National Laboratories.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">IB World School</span>
+          <h3 class="area-school-name">Granada High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Matadors</div>
+          <p class="area-school-desc">Prestigious International Baccalaureate (IB) World School offering advanced biotechnology pathways, robotics, and championship athletics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Full IB World School</div><div class="area-school-hallmark-item"><span>★</span> Biotechnology Career Pathway</div><div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Historic Flagship</span>
+          <h3 class="area-school-name">Livermore High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Cowboys</div>
+          <p class="area-school-desc">Historic secondary school founded in 1891, featuring a state-of-the-art STEM center, agricultural sciences, and celebrated music programs.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Founded in 1891</div><div class="area-school-hallmark-item"><span>★</span> Advanced Engineering & Architecture</div><div class="area-school-hallmark-item"><span>★</span> Active Alumni Foundation</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -240,6 +412,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 
 </html>

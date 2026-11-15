@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/neighborhood-walnut-creek.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,178 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Lafayette</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Semi-Rural Privacy with Metropolitan Proximity</h3>
+          <p class="area-pillar-desc">Wooded hillsides, peaceful oak canopies, generous setback parcels, and a chic downtown village with boutique retail and gourmet dining.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Lafayette Reservoir & Al Fresco Dining</h3>
+          <p class="area-pillar-desc">Morning laps around the scenic Lafayette Reservoir trail, weekend espresso on Mt. Diablo Boulevard, and garden entertaining at home.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Exceptional Weather & Microclimate</h3>
+          <p class="area-pillar-desc">Sheltered east of the Caldecott Tunnel, Lafayette enjoys warm, sunny summers and mild winters free from coastal fog.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">Architectural Masterpieces in Happy Valley & Reliez</h3>
+          <p class="area-pillar-desc">Sprawling custom ranch estates, mid-century modern architectural statements, and multimillion-dollar luxury view compounds.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Top 1% Public Schools in Northern California</h3>
+          <p class="area-pillar-desc">Acalanes High School and its feeder academies are celebrated nationwide for supreme academic scores and university placement.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.8858,-122.1180" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Lafayette Reservoir Recreation Area</span>
+              <span class="area-landmark-tag">NATURE RESERVOIR</span>
+            </div>
+            <p class="area-landmark-desc">Scenic reservoir with 2.7-mile paved shoreline loop, rim trails, paddle boats, and family picnic grounds.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Downtown Mt. Diablo Boulevard</span>
+              <span class="area-landmark-tag">DOWNTOWN DINING</span>
+            </div>
+            <p class="area-landmark-desc">Chic corridor of Michelin-recommended restaurants, artisan cafes, luxury boutiques, and community plazas.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Acalanes High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Premier flagship public high school ranked among the top secondary institutions in the state of California.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Happy Valley Luxury Enclave</span>
+              <span class="area-landmark-tag">PRIVATE ESTATE ENCLAVE</span>
+            </div>
+            <p class="area-landmark-desc">Secluded multi-acre luxury estates nestled into oak-canopied hillsides with custom architectural pedigree.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Lafayette BART Station</span>
+              <span class="area-landmark-tag">RAPID TRANSIT</span>
+            </div>
+            <p class="area-landmark-desc">Direct transit portal linking Lafayette residents to Downtown San Francisco in just 32 minutes.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">32m</span>
+          <span class="area-commute-mode">Direct Yellow Line BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">18m</span>
+          <span class="area-commute-mode">via Hwy 24 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Walnut Creek</span>
+          <span class="area-commute-time">8m</span>
+          <span class="area-commute-mode">via Hwy 24 East</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">55m</span>
+          <span class="area-commute-mode">via I-680 South</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Lafayette Reservoir Recreation Area","category":"parks","lat":37.886,"lng":-122.138,"tag":"NATURE RESERVOIR","desc":"Scenic reservoir with 2.7-mile paved shoreline loop, rim trails, paddle boats, and family picnic grounds.","highlight":"Lafayette’s premier outdoor sanctuary"},{"title":"Downtown Mt. Diablo Boulevard","category":"dining","lat":37.892,"lng":-122.118,"tag":"DOWNTOWN DINING","desc":"Chic corridor of Michelin-recommended restaurants, artisan cafes, luxury boutiques, and community plazas.","highlight":"Walkable boutique dining & shopping"},{"title":"Acalanes High School","category":"schools","lat":37.899,"lng":-122.094,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Premier flagship public high school ranked among the top secondary institutions in the state of California.","highlight":"Top 1% public high school in CA"},{"title":"Happy Valley Luxury Enclave","category":"enclaves","lat":37.898,"lng":-122.132,"tag":"PRIVATE ESTATE ENCLAVE","desc":"Secluded multi-acre luxury estates nestled into oak-canopied hillsides with custom architectural pedigree.","highlight":"Lamorinda’s premier luxury enclave"},{"title":"Lafayette BART Station","category":"parks","lat":37.8935,"lng":-122.1245,"tag":"RAPID TRANSIT","desc":"Direct transit portal linking Lafayette residents to Downtown San Francisco in just 32 minutes.","highlight":"Direct 32-min commute to SF"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Lafayette</h2>
+      <p class="area-schools__intro">Lafayette public schools are widely considered among the finest in the entire state of California, boasting near-perfect state test performance and dedicated parent funding.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1% in California</span>
+          <h3 class="area-school-name">Acalanes High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Dons</div>
+          <p class="area-school-desc">Flagship high school of the elite Acalanes Union district, renowned for Ivy League placement, National Merit scholars, and championship sports.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Blue Ribbon School</div><div class="area-school-hallmark-item"><span>★</span> 98% University Matriculation</div><div class="area-school-hallmark-item"><span>★</span> Exemplary Performing & Visual Arts</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Distinguished Middle School</span>
+          <h3 class="area-school-name">Stanley Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Consistently ranked in the top 2% of California middle schools with exemplary foreign language, robotics, and instrumental music.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Championship Robotics & Debate</div><div class="area-school-hallmark-item"><span>★</span> High Academic Standards</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -219,6 +391,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

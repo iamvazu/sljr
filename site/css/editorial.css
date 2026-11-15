@@ -2567,6 +2567,462 @@ html {
 }
 
 /* ============================================================================
+   Enhanced Area Guides: 5-Pillar Matrix, Dark Interactive Map & Schools Guide
+   ============================================================================ */
+
+/* 1. The 5-Pillar Matrix (What to Expect, Lifestyle, Appeal, Market, Love) */
+.area-pillars-section {
+  background: #090D13;
+  color: #F3EEE6;
+  padding: 68px 24px 76px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.area-pillars__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.area-pillars__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #D8A55A;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+}
+.area-pillars__h2 {
+  font-family: var(--sw-font-display);
+  font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+  font-weight: 300;
+  color: #FFFFFF;
+  margin: 0 0 36px;
+  letter-spacing: -0.015em;
+}
+.area-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1100px) {
+  .area-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .area-pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+.area-pillar-card {
+  background: rgba(20, 26, 35, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  backdrop-filter: blur(8px);
+}
+.area-pillar-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(216, 165, 90, 0.6);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+.area-pillar-num {
+  font-family: var(--sw-font-display);
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #D8A55A;
+  margin-bottom: 8px;
+  display: block;
+}
+.area-pillar-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #D8A55A;
+  margin-bottom: 8px;
+  display: block;
+}
+.area-pillar-title {
+  font-family: var(--sw-font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+.area-pillar-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #A9A398;
+  margin: 0;
+  flex: 1;
+}
+
+/* 2. Interactive Dark-Gold Explorer Map */
+.area-map-section {
+  background: #0D1117;
+  color: #F3EEE6;
+  padding: 72px 24px 84px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.area-map__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.area-map-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0 28px;
+}
+.area-map-filter-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(243, 238, 230, 0.85);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.area-map-filter-btn:hover {
+  border-color: #D8A55A;
+  color: #D8A55A;
+}
+.area-map-filter-btn.is-active {
+  background: #D8A55A;
+  border-color: #D8A55A;
+  color: #0D1117;
+}
+.area-map-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  background: #141A23;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 900px) {
+  .area-map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.area-map-viewport {
+  height: 520px;
+  width: 100%;
+  position: relative;
+  background: #0B0E14;
+}
+.area-map-sidebar {
+  padding: 20px;
+  max-height: 520px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .area-map-sidebar {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    max-height: 320px;
+  }
+}
+.area-landmark-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.18s ease;
+}
+.area-landmark-item:hover,
+.area-landmark-item.is-active {
+  background: rgba(216, 165, 90, 0.12);
+  border-color: #D8A55A;
+}
+.area-landmark-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.area-landmark-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #FFFFFF;
+}
+.area-landmark-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #D8A55A;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.area-landmark-desc {
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Map Markers and Popups */
+.sl-map-marker-wrap {
+  background: transparent;
+  border: none;
+}
+.sl-map-pin {
+  width: 32px;
+  height: 32px;
+  background: #141A23;
+  border: 2px solid #D8A55A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.sl-map-pin:hover {
+  transform: scale(1.18);
+  background: #D8A55A;
+}
+.sl-map-pin__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.sl-map-pin__pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid #D8A55A;
+  opacity: 0.6;
+  animation: slPinPulse 2.4s infinite ease-out;
+  pointer-events: none;
+}
+@keyframes slPinPulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.leaflet-popup-content-wrapper {
+  background: #141A23 !important;
+  color: #F3EEE6 !important;
+  border: 1px solid #D8A55A !important;
+  border-radius: 10px !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6) !important;
+}
+.leaflet-popup-tip {
+  background: #141A23 !important;
+  border: 1px solid #D8A55A !important;
+}
+.sl-map-popup {
+  padding: 4px;
+}
+.sl-map-popup__tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #D8A55A;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 4px;
+}
+.sl-map-popup__title {
+  font-family: var(--sw-font-display);
+  font-size: 1.15rem;
+  color: #FFFFFF;
+  margin: 0 0 6px;
+}
+.sl-map-popup__desc {
+  font-size: 0.82rem;
+  color: #A9A398;
+  line-height: 1.45;
+  margin: 0 0 8px;
+}
+.sl-map-popup__hl {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #D8A55A;
+}
+
+/* 3. Commute Times Matrix */
+.area-commute-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+@media (max-width: 900px) {
+  .area-commute-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .area-commute-bar {
+    grid-template-columns: 1fr;
+  }
+}
+.area-commute-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+}
+.area-commute-dest {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9CA3AF;
+  margin-bottom: 4px;
+}
+.area-commute-time {
+  font-family: var(--sw-font-display);
+  font-size: 1.65rem;
+  color: #D8A55A;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+.area-commute-mode {
+  font-size: 0.76rem;
+  color: #A9A398;
+}
+
+/* 4. Acclaimed Schools & Education Deep Dive */
+.area-schools-section {
+  background: #FAF7F2;
+  color: #141A23;
+  padding: 76px 24px 84px;
+  border-bottom: 1px solid rgba(20, 26, 35, 0.1);
+}
+.area-schools__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.area-schools__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #B5562E;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+}
+.area-schools__h2 {
+  font-family: var(--sw-font-display);
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  font-weight: 400;
+  color: #141A23;
+  margin: 0 0 16px;
+  letter-spacing: -0.015em;
+}
+.area-schools__intro {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: #3A4252;
+  max-width: 78ch;
+  margin: 0 0 36px;
+}
+.area-schools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1024px) {
+  .area-schools-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .area-schools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.area-school-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(20, 26, 35, 0.12);
+  border-radius: 14px;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  transition: transform 0.22s, box-shadow 0.22s;
+}
+.area-school-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+}
+.area-school-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(181, 86, 46, 0.1);
+  color: #B5562E;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  align-self: flex-start;
+}
+.area-school-name {
+  font-family: var(--sw-font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #141A23;
+  margin: 0 0 6px;
+}
+.area-school-level {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #718096;
+  margin-bottom: 12px;
+}
+.area-school-desc {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #4A5568;
+  margin: 0 0 14px;
+  flex: 1;
+}
+.area-school-hallmarks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid rgba(20, 26, 35, 0.08);
+  padding-top: 12px;
+}
+.area-school-hallmark-item {
+  font-size: 0.78rem;
+  color: #2D3748;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.area-school-hallmark-item span {
+  color: #B5562E;
+  font-weight: 700;
+}
+
+
+/* ============================================================================
    Resources & Real Estate News Magazine (Homes.com Style + Luxury Aesthetic)
    ============================================================================ */
 .res-nav-bar {

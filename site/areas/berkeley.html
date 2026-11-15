@@ -40,7 +40,7 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/hero-portfolio.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -163,6 +163,160 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Berkeley</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Intellectual Vibrancy & Architectural Masterpieces</h3>
+          <p class="area-pillar-desc">Tree-lined hillside avenues, brown-shingle Craftsman homes by Julia Morgan and Bernard Maybeck, and an unmatched intellectual energy.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Culinary Excellence in the Gourmet Ghetto</h3>
+          <p class="area-pillar-desc">Dining at Chez Panisse, morning coffee at the original Peet’s, browsing independent bookstores, and walks through the Greek Theatre.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Tilden Regional Park & Panoramic Bay Vistas</h3>
+          <p class="area-pillar-desc">2,079-acre Tilden Regional Park perches right above the city, offering a vintage carousel, botanical garden, and Lake Anza swimming.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From Historic Hillside Estates to Claremont Elegance</h3>
+          <p class="area-pillar-desc">Custom architectural treasures in the Berkeley Hills, grand estates surrounding the Claremont Hotel, and charming Elmwood bungalows.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">World-Class Culture, Diversity & Natural Beauty</h3>
+          <p class="area-pillar-desc">The rare intersection of world-class higher education, iconic architecture, vibrant culinary culture, and spectacular Golden Gate views.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.8715,-122.2730" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">University of California, Berkeley</span>
+              <span class="area-landmark-tag">WORLD-CLASS UNIVERSITY</span>
+            </div>
+            <p class="area-landmark-desc">America’s premier public research university, home to the iconic Sather Tower (Campanile) and Nobel Laureates.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Claremont Hotel, Club & Spa</span>
+              <span class="area-landmark-tag">HISTORIC LUXURY RESORT</span>
+            </div>
+            <p class="area-landmark-desc">Historic 1915 luxury resort situated at the foot of the Berkeley Hills, featuring championship tennis and fine dining.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Tilden Regional Park</span>
+              <span class="area-landmark-tag">REGIONAL PARK</span>
+            </div>
+            <p class="area-landmark-desc">2,079 acres of peaceful forest trails, Lake Anza, native botanical gardens, and steam train excursions.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Gourmet Ghetto & North Shattuck</span>
+              <span class="area-landmark-tag">CULINARY MECCA</span>
+            </div>
+            <p class="area-landmark-desc">Birthplace of California Cuisine featuring Alice Waters’ Chez Panisse, The Cheeseboard Collective, and artisanal dining.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">22m</span>
+          <span class="area-commute-mode">Direct Red Line BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">12m</span>
+          <span class="area-commute-mode">via Telegraph Ave / Hwy 24</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">55m</span>
+          <span class="area-commute-mode">via I-880 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Walnut Creek</span>
+          <span class="area-commute-time">25m</span>
+          <span class="area-commute-mode">via Hwy 24 East</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"University of California, Berkeley","category":"schools","lat":37.8719,"lng":-122.2585,"tag":"WORLD-CLASS UNIVERSITY","desc":"America’s premier public research university, home to the iconic Sather Tower (Campanile) and Nobel Laureates.","highlight":"#1 Public University in the World"},{"title":"Claremont Hotel, Club & Spa","category":"dining","lat":37.86,"lng":-122.242,"tag":"HISTORIC LUXURY RESORT","desc":"Historic 1915 luxury resort situated at the foot of the Berkeley Hills, featuring championship tennis and fine dining.","highlight":"Historic 1915 luxury resort & club"},{"title":"Tilden Regional Park","category":"parks","lat":37.893,"lng":-122.248,"tag":"REGIONAL PARK","desc":"2,079 acres of peaceful forest trails, Lake Anza, native botanical gardens, and steam train excursions.","highlight":"2,079-acre regional nature sanctuary"},{"title":"Gourmet Ghetto & North Shattuck","category":"dining","lat":37.879,"lng":-122.269,"tag":"CULINARY MECCA","desc":"Birthplace of California Cuisine featuring Alice Waters’ Chez Panisse, The Cheeseboard Collective, and artisanal dining.","highlight":"Birthplace of California Cuisine"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Berkeley</h2>
+      <p class="area-schools__intro">Berkeley schools reflect the city’s rich intellectual legacy, anchored by Berkeley High School and acclaimed private academies linked to the UC Berkeley research community.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Historic Public Flagship</span>
+          <h3 class="area-school-name">Berkeley High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Yellowjackets</div>
+          <p class="area-school-desc">Only comprehensive public high school in the nation offering a full International Baccalaureate (IB) diploma alongside multiple specialized small schools.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Full International Baccalaureate (IB)</div><div class="area-school-hallmark-item"><span>★</span> Award-Winning Jazz Program</div><div class="area-school-hallmark-item"><span>★</span> Celebrated Alumni Heritage</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -238,6 +392,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 
 </html>

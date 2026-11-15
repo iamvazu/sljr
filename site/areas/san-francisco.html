@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/hero-portfolio.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,170 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About San Francisco</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Iconic Architecture & Incomparable Bay Vistas</h3>
+          <p class="area-pillar-desc">Victorian and Edwardian streetscapes, grand Gold Coast mansions, panoramic Golden Gate views, and world-class cultural institutions.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Michelin Dining, Presidio Trails & Marina Sun</h3>
+          <p class="area-pillar-desc">Jogging along Marina Green, weekend strolls through the Presidio, dining at Michelin-starred restaurants, and Saturday Ferry Building markets.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">1,500 Acres of Presidio National Park</h3>
+          <p class="area-pillar-desc">A national park in the center of the city with tranquil eucalyptus forests, coastal bluff paths, historic military quarters, and ocean beaches.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From Pacific Heights Mansions to Marina Flats</h3>
+          <p class="area-pillar-desc">Billionaires’ Row architectural masterpieces in Pacific Heights, classic Marina flats, and modern high-rise penthouses with sweeping skyline views.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">The Undisputed Cultural Capital of Northern California</h3>
+          <p class="area-pillar-desc">Unmatched metropolitan elegance, architectural pedigree, museum culture, and culinary brilliance that continually defines global trends.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.7749,-122.4194" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Pacific Heights & Gold Coast</span>
+              <span class="area-landmark-tag">GOLD COAST LUXURY</span>
+            </div>
+            <p class="area-landmark-desc">Billionaires’ Row featuring grand Beaux-Arts, Georgian, and contemporary mansions with Golden Gate views.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">The Presidio National Park</span>
+              <span class="area-landmark-tag">NATIONAL PARK</span>
+            </div>
+            <p class="area-landmark-desc">1,500-acre national park with historic parade grounds, scenic ocean trails, and Presidio Golf Course.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Marina Green & Crissy Field</span>
+              <span class="area-landmark-tag">WATERFRONT RECREATION</span>
+            </div>
+            <p class="area-landmark-desc">Expansive waterfront greenbelt with sailing marinas, running paths, and close-up views of the Golden Gate Bridge.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">San Francisco University High School</span>
+              <span class="area-landmark-tag">ELITE PRIVATE PREP</span>
+            </div>
+            <p class="area-landmark-desc">Acclaimed independent college preparatory academy in Pacific Heights with 100% college acceptance rate.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Financial District</span>
+          <span class="area-commute-time">10m</span>
+          <span class="area-commute-mode">Local Transit / Car</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">SFO International</span>
+          <span class="area-commute-time">18m</span>
+          <span class="area-commute-mode">Direct BART / US-101</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">40m</span>
+          <span class="area-commute-mode">Caltrain Express / I-280</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Tri-Valley Corridor</span>
+          <span class="area-commute-time">45m</span>
+          <span class="area-commute-mode">Direct BART / Bay Bridge</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Pacific Heights & Gold Coast","category":"enclaves","lat":37.792,"lng":-122.435,"tag":"GOLD COAST LUXURY","desc":"Billionaires’ Row featuring grand Beaux-Arts, Georgian, and contemporary mansions with Golden Gate views.","highlight":"San Francisco’s premier luxury enclave"},{"title":"The Presidio National Park","category":"parks","lat":37.798,"lng":-122.466,"tag":"NATIONAL PARK","desc":"1,500-acre national park with historic parade grounds, scenic ocean trails, and Presidio Golf Course.","highlight":"1,500-acre national park in the city"},{"title":"Marina Green & Crissy Field","category":"parks","lat":37.805,"lng":-122.448,"tag":"WATERFRONT RECREATION","desc":"Expansive waterfront greenbelt with sailing marinas, running paths, and close-up views of the Golden Gate Bridge.","highlight":"Waterfront recreation & bridge vistas"},{"title":"San Francisco University High School","category":"schools","lat":37.789,"lng":-122.444,"tag":"ELITE PRIVATE PREP","desc":"Acclaimed independent college preparatory academy in Pacific Heights with 100% college acceptance rate.","highlight":"Premier Pacific Heights private prep"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in San Francisco</h2>
+      <p class="area-schools__intro">San Francisco offers historic public academic jewels alongside the nation’s most competitive independent college preparatory institutions.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Historic Public Jewel</span>
+          <h3 class="area-school-name">Lowell High School</h3>
+          <div class="area-school-level">Public Exam High School (Grades 9-12) · Mascot: Cardinals</div>
+          <p class="area-school-desc">Oldest public high school west of the Mississippi, renowned for unmatched academic decathlon records and Ivy League admissions.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Blue Ribbon Institution</div><div class="area-school-hallmark-item"><span>★</span> Oldest Public High School in West</div><div class="area-school-hallmark-item"><span>★</span> Exceptional AP & STEM Participation</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1% Independent Prep</span>
+          <h3 class="area-school-name">San Francisco University High School</h3>
+          <div class="area-school-level">Private College Prep (Grades 9-12)</div>
+          <p class="area-school-desc">Elite independent day school in Pacific Heights recognized for academic excellence, civic commitment, and college admissions.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> #1 Coed Independent High School in SF</div><div class="area-school-hallmark-item"><span>★</span> 100% University Matriculation</div><div class="area-school-hallmark-item"><span>★</span> Historic Pacific Heights Campus</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -219,6 +383,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

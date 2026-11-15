@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/neighborhood-walnut-creek.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,242 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Walnut Creek</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Upscale Conveniences in a Welcoming Atmosphere</h3>
+          <p class="area-pillar-desc">The sophistication and retail perks of a major city paired with pristine tree-lined streets, easy transit connectivity, and vibrant social plazas.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Broadway Plaza Dining, Arts & Weekend Culture</h3>
+          <p class="area-pillar-desc">Sunny morning farmers’ markets, Broadway Plaza open-air luxury retail, evening performances at the Lesher Center, and impromptu date nights.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Seamless Shift from City Streets to Mountain Summits</h3>
+          <p class="area-pillar-desc">The striking presence of Mount Diablo provides a breathtaking daily backdrop, offering immediate access to Shell Ridge and rugged open spaces.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">Architectural Character & Modern Hillside Estates</h3>
+          <p class="area-pillar-desc">From secluded custom view estates in the western foothills to iconic mid-century ranches in Rancho San Miguel and chic downtown penthouses.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">The Perfect Balance of Growth, Peace & Place</h3>
+          <p class="area-pillar-desc">Walnut Creek offers all the career connectivity and dining energy of a city while preserving the warmth, safety, and security of a true hometown.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.9101,-122.0652" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Broadway Plaza Luxury Retail</span>
+              <span class="area-landmark-tag">OPEN-AIR RETAIL</span>
+            </div>
+            <p class="area-landmark-desc">Premier open-air retail destination featuring Nordstrom, Apple, Tiffany & Co., lululemon, and rooftop dining.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Lesher Center for the Arts</span>
+              <span class="area-landmark-tag">CULTURAL ARTS</span>
+            </div>
+            <p class="area-landmark-desc">Vibrant four-theatre performing arts complex hosting Broadway productions, ballets, and symphony orchestras.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Las Lomas High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Acalanes Union High School District flagship, ranked among the top secondary schools in California.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Northgate High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Acclaimed public high school serving the Mount Diablo foothill corridor with distinguished STEM programs.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Walnut Creek BART Station</span>
+              <span class="area-landmark-tag">RAPID TRANSIT</span>
+            </div>
+            <p class="area-landmark-desc">Direct Yellow Line transit providing a seamless 38-minute commute into Downtown San Francisco.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Shell Ridge Open Space</span>
+              <span class="area-landmark-tag">PRESERVE & TRAILS</span>
+            </div>
+            <p class="area-landmark-desc">1,420 acres of protected rolling ridgeline and valley trails connecting directly to Mount Diablo State Park.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Heather Farm Park & Gardens</span>
+              <span class="area-landmark-tag">COMMUNITY PARK</span>
+            </div>
+            <p class="area-landmark-desc">102-acre community park featuring botanical gardens, fishing lake, Olympic swim complex, and equestrian center.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Rancho San Miguel & Lakewood</span>
+              <span class="area-landmark-tag">MID-CENTURY ENCLAVE</span>
+            </div>
+            <p class="area-landmark-desc">Iconic mid-century modern and Eichler residential architecture nestled under mature redwood and oak trees.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">38m</span>
+          <span class="area-commute-mode">Direct Yellow Line BART</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">20m</span>
+          <span class="area-commute-mode">via Hwy 24 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">55m</span>
+          <span class="area-commute-mode">via I-680 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Berkeley</span>
+          <span class="area-commute-time">25m</span>
+          <span class="area-commute-mode">via Hwy 24 West</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Broadway Plaza Luxury Retail","category":"dining","lat":37.896,"lng":-122.059,"tag":"OPEN-AIR RETAIL","desc":"Premier open-air retail destination featuring Nordstrom, Apple, Tiffany & Co., lululemon, and rooftop dining.","highlight":"Northern California premier retail hub"},{"title":"Lesher Center for the Arts","category":"dining","lat":37.8995,"lng":-122.062,"tag":"CULTURAL ARTS","desc":"Vibrant four-theatre performing arts complex hosting Broadway productions, ballets, and symphony orchestras.","highlight":"Downtown cultural & performance jewel"},{"title":"Las Lomas High School","category":"schools","lat":37.893,"lng":-122.049,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Acalanes Union High School District flagship, ranked among the top secondary schools in California.","highlight":"Acalanes Union Flagship High School"},{"title":"Northgate High School","category":"schools","lat":37.922,"lng":-122.012,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Acclaimed public high school serving the Mount Diablo foothill corridor with distinguished STEM programs.","highlight":"Premier Sports Medicine & STEM"},{"title":"Walnut Creek BART Station","category":"parks","lat":37.9056,"lng":-122.0673,"tag":"RAPID TRANSIT","desc":"Direct Yellow Line transit providing a seamless 38-minute commute into Downtown San Francisco.","highlight":"Direct 38-min commute to San Francisco"},{"title":"Shell Ridge Open Space","category":"parks","lat":37.904,"lng":-122.022,"tag":"PRESERVE & TRAILS","desc":"1,420 acres of protected rolling ridgeline and valley trails connecting directly to Mount Diablo State Park.","highlight":"1,420 acres of protected nature"},{"title":"Heather Farm Park & Gardens","category":"parks","lat":37.92,"lng":-122.043,"tag":"COMMUNITY PARK","desc":"102-acre community park featuring botanical gardens, fishing lake, Olympic swim complex, and equestrian center.","highlight":"102-acre flagship community park"},{"title":"Rancho San Miguel & Lakewood","category":"enclaves","lat":37.915,"lng":-122.035,"tag":"MID-CENTURY ENCLAVE","desc":"Iconic mid-century modern and Eichler residential architecture nestled under mature redwood and oak trees.","highlight":"Coveted architectural neighborhood"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Walnut Creek</h2>
+      <p class="area-schools__intro">Walnut Creek benefits from dual renowned educational infrastructures: the elite Acalanes Union High School District and high-ranking neighborhood academies within the Walnut Creek School District.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1.5% in California</span>
+          <h3 class="area-school-name">Las Lomas High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Knights</div>
+          <p class="area-school-desc">Distinguished flagship of the Acalanes Union High School District, celebrated for top AP pass rates, high Ivy League matriculation, and award-winning arts.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> 97% College Attendance</div><div class="area-school-hallmark-item"><span>★</span> Championship Athletics & Theater</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">National Gold Medal</span>
+          <h3 class="area-school-name">Northgate High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Broncos</div>
+          <p class="area-school-desc">High-performing secondary school serving the foothill and equestrian neighborhoods of Walnut Creek, featuring renowned Sports Medicine and STEM curricula.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Gold Ribbon Winner</div><div class="area-school-hallmark-item"><span>★</span> Elite Sports Medicine Program</div><div class="area-school-hallmark-item"><span>★</span> Distinguished Marching Band</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Exemplary Middle Feeder</span>
+          <h3 class="area-school-name">Walnut Creek Intermediate (WCI)</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Ranked in the top 5% of California middle schools, WCI offers comprehensive honors pathways, speech, debate, and championship robotics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Top 5% Middle School in State</div><div class="area-school-hallmark-item"><span>★</span> Award-Winning Instrumental Music</div><div class="area-school-hallmark-item"><span>★</span> State STEM Olympiad Finalists</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Neighborhood Gem</span>
+          <h3 class="area-school-name">Parkmead Elementary School</h3>
+          <div class="area-school-level">Public Elementary (Grades K-5)</div>
+          <p class="area-school-desc">Home of the acclaimed Parent Integrated Program (P.I.P.) and active community involvement, set within a peaceful residential enclave.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Innovative Project-Based Learning</div><div class="area-school-hallmark-item"><span>★</span> Close-knit Parent Community</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Acclaimed Feeder</span>
+          <h3 class="area-school-name">Buena Vista Elementary School</h3>
+          <div class="area-school-level">Public Elementary (Grades K-5)</div>
+          <p class="area-school-desc">Celebrated for progressive literacy programs, dedicated technology enrichment, and high test score consistency.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Honor Roll School</div><div class="area-school-hallmark-item"><span>★</span> Strong STEAM Integration</div><div class="area-school-hallmark-item"><span>★</span> Walk-to-School Neighborhood</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Private Prep Academy</span>
+          <h3 class="area-school-name">The Seven Hills School</h3>
+          <div class="area-school-level">Independent Day School (PK-8)</div>
+          <p class="area-school-desc">Set on nine wooded acres in Walnut Creek, Seven Hills delivers an extraordinary independent education focused on critical thinking and character.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> 9-Acre Natural Campus</div><div class="area-school-hallmark-item"><span>★</span> Small Class Sizes</div><div class="area-school-hallmark-item"><span>★</span> Comprehensive Arts & Innovation</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -231,6 +467,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

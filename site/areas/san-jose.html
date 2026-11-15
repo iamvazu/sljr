@@ -36,7 +36,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/danville-genoa.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,242 @@
     </div>
   </section>
 
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About San Jose & Silicon Valley</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Dynamic Tech Capital Anchored by Quiet Enclaves</h3>
+          <p class="area-pillar-desc">The global capital of technology innovation, balanced by quiet, tree-canopied residential pockets insulated from corporate campuses.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Sun-Drenched Valley Living & Outdoor Recreation</h3>
+          <p class="area-pillar-desc">Biking the Los Gatos Creek Trail, dining at Santana Row and San Pedro Square, and weekend getaways to Santa Cruz beaches in under 40 minutes.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">Rich Historic Roots & Municipal Rose Garden</h3>
+          <p class="area-pillar-desc">Before tech, San Jose was the "Valley of Heart’s Delight." That legacy thrives in historic Willow Glen, the Rose Garden, and local fruit orchards.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From 1920s Craftsman to Hillside Gated Mansions</h3>
+          <p class="area-pillar-desc">Charming 1920s Spanish bungalows in Willow Glen, mid-century classics, and sprawling custom luxury view estates in Almaden Valley and Silver Creek.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Boundless Opportunity & Distinct Neighborhood Pride</h3>
+          <p class="area-pillar-desc">The rare ability to access the economic dynamism of a global powerhouse while retreating home to peaceful, close-knit neighborhood avenues.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.3382,-121.8863" data-zoom="12"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Santana Row & Valley Fair</span>
+              <span class="area-landmark-tag">LUXURY SHOPPING & DINING</span>
+            </div>
+            <p class="area-landmark-desc">European-style boulevard lined with Gucci, Tesla, Left Bank Brasserie, luxury boutiques, and vibrant sidewalk cafes.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Historic Willow Glen & Lincoln Ave</span>
+              <span class="area-landmark-tag">HISTORIC ENCLAVE</span>
+            </div>
+            <p class="area-landmark-desc">Pedestrian-friendly avenue of independent bookstores, bistros, and tree-canopied 1920s Spanish and Craftsman homes.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Leland High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Top 1% public high school serving the Almaden Valley luxury corridor with exceptional STEM placement.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">San Pedro Square Market</span>
+              <span class="area-landmark-tag">DOWNTOWN DINING</span>
+            </div>
+            <p class="area-landmark-desc">Open-air public market hall with artisanal culinary vendors, craft breweries, and live music in historic downtown.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Municipal Rose Garden</span>
+              <span class="area-landmark-tag">BOTANICAL GARDEN</span>
+            </div>
+            <p class="area-landmark-desc">Historic five-acre garden with more than 4,000 rose bushes and grand fountain, surrounded by luxury estate residences.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Almaden Valley & Country Club Enclave</span>
+              <span class="area-landmark-tag">FOOTHILL ESTATES</span>
+            </div>
+            <p class="area-landmark-desc">Secluded foothill luxury enclave featuring private acreage, golf club facilities, and quick access to Quicksilver trails.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Alum Rock Park & Canyon</span>
+              <span class="area-landmark-tag">REGIONAL PARK</span>
+            </div>
+            <p class="area-landmark-desc">California’s oldest municipal park spanning 720 scenic canyon acres with rugged equestrian trails and mineral springs.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Bellarmine College Preparatory</span>
+              <span class="area-landmark-tag">PREMIER PRIVATE PREP</span>
+            </div>
+            <p class="area-landmark-desc">Historic Jesuit college preparatory institution founded in 1851 with 100% college acceptance rate.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">60m</span>
+          <span class="area-commute-mode">Caltrain Express / I-280</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Palo Alto</span>
+          <span class="area-commute-time">25m</span>
+          <span class="area-commute-mode">via I-280 / Caltrain</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Cupertino / Apple</span>
+          <span class="area-commute-time">15m</span>
+          <span class="area-commute-mode">via I-280 North</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Tri-Valley Corridor</span>
+          <span class="area-commute-time">35m</span>
+          <span class="area-commute-mode">via I-680 North</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Santana Row & Valley Fair","category":"dining","lat":37.321,"lng":-121.947,"tag":"LUXURY SHOPPING & DINING","desc":"European-style boulevard lined with Gucci, Tesla, Left Bank Brasserie, luxury boutiques, and vibrant sidewalk cafes.","highlight":"Silicon Valley’s premiere luxury retail"},{"title":"Historic Willow Glen & Lincoln Ave","category":"enclaves","lat":37.304,"lng":-121.898,"tag":"HISTORIC ENCLAVE","desc":"Pedestrian-friendly avenue of independent bookstores, bistros, and tree-canopied 1920s Spanish and Craftsman homes.","highlight":"Charming historic village lifestyle"},{"title":"Leland High School","category":"schools","lat":37.218,"lng":-121.854,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Top 1% public high school serving the Almaden Valley luxury corridor with exceptional STEM placement.","highlight":"Almaden Valley academic jewel"},{"title":"San Pedro Square Market","category":"dining","lat":37.3365,"lng":-121.894,"tag":"DOWNTOWN DINING","desc":"Open-air public market hall with artisanal culinary vendors, craft breweries, and live music in historic downtown.","highlight":"Downtown San Jose culinary epicenter"},{"title":"Municipal Rose Garden","category":"parks","lat":37.332,"lng":-121.926,"tag":"BOTANICAL GARDEN","desc":"Historic five-acre garden with more than 4,000 rose bushes and grand fountain, surrounded by luxury estate residences.","highlight":"Historic 5-acre botanical landmark"},{"title":"Almaden Valley & Country Club Enclave","category":"enclaves","lat":37.228,"lng":-121.838,"tag":"FOOTHILL ESTATES","desc":"Secluded foothill luxury enclave featuring private acreage, golf club facilities, and quick access to Quicksilver trails.","highlight":"Secluded luxury foothill estates"},{"title":"Alum Rock Park & Canyon","category":"parks","lat":37.399,"lng":-121.798,"tag":"REGIONAL PARK","desc":"California’s oldest municipal park spanning 720 scenic canyon acres with rugged equestrian trails and mineral springs.","highlight":"720-acre historic natural canyon"},{"title":"Bellarmine College Preparatory","category":"schools","lat":37.34,"lng":-121.916,"tag":"PREMIER PRIVATE PREP","desc":"Historic Jesuit college preparatory institution founded in 1851 with 100% college acceptance rate.","highlight":"Historic 1851 private prep academy"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in San Jose & Silicon Valley</h2>
+      <p class="area-schools__intro">San Jose spans multiple high-performing educational districts alongside world-renowned private preparatory academies that serve Silicon Valley’s top technology and research families.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1% in California</span>
+          <h3 class="area-school-name">Leland High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Almaden Valley</div>
+          <p class="area-school-desc">Academic jewel of the Almaden Valley corridor, celebrated for top STEM placement, elite speech & debate, and championship athletics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> 98% College Matriculation</div><div class="area-school-hallmark-item"><span>★</span> National Speech & Debate Champions</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">National Rank #1 Prep</span>
+          <h3 class="area-school-name">Bellarmine College Preparatory</h3>
+          <div class="area-school-level">Private All-Boys Catholic Prep (Grades 9-12)</div>
+          <p class="area-school-desc">Historic Jesuit college preparatory institution founded in 1851, boasting a 100% university matriculation rate and world-class athletic facilities.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Historic 1851 Institution</div><div class="area-school-hallmark-item"><span>★</span> 100% University Matriculation</div><div class="area-school-hallmark-item"><span>★</span> Legendary Athletic & Leadership Heritage</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Exemplary All-Girls Prep</span>
+          <h3 class="area-school-name">Presentation High School</h3>
+          <div class="area-school-level">Private All-Girls College Prep (Grades 9-12)</div>
+          <p class="area-school-desc">Prestigious independent academy dedicated to empowering young women through intensive STEAM education, performing arts, and community service.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Robotics Finalists</div><div class="area-school-hallmark-item"><span>★</span> Comprehensive Leadership Curriculum</div><div class="area-school-hallmark-item"><span>★</span> 100% College Bound</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top Feeder School</span>
+          <h3 class="area-school-name">Bret Harte Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8) · Almaden</div>
+          <p class="area-school-desc">Consistently high-ranking middle school feeder for Leland High, offering accelerated mathematics, computer science, and orchestral music.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Gold Ribbon Winner</div><div class="area-school-hallmark-item"><span>★</span> State Science Fair Winners</div><div class="area-school-hallmark-item"><span>★</span> Comprehensive Arts & Athletics</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Historic Neighborhood Feeder</span>
+          <h3 class="area-school-name">Willow Glen High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Willow Glen</div>
+          <p class="area-school-desc">Community-centered high school set in the heart of Willow Glen, featuring dual-immersion pathways, robotics, and strong community traditions.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Dual Immersion Pathways</div><div class="area-school-hallmark-item"><span>★</span> Vibrant Alumni & Community Foundation</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Award-Winning Elementary</span>
+          <h3 class="area-school-name">Williams Elementary School</h3>
+          <div class="area-school-level">Public Elementary (Grades K-5) · Almaden</div>
+          <p class="area-school-desc">Exemplary neighborhood school in Almaden Valley with 99th percentile California assessment marks and an extraordinary parent faculty club.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Blue Ribbon Nominee</div><div class="area-school-hallmark-item"><span>★</span> STEAM Innovation Lab</div><div class="area-school-hallmark-item"><span>★</span> Family-Centered Neighborhood Culture</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+
   <section class="area-explore-section">
     <div class="area-explore__inner">
       <span class="area-explore__eyebrow">EXPLORE THE NEIGHBORHOODS</span>
@@ -219,6 +455,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 

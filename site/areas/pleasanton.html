@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/theme.css?v=20261114e" />
-  <link rel="stylesheet" href="../css/editorial.css?v=20261114e" />
+  <link rel="stylesheet" href="../css/editorial.css?v=20261115b" />
   <link rel="stylesheet" href="../css/mobile.css?v=20261114e" />
   <link rel="preload" as="image" href="../assets/img/danville-genoa.jpg" fetchpriority="high" />
   <link rel="icon" type="image/png" href="../assets/brand/favicon.png" />
@@ -152,6 +152,242 @@
       </div>
     </div>
   </section>
+
+  <section class="area-pillars-section">
+    <div class="area-pillars__inner">
+      <span class="area-pillars__eyebrow">THE 5-PILLAR ESSENTIALS MATRIX</span>
+      <h2 class="area-pillars__h2">Everything You Need to Know About Pleasanton</h2>
+      <div class="area-pillars-grid">
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">01</span>
+          <span class="area-pillar-tag">WHAT TO EXPECT</span>
+          <h3 class="area-pillar-title">Picture-Perfect Historic Main Street</h3>
+          <p class="area-pillar-desc">Tree-lined avenues, manicured family parks, and a preserved 19th-century downtown filled with artisanal bakeries, fine dining, and community parades.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">02</span>
+          <span class="area-pillar-tag">THE LIFESTYLE</span>
+          <h3 class="area-pillar-title">Vineyards, Fairways & Saturday Markets</h3>
+          <p class="area-pillar-desc">Mornings on the Iron Horse Trail, weekend rounds at Ruby Hill Golf Club, and Saturday morning farmers’ markets with fresh local California produce.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">03</span>
+          <span class="area-pillar-tag">UNEXPECTED APPEAL</span>
+          <h3 class="area-pillar-title">1,200+ Acres of Ridge Parkland</h3>
+          <p class="area-pillar-desc">Direct foothill trailheads into Pleasanton Ridge Regional Park, offering panoramic valley sunsets, equestrian paths, and serene wilderness.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">04</span>
+          <span class="area-pillar-tag">THE HOUSING MARKET</span>
+          <h3 class="area-pillar-title">From Gated Compounds to Historic Craftsman</h3>
+          <p class="area-pillar-desc">Premier gated golf enclaves in Ruby Hill, secluded ridge estates in Castlewood, mid-century ranches in Vintage Hills, and downtown bungalows.</p>
+        </div>
+        
+        <div class="area-pillar-card">
+          <span class="area-pillar-num">05</span>
+          <span class="area-pillar-tag">YOU'LL FALL IN LOVE WITH</span>
+          <h3 class="area-pillar-title">Unrivaled Schools & Hometown Pride</h3>
+          <p class="area-pillar-desc">Steven Lenz Jr.’s hometown pairs an acclaimed, top-tier school district with a close-knit, safe community where lifelong roots are planted.</p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <section class="area-map-section">
+    <div class="area-map__inner">
+      <span class="area-pillars__eyebrow">INTERACTIVE EXPLORER MAP &amp; COMMUTE MATRIX</span>
+      <h2 class="area-pillars__h2">Explore Neighborhoods, Acclaimed Schools &amp; Lifestyle Hubs</h2>
+
+      <div class="area-map-filters">
+        <button type="button" class="area-map-filter-btn is-active" data-map-filter="all">✦ All Highlights</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="schools">🎓 Acclaimed Schools</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="enclaves">🏡 Prime Enclaves</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="dining">🍷 Downtown &amp; Dining</button>
+        <button type="button" class="area-map-filter-btn" data-map-filter="parks">🌲 Parks &amp; Recreation</button>
+      </div>
+
+      <div class="area-map-layout">
+        <div class="area-map-viewport" id="area-interactive-map" data-center="37.6624,-121.8747" data-zoom="13"></div>
+        <div class="area-map-sidebar">
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Ruby Hill Golf Club & Gated Enclave</span>
+              <span class="area-landmark-tag">GATED LUXURY</span>
+            </div>
+            <p class="area-landmark-desc">Jack Nicklaus signature golf course surrounded by custom Tuscan and Mediterranean estates behind 24/7 security gates.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="dining">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Historic Downtown Main Street</span>
+              <span class="area-landmark-tag">DOWNTOWN HUB</span>
+            </div>
+            <p class="area-landmark-desc">Tree-lined shopping and dining corridor featuring Saturday Farmers Market, Sabio on Main, and summer street festivals.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Amador Valley High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">Top 1% California high school, National Blue Ribbon recipient, and alma mater of Steven Lenz Jr.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Foothill High School</span>
+              <span class="area-landmark-tag">ACCLAIMED HIGH SCHOOL</span>
+            </div>
+            <p class="area-landmark-desc">US News Gold Medal high school featuring biomedical and AP Capstone honors programs.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="enclaves">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Castlewood Country Club</span>
+              <span class="area-landmark-tag">COUNTRY CLUB ESTATES</span>
+            </div>
+            <p class="area-landmark-desc">Hillside equestrian compounds, panoramic valley vistas, and two 18-hole championship golf courses.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Pleasanton Ridge Regional Park</span>
+              <span class="area-landmark-tag">PARKLAND & TRAILS</span>
+            </div>
+            <p class="area-landmark-desc">Over 5,200 acres of protected ridgeline wilderness with hiking, biking, and equestrian trails overlooking the valley.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="parks">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">Dublin / Pleasanton BART Station</span>
+              <span class="area-landmark-tag">TRANSIT HUB</span>
+            </div>
+            <p class="area-landmark-desc">Direct rapid transit link connecting Pleasanton residents to Downtown San Francisco in 45 minutes.</p>
+          </div>
+          
+          <div class="area-landmark-item" data-landmark-item data-category="schools">
+            <div class="area-landmark-top">
+              <span class="area-landmark-name">The Quarry Lane School</span>
+              <span class="area-landmark-tag">PRIVATE ACADEMY</span>
+            </div>
+            <p class="area-landmark-desc">Premier private PK-12 International Baccalaureate (IB) World School with cutting-edge robotics labs.</p>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="area-commute-bar">
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">San Francisco</span>
+          <span class="area-commute-time">45m</span>
+          <span class="area-commute-mode">Direct BART / Car</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Silicon Valley</span>
+          <span class="area-commute-time">35m</span>
+          <span class="area-commute-mode">via I-680 South</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Oakland</span>
+          <span class="area-commute-time">35m</span>
+          <span class="area-commute-mode">via I-580 West</span>
+        </div>
+        
+        <div class="area-commute-item">
+          <span class="area-commute-dest">Bishop Ranch</span>
+          <span class="area-commute-time">12m</span>
+          <span class="area-commute-mode">via I-680 North</span>
+        </div>
+        
+      </div>
+
+      <script id="area-map-data" type="application/json">
+        [{"title":"Ruby Hill Golf Club & Gated Enclave","category":"enclaves","lat":37.6489,"lng":-121.8214,"tag":"GATED LUXURY","desc":"Jack Nicklaus signature golf course surrounded by custom Tuscan and Mediterranean estates behind 24/7 security gates.","highlight":"Premier luxury gated enclave in Tri-Valley"},{"title":"Historic Downtown Main Street","category":"dining","lat":37.662,"lng":-121.8747,"tag":"DOWNTOWN HUB","desc":"Tree-lined shopping and dining corridor featuring Saturday Farmers Market, Sabio on Main, and summer street festivals.","highlight":"Walkable boutique dining & events"},{"title":"Amador Valley High School","category":"schools","lat":37.6608,"lng":-121.8847,"tag":"ACCLAIMED HIGH SCHOOL","desc":"Top 1% California high school, National Blue Ribbon recipient, and alma mater of Steven Lenz Jr.","highlight":"Steven Lenz Jr. Alma Mater"},{"title":"Foothill High School","category":"schools","lat":37.6885,"lng":-121.8988,"tag":"ACCLAIMED HIGH SCHOOL","desc":"US News Gold Medal high school featuring biomedical and AP Capstone honors programs.","highlight":"Ranked among top 2% in the nation"},{"title":"Castlewood Country Club","category":"enclaves","lat":37.6433,"lng":-121.9056,"tag":"COUNTRY CLUB ESTATES","desc":"Hillside equestrian compounds, panoramic valley vistas, and two 18-hole championship golf courses.","highlight":"Private foothills country club"},{"title":"Pleasanton Ridge Regional Park","category":"parks","lat":37.665,"lng":-121.92,"tag":"PARKLAND & TRAILS","desc":"Over 5,200 acres of protected ridgeline wilderness with hiking, biking, and equestrian trails overlooking the valley.","highlight":"Panoramic Tri-Valley vistas"},{"title":"Dublin / Pleasanton BART Station","category":"parks","lat":37.7017,"lng":-121.8992,"tag":"TRANSIT HUB","desc":"Direct rapid transit link connecting Pleasanton residents to Downtown San Francisco in 45 minutes.","highlight":"Direct connection to SF & SFO"},{"title":"The Quarry Lane School","category":"schools","lat":37.697,"lng":-121.868,"tag":"PRIVATE ACADEMY","desc":"Premier private PK-12 International Baccalaureate (IB) World School with cutting-edge robotics labs.","highlight":"Elite private prep academy"}]
+      </script>
+    </div>
+  </section>
+
+  <section class="area-schools-section">
+    <div class="area-schools__inner">
+      <span class="area-schools__eyebrow">EDUCATION &amp; ACADEMICS</span>
+      <h2 class="area-schools__h2">Top-Ranked Schools in Pleasanton</h2>
+      <p class="area-schools__intro">Pleasanton Unified is consistently ranked among the top school districts in Northern California, distinguished by exceptional AP testing scores, National Blue Ribbon designations, and championship athletic programs.</p>
+
+      <div class="area-schools-grid">
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 1% in California</span>
+          <h3 class="area-school-name">Amador Valley High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Dons</div>
+          <p class="area-school-desc">Steven Lenz Jr.’s alma mater! A National Blue Ribbon and California Distinguished School celebrated for elite AP exam pass rates, championship Mock Trial, and state robotics dominance.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> National Blue Ribbon School</div><div class="area-school-hallmark-item"><span>★</span> 98% College Matriculation</div><div class="area-school-hallmark-item"><span>★</span> Award-winning STEM & Marching Band</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Top 2% Nationwide</span>
+          <h3 class="area-school-name">Foothill High School</h3>
+          <div class="area-school-level">Public High School (Grades 9-12) · Mascot: Falcons</div>
+          <p class="area-school-desc">Exemplary academic powerhouse located in northern Pleasanton offering competitive AP Capstone diplomas, biomedical sciences pathways, and premier athletics.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Gold Ribbon Award</div><div class="area-school-hallmark-item"><span>★</span> US News Top High Schools</div><div class="area-school-hallmark-item"><span>★</span> Top Tier Athletics & Visual Arts</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">International Baccalaureate</span>
+          <h3 class="area-school-name">The Quarry Lane School</h3>
+          <div class="area-school-level">Private College Prep (PK-12)</div>
+          <p class="area-school-desc">Prestigious independent academy offering the rigorous International Baccalaureate (IB) Diploma Programme, state-of-the-art engineering labs, and a 100% college acceptance rate.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Full IB World School</div><div class="area-school-hallmark-item"><span>★</span> 7:1 Student-to-Teacher Ratio</div><div class="area-school-hallmark-item"><span>★</span> State-of-the-Art Science Complex</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">CA Distinguished School</span>
+          <h3 class="area-school-name">Thomas Hart Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Recognized for outstanding STEM curricula, advanced mathematics tracks, and comprehensive leadership development feeding into Foothill High.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> Top 5% Middle School in CA</div><div class="area-school-hallmark-item"><span>★</span> Distinguished Arts & Music</div><div class="area-school-hallmark-item"><span>★</span> State Science Olympiad Champions</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Exemplary Feeder</span>
+          <h3 class="area-school-name">Harvest Park Middle School</h3>
+          <div class="area-school-level">Public Middle School (Grades 6-8)</div>
+          <p class="area-school-desc">Award-winning academic culture offering accelerated algebra, language arts distinction, and renowned extracurricular programs feeding into Amador Valley High.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Distinguished School</div><div class="area-school-hallmark-item"><span>★</span> Championship Athletics</div><div class="area-school-hallmark-item"><span>★</span> Vibrant Music & Drama Programs</div>
+          </div>
+        </div>
+        
+        <div class="area-school-card">
+          <span class="area-school-badge">Neighborhood Anchor</span>
+          <h3 class="area-school-name">Vintage Hills Elementary</h3>
+          <div class="area-school-level">Public Elementary (Grades K-5)</div>
+          <p class="area-school-desc">Beloved neighborhood school with an active parent foundation, dedicated science specialists, and direct neighborhood walking trails.</p>
+          <div class="area-school-hallmarks">
+            <div class="area-school-hallmark-item"><span>★</span> California Gold Ribbon School</div><div class="area-school-hallmark-item"><span>★</span> Active Parent Faculty Club</div><div class="area-school-hallmark-item"><span>★</span> Walk-to-School Cul-de-Sacs</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
 
   <section class="area-explore-section">
     <div class="area-explore__inner">
@@ -282,6 +518,7 @@
   <div id="ed-drawer-mount"></div>
   <div id="ed-footer-mount"></div>
   <script src="../js/editorial-nav.js?v=20261113d"></script>
+  <script src="../js/area-map.js?v=20261115"></script>
 </body>
 </html>
 
