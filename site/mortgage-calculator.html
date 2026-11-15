@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tri-Valley &amp; Bay Area Mortgage Calculator | Steven Lenz Jr. · Compass</title>
+  <meta name="description" content="Calculate your true monthly payment on Pleasanton, Danville, and Bay Area luxury homes. Model Alameda &amp; Contra Costa Prop 13 property taxes, Jumbo loans, PMI, and 30-year amortization." />
+  <link rel="canonical" href="https://stevenlenzjr.com/mortgage-calculator" />
+
+  <!-- GEO & Local Search Authority -->
+  <meta name="geo.region" content="US-CA" />
+  <meta name="geo.placename" content="Pleasanton, California" />
+  <meta name="geo.position" content="37.6624;-121.8747" />
+  <meta name="ICBM" content="37.6624, -121.8747" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Steven Lenz Jr. | Compass" />
+  <meta property="og:url" content="https://stevenlenzjr.com/mortgage-calculator" />
+  <meta property="og:title" content="Tri-Valley &amp; Bay Area Mortgage Calculator | Steven Lenz Jr. · Compass" />
+  <meta property="og:description" content="Precision mortgage calculator designed for Northern California luxury real estate. Includes Prop 13 tax rates, Jumbo loan thresholds, PMI, and rapid payoff simulations." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://stevenlenzjr.com/assets/img/danville-genoa.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@StevenLenzJr" />
+  <meta name="twitter:creator" content="@StevenLenzJr" />
+  <meta name="twitter:title" content="Tri-Valley &amp; Bay Area Mortgage Calculator | Steven Lenz Jr. · Compass" />
+  <meta name="twitter:description" content="Precision mortgage calculator for Northern California real estate with Prop 13 taxes, Jumbo loans, and amortization schedules." />
+  <meta name="twitter:image" content="https://stevenlenzjr.com/assets/img/danville-genoa.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/theme.css?v=20261115e" />
+  <link rel="stylesheet" href="css/editorial.css?v=20261115e" />
+  <link rel="stylesheet" href="css/mobile.css?v=20261115e" />
+  <link rel="stylesheet" href="css/mortgage-calculator.css?v=20261115a" />
+
+  <!-- Structured Data: WebPage, FinancialProduct & FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://stevenlenzjr.com/mortgage-calculator#webpage",
+        "url": "https://stevenlenzjr.com/mortgage-calculator",
+        "name": "Tri-Valley & Bay Area Mortgage Calculator | Steven Lenz Jr. · Compass",
+        "description": "Interactive California luxury mortgage calculator modeling Prop 13 taxes, Jumbo loans, PMI, and amortization for Bay Area homes.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://stevenlenzjr.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Resources & News", "item": "https://stevenlenzjr.com/resources" },
+            { "@type": "ListItem", "position": 3, "name": "Mortgage Calculator", "item": "https://stevenlenzjr.com/mortgage-calculator" }
+          ]
+        }
+      },
+      {
+        "@type": "FinancialProduct",
+        "name": "California Luxury Mortgage & Jumbo Loan Calculator",
+        "description": "Calculates monthly mortgage payments, Prop 13 property taxes in Alameda and Contra Costa counties, insurance, and accelerated payoff schedules.",
+        "provider": {
+          "@type": "RealEstateAgent",
+          "name": "Steven Lenz Jr. | Compass",
+          "license": "CA DRE# 01989811",
+          "telephone": "+1-925-998-9711",
+          "url": "https://stevenlenzjr.com/"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the conforming loan limit in Alameda and Contra Costa Counties?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "For 2024 through 2026, the Federal Housing Finance Agency (FHFA) conforming high-balance limit for Alameda and Contra Costa counties is $1,149,825 for a single-family home. Any loan amount exceeding this threshold is categorized as a Jumbo Loan, which requires specialized underwriting, asset reserves, and competitive portfolio lending rates."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does California Proposition 13 affect property taxes on my monthly mortgage?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Under California Proposition 13, property tax is assessed at 1% of the purchase price upon transfer, plus local voter-approved bonds and special assessments (Mello-Roos). In Alameda County, the effective property tax rate typically averages ~1.18%, while Contra Costa County averages ~1.15%. Annual assessed value increases are constitutionally capped at 2% until the home is sold again."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When is Private Mortgage Insurance (PMI) required in California?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "On conventional loans, PMI is generally required when your down payment is less than 20% of the purchase price (loan-to-value ratio above 80%). Once your principal balance reaches 80% of the original purchase value, you can request PMI cancellation, and lenders must automatically terminate it at 78% under the Homeowners Protection Act."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between a 30-Year Fixed and a 7/1 ARM in luxury real estate?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A 30-year fixed loan locks in your interest rate and monthly payment for the full loan term. A 7/1 Adjustable-Rate Mortgage (ARM) offers a lower introductory interest rate fixed for the first 7 years, after which it adjusts annually based on benchmark SOFR rates. Many luxury buyers in the Bay Area leverage 7/1 ARMs to optimize cash flow, anticipating liquidity events or refinancing within that window."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/brand/favicon.png" />
+</head>
+<body class="mc-page">
+
+  <div id="ed-header-mount"></div>
+
+  <main class="mc-container">
+    <!-- Header -->
+    <header class="mc-header">
+      <span class="mc-eyebrow">Strategic Financial Planning · Compass Luxury</span>
+      <h1 class="mc-title">California &amp; Tri-Valley Mortgage Calculator</h1>
+      <p class="mc-subtitle">
+        Model your true monthly outlay across Pleasanton, Danville, Alamo, and the East Bay corridor. Tailored with county-level Prop 13 tax rates, Jumbo loan classifiers, automated PMI modeling, and accelerated amortization simulations.
+      </p>
+    </header>
+
+    <!-- Main Calculator Grid -->
+    <section class="mc-grid" aria-label="Interactive Mortgage Calculator">
+
+      <!-- Left Column: Inputs & Sliders -->
+      <div class="mc-card">
+        <!-- Quick Tri-Valley Price Tiers -->
+        <span class="mc-tiers-label">Tri-Valley Luxury Price Tiers:</span>
+        <div class="mc-tiers-row">
+          <button type="button" class="mc-tier-btn" data-price="1250000">$1.25M Starter</button>
+          <button type="button" class="mc-tier-btn is-active" data-price="1850000">$1.85M Tri-Valley Median</button>
+          <button type="button" class="mc-tier-btn" data-price="2850000">$2.85M Danville/Alamo Luxury</button>
+          <button type="button" class="mc-tier-btn" data-price="4500000">$4.5M+ Ruby Hill / Blackhawk</button>
+        </div>
+
+        <!-- 1. Home Price -->
+        <div class="mc-group">
+          <div class="mc-label-row">
+            <label for="mc-price-input" class="mc-label">Home Price</label>
+            <span class="mc-subtext">Sales price or target purchase budget</span>
+          </div>
+          <div class="mc-input-wrap">
+            <span class="mc-input-prefix">$</span>
+            <input type="text" id="mc-price-input" class="mc-input mc-input--has-prefix" value="1,850,000" aria-label="Home Price" />
+          </div>
+          <div class="mc-slider-wrap">
+            <input type="range" id="mc-price-slider" class="mc-slider" min="300000" max="10000000" step="25000" value="1850000" aria-label="Home Price Slider" />
+          </div>
+        </div>
+
+        <!-- 2. Down Payment -->
+        <div class="mc-group">
+          <div class="mc-label-row">
+            <label class="mc-label">Down Payment</label>
+            <span class="mc-subtext" id="mc-loan-amount-display">Financing $1,480,000 (80%)</span>
+          </div>
+          <div class="mc-split-inputs">
+            <div class="mc-input-wrap">
+              <span class="mc-input-prefix">$</span>
+              <input type="text" id="mc-down-amt" class="mc-input mc-input--has-prefix" value="370,000" aria-label="Down Payment in Dollars" />
+            </div>
+            <div class="mc-input-wrap">
+              <input type="text" id="mc-down-pct" class="mc-input mc-input--has-suffix" value="20" aria-label="Down Payment Percentage" />
+              <span class="mc-input-suffix">%</span>
+            </div>
+          </div>
+          <div class="mc-slider-wrap">
+            <input type="range" id="mc-down-slider" class="mc-slider" min="0" max="100" step="1" value="20" aria-label="Down Payment Percentage Slider" />
+          </div>
+          <div class="mc-chips-row">
+            <button type="button" class="mc-chip" data-pct="10">10%</button>
+            <button type="button" class="mc-chip is-active" data-pct="20">20% (Standard)</button>
+            <button type="button" class="mc-chip" data-pct="25">25%</button>
+            <button type="button" class="mc-chip" data-pct="30">30%</button>
+            <button type="button" class="mc-chip" data-pct="100">All Cash (100%)</button>
+          </div>
+        </div>
+
+        <!-- 3. Loan Program & Interest Rate -->
+        <div class="mc-2col mc-group">
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-loan-program" class="mc-label">Loan Program</label>
+            </div>
+            <select id="mc-loan-program" class="mc-select" aria-label="Loan Program">
+              <option value="30fixed" selected>30-Year Fixed (6.65%)</option>
+              <option value="20fixed">20-Year Fixed (6.35%)</option>
+              <option value="15fixed">15-Year Fixed (5.95%)</option>
+              <option value="7arm">7/1 ARM (6.20%)</option>
+              <option value="5arm">5/1 ARM (6.10%)</option>
+              <option value="10arm">10/1 ARM (6.40%)</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-rate-input" class="mc-label">Interest Rate</label>
+            </div>
+            <div class="mc-input-wrap">
+              <input type="text" id="mc-rate-input" class="mc-input mc-input--has-suffix" value="6.65" aria-label="Interest Rate" />
+              <span class="mc-input-suffix">%</span>
+            </div>
+            <div class="mc-slider-wrap">
+              <input type="range" id="mc-rate-slider" class="mc-slider" min="3.0" max="11.0" step="0.05" value="6.65" aria-label="Interest Rate Slider" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges Row: Jumbo Classifier & PMI Status -->
+        <div class="mc-badge-row">
+          <span id="mc-loan-tier-badge" class="mc-badge mc-badge--jumbo">★ Jumbo Loan Tier</span>
+          <span id="mc-pmi-badge" class="mc-badge mc-badge--pmi-zero">✓ 0% PMI (20%+ Down)</span>
+        </div>
+
+        <div style="height: 24px; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 24px;"></div>
+
+        <!-- 4. California County Property Tax (Prop 13) -->
+        <div class="mc-2col mc-group">
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-county-select" class="mc-label">CA County (Prop 13)</label>
+            </div>
+            <select id="mc-county-select" class="mc-select" aria-label="California County">
+              <option value="alameda" selected>Alameda County (~1.18%)</option>
+              <option value="contracosta">Contra Costa County (~1.15%)</option>
+              <option value="santaclara">Santa Clara County (~1.20%)</option>
+              <option value="sanmateo">San Mateo County (~1.16%)</option>
+              <option value="sanfrancisco">San Francisco County (~1.18%)</option>
+              <option value="custom">Custom Property Tax</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-tax-input" class="mc-label">Property Tax / Mo</label>
+            </div>
+            <div class="mc-input-wrap">
+              <span class="mc-input-prefix">$</span>
+              <input type="text" id="mc-tax-input" class="mc-input mc-input--has-prefix" value="1,819" aria-label="Monthly Property Tax" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Homeowners Hazard Insurance & HOA Dues -->
+        <div class="mc-2col mc-group">
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-ins-input" class="mc-label">Home Insurance / Mo</label>
+              <span class="mc-subtext">Hazard &amp; Wildfire</span>
+            </div>
+            <div class="mc-input-wrap">
+              <span class="mc-input-prefix">$</span>
+              <input type="text" id="mc-ins-input" class="mc-input mc-input--has-prefix" value="200" aria-label="Monthly Home Insurance" />
+            </div>
+          </div>
+
+          <div>
+            <div class="mc-label-row">
+              <label for="mc-hoa-input" class="mc-label">HOA Dues / Mo</label>
+              <span class="mc-subtext">Association fees</span>
+            </div>
+            <div class="mc-input-wrap">
+              <span class="mc-input-prefix">$</span>
+              <input type="text" id="mc-hoa-input" class="mc-input mc-input--has-prefix" value="150" aria-label="Monthly HOA Dues" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Results, Visual Donut, & Proportion Stack -->
+      <div class="mc-card mc-sticky-card">
+        <!-- Hero Monthly Payment Display -->
+        <div class="mc-hero-payment">
+          <div class="mc-payment-label">Estimated Total Monthly Outlay</div>
+          <div class="mc-payment-value" id="mc-total-payment">$11,664</div>
+          <div class="mc-payment-period">per month (Principal, Interest, Taxes, Insurance &amp; HOA)</div>
+        </div>
+
+        <!-- Animated SVG Donut Chart -->
+        <div class="mc-chart-box">
+          <svg class="mc-donut-svg" viewBox="0 0 180 180" aria-hidden="true">
+            <circle class="mc-donut-bg" cx="90" cy="90" r="70" />
+            <!-- Segments: stroke-dasharray and stroke-dashoffset populated dynamically by JS -->
+            <circle id="mc-donut-pi" class="mc-donut-segment" cx="90" cy="90" r="70" stroke="#D8A55A" />
+            <circle id="mc-donut-tax" class="mc-donut-segment" cx="90" cy="90" r="70" stroke="#2DD4BF" />
+            <circle id="mc-donut-ins" class="mc-donut-segment" cx="90" cy="90" r="70" stroke="#38BDF8" />
+            <circle id="mc-donut-hoa" class="mc-donut-segment" cx="90" cy="90" r="70" stroke="#A78BFA" />
+            <circle id="mc-donut-pmi" class="mc-donut-segment" cx="90" cy="90" r="70" stroke="#FB7185" />
+          </svg>
+        </div>
+
+        <!-- Stacked Proportion Bar -->
+        <div class="mc-bar-track" aria-hidden="true">
+          <div id="mc-bar-pi" class="mc-bar-segment" style="width: 81%; background: #D8A55A;" title="Principal &amp; Interest"></div>
+          <div id="mc-bar-tax" class="mc-bar-segment" style="width: 15%; background: #2DD4BF;" title="Property Taxes"></div>
+          <div id="mc-bar-ins" class="mc-bar-segment" style="width: 2%; background: #38BDF8;" title="Home Insurance"></div>
+          <div id="mc-bar-hoa" class="mc-bar-segment" style="width: 2%; background: #A78BFA;" title="HOA Dues"></div>
+          <div id="mc-bar-pmi" class="mc-bar-segment" style="width: 0%; background: #FB7185;" title="PMI"></div>
+        </div>
+
+        <!-- Breakdown List -->
+        <ul class="mc-breakdown-list" aria-label="Monthly Payment Breakdown">
+          <li class="mc-breakdown-item">
+            <div class="mc-item-label-group">
+              <span class="mc-item-dot" style="background: #D8A55A;"></span>
+              <div>
+                <span class="mc-item-name">Principal &amp; Interest</span>
+                <span class="mc-item-sub">Monthly loan payment</span>
+              </div>
+            </div>
+            <div class="mc-item-val-group">
+              <div class="mc-item-val" id="mc-val-pi">$9,495</div>
+              <div class="mc-item-pct" id="mc-pct-pi">81%</div>
+            </div>
+          </li>
+
+          <li class="mc-breakdown-item">
+            <div class="mc-item-label-group">
+              <span class="mc-item-dot" style="background: #2DD4BF;"></span>
+              <div>
+                <span class="mc-item-name">Property Taxes (Prop 13)</span>
+                <span class="mc-item-sub">County assessment + local bonds</span>
+              </div>
+            </div>
+            <div class="mc-item-val-group">
+              <div class="mc-item-val" id="mc-val-tax">$1,819</div>
+              <div class="mc-item-pct" id="mc-pct-tax">16%</div>
+            </div>
+          </li>
+
+          <li class="mc-breakdown-item">
+            <div class="mc-item-label-group">
+              <span class="mc-item-dot" style="background: #38BDF8;"></span>
+              <div>
+                <span class="mc-item-name">Homeowners Insurance</span>
+                <span class="mc-item-sub">Hazard, structure &amp; wildfire</span>
+              </div>
+            </div>
+            <div class="mc-item-val-group">
+              <div class="mc-item-val" id="mc-val-ins">$200</div>
+              <div class="mc-item-pct" id="mc-pct-ins">2%</div>
+            </div>
+          </li>
+
+          <li class="mc-breakdown-item">
+            <div class="mc-item-label-group">
+              <span class="mc-item-dot" style="background: #A78BFA;"></span>
+              <div>
+                <span class="mc-item-name">HOA Dues</span>
+                <span class="mc-item-sub">Community maintenance &amp; amenities</span>
+              </div>
+            </div>
+            <div class="mc-item-val-group">
+              <div class="mc-item-val" id="mc-val-hoa">$150</div>
+              <div class="mc-item-pct" id="mc-pct-hoa">1%</div>
+            </div>
+          </li>
+
+          <li class="mc-breakdown-item" id="mc-row-pmi" hidden>
+            <div class="mc-item-label-group">
+              <span class="mc-item-dot" style="background: #FB7185;"></span>
+              <div>
+                <span class="mc-item-name">Private Mortgage Insurance (PMI)</span>
+                <span class="mc-item-sub">Applies when down payment &lt; 20%</span>
+              </div>
+            </div>
+            <div class="mc-item-val-group">
+              <div class="mc-item-val" id="mc-val-pmi">$0</div>
+              <div class="mc-item-pct" id="mc-pct-pmi">0%</div>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Advisory Trigger CTA -->
+        <button type="button" id="mc-advisory-btn" class="sw-btn sw-btn--primary" style="width: 100%; justify-content: center; border: 0; cursor: pointer; padding: 14px 20px; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;">
+          Consult Steven's Preferred Jumbo Lenders →
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Rapid Amortization & Early Payoff Simulator -->
+    <section class="mc-amort-card" aria-label="Early Payoff Amortization Simulator">
+      <div class="mc-amort-head">
+        <div>
+          <span class="mc-eyebrow">Accelerated Equity Modeling</span>
+          <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.6rem, 2.5vw, 2.2rem); color: #FFFFFF; margin: 4px 0 6px; font-weight: 400;">
+            Early Payoff &amp; Rapid Amortization Simulator
+          </h2>
+          <p style="font-size: 0.86rem; color: rgba(243,238,230,0.7); margin: 0;">
+            See how applying an extra payment each month directly to your principal dramatically reduces loan duration and saves hundreds of thousands in lifetime interest.
+          </p>
+        </div>
+      </div>
+
+      <div class="mc-group" style="max-width: 640px;">
+        <div class="mc-label-row">
+          <label for="mc-extra-input" class="mc-label">Extra Monthly Principal Payment</label>
+          <span class="mc-subtext">Applied each month to principal</span>
+        </div>
+        <div class="mc-input-wrap">
+          <span class="mc-input-prefix">$</span>
+          <input type="text" id="mc-extra-input" class="mc-input mc-input--has-prefix" value="0" aria-label="Extra Monthly Principal" />
+        </div>
+        <div class="mc-slider-wrap">
+          <input type="range" id="mc-extra-slider" class="mc-slider" min="0" max="5000" step="50" value="0" aria-label="Extra Monthly Principal Slider" />
+        </div>
+      </div>
+
+      <!-- Savings KPI Summary Boxes -->
+      <div class="mc-savings-summary">
+        <div class="mc-savings-box">
+          <span class="mc-tiers-label">Loan Term Reduction</span>
+          <div class="mc-savings-val" id="mc-time-saved">0 months</div>
+          <span class="mc-subtext">shaved off standard 30-year term</span>
+        </div>
+
+        <div class="mc-savings-box">
+          <span class="mc-tiers-label">Total Interest Saved</span>
+          <div class="mc-savings-val" id="mc-interest-saved">$0</div>
+          <span class="mc-subtext">saved directly in lifetime finance charges</span>
+        </div>
+
+        <div class="mc-savings-box">
+          <span class="mc-tiers-label">Total Lifetime Interest</span>
+          <div class="mc-savings-val" id="mc-total-interest" style="color: #FFFFFF;">$1,938,200</div>
+          <span class="mc-subtext">projected finance cost over loan life</span>
+        </div>
+      </div>
+
+      <!-- Amortization Table Controls -->
+      <div class="mc-table-controls">
+        <div class="mc-toggle-group" role="tablist">
+          <button type="button" id="mc-toggle-annual" class="mc-toggle-btn is-active" role="tab" aria-selected="true">Annual Summary</button>
+          <button type="button" id="mc-toggle-monthly" class="mc-toggle-btn" role="tab" aria-selected="false">Monthly Schedule</button>
+        </div>
+
+        <button type="button" id="mc-export-csv" class="mc-export-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export Schedule to CSV
+        </button>
+      </div>
+
+      <!-- Amortization Table -->
+      <div class="mc-table-wrap">
+        <table class="mc-table" aria-label="Amortization Schedule">
+          <thead>
+            <tr>
+              <th id="mc-col-period">Year</th>
+              <th>Principal Paid</th>
+              <th>Interest Paid</th>
+              <th>Total Payment</th>
+              <th>Remaining Balance</th>
+            </tr>
+          </thead>
+          <tbody id="mc-amort-tbody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Advisory Integration Section -->
+    <section class="mc-advisory">
+      <div>
+        <span class="mc-eyebrow">Private Client Lending Advisory</span>
+        <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(1.8rem, 3vw, 2.4rem); color: #FFFFFF; margin: 8px 0 12px; font-weight: 400; line-height: 1.2;">
+          Navigate Northern California Jumbo Financing with Confidence
+        </h2>
+        <p style="font-size: 0.92rem; color: rgba(243,238,230,0.76); line-height: 1.65; margin: 0 0 16px;">
+          Luxury transactions in Pleasanton, Danville, and Alamo frequently require custom debt structuring — including asset depletion underwriting, RSUs, relationship banking discounts, and cross-collateralization. Steven Lenz Jr. connects high-net-worth buyers with California's most discreet private mortgage bankers.
+        </p>
+        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: rgba(243,238,230,0.85); display: flex; flex-direction: column; gap: 8px;">
+          <li>✓ Exclusive relationship discounts on jumbo mortgages for substantial depository assets</li>
+          <li>✓ Cross-collateralization strategies for buying before selling</li>
+          <li>✓ 7/1 and 10/1 ARM structures tailored to executive compensation cycles</li>
+        </ul>
+      </div>
+
+      <div style="background: rgba(13,17,23,0.8); border: 1px solid rgba(216,165,90,0.3); border-radius: 8px; padding: 24px; text-align: center;">
+        <h3 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.5rem; color: #FFFFFF; margin: 0 0 8px; font-weight: 400;">Connect with Steven</h3>
+        <p style="font-size: 0.82rem; color: rgba(243,238,230,0.65); line-height: 1.5; margin: 0 0 18px;">
+          Request a confidential lending introduction or tailored home acquisition consultation.
+        </p>
+        <a href="/connect" class="sw-btn sw-btn--primary" style="display: block; text-align: center; text-decoration: none; padding: 12px 20px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em;">Start a Private Conversation →</a>
+        <div style="margin-top: 14px; font-size: 0.74rem; color: rgba(243,238,230,0.5);">Direct: (925) 998-9711 · steven.lenzjr@compass.com</div>
+      </div>
+    </section>
+
+    <!-- Comprehensive FAQ Section -->
+    <section class="mc-faq-section" aria-label="Frequently Asked Questions">
+      <h2 class="mc-faq-title">Frequently Asked Questions: California Mortgages &amp; Taxes</h2>
+
+      <div class="mc-faq-item">
+        <button type="button" class="mc-faq-question">
+          <span>What is the conforming loan limit in Alameda and Contra Costa Counties?</span>
+          <span class="mc-faq-icon">+</span>
+        </button>
+        <div class="mc-faq-answer">
+          For 2024 through 2026, the FHFA conforming high-balance limit for Alameda and Contra Costa counties is $1,149,825 for a single-family home. When your loan amount exceeds this benchmark, it is classified as a Jumbo Mortgage. Jumbo loans are portfolio-held by lenders and require specialized underwriting, such as 6 to 12 months of post-closing liquid reserves, proof of asset liquidity, and verified debt-to-income (DTI) ratios typically under 43%.
+        </div>
+      </div>
+
+      <div class="mc-faq-item">
+        <button type="button" class="mc-faq-question">
+          <span>How does California Proposition 13 calculate property taxes?</span>
+          <span class="mc-faq-icon">+</span>
+        </button>
+        <div class="mc-faq-answer">
+          Under California Proposition 13, your property tax assessment begins at 1% of the established purchase price upon transfer. On top of the base 1%, local voter-approved bonds and special assessments (such as school bonds, park districts, and Mello-Roos community facilities districts) are added. In Alameda County, the combined effective rate typically averages ~1.18%, while Contra Costa County averages ~1.15%. Proposition 13 limits future annual property assessment increases to a maximum of 2% per year regardless of broader market appreciation.
+        </div>
+      </div>
+
+      <div class="mc-faq-item">
+        <button type="button" class="mc-faq-question">
+          <span>When is Private Mortgage Insurance (PMI) required?</span>
+          <span class="mc-faq-icon">+</span>
+        </button>
+        <div class="mc-faq-answer">
+          On conventional financing, Private Mortgage Insurance (PMI) is required whenever your down payment is less than 20% of the home's purchase price (loan-to-value ratio above 80%). PMI protects the lender in the event of default. Once your loan principal is paid down to 80% of the original purchase value (or if property appreciation creates sufficient equity supported by a formal appraisal), you can petition your servicer to drop PMI. Federal law mandates automatic cancellation once principal reaches 78% of original value.
+        </div>
+      </div>
+
+      <div class="mc-faq-item">
+        <button type="button" class="mc-faq-question">
+          <span>Should luxury buyers consider an Adjustable-Rate Mortgage (ARM) over a 30-Year Fixed?</span>
+          <span class="mc-faq-icon">+</span>
+        </button>
+        <div class="mc-faq-answer">
+          Many high-net-worth buyers in Pleasanton, Danville, and Alamo choose 7/1 or 10/1 ARMs. These instruments fix your rate at an attractive discount for the initial 7 or 10 years, after which the rate adjusts annually based on benchmark SOFR rates. If you anticipate corporate liquidity events, equity vesting, or plan to refinance or relocate within 5 to 7 years, an ARM can offer substantial interest savings compared to a traditional 30-year fixed loan.
+        </div>
+      </div>
+
+      <div class="mc-faq-item">
+        <button type="button" class="mc-faq-question">
+          <span>What additional closing costs should I budget for in Northern California?</span>
+          <span class="mc-faq-icon">+</span>
+        </button>
+        <div class="mc-faq-answer">
+          In addition to your down payment, buyers should typically budget 1% to 2% of the purchase price for escrow and closing fees. These include title insurance, county transfer taxes (customarily split or paid according to regional custom), lender origination and appraisal fees, prepaid homeowner insurance, and prorated property tax impounds for your escrow reserve account.
+        </div>
+      </div>
+    </section>
+
+    <!-- Financial Disclaimer -->
+    <footer class="mc-disclaimer">
+      <strong>Financial Disclosure &amp; Lending Disclaimer:</strong> This mortgage calculator is provided for illustrative and educational purposes only. Calculations represent estimates based on user-supplied parameters and standard California lending conventions. Actual mortgage interest rates, points, loan fees, property taxes, homeowners insurance, and underwriting requirements depend on individual credit qualifications, property type, loan program guidelines, and fluctuating financial market conditions. Nothing herein constitutes a financial commitment, loan offer, or binding advisory. Steven Lenz Jr. is a licensed California Real Estate Salesperson (CA DRE# 01989811) affiliated with Compass and is not a licensed mortgage broker or direct lender. Always consult with a licensed mortgage professional or certified financial planner before entering into a credit agreement.
+    </footer>
+  </main>
+
+  <!-- Lead Scenario Dialog Modal -->
+  <dialog class="sw-modal" id="mc-lead-dialog" style="max-width: 520px; border: 1px solid rgba(216,165,90,0.35); background: #141A23; border-radius: 12px; color: #F3EEE6; padding: 28px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h3 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.6rem; color: #FFFFFF; margin: 0; font-weight: 400;">Private Client Lending Request</h3>
+      <button type="button" id="mc-lead-close" style="background: none; border: none; color: #F3EEE6; font-size: 1.5rem; cursor: pointer;">×</button>
+    </div>
+    <p style="font-size: 0.84rem; color: rgba(243,238,230,0.7); margin-bottom: 20px; line-height: 1.5;">
+      Steven Lenz Jr. collaborates with top-tier private banking and jumbo lending officers across Northern California to secure favorable terms for qualified buyers.
+    </p>
+    <form id="mc-adv-form">
+      <div style="margin-bottom: 14px;">
+        <label for="mc-lead-name" style="display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #D8A55A; margin-bottom: 4px;">Full Name</label>
+        <input type="text" id="mc-lead-name" style="width: 100%; box-sizing: border-box; background: rgba(13,17,23,0.8); border: 1px solid rgba(216,165,90,0.3); border-radius: 6px; color: #fff; padding: 10px; font-family: 'Montserrat', sans-serif;" required />
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label for="mc-lead-email" style="display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #D8A55A; margin-bottom: 4px;">Email Address</label>
+        <input type="email" id="mc-lead-email" style="width: 100%; box-sizing: border-box; background: rgba(13,17,23,0.8); border: 1px solid rgba(216,165,90,0.3); border-radius: 6px; color: #fff; padding: 10px; font-family: 'Montserrat', sans-serif;" required />
+      </div>
+      <div style="margin-bottom: 14px;">
+        <label for="mc-lead-phone" style="display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #D8A55A; margin-bottom: 4px;">Phone Number (Optional)</label>
+        <input type="tel" id="mc-lead-phone" style="width: 100%; box-sizing: border-box; background: rgba(13,17,23,0.8); border: 1px solid rgba(216,165,90,0.3); border-radius: 6px; color: #fff; padding: 10px; font-family: 'Montserrat', sans-serif;" />
+      </div>
+      <div style="margin-bottom: 18px;">
+        <label for="mc-adv-note" style="display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #D8A55A; margin-bottom: 4px;">Calculated Financing Scenario</label>
+        <textarea id="mc-adv-note" rows="3" style="width: 100%; box-sizing: border-box; background: rgba(13,17,23,0.8); border: 1px solid rgba(216,165,90,0.3); border-radius: 6px; color: #fff; padding: 10px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem;"></textarea>
+      </div>
+      <button type="submit" class="sw-btn sw-btn--primary" style="width: 100%; justify-content: center; border: 0; cursor: pointer; padding: 12px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.12em;">Submit Financing Request →</button>
+      <div id="mc-lead-status" style="font-size: 0.78rem; color: #D8A55A; margin-top: 10px; text-align: center;" hidden></div>
+    </form>
+  </dialog>
+
+  <div id="ed-drawer-mount"></div>
+  <div id="ed-footer-mount"></div>
+
+  <script src="js/editorial-nav.js?v=20261115f"></script>
+  <script src="js/mortgage-calculator.js?v=20261115a"></script>
+</body>
+</html>

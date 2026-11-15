@@ -91,6 +91,7 @@ const STATIC_REDIRECTS = {
   '/private-exclusives.html': '/private-exclusives',
   '/connect.html': '/connect',
   '/resources.html': '/resources',
+  '/mortgage-calculator.html': '/mortgage-calculator',
   '/valuation.html': '/valuation',
   '/terms.html': '/terms',
   '/privacy.html': '/privacy',

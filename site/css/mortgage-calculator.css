@@ -1,0 +1,728 @@
+/* ============================================================================
+   mortgage-calculator.css — Luxury California & Tri-Valley Mortgage Engine
+   Steven Lenz Jr. | Compass Real Estate
+   ============================================================================ */
+
+.mc-page {
+  background: var(--sw-bg, #0D1117);
+  color: var(--sw-ink, #F3EEE6);
+  min-height: 100vh;
+  padding-top: 110px;
+  padding-bottom: 80px;
+}
+
+.mc-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 3vw, 40px);
+}
+
+/* Header & Eyebrow */
+.mc-header {
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto 48px;
+}
+
+.mc-eyebrow {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--sw-accent, #D8A55A);
+  margin-bottom: 12px;
+}
+
+.mc-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin: 0 0 16px;
+}
+
+.mc-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(243, 238, 230, 0.76);
+  margin: 0 auto;
+}
+
+/* Main Grid Layout */
+.mc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.95fr);
+  gap: clamp(24px, 3.5vw, 48px);
+  align-items: start;
+  margin-bottom: 64px;
+}
+
+@media (max-width: 980px) {
+  .mc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards */
+.mc-card {
+  background: linear-gradient(180deg, rgba(20, 26, 35, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);
+  border: 1px solid rgba(216, 165, 90, 0.22);
+  border-radius: 12px;
+  padding: clamp(20px, 3vw, 36px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mc-sticky-card {
+  position: sticky;
+  top: 110px;
+}
+
+/* Quick Tier Buttons */
+.mc-tiers-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(243, 238, 230, 0.6);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.mc-tiers-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.mc-tier-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(216, 165, 90, 0.25);
+  color: var(--sw-ink, #F3EEE6);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mc-tier-btn:hover {
+  background: rgba(216, 165, 90, 0.15);
+  border-color: var(--sw-accent, #D8A55A);
+  color: #FFFFFF;
+}
+
+.mc-tier-btn.is-active {
+  background: var(--sw-accent, #D8A55A);
+  border-color: var(--sw-accent, #D8A55A);
+  color: #0D1117;
+  font-weight: 600;
+}
+
+/* Form Groups & Inputs */
+.mc-group {
+  margin-bottom: 28px;
+}
+
+.mc-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.mc-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FFFFFF;
+}
+
+.mc-subtext {
+  font-size: 0.72rem;
+  color: rgba(243, 238, 230, 0.55);
+}
+
+.mc-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mc-input-prefix,
+.mc-input-suffix {
+  position: absolute;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--sw-accent, #D8A55A);
+  pointer-events: none;
+}
+
+.mc-input-prefix { left: 16px; }
+.mc-input-suffix { right: 16px; }
+
+.mc-input {
+  width: 100%;
+  background: rgba(13, 17, 23, 0.8);
+  border: 1px solid rgba(216, 165, 90, 0.3);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 12px 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.mc-input--has-prefix { padding-left: 34px; }
+.mc-input--has-suffix { padding-right: 34px; }
+
+.mc-input:focus {
+  border-color: var(--sw-accent, #D8A55A);
+  box-shadow: 0 0 0 3px rgba(216, 165, 90, 0.2);
+}
+
+.mc-select {
+  width: 100%;
+  background: rgba(13, 17, 23, 0.8) url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D8A55A'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e") no-repeat right 12px center;
+  background-size: 18px;
+  border: 1px solid rgba(216, 165, 90, 0.3);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  padding: 12px 38px 12px 16px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.mc-select:focus {
+  border-color: var(--sw-accent, #D8A55A);
+  box-shadow: 0 0 0 3px rgba(216, 165, 90, 0.2);
+}
+
+/* Custom Gold Range Sliders */
+.mc-slider-wrap {
+  margin-top: 12px;
+}
+
+.mc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--sw-accent, #D8A55A);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 8px rgba(216, 165, 90, 0.8);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.mc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.mc-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--sw-accent, #D8A55A);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 8px rgba(216, 165, 90, 0.8);
+  cursor: pointer;
+}
+
+/* Down Payment Split Inputs */
+.mc-split-inputs {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mc-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mc-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(243, 238, 230, 0.8);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mc-chip:hover {
+  border-color: var(--sw-accent, #D8A55A);
+  color: #FFFFFF;
+}
+
+.mc-chip.is-active {
+  background: rgba(216, 165, 90, 0.2);
+  border-color: var(--sw-accent, #D8A55A);
+  color: var(--sw-accent, #D8A55A);
+  font-weight: 600;
+}
+
+/* Badges (Jumbo vs Conforming & PMI) */
+.mc-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.mc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.mc-badge--jumbo {
+  background: rgba(216, 165, 90, 0.15);
+  border: 1px solid rgba(216, 165, 90, 0.4);
+  color: var(--sw-accent, #D8A55A);
+}
+
+.mc-badge--conforming {
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  color: #2DD4BF;
+}
+
+.mc-badge--pmi-active {
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: #FB7185;
+}
+
+.mc-badge--pmi-zero {
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  color: #2DD4BF;
+}
+
+/* Two Column Form Controls */
+.mc-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .mc-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Output Display: Total Monthly Payment */
+.mc-hero-payment {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(216, 165, 90, 0.2);
+  margin-bottom: 24px;
+}
+
+.mc-payment-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(243, 238, 230, 0.7);
+  margin-bottom: 6px;
+}
+
+.mc-payment-value {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.8rem, 4.2vw, 4.2rem);
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 1;
+  text-shadow: 0 0 24px rgba(216, 165, 90, 0.25);
+}
+
+.mc-payment-period {
+  font-size: 0.85rem;
+  color: var(--sw-accent, #D8A55A);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Interactive SVG Donut Chart */
+.mc-chart-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.mc-donut-svg {
+  width: 220px;
+  height: 220px;
+  transform: rotate(-90deg);
+}
+
+.mc-donut-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 26;
+}
+
+.mc-donut-segment {
+  fill: none;
+  stroke-width: 26;
+  transition: stroke-dasharray 0.4s ease, stroke-dashoffset 0.4s ease;
+  cursor: pointer;
+}
+
+.mc-donut-segment:hover {
+  stroke-width: 29;
+}
+
+/* Stacked Proportion Bar */
+.mc-bar-track {
+  height: 14px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.mc-bar-segment {
+  height: 100%;
+  transition: width 0.35s ease;
+}
+
+/* Breakdown List */
+.mc-breakdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+}
+
+.mc-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.86rem;
+}
+
+.mc-breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.mc-item-label-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mc-item-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mc-item-name {
+  color: var(--sw-ink, #F3EEE6);
+  font-weight: 500;
+}
+
+.mc-item-sub {
+  font-size: 0.72rem;
+  color: rgba(243, 238, 230, 0.5);
+  display: block;
+}
+
+.mc-item-val-group {
+  text-align: right;
+}
+
+.mc-item-val {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.mc-item-pct {
+  font-size: 0.72rem;
+  color: rgba(243, 238, 230, 0.55);
+}
+
+/* Amortization & Early Payoff Simulator */
+.mc-amort-card {
+  margin-top: 48px;
+  background: linear-gradient(180deg, rgba(20, 26, 35, 0.95) 0%, rgba(13, 17, 23, 0.98) 100%);
+  border: 1px solid rgba(216, 165, 90, 0.25);
+  border-radius: 12px;
+  padding: clamp(24px, 3.5vw, 40px);
+}
+
+.mc-amort-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(216, 165, 90, 0.2);
+}
+
+.mc-savings-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+
+.mc-savings-box {
+  background: rgba(13, 17, 23, 0.7);
+  border: 1px solid rgba(216, 165, 90, 0.25);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.mc-savings-val {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.85rem;
+  font-weight: 400;
+  color: var(--sw-accent, #D8A55A);
+  margin-top: 4px;
+}
+
+/* Table Controls & Amortization Table */
+.mc-table-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.mc-toggle-group {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.mc-toggle-btn {
+  background: transparent;
+  border: none;
+  color: rgba(243, 238, 230, 0.7);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mc-toggle-btn.is-active {
+  background: var(--sw-accent, #D8A55A);
+  color: #0D1117;
+  font-weight: 600;
+}
+
+.mc-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(216, 165, 90, 0.3);
+  color: var(--sw-accent, #D8A55A);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mc-export-btn:hover {
+  background: var(--sw-accent, #D8A55A);
+  color: #0D1117;
+}
+
+.mc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.mc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.mc-table th {
+  position: sticky;
+  top: 0;
+  background: #141A23;
+  color: var(--sw-accent, #D8A55A);
+  font-weight: 600;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(216, 165, 90, 0.25);
+  z-index: 2;
+}
+
+.mc-table th:first-child,
+.mc-table td:first-child {
+  text-align: left;
+}
+
+.mc-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(243, 238, 230, 0.85);
+}
+
+.mc-table tr:hover td {
+  background: rgba(216, 165, 90, 0.05);
+  color: #FFFFFF;
+}
+
+/* Advisory CTA Banner */
+.mc-advisory {
+  margin: 64px 0;
+  background: linear-gradient(135deg, rgba(20, 26, 35, 0.98) 0%, rgba(13, 17, 23, 0.98) 100%);
+  border: 1px solid rgba(216, 165, 90, 0.35);
+  border-radius: 12px;
+  padding: clamp(28px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+  gap: 36px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .mc-advisory {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FAQ Section */
+.mc-faq-section {
+  max-width: 960px;
+  margin: 64px auto 0;
+}
+
+.mc-faq-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  text-align: center;
+  color: #FFFFFF;
+  margin-bottom: 32px;
+}
+
+.mc-faq-item {
+  border-bottom: 1px solid rgba(216, 165, 90, 0.2);
+  padding: 18px 0;
+}
+
+.mc-faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mc-faq-icon {
+  font-size: 1.2rem;
+  color: var(--sw-accent, #D8A55A);
+  transition: transform 0.25s ease;
+  margin-left: 16px;
+}
+
+.mc-faq-item.is-open .mc-faq-icon {
+  transform: rotate(45deg);
+}
+
+.mc-faq-answer {
+  display: none;
+  margin-top: 14px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(243, 238, 230, 0.78);
+}
+
+.mc-faq-item.is-open .mc-faq-answer {
+  display: block;
+}
+
+/* Financial Disclaimer */
+.mc-disclaimer {
+  max-width: 960px;
+  margin: 48px auto 0;
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  font-size: 0.74rem;
+  line-height: 1.6;
+  color: rgba(243, 238, 230, 0.5);
+  text-align: center;
+}
