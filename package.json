@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node site/server.js",
     "dev": "node --watch site/server.js",
-    "test": "node --test test/crm.test.js",
+    "test": "node --test test/crm.test.js test/chat-llm.test.js",
     "backup": "node site/scripts/backup.js",
     "admin:password": "node site/scripts/set-admin-password.js"
   },

@@ -561,6 +561,54 @@ async function handleAdminApi(req, res, parsedUrl) {
     }
   }
 
+  // ---- Chat Sessions & Transcript Logs ----
+  if (method === 'GET' && route === '/chat-sessions') {
+    const result = db.getChatSessions({
+      search: stripHtml(sp.get('q') || '').slice(0, 80),
+      limit: Math.min(200, Math.max(1, Number(sp.get('limit')) || 50)),
+      offset: Math.max(0, Number(sp.get('offset')) || 0)
+    });
+    return sendJson(res, 200, Object.assign({ ok: true }, result));
+  }
+
+  if ((m = /^\/chat-sessions\/([\w.-]{1,90})$/.exec(route))) {
+    const sessionId = m[1];
+    if (method === 'GET') {
+      const session = db.getChatSession(sessionId);
+      return session ? sendJson(res, 200, { ok: true, session }) : sendJson(res, 404, { ok: false, error: 'Chat session not found.' });
+    }
+  }
+
+  if ((m = /^\/chat-sessions\/([\w.-]{1,90})\/convert$/.exec(route)) && method === 'POST') {
+    const sessionId = m[1];
+    const session = db.getChatSession(sessionId);
+    if (!session) return sendJson(res, 404, { ok: false, error: 'Chat session not found.' });
+
+    const body = await readJsonBody(req);
+    const fullName = stripHtml(body.name || session.contact_name || `Chat Visitor (${session.city || 'Bay Area'})`).slice(0, 120);
+    const email = stripHtml(body.email || '').toLowerCase().slice(0, 160);
+    const phone = stripHtml(body.phone || '').slice(0, 40);
+
+    try {
+      const contact = db.adminCreateContact({
+        display_name: fullName,
+        email,
+        phone,
+        type: 'buyer',
+        stage: 'new',
+        interest: session.intent || 'AI Chat Inquiry',
+        notes: `Converted from AI Chat Session ${sessionId} [Location: ${session.city || 'Unknown'}, ${session.region || 'CA'}]. Last visitor message: "${session.last_message || ''}"`,
+        source: 'ai_chat'
+      });
+      db.linkChatSessionContact(sessionId, contact.id);
+      db.audit('chat_convert_contact', `Converted chat session ${sessionId} to Contact #${contact.id}`, ip);
+      return sendJson(res, 200, { ok: true, contact_id: contact.id });
+    } catch (err) {
+      return sendJson(res, 400, { ok: false, error: err.message });
+    }
+  }
+
+
   return sendJson(res, 404, { ok: false, error: 'Admin route not found.' });
 }
 

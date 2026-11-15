@@ -187,7 +187,53 @@ function getDb() {
     runCrmMigrations(db);
   });
 
+  runOnce(db, 'chat_sessions_schema_v1', () => {
+    initChatSchema(db);
+  });
+
   return db;
+}
+
+function initChatSchema(database) {
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS chat_sessions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      session_id TEXT UNIQUE NOT NULL,
+      ip TEXT,
+      city TEXT,
+      region TEXT,
+      country TEXT,
+      postal TEXT,
+      device TEXT,
+      user_agent TEXT,
+      page_url TEXT,
+      utm_source TEXT,
+      utm_medium TEXT,
+      utm_campaign TEXT,
+      referrer TEXT,
+      contact_id INTEGER REFERENCES contacts(id),
+      lead_id TEXT,
+      intent TEXT,
+      lead_score INTEGER DEFAULT 0,
+      message_count INTEGER DEFAULT 0,
+      last_message TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chat_sessions_session ON chat_sessions(session_id);
+    CREATE INDEX IF NOT EXISTS idx_chat_sessions_updated ON chat_sessions(updated_at DESC);
+
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      session_id TEXT NOT NULL,
+      role TEXT NOT NULL,
+      content TEXT NOT NULL,
+      intent TEXT,
+      properties_json TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages(session_id, created_at ASC);
+  `);
 }
 
 function runCrmMigrations(database) {
@@ -357,6 +403,45 @@ function runCrmMigrations(database) {
       keys_json TEXT NOT NULL,
       created_at TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS chat_sessions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      session_id TEXT UNIQUE NOT NULL,
+      ip TEXT,
+      city TEXT,
+      region TEXT,
+      country TEXT,
+      postal TEXT,
+      device TEXT,
+      user_agent TEXT,
+      page_url TEXT,
+      utm_source TEXT,
+      utm_medium TEXT,
+      utm_campaign TEXT,
+      referrer TEXT,
+      contact_id INTEGER REFERENCES contacts(id),
+      lead_id TEXT,
+      intent TEXT,
+      lead_score INTEGER DEFAULT 0,
+      message_count INTEGER DEFAULT 0,
+      last_message TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chat_sessions_session ON chat_sessions(session_id);
+    CREATE INDEX IF NOT EXISTS idx_chat_sessions_updated ON chat_sessions(updated_at DESC);
+
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      session_id TEXT NOT NULL,
+      role TEXT NOT NULL,
+      content TEXT NOT NULL,
+      intent TEXT,
+      properties_json TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages(session_id, created_at ASC);
+
   `);
 
   const leadCols = database.prepare('PRAGMA table_info(leads)').all().map((c) => c.name);
@@ -1967,6 +2052,181 @@ function getLastBackupInfo() {
   return null;
 }
 
+// ---------- Chat Sessions & Messages (AI Assistant) ----------
+function upsertChatSession(data) {
+  const database = getDb();
+  const sessionId = data.session_id || data.sessionId;
+  if (!sessionId) return null;
+
+  const now = new Date().toISOString();
+  const existing = database.prepare('SELECT * FROM chat_sessions WHERE session_id = ?').get(sessionId);
+
+  if (existing) {
+    database.prepare(`
+      UPDATE chat_sessions
+      SET ip = COALESCE(?, ip),
+          city = COALESCE(?, city),
+          region = COALESCE(?, region),
+          country = COALESCE(?, country),
+          postal = COALESCE(?, postal),
+          device = COALESCE(?, device),
+          user_agent = COALESCE(?, user_agent),
+          page_url = COALESCE(?, page_url),
+          utm_source = COALESCE(?, utm_source),
+          utm_medium = COALESCE(?, utm_medium),
+          utm_campaign = COALESCE(?, utm_campaign),
+          referrer = COALESCE(?, referrer),
+          contact_id = COALESCE(?, contact_id),
+          lead_id = COALESCE(?, lead_id),
+          intent = COALESCE(?, intent),
+          lead_score = COALESCE(?, lead_score),
+          message_count = message_count + 1,
+          last_message = COALESCE(?, last_message),
+          updated_at = ?
+      WHERE session_id = ?
+    `).run(
+      data.ip || null,
+      data.city || null,
+      data.region || null,
+      data.country || null,
+      data.postal || null,
+      data.device || null,
+      data.user_agent || null,
+      data.page_url || null,
+      data.utm_source || null,
+      data.utm_medium || null,
+      data.utm_campaign || null,
+      data.referrer || null,
+      data.contact_id || null,
+      data.lead_id || null,
+      data.intent || null,
+      data.lead_score || null,
+      data.last_message || null,
+      now,
+      sessionId
+    );
+  } else {
+    database.prepare(`
+      INSERT INTO chat_sessions (
+        session_id, ip, city, region, country, postal, device, user_agent,
+        page_url, utm_source, utm_medium, utm_campaign, referrer,
+        contact_id, lead_id, intent, lead_score, message_count, last_message,
+        created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
+    `).run(
+      sessionId,
+      data.ip || null,
+      data.city || null,
+      data.region || null,
+      data.country || null,
+      data.postal || null,
+      data.device || null,
+      data.user_agent || null,
+      data.page_url || null,
+      data.utm_source || null,
+      data.utm_medium || null,
+      data.utm_campaign || null,
+      data.referrer || null,
+      data.contact_id || null,
+      data.lead_id || null,
+      data.intent || null,
+      data.lead_score || 0,
+      data.last_message || null,
+      now,
+      now
+    );
+  }
+  return database.prepare('SELECT * FROM chat_sessions WHERE session_id = ?').get(sessionId);
+}
+
+function insertChatMessage({ sessionId, role, content, intent = null, properties = null }) {
+  const database = getDb();
+  const now = new Date().toISOString();
+  database.prepare(`
+    INSERT INTO chat_messages (session_id, role, content, intent, properties_json, created_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(
+    sessionId,
+    role,
+    String(content || ''),
+    intent || null,
+    properties ? JSON.stringify(properties) : null,
+    now
+  );
+}
+
+function getChatMessages(sessionId) {
+  const database = getDb();
+  return database.prepare(`
+    SELECT * FROM chat_messages WHERE session_id = ? ORDER BY created_at ASC
+  `).all(sessionId).map((m) => ({
+    ...m,
+    properties: m.properties_json ? JSON.parse(m.properties_json) : null
+  }));
+}
+
+function getChatSessions({ limit = 50, offset = 0, search = '' } = {}) {
+  const database = getDb();
+  const clauses = [];
+  const params = [];
+
+  if (search) {
+    const like = `%${search.toLowerCase()}%`;
+    clauses.push('(LOWER(s.session_id) LIKE ? OR LOWER(s.city) LIKE ? OR LOWER(s.last_message) LIKE ? OR LOWER(c.display_name) LIKE ?)');
+    params.push(like, like, like, like);
+  }
+
+  const where = clauses.length ? 'WHERE ' + clauses.join(' AND ') : '';
+  const sql = `
+    SELECT s.*,
+      c.display_name as contact_name,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'email' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_email,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'phone' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_phone
+    FROM chat_sessions s
+    LEFT JOIN contacts c ON s.contact_id = c.id
+    ${where}
+    ORDER BY s.updated_at DESC
+    LIMIT ? OFFSET ?
+  `;
+  params.push(limit, offset);
+  const rows = database.prepare(sql).all(...params);
+
+  const countSql = `
+    SELECT COUNT(*) as total
+    FROM chat_sessions s
+    LEFT JOIN contacts c ON s.contact_id = c.id
+    ${where}
+  `;
+  const countParams = params.slice(0, -2);
+  const total = database.prepare(countSql).get(...countParams).total;
+
+  return { sessions: rows, total, limit, offset };
+}
+
+function getChatSession(sessionId) {
+  const database = getDb();
+  const session = database.prepare(`
+    SELECT s.*,
+      c.display_name as contact_name,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'email' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_email,
+      (SELECT value FROM contact_identities WHERE contact_id = c.id AND kind = 'phone' ORDER BY is_primary DESC, id ASC LIMIT 1) as contact_phone
+    FROM chat_sessions s
+    LEFT JOIN contacts c ON s.contact_id = c.id
+    WHERE s.session_id = ?
+  `).get(sessionId);
+
+  if (!session) return null;
+  const messages = getChatMessages(sessionId);
+  return { ...session, messages };
+}
+
+function linkChatSessionContact(sessionId, contactId) {
+  const database = getDb();
+  database.prepare(`
+    UPDATE chat_sessions SET contact_id = ? WHERE session_id = ?
+  `).run(contactId, sessionId);
+}
+
 module.exports = {
   getDb,
   getPublishedTestimonials,
@@ -1995,6 +2255,12 @@ module.exports = {
   outboxSummary,
   insertValuation,
   upsertNewsletter,
-  runCrmMigrations
+  runCrmMigrations,
+  upsertChatSession,
+  insertChatMessage,
+  getChatMessages,
+  getChatSessions,
+  getChatSession,
+  linkChatSessionContact
 };
 

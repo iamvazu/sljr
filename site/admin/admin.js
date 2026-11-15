@@ -11,6 +11,7 @@
     tasks: { filter: 'open', offset: 0 },
     contacts: { stage: '', type: '', score_band: '', q: '', offset: 0 },
     leads: { status: '', type: '', q: '', offset: 0 },
+    chatLogs: { q: '', offset: 0 },
     statuses: [],
     pipelines: []
   };
@@ -97,6 +98,8 @@
       contacts: contacts,
       tasks: tasks,
       leads: leads,
+      'chat-logs': chatLogs,
+      chatLogs: chatLogs,
       dashboard: dashboard,
       listings: listings,
       reviews: reviews,
@@ -1440,6 +1443,181 @@
       };
     }).catch(fail);
   }
+
+  /* ---------- Chat Logs (AI Concierge) ---------- */
+  function chatLogs() {
+    var f = state.chatLogs || (state.chatLogs = { q: '', offset: 0 });
+    var qs = '?limit=' + LIMIT + '&offset=' + f.offset + '&q=' + encodeURIComponent(f.q);
+    api('/chat-sessions' + qs).then(function (d) {
+      var sessions = d.sessions || [];
+      view.innerHTML =
+        '<h1>AI Chat Logs</h1>' +
+        '<div class="toolbar">' +
+          '<input type="search" id="chat-q" placeholder="Search location, message, session ID..." value="' + esc(f.q) + '" aria-label="Search chat logs" />' +
+        '</div>' +
+        (sessions.length ? '<div class="list">' + sessions.map(chatSessionRow).join('') + '</div>' : '<div class="empty">No visitor chat sessions recorded yet. Incoming conversations with AI Steve appear here live.</div>') +
+        '<div class="pager"><span>' + (d.total ? (f.offset + 1) + '–' + Math.min(f.offset + LIMIT, d.total) + ' of ' + d.total : '') + '</span><span>' +
+          (f.offset > 0 ? '<button class="btn" id="chat-prev">Newer</button> ' : '') + (f.offset + LIMIT < d.total ? '<button class="btn" id="chat-next">Older</button>' : '') + '</span></div>';
+
+      var t;
+      $('chat-q').addEventListener('input', function (e) {
+        clearTimeout(t);
+        t = setTimeout(function () { f.q = e.target.value.trim(); f.offset = 0; chatLogs(); }, 350);
+      });
+      if ($('chat-prev')) $('chat-prev').onclick = function () { f.offset = Math.max(0, f.offset - LIMIT); chatLogs(); };
+      if ($('chat-next')) $('chat-next').onclick = function () { f.offset += LIMIT; chatLogs(); };
+
+      view.querySelectorAll('[data-chat-session]').forEach(function (b) {
+        b.onclick = function () { chatSessionDetail(b.getAttribute('data-chat-session')); };
+      });
+      if (f.q) { var i = $('chat-q'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }
+    }).catch(fail);
+  }
+
+  function chatSessionRow(s) {
+    var loc = s.city ? '📍 ' + s.city + (s.region ? ', ' + s.region : '') : '📍 Bay Area, CA';
+    var dev = s.device ? (s.device === 'mobile' ? '📱 Mobile' : '💻 Desktop') : '💻 Web';
+    var contactPill = s.contact_name ? '<span class="pill pill--hot" style="margin-left:6px;">👤 ' + esc(s.contact_name) + '</span>' : '';
+    var intentPill = s.intent ? '<span class="pill" style="margin-left:6px; font-size:0.7rem;">' + esc(s.intent) + '</span>' : '';
+
+    return '<button class="row is-new" data-chat-session="' + esc(s.session_id) + '">' +
+      '<span class="row__title" style="display:flex; align-items:center; flex-wrap:wrap;">' +
+        '<strong>' + esc(loc) + '</strong>' +
+        contactPill +
+        intentPill +
+      '</span>' +
+      '<span class="row__side"><span class="pill pill--qualified">' + (s.message_count || 1) + ' msgs</span> ' + when(s.updated_at || s.created_at) + '</span>' +
+      '<span class="row__meta">' + esc(dev) + (s.page_url ? ' · On: ' + esc(s.page_url) : '') + (s.last_message ? ' — "' + esc(s.last_message.slice(0, 100)) + (s.last_message.length > 100 ? '…' : '') + '"' : '') + '</span>' +
+    '</button>';
+  }
+
+  function chatSessionDetail(sessionId) {
+    api('/chat-sessions/' + encodeURIComponent(sessionId)).then(function (d) {
+      var s = d.session;
+      var msgs = s.messages || [];
+
+      var transcriptHtml = '';
+      if (msgs.length) {
+        transcriptHtml = msgs.map(function (m) {
+          var isUser = m.role === 'user';
+          var bubbleBg = isUser ? 'rgba(216,165,90,.16)' : 'rgba(255,255,255,.05)';
+          var bubbleBorder = isUser ? 'var(--gold)' : 'rgba(255,255,255,.1)';
+          var roleName = isUser ? 'Visitor' : 'AI Steve (Assistant)';
+          var roleColor = isUser ? 'var(--gold)' : '#A9A398';
+
+          var propsHtml = '';
+          if (m.properties && m.properties.length) {
+            propsHtml = '<div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">' +
+              m.properties.map(function (p) {
+                var pPrice = p.price ? (typeof p.price === 'number' ? '$' + p.price.toLocaleString() : p.price) : '';
+                return '<div style="padding:6px 10px; background:rgba(0,0,0,.3); border-radius:6px; font-size:0.8rem; display:flex; justify-content:space-between;">' +
+                  '<span>🏠 <strong>' + esc(p.address || p.title) + '</strong> (' + esc(p.city) + ')</span>' +
+                  '<span style="color:var(--gold);">' + esc(pPrice) + '</span>' +
+                '</div>';
+              }).join('') +
+            '</div>';
+          }
+
+          return '<div style="margin-bottom:12px; padding:12px; background:' + bubbleBg + '; border:1px solid ' + bubbleBorder + '; border-radius:8px;">' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+              '<strong style="color:' + roleColor + '; font-size:0.85rem;">' + esc(roleName) + '</strong>' +
+              '<span class="muted small">' + when(m.created_at) + '</span>' +
+            '</div>' +
+            '<div style="white-space:pre-wrap; line-height:1.5; font-size:0.9rem;">' + esc(m.content) + '</div>' +
+            propsHtml +
+          '</div>';
+        }).join('');
+      } else {
+        transcriptHtml = '<p class="muted">No messages in transcript.</p>';
+      }
+
+      var convertBtnHtml = '';
+      if (s.contact_id) {
+        convertBtnHtml = '<button type="button" class="btn btn--primary" id="btn-view-linked-contact">View Contact Profile →</button>';
+      } else {
+        convertBtnHtml = '<button type="button" class="btn btn--primary" id="btn-open-convert-chat">+ Convert to CRM Contact</button>';
+      }
+
+      var html =
+        '<h2>Chat Conversation</h2>' +
+        '<p class="eyebrow">Session ' + esc(s.session_id.slice(0, 16)) + '… · ' + (s.city ? esc(s.city) + ', ' + esc(s.region || 'CA') : 'Bay Area') + '</p>' +
+        '<div class="actions" style="margin: 8px 0 16px;">' +
+          convertBtnHtml +
+        '</div>' +
+        '<div id="chat-convert-panel" class="card" style="margin: 12px 0 16px; border: 1px solid var(--gold);" hidden>' +
+          '<h2 style="margin:0 0 8px; font-size:1.05rem; color:var(--gold);">Convert to Pipeline Contact</h2>' +
+          '<form id="form-convert-chat">' +
+            '<label for="conv-name">Full Name</label>' +
+            '<input type="text" id="conv-name" placeholder="Client Name" value="' + esc(s.contact_name || '') + '" required />' +
+            '<div class="two">' +
+              '<div>' +
+                '<label for="conv-email">Email</label>' +
+                '<input type="email" id="conv-email" placeholder="client@example.com" value="' + esc(s.contact_email || '') + '" />' +
+              '</div>' +
+              '<div>' +
+                '<label for="conv-phone">Phone</label>' +
+                '<input type="tel" id="conv-phone" placeholder="(925) 555-0199" value="' + esc(s.contact_phone || '') + '" />' +
+              '</div>' +
+            '</div>' +
+            '<div class="actions" style="margin-top:12px;">' +
+              '<button type="submit" class="btn btn--primary">Save as Contact</button>' +
+              '<button type="button" class="btn btn--quiet" id="btn-cancel-convert">Cancel</button>' +
+            '</div>' +
+          '</form>' +
+        '</div>' +
+        '<dl class="kv">' +
+          kv('Visitor Location', (s.city ? esc(s.city) + ', ' + esc(s.region || 'CA') + ' ' + esc(s.country || 'USA') : 'Unknown')) +
+          kv('IP Address', esc(s.ip || 'Hidden')) +
+          kv('Device & Browser', esc((s.device || 'desktop') + (s.user_agent ? ' · ' + s.user_agent.slice(0, 45) + '…' : ''))) +
+          kv('Page Viewed', esc(s.page_url || '/')) +
+          kv('Campaign Source', esc([s.utm_source, s.utm_medium, s.utm_campaign].filter(Boolean).join(' / ') || 'Direct')) +
+          kv('Referrer', esc(s.referrer || 'None')) +
+          kv('First Message', when(s.created_at)) +
+          kv('Last Active', when(s.updated_at)) +
+        '</dl>' +
+        '<h2 style="margin-top:20px; margin-bottom:10px;">Full Transcript (' + msgs.length + ' messages)</h2>' +
+        '<div class="list">' + transcriptHtml + '</div>';
+
+      openDrawer(html);
+
+      var viewContactBtn = $('btn-view-linked-contact');
+      if (viewContactBtn) {
+        viewContactBtn.onclick = function () {
+          closeDrawer();
+          contactDetail(s.contact_id);
+        };
+      }
+
+      var openConvertBtn = $('btn-open-convert-chat');
+      var convertPanel = $('chat-convert-panel');
+      if (openConvertBtn && convertPanel) {
+        openConvertBtn.onclick = function () {
+          convertPanel.hidden = false;
+          openConvertBtn.hidden = true;
+          $('conv-name').focus();
+        };
+        $('btn-cancel-convert').onclick = function () {
+          convertPanel.hidden = true;
+          openConvertBtn.hidden = false;
+        };
+        $('form-convert-chat').onsubmit = function (e) {
+          e.preventDefault();
+          var payload = {
+            name: $('conv-name').value.trim(),
+            email: $('conv-email').value.trim(),
+            phone: $('conv-phone').value.trim()
+          };
+          api('/chat-sessions/' + encodeURIComponent(sessionId) + '/convert', 'POST', payload).then(function (res) {
+            toast('Contact created & linked to chat!');
+            closeDrawer();
+            chatLogs();
+            if (res.contact_id) contactDetail(res.contact_id);
+          }).catch(fail);
+        };
+      }
+    }).catch(fail);
+  }
+
 
   /* ---------- Listings ---------- */
   function listings() {

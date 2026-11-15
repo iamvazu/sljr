@@ -533,10 +533,20 @@
       body.appendChild(typingEl);
       body.scrollTop = body.scrollHeight;
 
+      var utmData = {};
+      try { utmData = JSON.parse(sessionStorage.getItem('sl_utm') || '{}'); } catch (_) {}
+
       fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: query, sessionId: sessionId })
+        body: JSON.stringify({
+          message: query,
+          sessionId: sessionId,
+          page_url: window.location.pathname + window.location.search,
+          referrer: document.referrer || '',
+          device: window.innerWidth <= 768 ? 'mobile' : 'desktop',
+          utm: utmData
+        })
       })
       .then(function (res) { return res.json(); })
       .then(function (data) {

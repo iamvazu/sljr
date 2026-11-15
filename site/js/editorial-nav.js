@@ -463,7 +463,7 @@
     if (!document.getElementById('ai-steve-script')) {
       var s = document.createElement('script');
       s.id = 'ai-steve-script';
-      s.src = '/js/ai-steve.js?v=20261115b';
+      s.src = '/js/ai-steve.js?v=20261115c';
       s.defer = true;
       document.body.appendChild(s);
     }

@@ -16,6 +16,8 @@ const { submitLead } = require('./api/lead');
 const { handleAdminApi } = require('./api/admin');
 const aiAgent = require('../server/ai');
 const aiDb = require('../server/db');
+const groqAgent = require('./lib/groq-agent');
+const geoip = require('./lib/geoip');
 const {
   stripHtml,
   isValidEmail,
@@ -283,22 +285,93 @@ async function handleApi(req, res, parsedUrl) {
     return sendJson(res, 200, { ok: true, status: 'healthy' });
   }
 
-  // AI Chat endpoint (AI Steve)
+  // AI Chat endpoint (AI Steve with Smart LLM & GeoIP Location Logging)
   if (req.method === 'POST' && pathname === '/api/chat') {
     const body = await readJsonBody(req);
-    const { message, sessionId = 'default-session' } = body;
+    const {
+      message,
+      sessionId = 'default-session',
+      page_url = '/',
+      utm = {},
+      device = 'desktop',
+      referrer = ''
+    } = body;
+
     if (!message || typeof message !== 'string') {
       return sendJson(res, 400, { ok: false, error: 'Message text is required' });
     }
+
     try {
-      const response = aiAgent.processQuery(message);
-      aiDb.recordConversation(sessionId, 'user', message);
-      aiDb.recordConversation(sessionId, 'assistant', response.reply, response.intent, response.properties);
+      const clientIp = getClientIp(req);
+      const geo = await geoip.lookupIp(clientIp);
+
+      // 1. Fetch previous conversation history from DB for multi-turn context
+      const prevMessages = db.getChatMessages(sessionId);
+
+      // 2. Log user message to session & messages
+      db.upsertChatSession({
+        sessionId,
+        ip: geo.ip || clientIp,
+        city: geo.city,
+        region: geo.region,
+        country: geo.country,
+        postal: geo.postal,
+        device: stripHtml(device || 'desktop').slice(0, 50),
+        user_agent: stripHtml(req.headers['user-agent'] || '').slice(0, 250),
+        page_url: stripHtml(page_url || '/').slice(0, 200),
+        utm_source: stripHtml(utm.source || utm.utm_source || '').slice(0, 80),
+        utm_medium: stripHtml(utm.medium || utm.utm_medium || '').slice(0, 80),
+        utm_campaign: stripHtml(utm.campaign || utm.utm_campaign || '').slice(0, 80),
+        referrer: stripHtml(referrer || '').slice(0, 200),
+        last_message: stripHtml(message).slice(0, 500)
+      });
+      db.insertChatMessage({
+        sessionId,
+        role: 'user',
+        content: message
+      });
+
+      // Also maintain legacy server/db record for backwards compatibility
+      try {
+        aiDb.recordConversation(sessionId, 'user', message);
+      } catch (_) {}
+
+      // 3. Generate LLM response via Groq with RAG listings & live context
+      const response = await groqAgent.generateResponse(message, prevMessages, {
+        city: geo.city,
+        region: geo.region,
+        country: geo.country,
+        page_url
+      });
+
+      // 4. Record assistant reply
+      db.insertChatMessage({
+        sessionId,
+        role: 'assistant',
+        content: response.reply,
+        intent: response.intent,
+        properties: response.properties
+      });
+      db.upsertChatSession({
+        sessionId,
+        intent: response.intent,
+        last_message: stripHtml(response.reply).slice(0, 500)
+      });
+
+      try {
+        aiDb.recordConversation(sessionId, 'assistant', response.reply, response.intent, response.properties);
+      } catch (_) {}
+
       return sendJson(res, 200, {
         success: true,
         ok: true,
         ...response,
         sessionId,
+        geo: {
+          city: geo.city,
+          region: geo.region,
+          country: geo.country
+        },
         timestamp: new Date().toISOString()
       });
     } catch (err) {
