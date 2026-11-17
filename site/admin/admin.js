@@ -85,16 +85,90 @@
   $('logout').addEventListener('click', function () { api('/logout', 'POST').catch(function () {}).then(function () { showLogin(); }); });
 
   /* ---------- Navigation ---------- */
-  $('tabs').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-view]'); if (b) go(b.getAttribute('data-view'));
+  var topHeader = document.querySelector('.top');
+  if (topHeader) {
+    topHeader.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-view]');
+      if (b) {
+        go(b.getAttribute('data-view'));
+        closeMoreMenu();
+      }
+    });
+  }
+
+  // More Dropdown toggle
+  var btnTabsMore = $('btn-tabs-more');
+  var tabsMoreMenu = $('tabs-more-menu');
+  function toggleMoreMenu() {
+    if (!tabsMoreMenu) return;
+    var isHidden = tabsMoreMenu.hidden;
+    tabsMoreMenu.hidden = !isHidden;
+    if (btnTabsMore) btnTabsMore.setAttribute('aria-expanded', String(isHidden));
+  }
+  function closeMoreMenu() {
+    if (tabsMoreMenu) {
+      tabsMoreMenu.hidden = true;
+      if (btnTabsMore) btnTabsMore.setAttribute('aria-expanded', 'false');
+    }
+  }
+  if (btnTabsMore) {
+    btnTabsMore.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleMoreMenu();
+    });
+  }
+  document.addEventListener('click', function (e) {
+    if (tabsMoreMenu && !tabsMoreMenu.hidden && !e.target.closest('#tabs-more')) {
+      closeMoreMenu();
+    }
   });
+
+  // Tab Scroll Buttons
+  var tabsContainer = $('tabs');
+  var scrollLeftBtn = $('tabs-scroll-left');
+  var scrollRightBtn = $('tabs-scroll-right');
+  if (scrollLeftBtn && tabsContainer) {
+    scrollLeftBtn.addEventListener('click', function () {
+      tabsContainer.scrollBy({ left: -180, behavior: 'smooth' });
+    });
+  }
+  if (scrollRightBtn && tabsContainer) {
+    scrollRightBtn.addEventListener('click', function () {
+      tabsContainer.scrollBy({ left: 180, behavior: 'smooth' });
+    });
+  }
+
   function go(name) {
     state.view = name;
     if (window.location.hash !== '#' + name) {
       window.location.hash = name;
     }
-    document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
-    document.querySelectorAll('#bottom-nav button').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-nav') === name); });
+    // Update all matching data-view buttons (tabs, settings in top__right, more dropdown items)
+    document.querySelectorAll('[data-view]').forEach(function (b) {
+      b.classList.toggle('is-on', b.getAttribute('data-view') === name);
+    });
+    document.querySelectorAll('#bottom-nav button').forEach(function (b) {
+      b.classList.toggle('is-active', b.getAttribute('data-nav') === name);
+    });
+
+    // Check if the view is inside "More" dropdown
+    var moreViews = {
+      dashboard: 'Dashboard',
+      listings: 'Listings',
+      reviews: 'Reviews',
+      subscribers: 'Subscribers',
+      activity: 'Activity'
+    };
+    var moreLabel = $('tabs-more-label');
+    var btnMore = $('btn-tabs-more');
+    if (moreViews[name]) {
+      if (btnMore) btnMore.classList.add('is-on');
+      if (moreLabel) moreLabel.textContent = 'More: ' + moreViews[name];
+    } else {
+      if (btnMore) btnMore.classList.remove('is-on');
+      if (moreLabel) moreLabel.textContent = 'More';
+    }
+
     view.innerHTML = '<p class="muted">Loading…</p>';
     var routes = {
       copilot: copilotView,
@@ -2545,6 +2619,36 @@
     });
   }
 
+  function openMobileMenuDrawer() {
+    var html =
+      '<div style="padding: 10px 4px;">' +
+        '<div style="text-align: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">' +
+          '<strong style="font-size: 1.1rem; letter-spacing: 0.16em; text-transform: uppercase; color: #FFF; display: block;">Steven Lenz Jr</strong>' +
+          '<div style="margin: 4px 0 6px;"><img src="/assets/brand/sl-compass-banner.png" alt="Compass" style="height: 18px; margin: 0 auto; display: block;" /></div>' +
+          '<span style="font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); display: block;">Back Office & Co-Pilot</span>' +
+        '</div>' +
+        '<div class="mobile-drawer-menu" style="display: grid; gap: 8px;">' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'copilot\');">⚡ Co-Pilot AI Assistant</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'today\');">📋 Today\'s Action Plan</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'pipeline\');">📊 Pipeline</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'contacts\');">👥 Contacts</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'tasks\');">📝 Tasks</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'leads\');">🔔 Leads & Inquiries</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'chat-logs\');">💬 Chat Logs</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'dashboard\');">📈 Dashboard & KPIs</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'listings\');">🏡 Property Listings</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'reviews\');">⭐ Client Reviews</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'subscribers\');">📬 Newsletter Subscribers</button>' +
+          '<button class="btn btn--quiet" style="justify-content: flex-start; width: 100%; font-size: 0.92rem;" onclick="closeDrawer(); go(\'activity\');">📜 Activity & Audit Log</button>' +
+          '<div style="margin: 12px 0 8px; border-top: 1px solid var(--line);"></div>' +
+          '<button class="btn btn--primary" style="justify-content: center; width: 100%;" onclick="closeDrawer(); go(\'settings\');">⚙️ System Settings</button>' +
+          '<a href="/" target="_blank" rel="noopener" class="btn btn--quiet" style="justify-content: center; width: 100%; margin-top: 6px;">View Public Site ↗</a>' +
+          '<button class="btn btn--danger" style="justify-content: center; width: 100%; margin-top: 6px;" onclick="closeDrawer(); $(\'logout\').click();">Sign Out</button>' +
+        '</div>' +
+      '</div>';
+    openDrawer(html);
+  }
+
   // Mobile Bottom Navigation Bar Handler
   var bottomNav = $('bottom-nav');
   if (bottomNav) {
@@ -2553,11 +2657,7 @@
       if (!btn) return;
       var target = btn.getAttribute('data-nav');
       if (target === 'more') {
-        var tabs = $('tabs');
-        if (tabs) {
-          tabs.scrollIntoView({ behavior: 'smooth' });
-          toast('Explore sections in the top bar above.');
-        }
+        openMobileMenuDrawer();
       } else if (target === 'copilot') {
         go('copilot');
         if (!copilotState.isRecording) {

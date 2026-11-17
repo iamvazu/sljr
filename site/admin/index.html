@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="SLJR Co-Pilot" />
   <link rel="apple-touch-icon" href="/assets/brand/favicon.png" />
-  <link rel="stylesheet" href="/admin/admin.css?v=10" />
+  <link rel="stylesheet" href="/admin/admin.css?v=11" />
 </head>
 
 <body>
@@ -57,24 +57,43 @@
         </div>
         <span class="top__brand-sub">Back Office</span>
       </a>
-      <nav class="tabs" id="tabs" aria-label="Sections">
-        <button data-view="copilot" class="tab-copilot">⚡ Co-Pilot <span class="badge badge--gold" id="badge-copilot">AI</span></button>
-        <button data-view="today" class="is-on">Today</button>
-        <button data-view="pipeline">Pipeline <span class="badge" id="badge-deals" hidden></span></button>
-        <button data-view="contacts">Contacts</button>
-        <button data-view="tasks">Tasks <span class="badge" id="badge-tasks" hidden></span></button>
-        <button data-view="leads">Leads <span class="badge" id="badge-new" hidden></span></button>
-        <button data-view="chat-logs">Chat Logs</button>
-        <button data-view="dashboard">Dashboard</button>
-        <button data-view="listings">Listings</button>
-        <button data-view="reviews">Reviews</button>
-        <button data-view="subscribers">Subscribers</button>
-        <button data-view="activity">Activity</button>
-        <button data-view="settings">Settings</button>
-      </nav>
+
+      <div class="tabs-wrap" id="tabs-wrap">
+        <button type="button" class="tabs-scroll-btn tabs-scroll-btn--left" id="tabs-scroll-left" aria-label="Scroll left" title="Scroll tabs left">‹</button>
+        <nav class="tabs" id="tabs" aria-label="Sections">
+          <button data-view="copilot" class="tab-copilot">⚡ Co-Pilot <span class="badge badge--gold" id="badge-copilot">AI</span></button>
+          <button data-view="today" class="is-on">Today</button>
+          <button data-view="pipeline">Pipeline <span class="badge" id="badge-deals" hidden></span></button>
+          <button data-view="contacts">Contacts</button>
+          <button data-view="tasks">Tasks <span class="badge" id="badge-tasks" hidden></span></button>
+          <button data-view="leads">Leads <span class="badge" id="badge-new" hidden></span></button>
+          <button data-view="chat-logs">Chat Logs</button>
+
+          <!-- Operations Dropdown Menu for secondary tools -->
+          <div class="tabs-more" id="tabs-more">
+            <button type="button" class="tabs-more__btn" id="btn-tabs-more" aria-haspopup="true" aria-expanded="false">
+              <span id="tabs-more-label">More</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="tabs-more__menu" id="tabs-more-menu" hidden>
+              <button data-view="dashboard" class="tabs-more__item"><span class="tabs-more__icon">📊</span> Dashboard</button>
+              <button data-view="listings" class="tabs-more__item"><span class="tabs-more__icon">🏡</span> Listings</button>
+              <button data-view="reviews" class="tabs-more__item"><span class="tabs-more__icon">⭐</span> Reviews</button>
+              <button data-view="subscribers" class="tabs-more__item"><span class="tabs-more__icon">📬</span> Subscribers</button>
+              <button data-view="activity" class="tabs-more__item"><span class="tabs-more__icon">📋</span> Activity & Audit</button>
+            </div>
+          </div>
+        </nav>
+        <button type="button" class="tabs-scroll-btn tabs-scroll-btn--right" id="tabs-scroll-right" aria-label="Scroll right" title="Scroll tabs right">›</button>
+      </div>
+
       <div class="top__right">
-        <a href="/" target="_blank" rel="noopener">View site ↗</a>
-        <button id="logout" class="btn btn--quiet">Sign out</button>
+        <button data-view="settings" class="top__settings-btn" id="btn-top-settings" title="CRM & System Settings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="3" r="1"/><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Settings</span>
+        </button>
+        <a href="/" target="_blank" rel="noopener" class="top__link" title="Open Public Website">View site ↗</a>
+        <button id="logout" class="btn btn--quiet" title="Sign out of Back Office">Sign out</button>
       </div>
     </header>
     <div id="banner" class="banner" hidden></div>
@@ -130,7 +149,7 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="/admin/admin.js?v=10"></script>
+  <script src="/admin/admin.js?v=11"></script>
 </body>
 
 </html>
