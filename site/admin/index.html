@@ -13,14 +13,19 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="SLJR Co-Pilot" />
   <link rel="apple-touch-icon" href="/assets/brand/favicon.png" />
-  <link rel="stylesheet" href="/admin/admin.css?v=9" />
+  <link rel="stylesheet" href="/admin/admin.css?v=10" />
 </head>
 
 <body>
   <div id="login" class="login">
     <form id="login-form" class="card login__card" autocomplete="on">
-      <p class="eyebrow">Steven Lenz Jr. · Compass</p>
-      <h1>Back Office & Co-Pilot</h1>
+      <div class="login__brand" style="text-align: center; margin-bottom: 20px;">
+        <span class="top__brand-name" style="font-size: 1.25rem; letter-spacing: 0.18em; display: block;">Steven Lenz Jr</span>
+        <div class="top__brand-compass" style="margin: 4px 0 6px;">
+          <img src="/assets/brand/sl-compass-banner.png" alt="Compass" class="top__brand-img" style="height: 24px; margin: 0 auto;" />
+        </div>
+        <span class="top__brand-sub" style="font-size: 0.7rem; letter-spacing: 0.26em; display: block;">Back Office</span>
+      </div>
       <label for="pw">Password</label>
       <input id="pw" type="password" autocomplete="current-password" placeholder="Enter admin password" required />
       <button class="btn btn--primary" type="submit">Sign in</button>
@@ -45,7 +50,13 @@
     </div>
 
     <header class="top">
-      <strong class="top__brand">Back Office</strong>
+      <a href="/admin/#today" class="top__brand" aria-label="Steven Lenz Jr · Compass · Back Office">
+        <span class="top__brand-name">Steven Lenz Jr</span>
+        <div class="top__brand-compass">
+          <img src="/assets/brand/sl-compass-banner.png" alt="Compass" class="top__brand-img" />
+        </div>
+        <span class="top__brand-sub">Back Office</span>
+      </a>
       <nav class="tabs" id="tabs" aria-label="Sections">
         <button data-view="copilot" class="tab-copilot">⚡ Co-Pilot <span class="badge badge--gold" id="badge-copilot">AI</span></button>
         <button data-view="today" class="is-on">Today</button>
@@ -119,7 +130,7 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="/admin/admin.js?v=9"></script>
+  <script src="/admin/admin.js?v=10"></script>
 </body>
 
 </html>
