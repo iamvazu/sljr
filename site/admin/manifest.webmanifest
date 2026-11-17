@@ -1,13 +1,14 @@
 {
-  "name": "Steven Lenz Jr. Back Office",
-  "short_name": "SLJR CRM",
-  "description": "Steven Lenz Jr. Compass Real Estate CRM & Back Office",
+  "name": "Steven Lenz Jr. Co-Pilot & CRM",
+  "short_name": "SLJR Co-Pilot",
+  "description": "Steven Lenz Jr. Luxury Real Estate CRM & AI Co-Pilot",
   "start_url": "/admin/",
   "scope": "/admin/",
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "portrait-primary",
   "background_color": "#0D1117",
   "theme_color": "#0D1117",
+  "categories": ["business", "productivity", "real-estate"],
   "icons": [
     {
       "src": "/assets/brand/favicon.png",
@@ -21,6 +22,28 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Talk to Co-Pilot",
+      "short_name": "Co-Pilot",
+      "description": "Speak to AI Executive Assistant",
+      "url": "/admin/#copilot",
+      "icons": [{ "src": "/assets/brand/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Today's Briefing",
+      "short_name": "Today",
+      "description": "Daily Action Plan & Priority Tasks",
+      "url": "/admin/#today",
+      "icons": [{ "src": "/assets/brand/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Pipeline",
+      "short_name": "Pipeline",
+      "description": "Active Deals & Escrows",
+      "url": "/admin/#pipeline",
+      "icons": [{ "src": "/assets/brand/favicon.png", "sizes": "192x192" }]
+    }
   ]
 }
-

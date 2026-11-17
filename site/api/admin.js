@@ -19,6 +19,7 @@ const outbox = require('../lib/outbox');
 const push = require('../lib/push');
 const backup = require('../lib/backup');
 const actionPlan = require('../lib/actionPlan');
+const copilot = require('../lib/copilot');
 const { stripHtml, getClientIp, hashIp, createRateLimiter, readJsonBody, sendJson } = require('../middleware/security');
 
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
@@ -141,6 +142,42 @@ async function handleAdminApi(req, res, parsedUrl) {
 
   const sp = parsedUrl.searchParams;
   let m;
+
+  // ---- Executive AI Co-Pilot (Voice & CRM Intelligence) ----
+  if (method === 'GET' && route === '/copilot/context') {
+    return sendJson(res, 200, { ok: true, context: copilot.gatherCrmContext() });
+  }
+
+  if (method === 'POST' && route === '/copilot/chat') {
+    const body = await readJsonBody(req);
+    const message = String(body.message || '').trim();
+    if (!message) return sendJson(res, 400, { ok: false, error: 'Message is required.' });
+    const result = await copilot.processCopilotCommand(message, body.history || []);
+    db.audit('copilot_command', `Co-Pilot executed: "${message.slice(0, 60)}"`, ip);
+    return sendJson(res, result.ok ? 200 : 500, result);
+  }
+
+  if (method === 'POST' && route === '/copilot/voice') {
+    const body = await readJsonBody(req);
+    let audioBuffer;
+    let mimeType = body.mime_type || 'audio/webm';
+
+    if (body.audio_base64) {
+      audioBuffer = Buffer.from(body.audio_base64, 'base64');
+    } else {
+      return sendJson(res, 400, { ok: false, error: 'No audio data provided.' });
+    }
+
+    const transcribeRes = await copilot.transcribeAudio(audioBuffer, mimeType);
+    if (!transcribeRes.ok || !transcribeRes.text) {
+      return sendJson(res, 400, { ok: false, error: transcribeRes.error || 'Could not understand audio.' });
+    }
+
+    const result = await copilot.processCopilotCommand(transcribeRes.text, body.history || []);
+    result.transcript = transcribeRes.text;
+    db.audit('copilot_voice', `Voice command: "${transcribeRes.text.slice(0, 60)}"`, ip);
+    return sendJson(res, 200, result);
+  }
 
   // ---- CRM: Today & Daily Action Plan (M2) ----
   if (method === 'GET' && route === '/today') {

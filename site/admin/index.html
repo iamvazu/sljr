@@ -3,24 +3,24 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Back Office — Steven Lenz Jr.</title>
+  <title>Back Office & AI Co-Pilot — Steven Lenz Jr.</title>
   <link rel="icon" href="/assets/brand/favicon.png" />
   <link rel="manifest" href="/admin/manifest.webmanifest" />
   <meta name="theme-color" content="#0D1117" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="SLJR CRM" />
+  <meta name="apple-mobile-web-app-title" content="SLJR Co-Pilot" />
   <link rel="apple-touch-icon" href="/assets/brand/favicon.png" />
-  <link rel="stylesheet" href="/admin/admin.css?v=8" />
+  <link rel="stylesheet" href="/admin/admin.css?v=9" />
 </head>
 
 <body>
   <div id="login" class="login">
     <form id="login-form" class="card login__card" autocomplete="on">
       <p class="eyebrow">Steven Lenz Jr. · Compass</p>
-      <h1>Back Office</h1>
+      <h1>Back Office & Co-Pilot</h1>
       <label for="pw">Password</label>
       <input id="pw" type="password" autocomplete="current-password" placeholder="Enter admin password" required />
       <button class="btn btn--primary" type="submit">Sign in</button>
@@ -29,9 +29,25 @@
   </div>
 
   <div id="app" hidden>
+    <!-- iOS / Browser PWA Install Prompt Banner -->
+    <div id="pwa-install-banner" class="pwa-banner" hidden>
+      <div class="pwa-banner__content">
+        <img src="/assets/brand/favicon.png" alt="SLJR Icon" class="pwa-banner__icon" />
+        <div class="pwa-banner__text">
+          <strong>Install SLJR Co-Pilot PWA</strong>
+          <p class="small muted">Add to Home Screen for voice mic & hands-free driving mode.</p>
+        </div>
+      </div>
+      <div class="pwa-banner__actions">
+        <button id="pwa-install-btn" class="btn btn--primary btn--sm">Install App</button>
+        <button id="pwa-dismiss-btn" class="btn btn--quiet btn--sm">✕</button>
+      </div>
+    </div>
+
     <header class="top">
       <strong class="top__brand">Back Office</strong>
       <nav class="tabs" id="tabs" aria-label="Sections">
+        <button data-view="copilot" class="tab-copilot">⚡ Co-Pilot <span class="badge badge--gold" id="badge-copilot">AI</span></button>
         <button data-view="today" class="is-on">Today</button>
         <button data-view="pipeline">Pipeline <span class="badge" id="badge-deals" hidden></span></button>
         <button data-view="contacts">Contacts</button>
@@ -52,6 +68,46 @@
     </header>
     <div id="banner" class="banner" hidden></div>
     <main id="view" class="view" tabindex="-1"></main>
+
+    <!-- Floating AI Voice Co-Pilot Orb Button -->
+    <button id="copilot-voice-orb" class="copilot-voice-orb" aria-label="Talk to Co-Pilot" title="Talk to Co-Pilot">
+      <span class="copilot-orb-ring"></span>
+      <span class="copilot-orb-core">
+        <svg class="copilot-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </span>
+      <span class="copilot-orb-label">Talk</span>
+    </button>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Mobile Navigation">
+      <button data-nav="today" class="is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Today</span>
+      </button>
+      <button data-nav="pipeline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="18" rx="1"/><rect x="9" y="8" width="6" height="13" rx="1"/><rect x="16" y="13" width="6" height="8" rx="1"/></svg>
+        <span>Pipeline</span>
+      </button>
+      <button data-nav="copilot" class="bottom-nav__copilot">
+        <div class="bottom-nav__copilot-orb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        </div>
+        <span>Co-Pilot</span>
+      </button>
+      <button data-nav="contacts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Contacts</span>
+      </button>
+      <button data-nav="more" id="btn-bottom-more">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+        <span>More</span>
+      </button>
+    </nav>
   </div>
 
   <div id="drawer" class="drawer" hidden>
@@ -63,7 +119,7 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="/admin/admin.js?v=8"></script>
+  <script src="/admin/admin.js?v=9"></script>
 </body>
 
 </html>

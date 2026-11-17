@@ -70,7 +70,8 @@
     var banner = $('banner');
     banner.hidden = active.length > 0;
     banner.textContent = active.length ? '' : 'No notification channel is set up, so new leads only appear here — nobody is emailed. Fill in the email or webhook settings in the .env file and restart the site.';
-    go(state.view);
+    var initialView = (window.location.hash || '').replace('#', '') || state.view;
+    go(initialView);
   }
   $('login-form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -89,9 +90,14 @@
   });
   function go(name) {
     state.view = name;
+    if (window.location.hash !== '#' + name) {
+      window.location.hash = name;
+    }
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-view') === name); });
+    document.querySelectorAll('#bottom-nav button').forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-nav') === name); });
     view.innerHTML = '<p class="muted">Loading…</p>';
     var routes = {
+      copilot: copilotView,
       today: today,
       pipeline: pipeline,
       pipelines: pipeline,
@@ -116,6 +122,332 @@
   function closeDrawer() { $('drawer').hidden = true; $('drawer-body').innerHTML = ''; }
   $('drawer').addEventListener('click', function (e) { if (e.target.closest('[data-close]')) closeDrawer(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !$('drawer').hidden) closeDrawer(); });
+
+  /* ---------- Co-Pilot Executive AI Assistant & Voice Mode ---------- */
+  var copilotState = {
+    history: [],
+    voiceFeedback: true,
+    handsFree: false,
+    mediaRecorder: null,
+    audioChunks: [],
+    isRecording: false
+  };
+
+  function formatMarkdown(str) {
+    if (!str) return '';
+    var safe = esc(str);
+    safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    safe = safe.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    safe = safe.replace(/^[\*\-] (.+)$/gm, '<li>$1</li>');
+    safe = safe.replace(/(<li>.*<\/li>)/s, '<ul style="margin:8px 0; padding-left:20px;">$1</ul>');
+    safe = safe.replace(/\n\n/g, '<br><br>');
+    return safe;
+  }
+
+  function speakResponse(text) {
+    if (!copilotState.voiceFeedback || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      var cleanText = text.replace(/[*_#`]/g, '').trim();
+      var utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 1.05;
+      utterance.pitch = 1.0;
+      var voices = window.speechSynthesis.getVoices();
+      var preferred = voices.find(function (v) {
+        return (v.lang === 'en-US' || v.lang.startsWith('en')) &&
+          (v.name.includes('Natural') || v.name.includes('Siri') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel'));
+      });
+      if (preferred) utterance.voice = preferred;
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('Speech synthesis error:', e);
+    }
+  }
+  window.sljrSpeak = function (text) {
+    speakResponse(text);
+  };
+
+  function updateRecordingUI(recording) {
+    var orb = $('copilot-voice-orb');
+    if (orb) orb.classList.toggle('is-recording', recording);
+
+    var stage = $('copilot-stage');
+    if (stage) stage.classList.toggle('is-recording', recording);
+
+    var recBtn = $('btn-copilot-record');
+    if (recBtn) {
+      recBtn.classList.toggle('is-recording', recording);
+      var lbl = $('copilot-record-label');
+      if (lbl) lbl.textContent = recording ? 'Listening… Tap to Send' : 'Tap to Talk to Co-Pilot';
+    }
+
+    var hint = $('copilot-record-hint');
+    if (hint) {
+      hint.textContent = recording
+        ? 'Recording voice memo… Tap button or wait to send to Groq Whisper.'
+        : 'Tap to speak naturally, or tap again to send. Works hands-free with AirPods.';
+    }
+  }
+
+  function toggleRecording(callback) {
+    if (copilotState.isRecording) {
+      stopRecording();
+    } else {
+      startRecording(callback);
+    }
+  }
+
+  function startRecording(callback) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast('Microphone access is not supported on this browser.', true);
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      copilotState.audioChunks = [];
+      var mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '');
+      var options = mimeType ? { mimeType: mimeType } : undefined;
+      var recorder = new MediaRecorder(stream, options);
+      copilotState.mediaRecorder = recorder;
+      copilotState.isRecording = true;
+
+      recorder.ondataavailable = function (e) {
+        if (e.data && e.data.size > 0) copilotState.audioChunks.push(e.data);
+      };
+
+      recorder.onstop = function () {
+        stream.getTracks().forEach(function (track) { track.stop(); });
+        var blob = new Blob(copilotState.audioChunks, { type: mimeType || 'audio/webm' });
+        uploadAudioCommand(blob, mimeType || 'audio/webm', callback);
+      };
+
+      recorder.start();
+      updateRecordingUI(true);
+      if (navigator.vibrate) navigator.vibrate(50);
+    }).catch(function (err) {
+      toast('Microphone permission denied: ' + err.message, true);
+    });
+  }
+
+  function stopRecording() {
+    if (copilotState.mediaRecorder && copilotState.isRecording) {
+      copilotState.mediaRecorder.stop();
+      copilotState.isRecording = false;
+      updateRecordingUI(false);
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    }
+  }
+
+  function uploadAudioCommand(blob, mimeType, callback) {
+    toast('Transcribing voice memo with Groq Whisper…');
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      var base64Data = (reader.result || '').split(',')[1];
+      api('/copilot/voice', 'POST', {
+        audio_base64: base64Data,
+        mime_type: mimeType,
+        history: copilotState.history.slice(-4)
+      }).then(function (res) {
+        handleCopilotResult(res, res.transcript || 'Voice Memo');
+        if (callback) callback(res);
+      }).catch(function (err) {
+        toast('Voice processing failed: ' + err.message, true);
+      });
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  function executeTextCommand(promptText) {
+    copilotState.history.push({
+      role: 'user',
+      text: promptText,
+      timestamp: new Date().toISOString()
+    });
+    var thread = $('copilot-thread');
+    if (thread) thread.innerHTML = renderCopilotHistory();
+
+    toast('Co-Pilot thinking…');
+    api('/copilot/chat', 'POST', {
+      message: promptText,
+      history: copilotState.history.slice(-4)
+    }).then(function (res) {
+      handleCopilotResult(res, promptText);
+    }).catch(function (err) {
+      toast('Command failed: ' + err.message, true);
+    });
+  }
+
+  function handleCopilotResult(res, promptText) {
+    copilotState.history.push({
+      role: 'assistant',
+      spoken_reply: res.spoken_reply || '',
+      detailed_markdown: res.detailed_markdown || res.spoken_reply || '',
+      actionResult: res.actionResult,
+      timestamp: new Date().toISOString()
+    });
+
+    var thread = $('copilot-thread');
+    if (thread) thread.innerHTML = renderCopilotHistory();
+
+    if (res.spoken_reply && copilotState.voiceFeedback) {
+      speakResponse(res.spoken_reply);
+    }
+
+    if (res.actionResult && res.actionResult.message) {
+      toast(res.actionResult.message);
+    }
+  }
+
+  function renderCopilotHistory() {
+    if (!copilotState.history.length) {
+      return '<div class="card muted text-center" style="padding: 30px;">' +
+        '<p style="margin: 0; font-size: 0.95rem;">No commands in this session yet. Tap the microphone above or pick a prompt to begin.</p>' +
+      '</div>';
+    }
+    return copilotState.history.map(function (item) {
+      var isUser = item.role === 'user';
+      if (isUser) {
+        return '<div class="copilot-bubble copilot-bubble--user">' +
+          '<div class="copilot-bubble__meta"><span>Steven Lenz Jr.</span><span>' + when(item.timestamp) + '</span></div>' +
+          '<div>' + esc(item.text) + '</div>' +
+        '</div>';
+      } else {
+        var actionCardHtml = '';
+        if (item.actionResult) {
+          var isDraft = item.actionResult.type === 'DRAFT_EMAIL_SUCCESS';
+          var isTask = item.actionResult.type === 'CREATE_TASK_SUCCESS';
+          var isNote = item.actionResult.type === 'LOG_NOTE_SUCCESS';
+          actionCardHtml =
+            '<div class="copilot-action-card ' + (isDraft ? 'action-draft' : '') + '">' +
+              '<div>' +
+                '<span class="copilot-action-card__badge ' + (isDraft ? 'copilot-action-card__badge--draft' : 'copilot-action-card__badge--success') + '">' +
+                  (isDraft ? 'Outbox Draft Ready' : (isTask ? 'Task Created' : (isNote ? 'Note Logged' : 'CRM Updated'))) +
+                '</span>' +
+                '<p style="margin: 6px 0 0; font-size: 0.84rem; color: #FFF;">' + esc(item.actionResult.message || 'Action executed.') + '</p>' +
+              '</div>' +
+              (isDraft ? '<button class="btn btn--primary btn--sm" onclick="location.hash=\'today\'; go(\'today\');">Review in Outbox →</button>' : '') +
+              (isTask ? '<button class="btn btn--quiet btn--sm" onclick="location.hash=\'tasks\'; go(\'tasks\');">View Tasks →</button>' : '') +
+            '</div>';
+        }
+        return '<div class="copilot-bubble copilot-bubble--ai">' +
+          '<div class="copilot-bubble__meta">' +
+            '<span>⚡ Steven\'s Co-Pilot</span>' +
+            '<div style="display:flex; gap:8px;">' +
+              (item.spoken_reply ? '<button class="btn btn--quiet btn--sm" style="padding:2px 8px; font-size:0.75rem;" onclick="window.sljrSpeak(\'' + esc(item.spoken_reply).replace(/'/g, "\\'") + '\')">🔊 Listen</button>' : '') +
+              '<span>' + when(item.timestamp) + '</span>' +
+            '</div>' +
+          '</div>' +
+          (item.spoken_reply ? '<div class="copilot-bubble__spoken">"' + esc(item.spoken_reply) + '"</div>' : '') +
+          '<div class="copilot-bubble__details">' + formatMarkdown(item.detailed_markdown || '') + '</div>' +
+          actionCardHtml +
+        '</div>';
+      }
+    }).reverse().join('');
+  }
+
+  function attachCopilotEvents() {
+    var recBtn = $('btn-copilot-record');
+    if (recBtn) {
+      recBtn.addEventListener('click', function () {
+        toggleRecording();
+      });
+    }
+
+    var textForm = $('copilot-text-form');
+    if (textForm) {
+      textForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var inp = $('copilot-text-input');
+        var val = (inp.value || '').trim();
+        if (!val) return;
+        inp.value = '';
+        executeTextCommand(val);
+      });
+    }
+
+    var chips = $('copilot-chips');
+    if (chips) {
+      chips.addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-prompt]');
+        if (!btn) return;
+        executeTextCommand(btn.getAttribute('data-prompt'));
+      });
+    }
+
+    var toggleVoice = $('toggle-voice-reply');
+    if (toggleVoice) {
+      toggleVoice.addEventListener('click', function () {
+        copilotState.voiceFeedback = !copilotState.voiceFeedback;
+        toggleVoice.classList.toggle('is-active', copilotState.voiceFeedback);
+        toggleVoice.querySelector('strong').textContent = copilotState.voiceFeedback ? 'ON' : 'OFF';
+      });
+    }
+
+    var toggleHandsFree = $('toggle-hands-free');
+    if (toggleHandsFree) {
+      toggleHandsFree.addEventListener('click', function () {
+        copilotState.handsFree = !copilotState.handsFree;
+        toggleHandsFree.classList.toggle('is-active', copilotState.handsFree);
+        toggleHandsFree.querySelector('strong').textContent = copilotState.handsFree ? 'ON' : 'OFF';
+        if (copilotState.handsFree) {
+          toast('Driving mode ON: Audio responses will speak automatically through your car/AirPods.');
+        }
+      });
+    }
+  }
+
+  function copilotView() {
+    view.innerHTML =
+      '<div class="copilot-console">' +
+        '<div class="copilot-hero">' +
+          '<div class="copilot-hero__header">' +
+            '<div>' +
+              '<h1 class="copilot-hero__title">⚡ Steven\'s Co-Pilot</h1>' +
+              '<p class="muted small" style="margin: 4px 0 0;">Executive AI Chief of Staff & Voice Operating System</p>' +
+            '</div>' +
+            '<div style="display: flex; gap: 8px; align-items: center;">' +
+              '<span class="copilot-hero__status">Online · Groq Llama/Qwen + Whisper</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="copilot-voice-stage" id="copilot-stage">' +
+            '<div class="copilot-wave" id="copilot-wave">' +
+              '<div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>' +
+              '<div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>' +
+            '</div>' +
+            '<button id="btn-copilot-record" class="copilot-record-btn">' +
+              '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>' +
+              '<span id="copilot-record-label">Tap to Talk to Co-Pilot</span>' +
+            '</button>' +
+            '<p class="small muted" id="copilot-record-hint" style="margin: 12px 0 0;">Tap to speak naturally, or tap again to send. Works hands-free with AirPods.</p>' +
+          '</div>' +
+          '<div class="copilot-toggles">' +
+            '<button id="toggle-voice-reply" class="toggle-btn ' + (copilotState.voiceFeedback ? 'is-active' : '') + '">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>' +
+              '<span>Voice Audio Response: <strong>' + (copilotState.voiceFeedback ? 'ON' : 'OFF') + '</strong></span>' +
+            '</button>' +
+            '<button id="toggle-hands-free" class="toggle-btn ' + (copilotState.handsFree ? 'is-active' : '') + '">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+              '<span>Driving Mode: <strong>' + (copilotState.handsFree ? 'ON' : 'OFF') + '</strong></span>' +
+            '</button>' +
+          '</div>' +
+          '<div class="copilot-chips" id="copilot-chips">' +
+            '<button class="chip-btn" data-prompt="What are my top priorities and pipeline volume today?">⚡ Today\'s Priorities</button>' +
+            '<button class="chip-btn" data-prompt="Which deals or contacts are going cold?">❄️ Deals Going Cold</button>' +
+            '<button class="chip-btn" data-prompt="Prep me for my upcoming showings and meetings">📋 Prep Me For Tours</button>' +
+            '<button class="chip-btn" data-prompt="Draft a follow-up email to the newest lead">📧 Draft Follow-Up</button>' +
+            '<button class="chip-btn" data-prompt="Give me a quick market check for Pleasanton and Westside Danville">🏡 Market Check</button>' +
+          '</div>' +
+          '<form id="copilot-text-form" class="copilot-input-bar">' +
+            '<input id="copilot-text-input" type="text" placeholder="Or type an instruction: \'Log showing note for Dr. Thorne...\'" autocomplete="off" />' +
+            '<button type="submit" class="btn btn--primary">Send</button>' +
+          '</form>' +
+        '</div>' +
+        '<div class="copilot-thread" id="copilot-thread">' +
+          renderCopilotHistory() +
+        '</div>' +
+      '</div>';
+
+    attachCopilotEvents();
+  }
 
   /* ---------- Today & Daily Action Plan ---------- */
   function today() {
@@ -2160,6 +2492,82 @@
       console.log('[PWA] ServiceWorker registered with scope:', reg.scope);
     }).catch(function (err) {
       console.warn('[PWA] ServiceWorker registration failed:', err);
+    });
+  }
+
+  // PWA Installation handling
+  var deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    var banner = $('pwa-install-banner');
+    if (banner) banner.hidden = false;
+  });
+
+  var pwaInstallBtn = $('pwa-install-btn');
+  if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', function () {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then(function (choice) {
+          if (choice.outcome === 'accepted') {
+            toast('SLJR Co-Pilot PWA installed!');
+          }
+          deferredInstallPrompt = null;
+          var banner = $('pwa-install-banner');
+          if (banner) banner.hidden = true;
+        });
+      } else {
+        toast('To install: tap Share (iOS) or Menu (Android), then tap "Add to Home Screen"');
+      }
+    });
+  }
+  var pwaDismissBtn = $('pwa-dismiss-btn');
+  if (pwaDismissBtn) {
+    pwaDismissBtn.addEventListener('click', function () {
+      var banner = $('pwa-install-banner');
+      if (banner) banner.hidden = true;
+    });
+  }
+
+  // Floating Voice Co-Pilot Orb Click Handler
+  var voiceOrb = $('copilot-voice-orb');
+  if (voiceOrb) {
+    voiceOrb.addEventListener('click', function () {
+      if (state.view !== 'copilot') {
+        go('copilot');
+        setTimeout(function () {
+          toggleRecording();
+        }, 200);
+      } else {
+        toggleRecording();
+      }
+    });
+  }
+
+  // Mobile Bottom Navigation Bar Handler
+  var bottomNav = $('bottom-nav');
+  if (bottomNav) {
+    bottomNav.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-nav]');
+      if (!btn) return;
+      var target = btn.getAttribute('data-nav');
+      if (target === 'more') {
+        var tabs = $('tabs');
+        if (tabs) {
+          tabs.scrollIntoView({ behavior: 'smooth' });
+          toast('Explore sections in the top bar above.');
+        }
+      } else if (target === 'copilot') {
+        go('copilot');
+        if (!copilotState.isRecording) {
+          setTimeout(function () {
+            toggleRecording();
+          }, 200);
+        }
+      } else {
+        go(target);
+      }
     });
   }
 

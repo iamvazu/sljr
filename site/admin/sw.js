@@ -2,13 +2,13 @@
 
 // Steven Lenz Jr. CRM Admin Shell Service Worker
 // Cache version: bump whenever the admin shell static assets change
-const SHELL_CACHE = 'sljr-admin-shell-v2';
+const SHELL_CACHE = 'sljr-admin-shell-v4';
 
 const SHELL_ASSETS = [
   '/admin/',
   '/admin/index.html',
-  '/admin/admin.css?v=5',
-  '/admin/admin.js?v=5',
+  '/admin/admin.css?v=9',
+  '/admin/admin.js?v=9',
   '/admin/manifest.webmanifest',
   '/assets/brand/favicon.png',
   '/assets/brand/sl-monogram.png',
