@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="SLJR Co-Pilot" />
   <link rel="apple-touch-icon" href="/assets/brand/favicon.png" />
-  <link rel="stylesheet" href="/admin/admin.css?v=11" />
+  <link rel="stylesheet" href="/admin/admin.css?v=12" />
 </head>
 
 <body>
@@ -68,23 +68,23 @@
           <button data-view="tasks">Tasks <span class="badge" id="badge-tasks" hidden></span></button>
           <button data-view="leads">Leads <span class="badge" id="badge-new" hidden></span></button>
           <button data-view="chat-logs">Chat Logs</button>
-
-          <!-- Operations Dropdown Menu for secondary tools -->
-          <div class="tabs-more" id="tabs-more">
-            <button type="button" class="tabs-more__btn" id="btn-tabs-more" aria-haspopup="true" aria-expanded="false">
-              <span id="tabs-more-label">More</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div class="tabs-more__menu" id="tabs-more-menu" hidden>
-              <button data-view="dashboard" class="tabs-more__item"><span class="tabs-more__icon">📊</span> Dashboard</button>
-              <button data-view="listings" class="tabs-more__item"><span class="tabs-more__icon">🏡</span> Listings</button>
-              <button data-view="reviews" class="tabs-more__item"><span class="tabs-more__icon">⭐</span> Reviews</button>
-              <button data-view="subscribers" class="tabs-more__item"><span class="tabs-more__icon">📬</span> Subscribers</button>
-              <button data-view="activity" class="tabs-more__item"><span class="tabs-more__icon">📋</span> Activity & Audit</button>
-            </div>
-          </div>
         </nav>
         <button type="button" class="tabs-scroll-btn tabs-scroll-btn--right" id="tabs-scroll-right" aria-label="Scroll right" title="Scroll tabs right">›</button>
+      </div>
+
+      <!-- Operations Dropdown Menu for secondary tools (placed outside tabs-wrap to prevent overflow clipping) -->
+      <div class="tabs-more" id="tabs-more">
+        <button type="button" class="tabs-more__btn" id="btn-tabs-more" aria-haspopup="true" aria-expanded="false">
+          <span id="tabs-more-label">More</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tabs-more__menu" id="tabs-more-menu" hidden>
+          <button data-view="dashboard" class="tabs-more__item"><span class="tabs-more__icon">📊</span> Dashboard</button>
+          <button data-view="listings" class="tabs-more__item"><span class="tabs-more__icon">🏡</span> Listings</button>
+          <button data-view="reviews" class="tabs-more__item"><span class="tabs-more__icon">⭐</span> Reviews</button>
+          <button data-view="subscribers" class="tabs-more__item"><span class="tabs-more__icon">📬</span> Subscribers</button>
+          <button data-view="activity" class="tabs-more__item"><span class="tabs-more__icon">📋</span> Activity & Audit</button>
+        </div>
       </div>
 
       <div class="top__right">
@@ -149,7 +149,7 @@
   </div>
   <div id="toast" class="toast" role="status" hidden></div>
 
-  <script src="/admin/admin.js?v=11"></script>
+  <script src="/admin/admin.js?v=12"></script>
 </body>
 
 </html>

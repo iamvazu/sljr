@@ -221,15 +221,15 @@ input[type=checkbox] { width: 20px; height: 20px; min-height: 0; padding: 0; acc
 }
 .tabs-more__menu {
   position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
+  top: calc(100% + 8px);
+  right: 0;
   background: #141A23;
-  border: 1px solid rgba(216, 165, 90, 0.35);
+  border: 1px solid rgba(216, 165, 90, 0.45);
   border-radius: 10px;
   padding: 6px;
-  min-width: 175px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
-  z-index: 100;
+  min-width: 185px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 2px;
