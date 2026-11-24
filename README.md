@@ -18,17 +18,18 @@
 
 | Parameter | Value |
 |---|---|
-| **Live Web Platform (V1)** | [https://sljr.2.25.90.226.sslip.io](https://sljr.2.25.90.226.sslip.io) |
-| **Landing Page V2 Showcase** | [https://sljr.2.25.90.226.sslip.io/v2](https://sljr.2.25.90.226.sslip.io/v2) |
-| **Luxury Mortgage Calculator** | [https://sljr.2.25.90.226.sslip.io/mortgage-calculator](https://sljr.2.25.90.226.sslip.io/mortgage-calculator) |
-| **Relocation Matrix Hub** | [https://sljr.2.25.90.226.sslip.io/relocation](https://sljr.2.25.90.226.sslip.io/relocation) |
-| **Compass Private Exclusives** | [https://sljr.2.25.90.226.sslip.io/private-exclusives](https://sljr.2.25.90.226.sslip.io/private-exclusives) |
-| **Concierge Services** | [https://sljr.2.25.90.226.sslip.io/concierge](https://sljr.2.25.90.226.sslip.io/concierge) |
-| **Communities & Area Hubs** | [https://sljr.2.25.90.226.sslip.io/neighborhoods](https://sljr.2.25.90.226.sslip.io/neighborhoods) |
-| **Buy Advisory Hub** | [https://sljr.2.25.90.226.sslip.io/buy](https://sljr.2.25.90.226.sslip.io/buy) |
-| **Sell Advisory Hub** | [https://sljr.2.25.90.226.sslip.io/sell](https://sljr.2.25.90.226.sslip.io/sell) |
-| **Executive Admin & Co-Pilot** | [https://sljr.2.25.90.226.sslip.io/admin](https://sljr.2.25.90.226.sslip.io/admin) |
-| **API Health Endpoint** | [https://sljr.2.25.90.226.sslip.io/api/health](https://sljr.2.25.90.226.sslip.io/api/health) |
+| **Primary Domain (Live Web Platform)** | [https://stevenlenzjr.com](https://stevenlenzjr.com) & [https://www.stevenlenzjr.com](https://www.stevenlenzjr.com) |
+| **Landing Page V2 Showcase** | [https://stevenlenzjr.com/v2](https://stevenlenzjr.com/v2) |
+| **Luxury Mortgage Calculator** | [https://stevenlenzjr.com/mortgage-calculator](https://stevenlenzjr.com/mortgage-calculator) |
+| **Relocation Matrix Hub** | [https://stevenlenzjr.com/relocation](https://stevenlenzjr.com/relocation) |
+| **Compass Private Exclusives** | [https://stevenlenzjr.com/private-exclusives](https://stevenlenzjr.com/private-exclusives) |
+| **Concierge Services** | [https://stevenlenzjr.com/concierge](https://stevenlenzjr.com/concierge) |
+| **Communities & Area Hubs** | [https://stevenlenzjr.com/neighborhoods](https://stevenlenzjr.com/neighborhoods) |
+| **Buy Advisory Hub** | [https://stevenlenzjr.com/buy](https://stevenlenzjr.com/buy) |
+| **Sell Advisory Hub** | [https://stevenlenzjr.com/sell](https://stevenlenzjr.com/sell) |
+| **Executive Admin & Co-Pilot** | [https://stevenlenzjr.com/admin](https://stevenlenzjr.com/admin) |
+| **API Health Endpoint** | [https://stevenlenzjr.com/api/health](https://stevenlenzjr.com/api/health) |
+| **Fallback / Stage URL** | [https://sljr.2.25.90.226.sslip.io](https://sljr.2.25.90.226.sslip.io) |
 | **Host Server** | Hostinger Cloud VPS (`2.25.90.226` / Ubuntu 24.04.4 LTS) |
 | **Docker Container** | `stevenlenzjr-web` (Isolated, Port `4173`, Zero-Disruption Multi-Tenancy) |
 | **Reverse Proxy** | Host Nginx (`/etc/nginx/sites-available/stevenlenzjr`) |
